@@ -1,0 +1,48 @@
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #ffffff;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgba(0, 33, 123, 0.562);
+}
+
+.img-inic {
+    padding: 35px;
+    width: 100%;
+}
+
+.img-inic img {
+    width: 100%;
+    height: 50%;
+}
+
+.espt-img-pc {
+    width: 100%;
+    height: 55vh;
+}
+
+.espt-img-mob {
+    display: none;
+}
+
+@media screen and (max-width:600px) {
+
+    .espt-img-pc{
+        display: none;
+    }
+
+    .espt-img-mob{
+        display: block;
+        width: 100%;
+        height: 50%;
+        padding: 15px;
+    }
+
+    .img-inic{
+        padding: 5px;
+    }
+
+
+}

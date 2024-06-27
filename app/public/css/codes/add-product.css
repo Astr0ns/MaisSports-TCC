@@ -1,0 +1,100 @@
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #ffffff;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgb(79, 79, 79);
+    --cor-fundo4: #1a348967;
+}
+
+.card {
+    display: flex;
+    position: relative;
+    width: 165vh;
+    height: 70vh;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 35px 35px;
+    overflow: hidden;
+    margin-left: 5%;
+}
+
+.pics-card {
+    background-color: #f5f5f5;
+}
+
+.pics-card i {
+    font-size: 80px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    padding: 20%;
+    text-decoration: none;
+    color: var(--cor-fundo4);
+}
+
+.product-card i {
+    font-size: 40vh;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    padding: 12%;
+    text-decoration: none;
+    color: var(--cor-fundo4);
+}
+
+.categorias select {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}
+
+
+.title-prod .name {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}
+
+.mini-pics-product i {
+    font-size: 100px;
+    color: var(--cor-fundo4);
+}
+
+section .desc-container {
+    display: flex;
+    position: relative;
+    width: 80%;
+    height: auto;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 35px 35px;
+    overflow: hidden;
+    margin-left: 10%;
+}
+
+section .descricao {
+    display: flex;
+    flex-direction: column;
+}
+
+.desc-input {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}

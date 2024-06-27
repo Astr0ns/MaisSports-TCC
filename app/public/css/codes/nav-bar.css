@@ -1,0 +1,211 @@
+/* Inicio Barra Lateral */
+
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #ffffff;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgba(0, 33, 123, 0.562);
+    --cor-fundo4: rgba(0, 14, 54, 0.658);
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.nav-list a {
+    color: var(--cor-fonte2);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.nav-list a:hover {
+    opacity: 0.7;
+}
+
+.logo {
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-family: system-ui, -apple-system, Helvetica, Arial, sans-serif;
+    background: #f5f5f5f5;
+    height: 8vh;
+    overflow: hidden;
+}
+
+.mob {
+    display: none;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex !important;
+    z-index: 1;
+}
+
+.nav-list a:hover {
+    color: #d12089;
+}
+
+.nav-list li {
+    letter-spacing: 3px;
+    margin-left: 32px;
+}
+
+section.mobile-menu {
+    display: none;
+}
+
+.mobile-menu section {
+    width: 32px;
+    height: 2px;
+    background: var(--cor-fonte2);
+    margin: 8px;
+    transition: 0.3s;
+}
+
+
+.mob-og {
+    display: none;
+}
+
+a.pc-og {
+    display: block;
+}
+
+@media screen and (max-width: 999px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    a.mob-og {
+        display: block;
+    }
+
+    .nav-list {
+        position: absolute;
+        top: 8vh;
+        right: 0;
+        width: 50vw;
+        height: 92vh;
+        background: #f5f5f5f5;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in;
+        display: none;
+    }
+
+    .nav-list a:hover {
+        color: #d12089;
+    }
+
+    .nav-list li {
+        margin-left: 0;
+        opacity: 0;
+    }
+
+    .mob-og button {
+        display: inline-flex;
+        color: var(--cor-fonte);
+        background-color: var(--cor-fundo2);
+        border: 1px solid var(--cor-fundo2);
+        border-radius: 15px;
+        padding: 10px 5px;
+        width: 70px;
+        transition: all .42s ease;
+    }
+
+    .mob-og button:hover {
+        color: var(--cor-fundo2);
+        background-color: var(--cor-fonte);
+        transition: 0.5 ease;
+    }
+
+    .pc-og {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 321px) and (max-width: 1024px) {
+    section.mobile-menu {
+        display: block;
+        cursor: pointer;
+    }
+
+    .nav-list{
+        display: none;
+    }
+}
+
+@media screen and (min-width: 320px) {
+    .nav-list {
+        top: 7vh;
+        z-index: 2;
+    }
+    section.mobile-menu {
+        display: block;
+        cursor: pointer;
+    }
+
+    .mob-og button {
+        display: block;
+        color: var(--cor-fonte);
+        background-color: var(--cor-fundo2);
+        border: 1px solid var(--cor-fundo2);
+        border-radius: 15px;
+        padding: 10px;
+        width: 90px;
+        transition: all .42s ease;
+    }
+
+    .mob-og button:hover {
+        color: var(--cor-fundo2);
+        background-color: var(--cor-fonte);
+        transition: 0.5 ease;
+    }
+
+    .pc-og {
+        display: none;
+    }
+}
+
+
+.nav-list.active {
+    transform: translateX(0);
+}
+
+@keyframes navLinkFade {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.mobile-menu.active .line1 {
+    transform: rotate(-45deg) translate(-8px, 8px);
+}
+
+.mobile-menu.active .line2 {
+    opacity: 0;
+}
+
+.mobile-menu.active .line3 {
+    transform: rotate(45deg) translate(-5px, -7px);
+}

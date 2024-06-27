@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="imagem/png" href="imagem/icon-msports.jpg">
+
+    <!-- Link Responsives CSS's-->
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="css/small.css">
+    <link rel="stylesheet" media="screen and (max-width: 534px)" href="css/verysmall.css">
+    <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)" href="css/medium.css">
+    <!-- End Responsives CSS's-->
+
+    <!-- Link CSS's of Mains, Sections, etc. -->
+
+    <link rel="stylesheet" href="css/codes/sessoes.css">
+    <link rel="stylesheet" href="css/codes/tendencia.css">
+    <link rel="stylesheet" href="css/codes/categorias.css">
+    <link rel="stylesheet" href="css/codes/product-page.css">
+    <link rel="stylesheet" href="css/codes/nav-bar.css">
+    <link rel="stylesheet" href="css/codes/footer.css">
+    <link rel="stylesheet" href="css/codes/profile.css">
+
+    <!-- Others Links -->
+
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <title>+Sports</title>
+</head>
+
+<body>
+
+    <%- include("../partial/header-home") %>
+        <!--    Utilize "document.write(localStorage.getItem("name"));" para mostrar os dados digitados no cadastro    -->
+
+        <section class="infos">
+            <h2>Minha conta</h2>
+        </section>
+
+        <section class="historico">
+            <section class="account">
+                <section class="nog">
+                    <h2>MEU CADASTRO</h2>
+                    <ul class="desc">
+                        <li>
+                            <% if(nome==false) { %>
+                                <h4>Logue para acessar suas informações!</h4>
+                                <% }else{ %>
+                                    <h4 class="lr">Seu nome completo:</h4>
+                                    <label class="campo-dig" for="nome">
+                                        <%= nome + " " + sobrenome%>
+                                    </label>
+                                    <h4>Deseja alterar seu <span>nome?</span></h4>
+                                    <input id="nome" type="text" name="nome" placeholder="Deseja alterar seu nome?"
+                                        required>
+                                    <% } %>
+                        </li>
+                        <li>
+                            <% if(nome && email==false) { %>
+                                <h4>Logue para acessar suas informações!</h4>
+                                <% }else{ %>
+                                    <h4 class="lr">Seu E-mail</h4>
+                                    <label class="campo-dig" for="email">
+                                        <%= email %>
+                                    </label>
+                                    <h4>Deseja alterar seu <span>e-mail?</span></h4>
+                                    <input id="email" type="text" name="email" placeholder="Deseja alterar seu email?"
+                                        required>
+                                    <% } %>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+
+
+
+        </section>
+        </section>
+
+
+        <%- include("../partial/footer") %>
+
+</body>
+<script src="js/script.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/updateUI-profile.js"></script>
+<script src="js/profile.js"></script>
+
+</html>

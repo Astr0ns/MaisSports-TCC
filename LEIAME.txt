@@ -1,0 +1,10 @@
+para adicionar as depencencias use:
+
+npm init -y
+
+
+npm config set strict-ssl false ( se necessário)
+npm install express-validator
+npm install dotenv --save
+npm install mysql2
+npm install express-session

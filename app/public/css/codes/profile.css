@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+section {
+    padding: 2% 20%;
+    transition: all 0.3s ease;
+}
+
+h2 {
+    padding: 25px;
+    overflow: hidden;
+    align-items: center;
+}
+
+a {
+    color: var(--cor-fonte2);
+}
+
+a:hover {
+    color: var(--cor-fundo2);
+}
+
+.infos {
+    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.account {
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    box-sizing: border-box;
+    background: rgb(247, 247, 247);
+    padding: 48px;
+    display: grid;
+    gap: 35px;
+    grid-template-columns: repeat(2, auto);
+    width: 100%;
+}
+
+.infos {
+    overflow: hidden;
+}
+
+.nog {
+    display: flex;
+    flex-direction: column;
+}
+
+.desc {
+    border-radius: 25px;
+    background: rgb(255, 255, 255);
+    padding: 16px;
+    height: 100%;
+    box-sizing: border-box;
+    list-style-type: none;
+
+}
+
+.sair-btn button {
+    display: inline-flex;
+    color: var(--cor-fonte);
+    background-color: var(--cor-fundo2);
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 15px;
+    padding: 10px 5px;
+    width: 70px;
+    transition: all .42s ease;
+}
+
+.sair-btn button:hover {
+    color: var(--cor-fundo2);
+    background-color: var(--cor-fonte);
+    transition: 0.5 ease;
+}
+
+.login-btn button {
+    display: inline-flex;
+    color: var(--cor-fonte);
+    background-color: var(--cor-fundo2);
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 15px;
+    padding: 10px 5px;
+    width: 170px;
+    transition: all .42s ease;
+}
+
+.login-btn button:hover {
+    color: var(--cor-fundo2);
+    background-color: var(--cor-fonte);
+    transition: 0.5 ease;
+}
+
+i.bi.bi-person {
+    width: 95%;
+}
+
+span {
+    color: var(--cor-fundo2);
+}
+
+@media screen and (min-width: 320px) and (max-width: 650px) {
+
+    section {
+        padding: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .account {
+        display: grid;
+        gap: 35px;
+        grid-template-columns: repeat(1, auto);
+        width: 100%;
+    }
+}

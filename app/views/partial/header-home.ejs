@@ -1,0 +1,48 @@
+<header>
+    <nav>
+        <a class="logo" href="/"><img src="imagem/LOGO.png"></a>
+        <section class="box">
+            <input type="checkbox" id="check">
+            <section class="search-box">
+                <input type="text" placeholder="Pesquise aqui...">
+                <label for="check" class="icon">
+                    <i class='bx bx-search'></i>
+                </label>
+            </section>
+        </section>
+
+        <section class="mobile-menu">
+            <section class="line1"></section>
+            <section class="line2"></section>
+            <section class="line3"></section>
+        </section>
+        <ul class="nav-list">
+            <li>
+                <section class="trilho" id="trilho">
+                    <section class="indicador"></section>
+                </section>
+            </li>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/cart">Carrinho</a></li>
+            <li><a href="/locais-esportivos">Locais Esportivos</a></li>
+            <% if(email==undefined ) { %>
+                <li><a class="pc-og" href="/login">Entrar</a></li>
+                <% }else{ %>
+                    <li><a class="prof" href="/profile">Perfil</a></li>
+                    <li><a class="log-out" href="/fazerLogout">Sair</a></li>
+                    <% } %>
+        </ul>
+    </nav>
+</header>
+
+<section class="box-2">
+    <input type="checkbox" id="check-2">
+    <section class="search-box-2">
+        <input id="search-input" type="text" placeholder="Pesquise aqui...">
+        <label for="check-2" class="icon-2">
+            <i class='bx bx-search'></i>
+        </label>
+    </section>
+</section>
+
+<script src="js/toggleMode.js"></script>

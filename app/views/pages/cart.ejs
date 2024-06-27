@@ -1,0 +1,120 @@
+<!DOCTYPE ejs>
+<ejs lang="pt-br">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" type="imagem/png" href="imagem/icon-msports.jpg">
+
+        <!-- Link Responsives CSS's-->
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+        <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="css/small.css">
+        <link rel="stylesheet" media="screen and (max-width: 534px)" href="css/verysmall.css">
+        <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)" href="css/medium.css">
+        <!-- End Responsives CSS's-->
+
+        <!-- Link CSS's of Mains, Sections, etc. -->
+        <link rel="stylesheet" href="css/codes/cart.css">
+        <link rel="stylesheet" href="css/codes/nav-bar.css">
+        <link rel="stylesheet" href="css/codes/footer.css">
+
+        <!-- Others Links -->
+
+        <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+        <title>+Sports - Carrinho</title>
+    </head>
+
+    <body>
+        <%- include("../partial/header-home") %>
+
+            <main>
+                <section class="container">
+                    <section class="cart-container">
+                        <section class="center-text">
+                            <h2>Carrinho</h2>
+                        </section>
+                        <section class="smmall-cont cart-page">
+                            <table>
+                                <tr>
+                                    <th>product</th>
+                                    <th>quantity</th>
+                                    <th>subtotal</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <section class="cart-info">
+                                            <img id="no-background"
+                                                src="https://artwalk.vteximg.com.br/arquivos/ids/234008-1000-1000/Camiseta-Jordan-X-PSG-Statement-Masculina-Azul.jpg?v=637569609852970000">
+                                            <section class="cart-prod">
+                                                <p>red printed tshirt</p>
+                                                <small>price: R$:50,00</small>
+                                                <a href="">remove</a>
+                                            </section>
+                                        </section>
+
+                                    </td>
+                                    <td><input type="number" value="1"></td>
+                                    <td><p class="preco">R$50,00</p></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <section class="cart-info">
+                                            <img id="no-background"
+                                                src="https://artwalk.vteximg.com.br/arquivos/ids/321781-1000-1000/CZ020-4-400-1.jpg?v=638060295259130000">
+                                            <section class="cart-prod">
+                                                <p>red printed tshirt</p>
+                                                <small>price: R$:50,00</small>
+                                                <a href="">remove</a>
+                                            </section>
+                                        </section>
+
+                                    </td>
+                                    <td><input type="number" value="1"></td>
+                                    <td><p class="preco">R$50,00</p></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <section class="cart-info">
+                                            <img id="no-background"
+                                                src="https://artwalk.vteximg.com.br/arquivos/ids/233540-1000-1000/Camiseta-Jordan-X-PSG-Masculina-Preto.jpg?v=637558982442800000">
+                                            <section class="cart-prod">
+                                                <p>red printed tshirt</p>
+                                                <small>price: R$:50,00</small>
+                                                <a href="">remove</a>
+                                            </section>
+                                        </section>
+
+                                    </td>
+                                    <td><input type="number" value="1"></td>
+                                    <td><p class="preco">R$50,00</p></td>
+                                </tr>
+                            </table>
+                            <section class="total-price">
+                                <table>
+                                    <tr>
+                                        <td>subtotal</td>
+                                        <td>R$150,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>tax</td>
+                                        <td>R$35,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>total</td>
+                                        <td>R$185,00</td>
+                                    </tr>
+                                </table>
+                            </section>
+
+                        </section>
+                    </section>
+                </section>
+            </main>
+            <script src="js/script.js" defer></script>
+            <script src="js/logout.js"></script>
+            <script src="js/updateUI.js"></script>
+    </body>
+</ejs>

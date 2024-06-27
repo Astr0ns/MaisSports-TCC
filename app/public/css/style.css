@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #ffffff;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgb(79, 79, 79);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+section#trending {
+    padding: 4% 16% 4% 16%;
+}
+
+.fav i {
+    margin-top: 0px;
+    display: inline-block;
+    font-size: 25px;
+    color: #f80091bd;
+}
+
+
+.logo img {
+    width: 130px;
+}
+
+/* campo de busca */
+
+.box-2 {
+    display: none;
+}
+
+.box {
+    width: 100%;
+    max-width: 400px;
+}
+
+.box .search-box {
+    overflow: hidden;
+    position: relative;
+    height: 45px;
+    max-width: 380px;
+    margin: auto;
+    left: 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.075)75;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+/*
+#check:checked ~ .search-box{
+    max-width: 380px;
+
+}*/
+.search-box input {
+    overflow: hidden;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 25px;
+    background: var(--cor-fonte);
+    outline: none;
+    border: none;
+    padding: 20px;
+    font-size: 18px;
+}
+
+.search-box .icon {
+    overflow: hidden;
+    position: absolute;
+    right: -2px;
+    top: 0;
+    font-size: 20px;
+    width: 50px;
+    color: var(--cor-fundo3);
+    height: 100%;
+    text-align: center;
+    line-height: 50px;
+    margin-left: 20rem;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+/*
+#check:checked ~ .search-box .icon{
+    background-color: var(--cor-bar);
+    color: var(--cor-fonte);
+    border-radius: 0 25px 25px 0;
+    width: 60px;
+
+}*/
+#check {
+    display: none;
+}
+
+.sacola {
+    display: none;
+}
+
+
+/* fim do campo de busca */
+
+.span-color {
+    color: rgb(255, 61, 168);
+
+}
+
+
+
+section .main-home {
+    padding: 6% 10% 1% 10%;
+}
+
+img.inic-espt-pc {
+    padding: 4% 16% 4% 16%;
+}
+
+img.inic-espt-mob {
+    display: none;
+}
+
+@media screen and (max-width: 1024px) {
+    img.inic-espt-mob {
+        display: block;
+    }
+}
+
+
+/* Fim Barra Lateral */

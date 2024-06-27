@@ -1,0 +1,210 @@
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #f5f5f5;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgba(0, 33, 123, 0.562);
+}
+
+/* Botão de compra */
+.button {
+    --width: 300px;
+    --height: 50px;
+    --button-color: #222;
+    --tooltip-color: #fff;
+    margin-top: 2rem;
+    margin-left: 25%;
+    width: var(--width);
+    height: var(--height);
+    background: var(--cor-fundo2);
+    position: relative;
+    text-align: center;
+    border-radius: 0.45em;
+    font-family: "Arial";
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.button::before {
+    position: absolute;
+    background-color: var(--cor-fundo3);
+    font-size: 0.9rem;
+    color: #fff;
+    border-radius: .25em;
+}
+
+.button::after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top-color: var(--cor-fundo3);
+    left: calc(50% - 10px);
+}
+
+.button::after,
+.button::before {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s;
+}
+
+.text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-wrapper,
+.text,
+.icon {
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    color: #fff;
+}
+
+.text {
+    top: 0
+}
+
+.text,
+.icon {
+    transition: top 0.5s;
+}
+
+.icon {
+    color: #fff;
+    top: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.button:hover {
+    background: var(--cor-fundo3);
+}
+
+.button:hover .text {
+    top: -100%;
+}
+
+.button:hover .icon {
+    top: 0;
+}
+
+.button:hover:before,
+.button:hover:after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.button:hover:after {
+    bottom: calc(var(--height));
+}
+
+.button:hover:before {
+    bottom: calc(var(--height));
+}
+
+
+@media screen and (min-width: 500px) and (max-width: 999px) {
+    .button {
+        --width: 266px;
+        --height: 50px;
+        --button-color: #222;
+        --tooltip-color: #fff;
+        margin-top: 5rem;
+        margin-left: 14%;
+    }
+
+
+    /* Botão do carrinho */
+
+    .btn-cart {
+        color: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        border: none;
+        background-color: transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-cart::after {
+        content: attr(data-quantity);
+        width: fit-content;
+        height: fit-content;
+        position: absolute;
+        font-size: 15px;
+        color: black;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        opacity: 0;
+        visibility: hidden;
+        transition: .2s linear;
+        top: 100%;
+    }
+
+    .icon-cart {
+        width: 24.38px;
+        height: 30.52px;
+        transition: .2s linear;
+    }
+
+    .icon-cart path {
+        fill: var(--cor-fundo);
+        transition: .2s linear;
+    }
+
+    .btn-cart:hover>.icon-cart {
+        transform: scale(1.2);
+    }
+
+    .btn-cart:hover>.icon-cart path {
+        fill: rgb(186, 34, 233);
+    }
+
+    .btn-cart:hover::after {
+        visibility: visible;
+        opacity: 1;
+        top: 35%;
+    }
+
+    .quantity {
+        display: none;
+    }
+}
+
+@media screen and (min-width:320px) and (max-width:499px) {
+
+    .button {
+        --width: 200px;
+        --height: 50px;
+        margin-top: 1rem;
+        margin-left: 5%;
+        width: var(--width);
+        height: var(--height);
+        background: var(--cor-fundo2);
+        position: relative;
+        text-align: center;
+        border-radius: 0.45em;
+        font-family: "Arial";
+        transition: background 0.3s;
+        cursor: pointer;
+    }
+
+}
