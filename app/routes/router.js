@@ -55,7 +55,14 @@ router.get("/alter", function (req, res) {
 
 router.post("/fazerRegistro", async function (req, res) {
 
-    const { nome, sobrenome, email, senha, 'c-password': confirmacaoSenha } = req.body;
+    const { nome, sobrenome, email, senha, cSenha } = req.body;
+
+    
+
+    if(senha != cSenha){
+        req.flash("msg", "As senhas não coicidem");
+        return res.render('/register');
+    }
 
     try {
         const emailExist = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE email_cliente = ?", [email]);
