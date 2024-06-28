@@ -69,20 +69,60 @@ td {
     padding: 10px 5px;
 }
 
+.btn{
+    background-color: var(--cor-bar);
+    border-radius: 5px;
+    cursor: pointer;
+    float: left;
+    font: normal 14px/1.6 "Helbetica Neue", Arial, sans-serif;
+    height: 32px;
+    margin-right: 10px;
+}
+
+.btn .icone, .btn .contador{
+    float: left;
+    line-height: 32px;
+    text-align: center;
+    user-select: none;
+    width: 50%;
+}
+
+.btn .icone img{
+    display: block;
+    margin: 0 auto;
+    width: 32px;
+}
+
+.btn .icone span{
+    text-align: center;
+    width: 32px;
+}
+
+.btn .contador{
+    color: #333;
+    font-weight: 600;
+}
+
+#quantidade{
+    border: 1px solid #0984ff;
+    width: 120px;
+}
+
+#quantidade .icone, #quantidade .contador {
+    width: 33.333%;
+}
+
+#quantidade .contador {
+    background: #0984ff;
+    color: var(--cor-fonte);
+}
+
 td .preco {
     border-radius: 10px;
     border: 1px solid #c2c2c2;
     background-color: var(--cor-fonte);
     color: var(--cor-fonte3);
     font-weight: bold;
-}
-
-td input {
-    width: 100%;
-    height: 100%;
-    padding: 5px;
-    border-radius: 10px;
-    border: 1px solid #c2c2c2;
 }
 
 td a {

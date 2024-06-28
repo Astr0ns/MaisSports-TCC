@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="css/codes/footer.css">
     <link rel="stylesheet" href="css/codes/nav-bar.css">
     <link rel="stylesheet" href="css/codes/register.css">
+    <link rel="stylesheet" href="css/codes/interface.css">
 
     <!-- Others Links -->
 
@@ -36,7 +37,36 @@
 
 <body>
 
-    <%- include("../partial/header-home") %>
+    <header>
+        <nav>
+
+            <a class="logo" href="/"><img src="imagem/LOGO.png"></a>
+            <section class="box">
+                <input type="checkbox" id="check">
+                <section class="search-box">
+                    <input type="text" placeholder="Pesquise aqui...">
+                    <label for="check" class="icon">
+                        <i class='bx bx-search'></i>
+                    </label>
+                </section>
+            </section>
+
+            <section class="mobile-menu">
+                <section class="line1"></section>
+                <section class="line2"></section>
+                <section class="line3"></section>
+            </section>
+
+            <ul class="nav-list">
+                <li>
+                    <section class="trilho" id="trilho">
+                        <section class="indicador"></section>
+                    </section>
+                </li>
+                <li><a href="/">Inicio</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <section class="area-login">
 
@@ -60,7 +90,7 @@
                     <section class="form-group">
                         <h3 class="lr">Digite seu E-mail</h3>
                         <label for="email"></label>
-                        <input id="email" type="text" name="email" placeholder="Digite seu email" required >
+                        <input id="email" type="text" name="email" placeholder="Digite seu email" required>
                         <section id="verify"></section>
                     </section>
 
@@ -68,28 +98,30 @@
                         <h3 class="lr">Digite sua Senha</h3>
                         <label for="password"></label>
                         <input id="password" type="password" name="senha" placeholder="Digite sua senha" required
-                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}" title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
+                            title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
                     </section>
                     <section class="form-group">
                         <h3 class="lr"><span>Confirme</span> sua Senha</h3>
                         <label for="password"></label>
                         <input id="c-password" type="password" name="cSenha" placeholder="Confirme sua senha" required
-                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}" title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
+                            title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
                     </section>
 
                     <section class="form-group">
-                       <section class="dica">
-                        <h3>Adicione no Minímo uma letra maiúscula, uma caracter especial e um número</h3>
-                       </section>
+                        <section class="dica">
+                            <h3>Adicione no Minímo uma letra maiúscula, uma caracter especial e um número</h3>
+                        </section>
 
                     </section>
                     <section id="valid"></section>
-                    
+
                     <section class="text-center">
                         <button type="submit" class="btn btn-primary" id="save-btn" required>Cadastrar</button>
                     </section>
                     <section id="valid-sucess">
-        
+
                     </section>
 
                 </form>
@@ -104,9 +136,8 @@
 
     <%- include("../partial/footer") %>
 
-    <script src="js/script.js"></script>
-    <script src="js/validation-1.js"></script>
-    <script src="js/create-account.js"></script>
+        <script src="js/script.js"></script>
+        <script src="js/toggleMode.js"></script>
 </body>
 
 </html>

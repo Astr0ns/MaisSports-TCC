@@ -3,6 +3,7 @@ var router = express.Router();
 exports.router = router;
 const connection = require("../../config/pool_conexoes");
 const req = require("express/lib/request");
+const flash = require("connect-flash");
 
 router.get("/", function (req, res) {
     var email = req.session.email;
@@ -14,13 +15,16 @@ router.get("/login", function (req, res) {
     res.render("pages/login");
 });
 router.get("/locais-esportivos", function (req, res) {
-    res.render("pages/locais-esportivos");
+    var email = req.session.email;
+    res.render("pages/locais-esportivos", { email: email });
 });
 router.get("/product-page", function (req, res) {
-    res.render("pages/product-page");
+    var email = req.session.email;
+    res.render("pages/product-page", { email: email });
 });
 router.get("/product-page-2", function (req, res) {
-    res.render("pages/product-page-2");
+    var email = req.session.email;
+    res.render("pages/product-page-2", { email: email });
 });
 router.get("/profile", function (req, res) {
     var nome = req.session.nome;
@@ -30,19 +34,23 @@ router.get("/profile", function (req, res) {
     res.render("pages/profile", { nome: nome, email: email });
 });
 router.get("/register", function (req, res) {
-    res.render("pages/register");
+    var email = req.session.email;
+    res.render("pages/register", { email: email });
 });
 router.get("/soccer", function (req, res) {
-    res.render("pages/soccer");
+    var email = req.session.email;
+    res.render("pages/soccer", { email: email });
 });
 router.get("/empresa", function (req, res) {
+    var email = req.session.email;
     res.render("pages/empresa");
 });
 router.get("/add-product", function (req, res) {
     res.render("pages/add-product");
 });
 router.get("/cart", function (req, res) {
-    res.render("pages/cart");
+    var email = req.session.email;
+    res.render("pages/cart", { email: email });
 });
 
 router.get("/alter", function (req, res) {
@@ -54,28 +62,35 @@ router.get("/alter", function (req, res) {
 });
 
 router.post("/fazerRegistro", async function (req, res) {
-
     const { nome, sobrenome, email, senha, cSenha } = req.body;
 
-    
-
-    if(senha != cSenha){
-        req.flash("msg", "As senhas não coicidem");
-        return res.render('/register');
+    // Verificar se as senhas coincidem
+    if (senha !== cSenha) {
+        req.flash("error_msg", "As senhas não coincidem");
+        return res.redirect('/register');
     }
 
     try {
-        const emailExist = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE email_cliente = ?", [email]);
+        // Consultar se o email já está registrado
+        const [rows] = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE email_cliente = ?", [email]);
 
-        await connection.query("INSERT INTO usuario_clientes (nome_cliente, sobrenome_cliente, email_cliente, senha_cliente) VALUES (?, ?, ?, ?)", [nome, sobrenome, email, senha]); {
-            res.render('pages/login', { pagina: "login", logado: null });
+        // Se encontrou algum registro com o mesmo email, exibir mensagem de erro
+        if (rows.length > 0) {
+            req.flash("error_msg", "Este email já está registrado. Por favor, utilize outro email.");
+            return res.redirect('/register');
         }
+
+        // Se o email não existe no banco de dados, inserir o novo registro
+        await connection.query("INSERT INTO usuario_clientes (nome_cliente, sobrenome_cliente, email_cliente, senha_cliente) VALUES (?, ?, ?, ?)", [nome, sobrenome, email, senha]);
+        
+        // Redirecionar para a página de login ou outra página após o registro
+        req.flash("success_msg", "Registro realizado com sucesso!");
+        res.render('pages/login', { pagina: "login", logado: null });
+
     } catch (error) {
         console.error(error);
         res.status(400).send(error.message);
     }
-    // Verificar se os dados estão chegando corretamente
-    console.log("Dados recebidos:", req.body);
 });
 
 

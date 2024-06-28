@@ -28,7 +28,7 @@
     </head>
 
     <body>
-        <%- include("../partial/header-home") %>
+        <%- include("../partial/header-home", {email: email}) %>
 
             <main>
                 <section class="container">
@@ -56,8 +56,23 @@
                                         </section>
 
                                     </td>
-                                    <td><input type="number" value="1"></td>
-                                    <td><p class="preco">R$50,00</p></td>
+                                    <td>
+                                        <section class="btn btn-quantidade" id="quantidade">
+                                            <section class="icone" id="quantidade-mais">
+                                                <span>+</span>
+                                            </section>
+                                            <section class="contador">
+                                                <span>0</span>
+                                            </section>
+                                            <section class="icone" id="quantidade-menos">
+                                                <span>-</span>
+                                            </section>
+                                        </section>
+
+                                    </td>
+                                    <td>
+                                        <p class="preco">R$50,00</p>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -72,8 +87,23 @@
                                         </section>
 
                                     </td>
-                                    <td><input type="number" value="1"></td>
-                                    <td><p class="preco">R$50,00</p></td>
+                                    <td>
+                                        <section class="btn btn-quantidade" id="quantidade">
+                                            <section class="icone" id="quantidade-mais">
+                                                <span>+</span>
+                                            </section>
+                                            <section class="contador">
+                                                <span>0</span>
+                                            </section>
+                                            <section class="icone" id="quantidade-menos">
+                                                <span>-</span>
+                                            </section>
+                                        </section>
+
+                                    </td>
+                                    <td>
+                                        <p class="preco">R$50,00</p>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -88,8 +118,23 @@
                                         </section>
 
                                     </td>
-                                    <td><input type="number" value="1"></td>
-                                    <td><p class="preco">R$50,00</p></td>
+                                    <td>
+                                        <section class="btn btn-quantidade" id="quantidade">
+                                            <section class="icone" id="quantidade-mais">
+                                                <span>+</span>
+                                            </section>
+                                            <section class="contador">
+                                                <span>0</span>
+                                            </section>
+                                            <section class="icone" id="quantidade-menos">
+                                                <span>-</span>
+                                            </section>
+                                        </section>
+
+                                    </td>
+                                    <td>
+                                        <p class="preco">R$50,00</p>
+                                    </td>
                                 </tr>
                             </table>
                             <section class="total-price">
@@ -114,7 +159,7 @@
                 </section>
             </main>
             <script src="js/script.js" defer></script>
-            <script src="js/logout.js"></script>
-            <script src="js/updateUI.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="js/quantidade.js"></script>
     </body>
 </ejs>

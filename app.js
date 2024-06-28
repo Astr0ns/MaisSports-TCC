@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const session = require("express-session");
-const FileStore = require("session-file-store")(session)
+const FileStore = require("session-file-store")(session);
+const flash = require("connect-flash");
 
 //configurações do app
 app.use(express.static("app/public"));
@@ -13,6 +14,8 @@ app.set("views", "./app/views");
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
+
+app.use(flash());
 
 //configurações da sessão
 app.use(session({
