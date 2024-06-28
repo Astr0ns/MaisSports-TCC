@@ -126,7 +126,7 @@ router.post("/fazerLogin", async function (req, res) {
             const passwordMatch = bcrypt.compareSync(senha, account[0][0].senha_cliente)
 
             if (!passwordMatch) {
-                req.flash('msg', errorMessages.INCORRECT_PASSWORD);
+                req.flash('msg', "As senhas não conferem");
             }
 
             res.redirect('/profile');
