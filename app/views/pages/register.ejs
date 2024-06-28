@@ -102,20 +102,29 @@
                             title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
                     </section>
                     <section class="form-group">
-                        <h3 class="lr"><span>Confirme</span> sua Senha</h3>
-                        <label for="password"></label>
-                        <input id="c-password" type="password" name="cSenha" placeholder="Confirme sua senha" required
-                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
-                            title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
+                       
+                                <h3 class="lr"><span>Confirme</span> sua Senha</h3>
+                                <label for="password"></label>
+                                <input id="c-password" type="password" name="cSenha" placeholder="Confirme sua senha"
+                                    required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
+                                    title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
+                    </section>
+
+                    <section class="form-group">
+
                     </section>
 
                     <section class="form-group">
                         <section class="dica">
                             <h3>Adicione no Minímo uma letra maiúscula, uma caracter especial e um número</h3>
                         </section>
+                        <section class="dica">
+                            <% if (messages.msg && messages.msg.length > 0) { %>
+                                <h3><%= messages.msg %></h3>
+                            <% } %>
+                        </section>
 
                     </section>
-                    <section id="valid"></section>
 
                     <section class="text-center">
                         <button type="submit" class="btn btn-primary" id="save-btn" required>Cadastrar</button>

@@ -4,11 +4,12 @@ exports.router = router;
 const connection = require("../../config/pool_conexoes");
 const req = require("express/lib/request");
 const flash = require("connect-flash");
+const bcrypt = require('bcrypt');
 
 router.get("/", function (req, res) {
     var email = req.session.email;
     req.session.email;
-    res.render("pages/index", {email: email});
+    res.render("pages/index", { email: email });
 });
 
 router.get("/login", function (req, res) {
@@ -35,8 +36,11 @@ router.get("/profile", function (req, res) {
 });
 router.get("/register", function (req, res) {
     var email = req.session.email;
-    res.render("pages/register", { email: email });
+    req.flash("As senhas não coincidem");
+    console.log(req.flash()); // Adicione este console log para verificar as mensagens flash
+    res.render('pages/register', { email: email, messages: req.flash() });
 });
+
 router.get("/soccer", function (req, res) {
     var email = req.session.email;
     res.render("pages/soccer", { email: email });
@@ -63,26 +67,33 @@ router.get("/alter", function (req, res) {
 
 router.post("/fazerRegistro", async function (req, res) {
     const { nome, sobrenome, email, senha, cSenha } = req.body;
-
     // Verificar se as senhas coincidem
     if (senha !== cSenha) {
-        req.flash("error_msg", "As senhas não coincidem");
-        return res.redirect('/register');
+        req.flash('msg', "As senhas não coincidem");
+        console.log(req.flash()); // Adicione este console log para verificar as mensagens flash
+        res.render('pages/register', { email: email, messages: req.flash() });
     }
 
+    console.log(req.flash('msg')); // Verifica se a mensagem está sendo corretamente definida
+
     try {
+
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(senha, salt);
+
         // Consultar se o email já está registrado
         const [rows] = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE email_cliente = ?", [email]);
 
         // Se encontrou algum registro com o mesmo email, exibir mensagem de erro
         if (rows.length > 0) {
-            req.flash("error_msg", "Este email já está registrado. Por favor, utilize outro email.");
-            return res.redirect('/register');
+            req.flash('msg', "Usuario em uso.");
+            console.log(req.flash()); // Adicione este console log para verificar as mensagens flash
+            res.render('pages/register', { email: email, messages: req.flash() });
         }
 
         // Se o email não existe no banco de dados, inserir o novo registro
-        await connection.query("INSERT INTO usuario_clientes (nome_cliente, sobrenome_cliente, email_cliente, senha_cliente) VALUES (?, ?, ?, ?)", [nome, sobrenome, email, senha]);
-        
+        await connection.query("INSERT INTO usuario_clientes (nome_cliente, sobrenome_cliente, email_cliente, senha_cliente) VALUES (?, ?, ?, ?)", [nome, sobrenome, email, hashedPassword]);
+
         // Redirecionar para a página de login ou outra página após o registro
         req.flash("success_msg", "Registro realizado com sucesso!");
         res.render('pages/login', { pagina: "login", logado: null });
@@ -103,16 +114,24 @@ router.post("/fazerLogin", async function (req, res) {
 
 
     try {
-        const account = await connection.query("SELECT * FROM usuario_clientes WHERE email_cliente = ? AND senha_cliente = ?", [email, senha]);
+        const account = await connection.query("SELECT * FROM usuario_clientes WHERE email_cliente = ?", [email]);
 
-            if (account[0].length > 0) {
-                // Usuário encontrado e senha corresponde
-                req.session.nome = account[0][0].nome_cliente;
-                req.session.sobrenome = account[0][0].sobrenome_cliente;
-                req.session.email = account[0][0].email_cliente;
-                res.redirect('/profile');
+        if (account[0].length > 0) {
+            // Usuário encontrado e senha corresponde
+            req.session.nome = account[0][0].nome_cliente;
+            req.session.sobrenome = account[0][0].sobrenome_cliente;
+            req.session.email = account[0][0].email_cliente;
+
+            // verificar se as senhas conheecidem
+            const passwordMatch = bcrypt.compareSync(senha, account[0][0].senha_cliente)
+
+            if (!passwordMatch) {
+                req.flash('msg', errorMessages.INCORRECT_PASSWORD);
             }
-        
+
+            res.redirect('/profile');
+        }
+
     } catch (err) {
         console.error("Erro na consulta: ", err);
         res.status(500).send('Erro interno do servidor');

@@ -15,8 +15,6 @@ app.set("views", "./app/views");
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 
-app.use(flash());
-
 //configurações da sessão
 app.use(session({
   secret: 'host-pass-98$3',
@@ -24,6 +22,8 @@ app.use(session({
   saveUninitialized:'true',
   cookie: {secure:false}
 }))
+
+app.use(flash());
 
 var rotas = require("./app/routes/router");
 app.use("/", rotas);

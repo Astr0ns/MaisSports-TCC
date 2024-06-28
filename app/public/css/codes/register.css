@@ -55,6 +55,7 @@ h3 .lr {
     width: 490px;
     height: auto;
     padding: 35px;
+    margin-top: 10%;
 }
 
 section.area-login {
@@ -62,6 +63,7 @@ section.area-login {
     align-items: center;
     padding: 35px;
     display: flex;
+    height: auto;
 }
 
 .login form {
@@ -79,6 +81,12 @@ section.area-login {
     width: 100%;
 }
 
+.notif-body{
+    display: flex;
+    width: auto;
+    height: auto;
+}
+
 .login::placeholder {
     color: var(--cor-fonte2);
     font-size: 14px;
@@ -94,6 +102,7 @@ section.area-login {
     overflow: hidden;
     color: var(--cor-fonte2);
     height: 60px;
+    padding: 20px;
 }
 
 .form-group {
