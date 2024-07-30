@@ -65,9 +65,12 @@ body {
 
 #products {
   display: grid;
-  grid-template-columns: auto auto auto;
-  grid-column-gap: 1.5em;
-  padding: 2em 0;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 8px;
+  padding: 35px;
+  margin-left: 12%;
 }
 
 .card {
@@ -82,7 +85,7 @@ body {
   text-align: center;
 }
 
-img {
+.card img {
   max-width: 100%;
   object-fit: contain;
   height: 15em;
@@ -112,8 +115,10 @@ img {
 }
 
 .img-inic img {
-  width: 100%;
-  height: 50%;
+  padding: 35px;
+  width: 75%;
+  display: flex;
+  margin-left: 13%;
 }
 
 

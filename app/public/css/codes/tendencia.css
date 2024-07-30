@@ -15,7 +15,8 @@
     text-align: center;
     margin-bottom: 30px;
 }
-.center-text span{
+
+.center-text span {
     color: var(--cor-fonte3);
 }
 
@@ -27,31 +28,37 @@
     text-align: center;
     margin-bottom: 30px;
 }
-.center-text-camisas span{
+
+.center-text-camisas span {
     color: var(--cor-fonte3);
 }
 
-.products{
+.products {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, auto));
+    grid-template-columns: repeat(auto-fit, minmax(230px, auto));
     padding: 45px;
     gap: 2rem;
+    width: 82%;
+    margin-left: 10%;
 }
-.row{
+
+.row {
     position: relative;
     transition: all .40s;
     border: 1px solid rgba(128, 128, 128, 0.253);
     padding: 10px;
 }
 
-.row img{
+.row img {
     width: 100%;
     height: auto;
     transition: all .40s;
 }
-.row img:hover{
+
+.row img:hover {
     transform: scale(0.9);
 }
+
 .product-text h5 {
     position: absolute;
     top: 13px;
@@ -64,25 +71,30 @@
     padding: 3px 10px;
     border-radius: 2px;
 }
-.heart-icon{
+
+.heart-icon {
     position: absolute;
     right: 0;
     font-size: 20px;
     cursor: pointer;
 }
-.heart-icon:hover{
+
+.heart-icon:hover {
     color: #ff2929;
 }
-.ratting i{
+
+.ratting i {
     color: #FFD700;
     font-size: 18px;
 }
-.price{
+
+.price {
     color: var(--cor-fonte2);
     font-size: 16px;
     font-weight: 400;
 }
-.price p{
+
+.price p {
     color: #151515;
     font-size: 14px;
     font-weight: 400;
@@ -102,7 +114,7 @@ section.desc-outher {
     justify-content: space-between;
 }
 
-.desc-price .desconto{
+.desc-price .desconto {
     border: 1px solid rgba(128, 128, 128, 0.253);
     font-size: 14px;
     padding: 10px;
@@ -141,32 +153,36 @@ section.desc-outher {
     width: 15px;
     height: 15px;
 }
+
 .ballg {
     background-color: rgb(0, 202, 0);
     border-radius: 50%;
     width: 15px;
     height: 15px;
 }
+
 .ballb {
     background-color: rgb(0, 17, 255);
     border-radius: 50%;
     width: 15px;
     height: 15px;
 }
+
 .balla {
     background-color: rgb(251, 255, 0);
     border-radius: 50%;
     width: 15px;
     height: 15px;
 }
+
 .ballp {
     background-color: rgb(255, 117, 232);
     border-radius: 50%;
     width: 15px;
     height: 15px;
-} 
+}
 
-.price .cores{
+.price .cores {
     margin-left: 5px;
 }
 
@@ -176,19 +192,22 @@ section.desc-outher {
         margin-left: 0px;
     }
 }
+
 /* Product page */
 
 
 
-@media screen and (min-width: 320px){
-    .center-text h2{
+@media screen and (min-width: 320px) {
+    .center-text h2 {
         font-size: 18px;
     }
-    .prod-center-text h2{
+
+    .prod-center-text h2 {
         font-size: 18px;
     }
 
 }
-.error{
+
+.error {
     border: solid 1px red;
 }

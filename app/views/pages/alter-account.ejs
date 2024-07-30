@@ -30,10 +30,6 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-            crossorigin="anonymous"></script>
-
     <title>+Sports</title>
 </head>
 
@@ -55,29 +51,13 @@
                             <% if(nome==false) { %>
                                 <h4>Logue para acessar suas informações!</h4>
                                 <% }else{ %>
-                                    <h4 class="lr">Adicionar endereço:</h4>
-                                    <form method="get" action="/guardarCEP">
-                                        <label>Cep:
-                                        <input name="cep" type="text" id="cep" value="" size="10" maxlength="9" /></label><br />
-                                        <label>Rua:
-                                        <input name="rua" type="text" id="rua" size="60" /></label><br />
-                                        <label>Bairro:
-                                        <input name="bairro" type="text" id="bairro" size="40" /></label><br />
-                                        <label>Cidade:
-                                        <input name="cidade" type="text" id="cidade" size="40" /></label><br />
-                                        <label>Estado:
-                                        <input name="uf" type="text" id="uf" size="2" /></label><br />
-                                        <button type="submit" class="btn btn-primary" id="save-btn" required>Salvar endereço</button>
-                                      </form>
-                                      <h4>Endereço:</h4>
-                                      <ul>
-                                          <li>CEP:<%= cep %></li>
-                                          <li>Rua: <%= rua %></li>
-                                          <li>Bairro: <%= bairro %></li>
-                                          <li>Cidade: <%= cidade %></li>
-                                          <li>Estado: <%= nome %></li>
-                                      </ul>
-                                      
+                                    <h4 class="lr">Seu nome completo:</h4>
+                                    <label class="campo-dig" for="nome">
+                                        <%= nome + " " + sobrenome%>
+                                    </label>
+                                    <h4>Deseja alterar seu <span>nome?</span></h4>
+                                    <input id="nome" type="text" name="nome" placeholder="Deseja alterar seu nome?"
+                                        required>
                                     <% } %>
                         </li>
                         <li>
@@ -107,6 +87,8 @@
 
 </body>
 <script src="js/script.js"></script>
-<script src="js/cep-api.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/updateUI-profile.js"></script>
+<script src="js/profile.js"></script>
 
 </html>

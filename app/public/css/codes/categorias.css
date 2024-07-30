@@ -11,7 +11,7 @@
 .categs {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, auto));
-    gap: 3rem;
+    gap: 20px;
     padding: 0;
     align-items: center;
     justify-content: center;

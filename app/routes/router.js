@@ -104,7 +104,27 @@ router.post("/fazerRegistro", async function (req, res) {
     }
 });
 
+router.get("/guardarCEP", async function (req, res){
+    const{ cep, rua, bairro, cidade, uf } = req.body;
 
+    try{
+        const [adress] = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE cep_cliente VALUES = ?", [cep]);
+
+        if(adress.lenght > 0){
+            req.flash('msg', "Você ja tem um endereço cadastrado!")
+            console.log(req.flash());
+            res.render('pages/alter');
+        }
+
+        await connection.query("INSERT INTO usuario_clientes (cep_cliente, cidade_cliente, bairro_cliente, logradouro_cliente, estado) VALUES (?, ?, ?, ?)", [cep, cidade, bairro, rua, uf]);
+
+        req.flash('msg', "Endereço cadastrado com sucesso!")
+    }catch (error) {
+        console.error(error);
+        res.status(400).send(error.message);
+    }
+    res.render('pages/alter', { email: email });
+});
 
 
 // Rota para processar o login
