@@ -25,8 +25,8 @@ app.use(session({
 
 app.use(flash());
 
-var rotas = require("./app/routes/router");
-app.use("/", rotas);
+var router = require("./app/routes/router");
+app.use("/", router);
 
 
 app.listen(port, () => {

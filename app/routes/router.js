@@ -1,10 +1,12 @@
 var express = require("express");
 var router = express.Router();
-exports.router = router;
-const connection = require("../../config/pool_conexoes");
-const req = require("express/lib/request");
-const flash = require("connect-flash");
-const bcrypt = require('bcrypt');
+
+const {
+    verificarUsuAutenticado,
+    limparSessao,
+    gravarUsuAutenticado,
+    verificarUsuAutorizado,
+} = require("../models/middleware");
 
 router.get("/", function (req, res) {
     var email = req.session.email;
@@ -63,45 +65,6 @@ router.get("/alter", function (req, res) {
     var email = req.session.email;
 
     res.render("pages/alter", { nome: nome, sobrenome: sobrenome, email: email });
-});
-
-router.post("/fazerRegistro", async function (req, res) {
-    const { nome, sobrenome, email, senha, cSenha } = req.body;
-    // Verificar se as senhas coincidem
-    if (senha !== cSenha) {
-        req.flash('msg', "As senhas não coincidem");
-        console.log(req.flash()); // Adicione este console log para verificar as mensagens flash
-        res.render('pages/register', { email: email, messages: req.flash() });
-    }
-
-    console.log(req.flash('msg')); // Verifica se a mensagem está sendo corretamente definida
-
-    try {
-
-        const salt = bcrypt.genSaltSync(10);
-        const hashedPassword = bcrypt.hashSync(senha, salt);
-
-        // Consultar se o email já está registrado
-        const [rows] = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE email_cliente = ?", [email]);
-
-        // Se encontrou algum registro com o mesmo email, exibir mensagem de erro
-        if (rows.length > 0) {
-            req.flash('msg', "Usuario em uso.");
-            console.log(req.flash()); // Adicione este console log para verificar as mensagens flash
-            res.render('pages/register', { email: email, messages: req.flash() });
-        }
-
-        // Se o email não existe no banco de dados, inserir o novo registro
-        await connection.query("INSERT INTO usuario_clientes (nome_cliente, sobrenome_cliente, email_cliente, senha_cliente) VALUES (?, ?, ?, ?)", [nome, sobrenome, email, hashedPassword]);
-
-        // Redirecionar para a página de login ou outra página após o registro
-        req.flash("success_msg", "Registro realizado com sucesso!");
-        res.render('pages/login', { pagina: "login", logado: null });
-
-    } catch (error) {
-        console.error(error);
-        res.status(400).send(error.message);
-    }
 });
 
 router.get("/guardarCEP", async function (req, res){
@@ -164,6 +127,10 @@ router.get("/fazerLogout", function (req, res) {
     req.session.destroy(function (err) {
         res.redirect('/');
     })
-})
+});
+
+
+
+
 
 module.exports = router;
