@@ -8,6 +8,12 @@ const {
     verificarUsuAutorizado,
 } = require("../models/middleware");
 
+const usuarioController = require("../controllers/usuarioController");
+
+const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
+// const uploadFile = require("../util/uploader")();
+
+
 router.get("/", function (req, res) {
     var email = req.session.email;
     req.session.email;
@@ -29,19 +35,24 @@ router.get("/product-page-2", function (req, res) {
     var email = req.session.email;
     res.render("pages/product-page-2", { email: email });
 });
-router.get("/profile", function (req, res) {
+router.get("/profile", verificarUsuAutorizado([1, 2, 3], "pages/restrito"), async function (req, res) {
+    usuarioController.mostrarPerfil(req, res);
     var nome = req.session.nome;
     var email = req.session.email;
-
     console.log(nome);
     res.render("pages/profile", { nome: nome, email: email });
-});
+}
+);
+
 router.get("/register", function (req, res) {
-    var email = req.session.email;
-    req.flash("As senhas não coincidem");
-    console.log(req.flash()); // Adicione este console log para verificar as mensagens flash
-    res.render('pages/register', { email: email, messages: req.flash() });
+    res.render("pages/cadastro", {
+        listaErros: null,
+        dadosNotificacao: null,
+        valores: { nome_usu: "", nomeusu_usu: "", email_usu: "", senha_usu: "" },
+    });
 });
+
+
 
 router.get("/soccer", function (req, res) {
     var email = req.session.email;
@@ -67,13 +78,13 @@ router.get("/alter", function (req, res) {
     res.render("pages/alter", { nome: nome, sobrenome: sobrenome, email: email });
 });
 
-router.get("/guardarCEP", async function (req, res){
-    const{ cep, rua, bairro, cidade, uf } = req.body;
+router.get("/guardarCEP", async function (req, res) {
+    const { cep, rua, bairro, cidade, uf } = req.body;
 
-    try{
+    try {
         const [adress] = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE cep_cliente VALUES = ?", [cep]);
 
-        if(adress.lenght > 0){
+        if (adress.lenght > 0) {
             req.flash('msg', "Você ja tem um endereço cadastrado!")
             console.log(req.flash());
             res.render('pages/alter');
@@ -82,7 +93,7 @@ router.get("/guardarCEP", async function (req, res){
         await connection.query("INSERT INTO usuario_clientes (cep_cliente, cidade_cliente, bairro_cliente, logradouro_cliente, estado) VALUES (?, ?, ?, ?)", [cep, cidade, bairro, rua, uf]);
 
         req.flash('msg', "Endereço cadastrado com sucesso!")
-    }catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(400).send(error.message);
     }

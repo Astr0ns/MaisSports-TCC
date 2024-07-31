@@ -65,42 +65,20 @@ const usuarioModel = {
         }
     },
 
-    fazerRegistro: async function (req, res) {
-        const { nome, sobrenome, email, senha, cSenha } = req.body;
-        // Verificar se as senhas coincidem
-        if (senha !== cSenha) {
-            req.flash('msg', "As senhas não coincidem");
-            console.log(req.flash()); // Adicione este console log para verificar as mensagens flash
-            res.render('pages/register', { email: email, messages: req.flash() });
-        }
-    
-        console.log(req.flash('msg')); // Verifica se a mensagem está sendo corretamente definida
-    
+    findId: async (id) => {
         try {
-    
-            const salt = bcrypt.genSaltSync(10);
-            const hashedPassword = bcrypt.hashSync(senha, salt);
-    
-            // Consultar se o email já está registrado
-            const [rows] = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE email_cliente = ?", [email]);
-    
-            // Se encontrou algum registro com o mesmo email, exibir mensagem de erro
-            if (rows.length > 0) {
-                req.flash('msg', "Usuario em uso.");
-                console.log(req.flash()); // Adicione este console log para verificar as mensagens flash
-                res.render('pages/register', { email: email, messages: req.flash() });
-            }
-    
-            // Se o email não existe no banco de dados, inserir o novo registro
-            await connection.query("INSERT INTO usuario_clientes (nome_cliente, sobrenome_cliente, email_cliente, senha_cliente) VALUES (?, ?, ?, ?)", [nome, sobrenome, email, hashedPassword]);
-    
-            // Redirecionar para a página de login ou outra página após o registro
-            req.flash("success_msg", "Registro realizado com sucesso!");
-            res.render('pages/login', { pagina: "login", logado: null });
-    
+            const [resultados] = await pool.query(
+                "SELECT u.id_usuario, u.nome_usuario, u.user_usuario, " +
+                "u.senha_usuario, u.email_usuario, u.fone_usuario, u.tipo_usuario, " +
+                "u.status_usuario,u.numero_usuario, u.cep_usuario,u.img_perfil_banco, u.img_perfil_pasta," +
+                "t.id_tipo_usuario, t.descricao_usuario " +
+                "FROM usuario u, tipo_usuario t where u.status_usuario = 1 and " +
+                "u.tipo_usuario = t.id_tipo_usuario and u.id_usuario = ? ", [id]
+            )
+            return resultados;
         } catch (error) {
-            console.error(error);
-            res.status(400).send(error.message);
+            console.log(error);
+            return error;
         }
-    }
+    },
 };

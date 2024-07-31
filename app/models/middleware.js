@@ -2,7 +2,7 @@ const { validationResult } = require("express-validator");
 const usuario = require("./usuarioModel");
 const bcrypt = require("bcrypt");
 
-vereficarUsusAutenticado = (req, res, next) =>{
+verificarUsuAutenticado = (req, res, next) =>{
     if(req.session.autenticado){
         var autenticado = req.session.autenticado;
     }else{
@@ -21,15 +21,15 @@ gravarUsuAutenticado = async (req, res, next) => {
     erros = validationResult(req)
     if(erros.isEmpty()) {
         var dadosForm = {
-            email_cliente: req.body.email,
-            senha_cliente: req.body.senha,
+            email: req.body.email,
+            senha: req.body.senha,
         };
         var results = await usuario.findUserEmail(dadosForm);
     var total = Object.keys(results).length;
     if (total == 1) {
       if (bcrypt.compareSync(dadosForm.senha_cliente, results[0].senha_cliente)) {
         var autenticado = {
-          autenticado: results[0].nome_cliente,
+          autenticado: results[0].nome,
           id: results[0].id_cliente,
           tipo: results[0].tipo_cliente,
           img_perfil_banco: results[0].img_perfil_banco != null ? `data:image/jpeg;base64,${results[0].img_perfil_banco.toString('base64')}` : null,
@@ -41,6 +41,28 @@ gravarUsuAutenticado = async (req, res, next) => {
   req.session.autenticado = autenticado;
   req.session.logado = 0;
   next();
+};
+
+verificarUsuAutorizado = (tipoPermitido, destinoFalha) => {
+  return (req, res, next) => {
+    if (
+      req.session.autenticado.autenticado != null &&
+      tipoPermitido.find(function (element) {
+        return element == req.session.autenticado.tipo;
+      }) != undefined
+    ) {
+      next();
+    } else {
+      res.render(destinoFalha, req.session.autenticado);
+    }
+  };
+};
+
+module.exports = {
+  verificarUsuAutenticado,
+  limparSessao,
+  gravarUsuAutenticado,
+  verificarUsuAutorizado,
 };
 
 
