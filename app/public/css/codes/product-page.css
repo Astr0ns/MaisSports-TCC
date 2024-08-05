@@ -16,7 +16,7 @@
     display: flex;
     position: relative;
     width: 165vh;
-    height: 100%;
+    height: auto;
     background-color: #f5f5f5;
     border-radius: 10px;
     padding: 35px 35px;
@@ -29,7 +29,8 @@ section.container {
 }
 
 .product-info {
-    width: 50%;
+    width: 30%;
+    padding: 30px;
 }
 
 .container-product {
@@ -58,7 +59,13 @@ section.container {
 
 .product-info p {
     text-align: start;
-    font-size: 20px;
+    font-size: 14px;
+
+}
+
+.product-info li {
+    text-align: start;
+    font-size: 14px;
 
 }
 
@@ -113,10 +120,13 @@ section.heart-icon {
 
 section.product-card {
     display: grid;
-    grid-template-columns: repeat(2, 38%);
-    grid-template-rows: 20% 20% 20% 20%;
-    grid-column-gap: 0px;
-    grid-row-gap: 36%;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(4, auto);
+    grid-column-gap: 1%;
+    grid-row-gap: 1%;
+    width: 70%;
+    overflow: hidden;
+    height: 170vh;
 }
 
 
@@ -125,7 +135,7 @@ section.product-card {
     width: 100%;
     transition: all .40s;
     border: 2px solid var(--cor-fundo2);
-    border-radius: 15%;
+    border-radius: 2%;
 }
 
 .mini-imgs {
@@ -245,6 +255,43 @@ section.product-card {
     color: var(--cor-fundo2);
     font-weight: bold;
 }
+
+section.tam {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+section.num-tam {
+    /* width: 100%; */
+    transition: all .40s;
+    border: 2px solid var(--cor-fundo2);
+    border-radius: 15%;
+    padding: 15px;
+}
+
+section .content {
+    max-height: 0px; /* Altura suficiente para mostrar o conteúdo */
+    overflow: hidden; /* Oculta o conteúdo que transborda */
+    transition: max-height 0.5s ease-out; /* Animação suave */
+}
+.content.collapsed {
+    max-height: 100vh; /* Esconde o conteúdo */
+}
+
+section .btn-vermais{
+    border: none;
+    background-color: transparent;
+    font-size: 14px;
+    text-decoration:underline;
+    cursor: pointer;
+}
+
 
 
 @media screen and (min-width: 502px) and (max-width: 630px) {

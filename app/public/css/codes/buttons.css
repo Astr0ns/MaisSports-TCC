@@ -10,18 +10,18 @@
 
 /* Botão de compra */
 .button {
-    --width: 300px;
+    --width: 255px;
     --height: 50px;
     --button-color: #222;
     --tooltip-color: #fff;
     margin-top: 2rem;
-    margin-left: 25%;
+    margin-left: 8%;
     width: var(--width);
     height: var(--height);
     background: var(--cor-fundo2);
     position: relative;
     text-align: center;
-    border-radius: 0.45em;
+    border-radius: 5.45em;
     font-family: "Arial";
     transition: background 0.3s;
     cursor: pointer;
@@ -115,6 +115,32 @@
 
 .button:hover:before {
     bottom: calc(var(--height));
+}
+
+.button-fav {
+    padding: 7px;
+    display: flex;
+    width: 75%;
+    background-color: rgba(35, 35, 87, 0.678);
+    border: 1px;
+    border-radius: 50px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-left: 8%;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3%;
+    cursor: pointer;
+}
+
+.button-fav button{
+    background-color: transparent;
+    font-size: 14px;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
 }
 
 

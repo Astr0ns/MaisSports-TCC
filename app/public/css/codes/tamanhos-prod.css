@@ -8,64 +8,10 @@
     --cor-fundo3: rgb(37, 37, 37);
 }
 
-
-
-/* Codigo de formatação dos quadradinhos do size */
-.tamanhos {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    grid-template-rows: 44px;
-    grid-column-gap: 0;
-    grid-row-gap: 0px;
-    color: var(--cor-fonte3);
-    align-items: start;
-    justify-content: center;
-}
-
-.tamanhos select {
-    font-size: 18px;
-    border: solid 1px;
-    border-radius: 10px;
-    width: 70px;
-    transform: translate(0.1 ease);
-}
-
-.tamanhos select {
-    background-color: var(--cor-fonte);
-    display: block;
-    padding: 5px, 10px;
-    margin-left: 10px;
-    border: 1px solid var(--cor-fundo2);
-}
-
-
-.tamanhos input {
-    background-color: var(--cor-fonte);
-    width: 70px;
-    height: 40px;
-    padding-left: 15px;
-    font-size: 16px;
-    margin-left: 10px;
-    border: 1px solid var(--cor-fundo2);
-    border-radius: 10px;
-}
-
 .tamanhos input:focus {
     outline: none;
 }
 
-.tamanhos #quant_error {
-    margin-top: 5px;
-    width: 345px;
-    font-size: 15px;
-    color: #C62828;
-    background: rgb(255, 0, 0, 0.1);
-    text-align: center;
-    padding: 5px 8px;
-    border-radius: 3px;
-    border: 1px solid #EF9A9A;
-    display: none;
-}
 
 .start-text h2 {
     color: var(--cor-fonte2);
