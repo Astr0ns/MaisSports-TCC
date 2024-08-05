@@ -16,7 +16,7 @@
     display: flex;
     position: relative;
     width: 165vh;
-    height: 70vh;
+    height: 100%;
     background-color: #f5f5f5;
     border-radius: 10px;
     padding: 35px 35px;
@@ -73,10 +73,11 @@ section.container {
     padding: 15px;
 }
 
-section.ratting{
+section.ratting {
     padding: 10px;
 }
-section.heart-icon{
+
+section.heart-icon {
     padding: 10px;
 }
 
@@ -109,20 +110,20 @@ section.heart-icon{
     border-radius: 20%;
 }
 
-.product-card {
-    width: 80vh;
-    height: 60vh;
-    overflow: hidden;
 
+section.product-card {
+    display: grid;
+    grid-template-columns: repeat(2, 38%);
+    grid-template-rows: 20% 20% 20% 20%;
+    grid-column-gap: 0px;
+    grid-row-gap: 36%;
 }
 
+
+
 .product-card img {
-    width: 75%;
-    height: auto;
+    width: 100%;
     transition: all .40s;
-    display: flex;
-    margin-left: 6rem;
-    overflow: hidden;
     border: 2px solid var(--cor-fundo2);
     border-radius: 15%;
 }
