@@ -46,6 +46,9 @@ router.get("/profile", async function (req, res) {
     res.render("pages/profile", { nome: nome, email: email, autenticado: autenticado });
 });
 
+router.post("/alterType", async function (req, res){
+
+});
 
 router.get("/register", function (req, res) {
     res.render("pages/register", {
@@ -68,7 +71,7 @@ router.post("/fazerRegistro", async function (req, res){
     try {
         const emailExist = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE email = ?", [email]);
 
-        await connection.query("INSERT INTO usuario_clientes (nome, sobrenome, email, senha) VALUES (?, ?, ?, ?)", [nome, sobrenome, email, hash]); {
+        await connection.query("INSERT INTO usuario_clientes (nome, sobrenome, email, senha, tipo) VALUES (?, ?, ?, ?, 'usuario')", [nome, sobrenome, email, hash]); {
             res.render('pages/login', { pagina: "login", logado: null });
         }
     } catch (error) {
