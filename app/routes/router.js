@@ -46,9 +46,9 @@ router.get("/profile", async function (req, res) {
     res.render("pages/profile", { nome: nome, email: email, autenticado: autenticado });
 });
 
-router.post("/alterType", async function (req, res){
-
-});
+// router.post("/alterType", async function (req, res){
+// UPDATE usuario_clientes SET tipo = 'usuario' WHERE id_cliente = 57;
+// });
 
 router.get("/register", function (req, res) {
     res.render("pages/register", {
