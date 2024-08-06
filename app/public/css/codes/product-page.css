@@ -134,7 +134,7 @@ section.product-card {
 .product-card img {
     width: 100%;
     transition: all .40s;
-    border: 2px solid var(--cor-fundo2);
+    border: 2px solid #d120895c;
     border-radius: 2%;
 }
 
@@ -167,12 +167,12 @@ section.product-card {
 
 .mini-pics-product img:hover {
     transform: scale(0.8);
-    border: 1px solid var(--cor-fundo2);
+    border: 2px solid #d120895c;
     border-radius: 20%;
 }
 
 .select-prod {
-    border: 1px solid var(--cor-fundo2);
+    border: 2px solid #d120895c;
     border-radius: 20%;
 }
 
@@ -270,7 +270,7 @@ section.tam {
 section.num-tam {
     /* width: 100%; */
     transition: all .40s;
-    border: 2px solid var(--cor-fundo2);
+    border: 2px solid #d120895c;
     border-radius: 15%;
     padding: 15px;
 }
