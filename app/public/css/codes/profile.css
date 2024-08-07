@@ -93,6 +93,7 @@ a:hover {
     padding: 10px 5px;
     width: 170px;
     transition: all .42s ease;
+    cursor: pointer;
 }
 
 .login-btn button:hover {

@@ -3,6 +3,9 @@ var router = express.Router();
 const bcrypt = require("bcrypt");
 var salt = bcrypt.genSaltSync(12);
 var connection = require("../../config/pool_conexoes");
+const mysql = require('mysql2/promise');
+const flash = require('connect-flash');
+const authMiddleware = require('.././models/middleware')
 
 const {
     verificarUsuAutenticado,
@@ -42,7 +45,6 @@ router.get("/profile", async function (req, res) {
     var nome = req.session.nome;
     var email = req.session.email;
     var autenticado = req.session.autenticado;
-    console.log(nome);
     res.render("pages/profile", { nome: nome, email: email, autenticado: autenticado });
 });
 
@@ -101,9 +103,6 @@ router.post("/fazerRegistro", async function (req, res) {
 });
 
 
-
-
-
 router.get("/soccer", function (req, res) {
     var email = req.session.email;
     res.render("pages/soccer", { email: email });
@@ -124,32 +123,57 @@ router.get("/alter", function (req, res) {
     var nome = req.session.nome;
     var sobrenome = req.session.sobrenome;
     var email = req.session.email;
+    var cep = req.session.cep;
 
-    res.render("pages/alter", { nome: nome, sobrenome: sobrenome, email: email });
+    console.log(req.session.cep);
+
+
+    res.render("pages/alter", { nome: nome, sobrenome: sobrenome, email: email, cep:cep });
 });
-
-router.get("/guardarCEP", async function (req, res) {
-    const { cep, rua, bairro, cidade, uf } = req.body;
-
+router.get('/guardarCEP', async (req, res) => {
+    const { cep, numero } = req.query;
+  
+    let conn;
+  
     try {
-        const [adress] = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE cep_cliente VALUES = ?", [cep]);
-
-        if (adress.lenght > 0) {
-            req.flash('msg', "Você ja tem um endereço cadastrado!")
-            console.log(req.flash());
-            res.render('pages/alter');
+      conn = await connection.getConnection(); // Obtém uma conexão do pool
+  
+      try {
+        // Verifique se o endereço já está cadastrado
+        const [rows] = await conn.query(
+          "SELECT id_cliente FROM usuario_clientes WHERE cep = ?",
+          [cep]
+        );
+  
+        if (rows.length > 0) {
+          req.flash('msg', "Você já tem um endereço cadastrado!");
+          return res.redirect('/alter'); // Redireciona para a página de alteração
         }
-
-        await connection.query("INSERT INTO usuario_clientes (cep_cliente, cidade_cliente, bairro_cliente, logradouro_cliente, estado) VALUES (?, ?, ?, ?)", [cep, cidade, bairro, rua, uf]);
-
-        req.flash('msg', "Endereço cadastrado com sucesso!")
+  
+        const userId = req.session.userId;
+  
+        // Insira o novo endereço no banco de dados
+        await conn.query(
+          "UPDATE usuario_clientes SET cep = ?, numero = ? WHERE id_cliente = ?",
+          [cep, numero, userId]
+        );
+  
+        req.flash('msg', "Endereço cadastrado com sucesso!");
+        return res.redirect('/alter'); // Redireciona para a página de alteração
+      } finally {
+        if (conn) conn.release(); // Libere a conexão após o uso
+      }
     } catch (error) {
-        console.error(error);
-        res.status(400).send(error.message);
+      console.error(error);
+      if (!res.headersSent) { // Verifique se os cabeçalhos já foram enviados
+        res.status(400).send(error.message); // Envie uma resposta de erro se não tiver sido enviada uma resposta anterior
+      }
     }
-    res.render('pages/alter', { email: email });
-});
+  });
 
+router.get('/empresa', authMiddleware, (req, res) => {
+    res.send(`Bem-vindo ao seu dashboard, usuário ID ${req.session.userId}`);
+  });
 
 // Rota para processar o login
 router.post("/fazerLogin", async function (req, res) {
@@ -168,9 +192,11 @@ router.post("/fazerLogin", async function (req, res) {
 
             // verificar se as senhas conheecidem
             const passwordMatch = bcrypt.compareSync(senha, account[0][0].senha)
-
+            
             if (!passwordMatch) {
                 req.flash('msg', "As senhas não conferem");
+            }else{
+                res.status(401).send("Email ou senhas incorretos!")
             }
 
             res.redirect('/profile');

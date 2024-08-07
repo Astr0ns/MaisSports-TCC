@@ -49,52 +49,58 @@
                     <ul class="desc">
                         <li>
                             <% if(nome==false) { %>
-                                <h2>Logue para acessar suas informações!</h2>
+                                <h2 class="lr">Adicionar endereço:</h2>
+                                <form method="get" action="/guardarCEP">
+                                    <section class="form-group">
+                                        <label for="cep">
+                                            <h3 class="lr">Digite seu CEP</h3>
+                                            <input class="input-form" name="cep" type="text" id="cep" placeholder="CEP"
+                                                size="10" class="" onblur="pesquisacep(thisvalue);"
+                                                onkeyup="mascaraCEP(event)" maxlength="9" />
+                                        </label><br />
+                                    </section>
+                                    <section class="form-group">
+                                        <h3 class="lr">Rua:</h3>
+                                        <label for="rua">
+                                            <input class="input-form" name="rua" type="text" id="rua"
+                                                size="60" /></label><br />
+                                    </section>
+                                    <section class="form-group">
+                                        <h3 class="lr">Número da residência:</h3>
+                                        <label for="numero">
+                                            <input class="input-form" name="numero" type="text" id="numero"
+                                                size="60" /></label><br />
+                                    </section>
+                                    <section class="form-group">
+                                        <h3 class="lr">Bairro:</h3>
+                                        <label for="bairro">
+                                            <input class="input-form" name="bairro" type="text" id="bairro"
+                                                size="40" /></label><br />
+                                    </section>
+                                    <section class="form-group">
+                                        <h3 class="lr">Cidade:</h3>
+                                        <label for="cidade">
+                                            <input class="input-form" name="cidade" type="text" id="cidade"
+                                                size="40" /></label><br />
+                                    </section>
+                                    <section class="form-group">
+                                        <h3 class="lr">Estado:</h3>
+                                        <label for="estado">
+                                            <input class="input-form" name="uf" type="text" id="uf"
+                                                size="2" /></label><br />
+                                    </section>
+                                    <button type="submit" class="btn btn-primary" id="save-btn" required>Salvar
+                                        endereço</button>
+                                </form>
                                 <% }else{ %>
-                                    <h2 class="lr">Adicionar endereço:</h2>
-                                    <form method="post" action="/alterType">
-                                        <section class="form-group">
-                                            <label for="cep">
-                                                <h3 class="lr">Digite seu CEP</h3>
-                                                <input class="input-form" name="cep" type="text" id="cep" placeholder="CEP" size="10"
-                                                    class="" onblur="pesquisacep(thisvalue);"
-                                                    onkeyup="mascaraCEP(event)" maxlength="9" />
-                                            </label><br />
-                                        </section>
-                                        <section class="form-group">
-                                            <h3 class="lr">Rua:</h3>
-                                            <label for="rua">
-                                                <input class="input-form" name="rua" type="text" id="rua" size="60" /></label><br />
-                                        </section>
-                                        <section class="form-group">
-                                            <h3 class="lr">Número da residência:</h3>
-                                            <label for="numero">
-                                                <input class="input-form" name="numero" type="text" id="numero" size="60" /></label><br />
-                                        </section>
-                                        <section class="form-group">
-                                            <h3 class="lr">Bairro:</h3>
-                                            <label for="bairro">
-                                                <input class="input-form" name="bairro" type="text" id="bairro" size="40" /></label><br />
-                                        </section>
-                                        <section class="form-group">
-                                            <h3 class="lr">Cidade:</h3>
-                                            <label for="cidade">
-                                                <input class="input-form" name="cidade" type="text" id="cidade" size="40" /></label><br />
-                                        </section>
-                                        <section class="form-group">
-                                            <h3 class="lr">Estado:</h3>
-                                            <label for="estado">
-                                                <input class="input-form" name="uf" type="text" id="uf" size="2" /></label><br />
-                                        </section>
-                                        <button type="submit" class="btn btn-primary" id="save-btn" required>Salvar
-                                            endereço</button>
-                                    </form>
+                                    <h2>Logue para acessar suas informações!</h2>
                                     <% } %>
                         </li>
                         <li>
-                            <% if(nome && email==false) { %>
+                            <%= if(email < 0){ %>
                                 <h4>Logue para acessar suas informações!</h4>
-                                <% }else{ %>
+                                <%= }else{ %>
+                                    <h4>Logue para acessar suas informações!</h4>
                                     <h4 class="lr">Seu E-mail</h4>
                                     <label class="campo-dig" for="email">
                                         <%= email %>
@@ -102,20 +108,7 @@
                                     <h4>Deseja alterar seu <span>e-mail?</span></h4>
                                     <input id="email" type="text" name="email" placeholder="Deseja alterar seu email?"
                                         required>
-                                    <% } %>
-                        </li>
-                        <li>
-                            <% if(nome && email==false) { %>
-                                <h4>Logue para acessar suas informações!</h4>
-                                <% }else{ %>
-                                    <h4 class="lr">Seu E-mail</h4>
-                                    <label class="campo-dig" for="email">
-                                        <%= email %>
-                                    </label>
-                                    <h4>Deseja alterar seu <span>e-mail?</span></h4>
-                                    <input id="email" type="text" name="email" placeholder="Deseja alterar seu email?"
-                                        required>
-                                    <% } %>
+                                    <%= } %>
                         </li>
                     </ul>
                 </section>
