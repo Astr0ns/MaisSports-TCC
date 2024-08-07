@@ -46,7 +46,7 @@ gravarUsuAutenticado = async (req, res, next) => {
 verificarUsuAutorizado = (tipoPermitido, destinoFalha) => {
   return (req, res, next) => {
     if (
-      req.session.autenticado.autenticado != null &&
+      req.session.autenticado != null &&
       tipoPermitido.find(function (element) {
         return element == req.session.autenticado.tipo;
       }) != undefined
@@ -54,7 +54,7 @@ verificarUsuAutorizado = (tipoPermitido, destinoFalha) => {
       next();
     } else {
       res.render(destinoFalha, req.session.autenticado);
-    }
+    } 
   };
 };
 
@@ -78,4 +78,8 @@ module.exports = {
 //     // ...
 
 //     next()//utilizado para prosseguir para o próximo middleware ou rota
+// }
+
+// if(tipo_usuario = empresa){
+//
 // }

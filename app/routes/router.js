@@ -50,6 +50,25 @@ router.get("/profile", async function (req, res) {
 // UPDATE usuario_clientes SET tipo = 'usuario' WHERE id_cliente = 57;
 // });
 
+router.post("/alterType", async function (req, res) {
+    const { email, senha, cnpj, cSenha } = req.body;
+
+    if (senha != cSenha) {
+        req.flash("msg", "As senhas não coicidem");
+        return res.render('/regiEmpresa')
+    }
+    const hash = await bcrypt.hash(senha, 10);
+    try {
+        const emailExist = await connection.query("SELECT id_empresa FROM empresas WHERE email = ? AND cnpj = ?", [email, cnpj]);
+
+        await connection.query("INSERT INTO empresas (cnpj, email, senha, tipo) VALUES = (?, ?, ?)", [email, cnpj, hash]); {
+            res.render('pages/empresa', { pagina: "empresa", logado: null });
+        }
+    }catch (error) {
+        console.error(error);
+        res.status(400).send(error.message);
+    }
+    });
 router.get("/register", function (req, res) {
     res.render("pages/register", {
         listaErros: null,
@@ -58,7 +77,7 @@ router.get("/register", function (req, res) {
     });
 });
 
-router.post("/fazerRegistro", async function (req, res){
+router.post("/fazerRegistro", async function (req, res) {
     const { nome, sobrenome, email, senha, cSenha } = req.body;
 
     if (senha != cSenha) {
