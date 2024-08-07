@@ -55,20 +55,35 @@
                                 <h4>Logue para acessar suas informações!</h4>
                                 <% }else{ %>
                                     <h4 class="lr">Adicionar endereço:</h4>
-                                    <form method="get" action="/profile">
-                                        <label>Cep:
-                                            <input name="cep" type="text" id="cep"
-                                                placeholder="CEP" size="10" class=""
-                                                onblur="pesquisacep(thisvalue);" onkeyup="mascaraCEP(event)"
-                                                maxlength="9" /></label><br />
-                                        <label>Rua:
-                                            <input name="rua" type="text" id="rua" size="60" /></label><br />
-                                        <label>Bairro:
-                                            <input name="bairro" type="text" id="bairro" size="40" /></label><br />
-                                        <label>Cidade:
-                                            <input name="cidade" type="text" id="cidade" size="40" /></label><br />
-                                        <label>Estado:
-                                            <input name="uf" type="text" id="uf" size="2" /></label><br />
+                                    <form method="post" action="/alterType">
+                                        <section class="form-group">
+                                            <label for="cep">
+                                                <h3 class="lr">Digite seu primeiro nome</h3>
+                                                <input name="cep" type="text" id="cep" placeholder="CEP" size="10"
+                                                    class="" onblur="pesquisacep(thisvalue);"
+                                                    onkeyup="mascaraCEP(event)" maxlength="9" />
+                                            </label><br />
+                                        </section>
+                                        <section class="form-group">
+                                            <h3 class="lr">Rua:</h3>
+                                            <label for="rua">
+                                                <input name="rua" type="text" id="rua" size="60" /></label><br />
+                                        </section>
+                                        <section class="form-group">
+                                            <h3 class="lr">Bairro:</h3>
+                                            <label for="bairro">
+                                                <input name="bairro" type="text" id="bairro" size="40" /></label><br />
+                                        </section>
+                                        <section class="form-group">
+                                            <h3 class="lr">Cidade:</h3>
+                                            <label for="cidade">
+                                                <input name="cidade" type="text" id="cidade" size="40" /></label><br />
+                                        </section>
+                                        <section class="form-group">
+                                            <h3 class="lr">Estado:</h3>
+                                            <label for="estado">
+                                                <input name="uf" type="text" id="uf" size="2" /></label><br />
+                                        </section>
                                         <button type="submit" class="btn btn-primary" id="save-btn" required>Salvar
                                             endereço</button>
                                     </form>
