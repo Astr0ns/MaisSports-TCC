@@ -66,11 +66,11 @@ router.post("/alterType", async function (req, res) {
         await connection.query("INSERT INTO empresas (cnpj, email, senha, tipo) VALUES = (?, ?, ?)", [email, cnpj, hash]); {
             res.render('pages/empresa', { pagina: "empresa", logado: null });
         }
-    }catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(400).send(error.message);
     }
-    });
+});
 router.get("/register", function (req, res) {
     res.render("pages/register", {
         listaErros: null,
@@ -119,67 +119,80 @@ router.get("/cart", function (req, res) {
     res.render("pages/cart", { email: email });
 });
 
-router.get("/alter", function (req, res) {
-    var nome = req.session.nome;
-    var sobrenome = req.session.sobrenome;
-    var email = req.session.email;
-    var cep = req.session.cep;
+router.get('/alter', async (req, res) => {
+    const userId = req.session.userId;
+    
+    try {
+        const [rows] = await connection.query(
+            "SELECT cep FROM usuario_clientes WHERE id_cliente = ?",
+            [userId]
+        );
 
-    console.log(req.session.cep);
+        const cep = rows.length > 0 ? rows[0].cep : null;
+        const email = req.session.email || null;
 
+        console.log('Email:', email); // Debug
+        console.log('CEP:', cep); // Debug
 
-    res.render("pages/alter", { nome: nome, sobrenome: sobrenome, email: email, cep:cep });
+        res.render('pages/alter', { email, cep });
+    } catch (error) {
+        console.error('Erro ao obter dados:', error);
+        res.status(500).send('Erro ao obter dados');
+    }
 });
+
 router.get('/guardarCEP', async (req, res) => {
     const { cep, numero } = req.query;
-  
+    const userId = req.session.userId;
+
     let conn;
-  
+
     try {
-      conn = await connection.getConnection(); // Obtém uma conexão do pool
-  
-      try {
-        // Verifique se o endereço já está cadastrado
-        const [rows] = await conn.query(
-          "SELECT id_cliente FROM usuario_clientes WHERE cep = ?",
-          [cep]
-        );
-  
-        if (rows.length > 0) {
-          req.flash('msg', "Você já tem um endereço cadastrado!");
-          return res.redirect('/alter'); // Redireciona para a página de alteração
+        conn = await connection.getConnection(); // Obtém uma conexão do pool
+
+        try {
+            // Verifique se o endereço já está cadastrado
+            const [rows] = await conn.query(
+                "SELECT id_cliente FROM usuario_clientes WHERE cep = ?",
+                [cep]
+            );
+
+            if (rows.length > 0) {
+                req.flash('msg', "Você já tem um endereço cadastrado!");
+                return res.redirect('/alter');
+            }
+
+            // Insira o novo endereço no banco de dados
+            await conn.query(
+                "UPDATE usuario_clientes SET cep = ?, numero = ? WHERE id_cliente = ?",
+                [cep, numero, userId]
+            );
+
+            // Atualiza a sessão com o novo CEP
+            req.session.cep = cep;
+
+            req.flash('msg', "Endereço cadastrado com sucesso!");
+            return res.redirect('/alter');
+        } finally {
+            if (conn) conn.release(); // Libere a conexão após o uso
         }
-  
-        const userId = req.session.userId;
-  
-        // Insira o novo endereço no banco de dados
-        await conn.query(
-          "UPDATE usuario_clientes SET cep = ?, numero = ? WHERE id_cliente = ?",
-          [cep, numero, userId]
-        );
-  
-        req.flash('msg', "Endereço cadastrado com sucesso!");
-        return res.redirect('/alter'); // Redireciona para a página de alteração
-      } finally {
-        if (conn) conn.release(); // Libere a conexão após o uso
-      }
     } catch (error) {
-      console.error(error);
-      if (!res.headersSent) { // Verifique se os cabeçalhos já foram enviados
-        res.status(400).send(error.message); // Envie uma resposta de erro se não tiver sido enviada uma resposta anterior
-      }
+        console.error(error);
+        if (!res.headersSent) {
+            res.status(400).send(error.message);
+        }
     }
-  });
+});
+
 
 router.get('/empresa', authMiddleware, (req, res) => {
     res.send(`Bem-vindo ao seu dashboard, usuário ID ${req.session.userId}`);
-  });
+});
 
 // Rota para processar o login
 router.post("/fazerLogin", async function (req, res) {
 
     const { email, senha } = req.body;
-
 
     try {
         const account = await connection.query("SELECT * FROM usuario_clientes WHERE email = ?", [email]);
@@ -192,11 +205,10 @@ router.post("/fazerLogin", async function (req, res) {
 
             // verificar se as senhas conheecidem
             const passwordMatch = bcrypt.compareSync(senha, account[0][0].senha)
-            
+
             if (!passwordMatch) {
                 req.flash('msg', "As senhas não conferem");
-            }else{
-                res.status(401).send("Email ou senhas incorretos!")
+                return res.redirect('/login'); // Redireciona para a página de login se as senhas não conferem
             }
 
             res.redirect('/profile');
