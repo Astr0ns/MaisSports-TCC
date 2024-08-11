@@ -49,15 +49,16 @@
                     <ul class="desc">
                         <li>
                             <% if (email) { %> <!-- Verifica se o usuário está logado -->
-                                <% if (cep) { %> <!-- Verifica se o CEP está disponível -->
+                                <% if (cep> 0000 ) { %> <!-- Verifica se o CEP está disponível -->
                                     <h2 class="lr">Seu CEP cadastrado:</h2>
                                     <form method="get" action="/guardarCEP">
                                         <section class="form-group">
                                             <label for="cep">
                                                 <h3 class="lr">Digite seu CEP</h3>
-                                                <input class="input-form" name="cep" type="text" id="cep" placeholder="CEP"
-                                                    size="10" value="<%= cep %>" onblur="pesquisacep(this.value);" 
-                                                    onkeyup="mascaraCEP(event)" maxlength="9" />
+                                                <input class="input-form" name="cep" type="text" id="cep"
+                                                    placeholder="<%= cep %>" size="10" value="<%= cep %>"
+                                                    onblur="pesquisacep(this.value);" onkeyup="mascaraCEP(event)"
+                                                    maxlength="9" />
                                             </label><br />
                                         </section>
                                         <section class="form-group">
@@ -70,7 +71,7 @@
                                             <h3 class="lr">Número da residência:</h3>
                                             <label for="numero">
                                                 <input class="input-form" name="numero" type="text" id="numero"
-                                                    size="60" />
+                                                    size="60" placeholder="<%= numero %>" value="<%= numero %>" />
                                             </label><br />
                                         </section>
                                         <section class="form-group">
@@ -93,8 +94,11 @@
                                                 <input class="input-form" name="uf" type="text" id="uf" size="2" />
                                             </label><br />
                                         </section>
-                                        <button type="submit" class="btn btn-primary" id="save-btn">Salvar
+                                        <button type="submit" class="btn btn-primary" id="save-btn">Editar
                                             endereço</button>
+                                        <form action="/delCEP" method="post">
+                                            <button type="submit">excluir endereço</button>
+                                        </form>
                                     </form>
                                     <% } else { %> <!-- Se o CEP não estiver disponível -->
                                         <h2 class="lr">Adicionar endereço:</h2>
@@ -102,8 +106,8 @@
                                             <section class="form-group">
                                                 <label for="cep">
                                                     <h3 class="lr">Digite seu CEP</h3>
-                                                    <input class="input-form" name="cep" type="text" id="cep" placeholder="CEP"
-                                                        size="10" onblur="pesquisacep(this.value);" 
+                                                    <input class="input-form" name="cep" type="text" id="cep"
+                                                        placeholder="CEP" size="10" onblur="pesquisacep(this.value);"
                                                         onkeyup="mascaraCEP(event)" maxlength="9" />
                                                 </label><br />
                                             </section>
@@ -144,22 +148,12 @@
                                             <button type="submit" class="btn btn-primary" id="save-btn">Salvar
                                                 endereço</button>
                                         </form>
+
+
                                         <% } %>
                                             <% } else { %> <!-- Se o usuário não estiver logado -->
                                                 <h2>Logue para acessar suas informações!</h2>
                                                 <% } %>
-                        </li>
-                        <form action="">
-                            <section class="form-group">
-
-                            </section>
-                        </form>
-                        <li>
-
-                        </li>
-
-                        <li>
-                            <h4>exemplo</h4>
                         </li>
                     </ul>
                 </section>
