@@ -257,14 +257,13 @@ section.product-card {
 }
 
 section.tam {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
     align-content: center;
     justify-content: space-evenly;
     align-items: center;
     gap: 16px;
     width: 100%;
+    grid-template-columns: repeat(5, auto);
 }
 
 section.num-tam {
