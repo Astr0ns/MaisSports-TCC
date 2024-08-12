@@ -27,8 +27,8 @@
 @media screen and (min-width: 310px) and (max-width: 500px) {
     .tamanhos {
         display: grid;
-        grid-template-columns: repeat(2, 104px);
-        grid-template-rows: 31px;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: auto;
         align-items: start;
         justify-content: center;
     }

@@ -120,7 +120,7 @@
 .button-fav {
     padding: 7px;
     display: flex;
-    width: 75%;
+    width: 81%;
     background-color: rgba(35, 35, 87, 0.678);
     border: 1px;
     border-radius: 50px;
@@ -222,7 +222,7 @@
         --height: 50px;
         margin-top: 1rem;
         margin-left: 5%;
-        width: var(--width);
+        width: 75%;
         height: var(--height);
         background: var(--cor-fundo2);
         position: relative;
