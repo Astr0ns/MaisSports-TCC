@@ -21,21 +21,6 @@
     margin-left: 5%;
 }
 
-.pics-card {
-    background-color: #f5f5f5;
-}
-
-.pics-card i {
-    font-size: 80px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    padding: 20%;
-    text-decoration: none;
-    color: var(--cor-fundo4);
-}
-
 .product-card i {
     font-size: 28vh;
     display: flex;

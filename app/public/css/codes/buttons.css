@@ -16,7 +16,7 @@
     --tooltip-color: #fff;
     margin-top: 2rem;
     margin-left: 8%;
-    width: var(--width);
+    width: 75%;
     height: var(--height);
     background: var(--cor-fundo2);
     position: relative;
