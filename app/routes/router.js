@@ -26,11 +26,14 @@ router.get("/", function (req, res) {
     res.render("pages/index", { email: email });
 });
 
-router.get("/product-page/:id", async function(req, res) {
-    const id = req.params.id
+router.get("/", verificarUsuAutenticado, function (req, res) {
+    res.render("pages/index", {
+        userId: req.session.userId,
+        login: req.session.logado,
+    });
+});
 
-    const produto = await connection.query("")
-})
+// 
 
 router.get("/login", function (req, res) {
     res.render("pages/login");

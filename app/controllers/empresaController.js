@@ -18,15 +18,38 @@ gravarEmpresa: async (req, res) => {
                 console.log("falha no carregamento");
             }else{
                 caminhoArquivo = "imagem/empresa/" + req.file.filename;
-                if(dadosForm.img_perfil_pasta != caminhoArquivo){
+                if(dadosForm.img_produto_pasta != caminhoArquivo){
 
                 }
-                dadosForm.img_perfil_pasta = caminhoArquivo;
-                dadosForm.img_perfil_banco = null;
+                dadosForm.img_produto_pasta = caminhoArquivo;
+                dadosForm.img_produto_banco = null;
 
             }
             let resultUpdate = await empresa.update(dadosForm, req.session.autenticado.id);
+            id(!resultUpdate.isEmpty){
+                if(resultUpdate.changeRows == 1) {
+                    var result = await empresa.findId(req.session.autenticado.id);
+                    var autenticado = {
+                        id: result[0].id,
+                        tipo: result[0].tipo,
+                        img_produto_banco: result[0].img_produto_banco != null ? `data:image/jpeg;base64, ${result[0].img_produto_banco.toString('base64')}`: null,
+                        img_produto_pasta: result[0].img_produto_pasta
+                    };
+                    req.session.autenticado = autenticado;
+                    var campos = {
+                        nome_prod: result[0].nome_prod, email_prod: result[0].email.empresa,
+                        img_produto_pasta: result[0].img_produto_pasta, img_produto_banco: result[0].img_produto_banco,
+                        nome_prod:result[0].user_empr, celular
+                    }
+                }
+            }
         }
+    }catch{
+
     }
 }
+
+module.exports(
+    gravarEmpresa,
+)
 
