@@ -5,7 +5,7 @@ var salt = bcrypt.genSaltSync(12);
 var connection = require("../../config/pool_conexoes");
 const mysql = require('mysql2/promise');
 const flash = require('connect-flash');
-const authMiddleware = require('.././models/middleware')
+const authMiddleware = require('.././models/middleware');
 
 const {
     verificarUsuAutenticado,
@@ -25,6 +25,12 @@ router.get("/", function (req, res) {
     req.session.email;
     res.render("pages/index", { email: email });
 });
+
+router.get("/product-page/:id", async function(req, res) {
+    const id = req.params.id
+
+    const produto = await connection.query("")
+})
 
 router.get("/login", function (req, res) {
     res.render("pages/login");

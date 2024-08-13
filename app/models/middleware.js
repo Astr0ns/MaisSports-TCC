@@ -17,6 +17,8 @@ function verificarAutorizacao(req, res, next) {
     res.redirect('/unauthorized'); // Redireciona se não autorizado
 }
 
+
+
 // Exporte o router e middleware
 module.exports = {
     verificarAutenticacao,

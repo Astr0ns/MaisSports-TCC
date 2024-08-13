@@ -4,10 +4,10 @@ const usuarioModel = {
     findAll: async () => {
         try {
             const [resultados] = await pool.query(
-                "SELECT u.id_cliente, u.nome_cliente, " +
+                "SELECT u.id, u.nome_cliente, " +
                 "u.senha_cliente, u.email_cliente, u.celular_cliente, u.tipo_cliente, " +
-                "u.status, t.tipo_cliente, t.descricao " +
-                "FROM usuario_clientes u, tipo_cliente t where u.status = 1 and " +
+                ", t.tipo_cliente, t.descricao " +
+                "FROM usuario_clientes u, tipo_cliente t where  = 1 and " +
                 "u.tipo_cliente = t.id_tipo_cliente"
             )
             return resultados;
@@ -42,21 +42,9 @@ const usuarioModel = {
     update: async (camposForm, id) => {
         try {
             const [resultados] = await pool.query(
-                "UPDATE cliente SET ? " +
-                " WHERE id_cliente = ?",
+                "UPDATE usario_clientes SET ? " +
+                " WHERE id = ?",
                 [camposForm, id]
-            )
-            return resultados;
-        } catch (error) {
-            console.log(error);
-            return error;
-        }
-    },
-
-    delete: async (id) => {
-        try {
-            const [resultados] = await pool.query(
-                "UPDATE cliente SET status_cliente = 0 WHERE id_cliente = ? ", [id]
             )
             return resultados;
         } catch (error) {
@@ -68,12 +56,12 @@ const usuarioModel = {
     findId: async (id) => {
         try {
             const [resultados] = await pool.query(
-                "SELECT u.id_usuario, u.nome_usuario, u.user_usuario, " +
-                "u.senha_usuario, u.email_usuario, u.fone_usuario, u.tipo_usuario, " +
-                "u.status_usuario,u.numero_usuario, u.cep_usuario,u.img_perfil_banco, u.img_perfil_pasta," +
-                "t.id_tipo_usuario, t.descricao_usuario " +
-                "FROM usuario u, tipo_usuario t where u.status_usuario = 1 and " +
-                "u.tipo_usuario = t.id_tipo_usuario and u.id_usuario = ? ", [id]
+                "SELECT u.id, u.nome, u.user, " +
+                "u.senha, u.email, u.celular, u.tipo, " +
+                "u.numero, u.cep, u.img_perfil_banco, u.img_perfil_pasta," +
+                "t.id_tipo, t.descricao " +
+                "FROM usuario u, tipo t where = 1 and " +
+                "u.tipo_cliente = t.id_tipo_cliente and u.id = ? ", [id]
             )
             return resultados;
         } catch (error) {
