@@ -13,10 +13,29 @@
     --cor-fonte2: #000;
     --cor-fonte3: #c70074d2;
     --cor-bar: #f5f5f5;
+    --cor-bar-dark: #010c1aa9;
+    --cor-bar-dark-mob: #010c1a;
     --cor-fundo: #f80091bd;
     --cor-fundo2: #d12089;
-    --cor-fundo3: rgba(26, 52, 137, 0.753);
+    --cor-fundo3: rgba(0, 33, 123, 0.562);
+    --cor-fundo4: rgb(235, 235, 235);
+    --cor-fundo5: #12488ded;
+    --cor-fundo6: #2c295745;
+    --cor-fundo-body: #010c1aed;
 }
+
+.bg {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: 300% 300%;
+    background-image: linear-gradient(-45deg, #2c2957 0%, #2c2957 25%, #2c2957 51%, #ff0099 100%);
+    -webkit-animation: AnimateBG 20s ease infinite;
+    animation: AnimateBG 20s ease infinite;
+}
+
 
 .area-login {
     margin-top: -50px;
@@ -52,7 +71,7 @@ h3 .lr {
     justify-content: center;
     background-color: var(--cor-bar);
     border-radius: 10px;
-    width: 490px;
+    width: auto;
     height: auto;
     padding: 35px;
     margin-top: 10%;
@@ -81,7 +100,7 @@ section.area-login {
     width: 100%;
 }
 
-.notif-body{
+.notif-body {
     display: flex;
     width: auto;
     height: auto;
@@ -149,9 +168,51 @@ section#successMessage {
     border-radius: 15px;
 }
 
-.dica h3{
+.dica h3 {
     padding: 20px;
     color: white;
     font-size: 14px;
     font-weight: normal;
+}
+
+body.dark{
+    .login{
+        background-color: var(--cor-bar-dark);
+    }
+
+    h1{
+        color: white;
+    }
+
+    h3.lr{
+        color: white;
+    }
+}
+
+@-webkit-keyframes AnimateBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes AnimateBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }

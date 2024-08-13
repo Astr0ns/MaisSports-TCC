@@ -26,7 +26,7 @@ router.get("/", function (req, res) {
     res.render("pages/index", { email: email });
 });
 
-router.get("/", verificarUsuAutenticado, function (req, res) {
+router.get("/", verificarAutenticacao, function (req, res) {
     res.render("pages/index", {
         userId: req.session.userId,
         login: req.session.logado,

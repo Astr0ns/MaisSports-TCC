@@ -14,7 +14,7 @@
     <link rel="stylesheet" media="(min-width: 769px) and (max-width: 1024px)" href="css/medium.css">
     <link rel="stylesheet" media="(min-width: 1025px)" href="css/large.css">
     <!-- End Responsives CSS's-->
-    <link rel="stylesheet"href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.js"></script>
     <!-- Link CSS's of Mains, Sections, etc. -->
 
@@ -69,74 +69,78 @@
         </nav>
     </header>
 
-    <section class="area-login">
+    <main class="bg">
+        <section class="area-login">
 
-        <section class="sub-og">
-            <section class="login">
+            <section class="sub-og">
+                <section class="login">
 
-                <h1>REGISTRE-SE</h1>
+                    <h1>REGISTRE-SE</h1>
 
-                <form action="/fazerRegistro" method="post">
-                    <section class="form-group">
-                        <h3 class="lr">Digite seu primeiro nome</h3>
-                        <label for="name"></label>
-                        <input id="name" type="text" name="nome" id="nome" placeholder="Digite seu nome" required>
-                    </section>
-                    <section class="form-group">
-                        <h3 class="lr">Digite seu Sobrenome</h3>
-                        <label for="sobrenome"></label>
-                        <input id="sobrenome" type="text" name="sobrenome" id="sobrenome" placeholder="Digite seu Sobrenome" required>
-                    </section>
-
-                    <section class="form-group">
-                        <h3 class="lr">Digite seu E-mail</h3>
-                        <label for="email"></label>
-                        <input id="email" type="text" name="email" id="email" placeholder="Digite seu email" required>
-                        <section id="verify"></section>
-                    </section>
-
-                    <section class="form-group">
-                        <h3 class="lr">Digite sua Senha</h3>
-                        <label for="password"></label>
-                        <input id="password" type="password" name="senha" id="senha" placeholder="Digite sua senha" required
-                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
-                            title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
-                    </section>
-                    <section class="form-group">
-                       
-                                <h3 class="lr"><span>Confirme</span> sua Senha</h3>
-                                <label for="password"></label>
-                                <input id="c-password" type="password" name="cSenha" placeholder="Confirme sua senha"
-                                    required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
-                                    title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
-                    </section>
-
-                    <section class="form-group">
-
-                    </section>
-
-                    <section class="form-group">
-                        <section class="dica">
-                            <h3>Adicione no Minímo uma letra maiúscula, uma caracter especial e um número</h3>
+                    <form action="/fazerRegistro" method="post">
+                        <section class="form-group">
+                            <h3 class="lr">Digite seu primeiro nome</h3>
+                            <label for="name"></label>
+                            <input id="name" type="text" name="nome" id="nome" placeholder="Digite seu nome" required>
                         </section>
-                    </section>
+                        <section class="form-group">
+                            <h3 class="lr">Digite seu Sobrenome</h3>
+                            <label for="sobrenome"></label>
+                            <input id="sobrenome" type="text" name="sobrenome" id="sobrenome"
+                                placeholder="Digite seu Sobrenome" required>
+                        </section>
 
-                    <section class="text-center">
-                        <button type="submit" class="btn btn-primary" id="save-btn" required>Cadastrar</button>
-                    </section>
-                    <section id="valid-sucess">
+                        <section class="form-group">
+                            <h3 class="lr">Digite seu E-mail</h3>
+                            <label for="email"></label>
+                            <input id="email" type="text" name="email" id="email" placeholder="Digite seu email"
+                                required>
+                            <section id="verify"></section>
+                        </section>
 
-                    </section>
+                        <section class="form-group">
+                            <h3 class="lr">Digite sua Senha</h3>
+                            <label for="password"></label>
+                            <input id="password" type="password" name="senha" id="senha" placeholder="Digite sua senha"
+                                required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
+                                title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
+                        </section>
+                        <section class="form-group">
 
-                </form>
+                            <h3 class="lr"><span>Confirme</span> sua Senha</h3>
+                            <label for="password"></label>
+                            <input id="c-password" type="password" name="cSenha" placeholder="Confirme sua senha"
+                                required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
+                                title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
+                        </section>
+
+                        <section class="form-group">
+
+                        </section>
+
+                        <section class="form-group">
+                            <section class="dica">
+                                <h3>Adicione no Minímo uma letra maiúscula, uma caracter especial e um número</h3>
+                            </section>
+                        </section>
+
+                        <section class="text-center">
+                            <button type="submit" class="btn btn-primary" id="save-btn" required>Cadastrar</button>
+                        </section>
+                        <section id="valid-sucess">
+
+                        </section>
+
+                    </form>
 
 
-                <p>Já tem uma conta?<a href="/login">Faça Login</a>.</p>
+                    <p>Já tem uma conta?<a href="/login">Faça Login</a>.</p>
 
 
+                </section>
             </section>
         </section>
-    </section>
+    </main>
 
     <%- include("../partial/footer") %>
 

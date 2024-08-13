@@ -18,6 +18,7 @@
     <!-- Link CSS's of Mains, Sections, etc. -->
 
     <link rel="stylesheet" href="css/codes/buttons.css">
+    <link rel="stylesheet" href="css/codes/interface.css">
     <link rel="stylesheet" href="css/codes/product-page.css">
     <link rel="stylesheet" href="css/codes/tamanhos-prod.css">
     <link rel="stylesheet" href="css/codes/nav-bar.css">
@@ -36,7 +37,7 @@
 
 <body>
 
-    <%- include("../partial/header-home", {email: email}) %>
+    <%- include("../partial/header-home", {email: email }) %>
 
         <section class="container-product">
             <section class="container">
@@ -105,19 +106,39 @@
                             </section>
                         </section>
                         <!-- Seleção de tamanhos  -->
-                         <h2 class="tam-inf"><span>Tamanho</span></h2>
-                        <section class="tamanhos">                    
+                        <h2 class="tam-inf"><span>Tamanho</span></h2>
+                        <section class="tamanhos">
                             <section class="tam">
-                                <section class="num-tam">36</section>
-                                <section class="num-tam">37</section>
-                                <section class="num-tam">38</section>
-                                <section class="num-tam">39</section>
-                                <section class="num-tam">40</section>
-                                <section class="num-tam">41</section>
-                                <section class="num-tam">42</section>
-                                <section class="num-tam">43</section>
-                                <section class="num-tam">44</section>
-                                <section class="num-tam">45</section>
+                                <section class="num-tam">
+                                    <p>36</p>
+                                </section>
+                                <section class="num-tam">
+                                    <p>37</p>
+                                </section>
+                                <section class="num-tam">
+                                    <p>38</p>
+                                </section>
+                                <section class="num-tam">
+                                    <p>39</p>
+                                </section>
+                                <section class="num-tam">
+                                    <p>41</p>
+                                </section>
+                                <section class="num-tam">
+                                    <p>40</p>
+                                </section>
+                                <section class="num-tam">
+                                    <p>42</p>
+                                </section>
+                                <section class="num-tam">
+                                    <p>43</p>
+                                </section>
+                                <section class="num-tam">
+                                    <p>44</p>
+                                </section>
+                                <section class="num-tam">
+                                    <p>45</p>
+                                </section>
                             </section>
                         </section>
                         <!-- descrição -->
@@ -234,30 +255,46 @@
         <section class="relacionados">
 
             <section class="relacionado">
-                <section class="img-relac">
-                    <a href="#"><img class="rf" src="https://imgnike-a.akamaihd.net/768x768/0270887T.jpg" alt=""
-                            srcset=""></a>
-                    <section class="relac-product-text">
+                <section class="row">
+                    <img src="https://imgnike-a.akamaihd.net/768x768/0287397TA8.jpg" alt="" srcset="">
+                    <section class="product-text">
                         <h5>NEW</h5>
                     </section>
                     <section class="heart-icon">
                         <i class='bx bx-heart'></i>
                     </section>
                     <section class="ratting">
-                        <i class="bi bi-star"></i>
-                        <i class="bi bi-star"></i>
-                        <i class="bi bi-star"></i>
-                        <i class="bi bi-star"></i>
-                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
                     </section>
-                    <section class="relac-price">
-                        <h4>Tênis Nike Sabrina 1 Spark Feminino</h4>
-                        <p>a partir de <span>10x de R$ 83,33</span></p>
+                    <section class="price">
+                        <h4> Nike Court Vision Next Nature Essential</h4>
+                        <section class="desc-price">
+                            <p class="desconto">37% off</p>
+                            <section class="preco">
+                                <p>R$ 408,49 no Pix</p>
+                                <p>6 x R$ 68.08</p>
+                            </section>
+                        </section>
+                        <section class="desc-outher">
+                            <p class="estoque">em estoque</p>
+
+                            <section class="prod-colors">
+                                <p class="cores">cores</p>
+                                <section class="ballwht"></section>
+                            </section>
+                        </section>
                     </section>
                 </section>
-                <section class="img-relac">
-                    <a href="/product-page-2"><img class="rf" src="https://imgnike-a.akamaihd.net/768x768/021997ID.jpg"
-                            alt="" srcset=""></a>
+
+                <section class="row">
+                    <img src="https://imgnike-a.akamaihd.net/768x768/029411IDA8.jpg" alt="" srcset="">
+                    <section class="product-text">
+                        <h5>NEW</h5>
+                    </section>
                     <section class="heart-icon">
                         <i class='bx bx-heart'></i>
                     </section>
@@ -266,15 +303,32 @@
                         <i class="bi bi-star-fill"></i>
                         <i class="bi bi-star-fill"></i>
                         <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star-half"></i>
                     </section>
-                    <section class="relac-price">
-                        <h4>Shorts Nike Dri-FIT Woven Masculino</h4>
-                        <p>a partir de <span>R$: 149,99</span> -
-                            <a class="riscado">R$: 249,99</a>
-                        </p>
+                    <section class="price">
+                        <h4>TÊNIS NIKE KYRIE 8</h4>
+                        <section class="desc-price">
+                            <p class="desconto">-13%</p>
+                            <section class="preco">
+                                <p>R$719,90</p>
+                                <p>10 x 71,99</p>
+                            </section>
+                        </section>
+                        <section class="desc-outher">
+                            <p class="estoque"> em estoque</p>
+
+                            <section class="prod-colors">
+                                <p class="cores">cores</p>
+                                <section class="ballr"></section>
+                                <section class="ballg"></section>
+                                <section class="ballb"></section>
+                                <section class="balla"></section>
+                                <section class="ballp"></section>
+                            </section>
+                        </section>
                     </section>
                 </section>
+                
                 <section class="img-relac">
                     <a href="#"><img class="rf" src="https://imgnike-a.akamaihd.net/768x768/02316915.jpg" srcset=""></a>
                     <section class="heart-icon">
