@@ -24,7 +24,14 @@
     <link rel="stylesheet" href="css/codes/nav-bar.css">
     <link rel="stylesheet" href="css/codes/login.css">
 
+    <!-- Links Js's -->
+
+    <script src="js/notify.js"></script>
+
     <!-- Others Links -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplenotify@0.5.5/dist/simple-notify.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simplenotify.min.js"></script>
 
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -59,43 +66,44 @@
         </nav>
     </header>
 
-    <section class="area-login">
+        <section class="area-login">
 
-        <section class="login">
-            <h1>LOGIN</h1>
-            <form action="/fazerLogin" method="post" class="login_form">
+            <section class="login">
+                <h1>LOGIN</h1>
+                <form action="/fazerLogin" method="post" class="login_form">
 
-                <section class="form-group">
-                    <h3 class="lr">E-mail</h3>
-                    <label for="email"></label>
-                    <input id="email" type="text" name="email" placeholder="Digite seu E-mail" required>
-                </section>
+                    <section class="form-group">
+                        <h3 class="lr">E-mail</h3>
+                        <label for="email"></label>
+                        <input id="email" type="text" name="email" placeholder="Digite seu E-mail" required>
+                    </section>
 
-                <section class="form-group">
-                    <h3 class="lr">Senha</h3>
-                    <label for="password"></label>
-                    <input id="password" type="password" name="senha" placeholder="Digite sua senha" required
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}" title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
-                </section>
+                    <section class="form-group">
+                        <h3 class="lr">Senha</h3>
+                        <label for="password"></label>
+                        <input id="password" type="password" name="senha" placeholder="Digite sua senha" required
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
+                            title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
+                    </section>
 
-                <section id="valid"></section>
+                    <section id="valid"></section>
 
-                <section class="text-center">
-                    <button type="submit" class="btn btn-primary" id="save-btn">Entrar</button>
-                </section>
+                    <section class="text-center">
+                        <button type="submit" class="btn btn-primary" id="save-btn">Entrar</button>
+                    </section>
 
-                <section id="valid-sucess"></section>
+                    <section id="valid-sucess"></section>
 
-            </form>
+                </form>
 
-            <p class="butun">Ainda não tem uma conta?<a href="/register">Cadastre-se</a>.</p>
+                <p class="butun">Ainda não tem uma conta?<a href="/register">Cadastre-se</a>.</p>
 
+            </section>
         </section>
-    </section>
 
-    <%- include("../partial/footer") %>
-    <script src="js/script.js"></script>
-    <script src="js/save-date.js"></script>
+        <%- include("../partial/footer") %>
+            <script src="js/script.js"></script>
+            <script src="js/save-date.js"></script>
 </body>
 
 

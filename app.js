@@ -23,7 +23,15 @@ app.use(session({
   cookie: {secure:false}
 }))
 
+//flash
+
 app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.messages = req.flash('msg');
+  next();
+});
+
 
 var router = require("./app/routes/router");
 app.use("/", router);

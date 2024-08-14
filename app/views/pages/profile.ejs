@@ -27,103 +27,121 @@
 
     <!-- Others Links -->
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplenotify@0.5.5/dist/simple-notify.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simplenotify.min.js"></script>
+
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
 
     <title>+Sports</title>
 </head>
 
 <body>
 
+
     <%- include("../partial/header-home", {email: email}) %>
         <!--    Utilize "document.write(localStorage.getItem("name"));" para mostrar os dados digitados no cadastro    -->
 
-        <section class="infos">
-            <h2>Minha conta</h2>
+        <% if (messages && messages.length> 0) { %>
+            <% messages.forEach(function(message) { %>
+                <script>
+                    alert('<%= message %>'); // Exibe a mensagem usando um alerta simples
+                </script>
+                <% }); %>
+                    <% } %>
+                        <section class="infos">
+                            <h2>Minha conta</h2>
 
-            <% if(nome == undefined ) {  %> <li>
-                <a class="login-btn" href="/login">
-                    <button>
-                        <i class="bi bi-person">Entre agora</i>
-                    </button>
-                </a>
-                </li>
-               <% } else { %>
-                <li>
-                    <a class="sair-btn" href="/fazerLogout">
-                        <button>
-                            <i class="bi bi-person">Sair</i>
-                        </button>
-                    </a>
-                </li>
-                
-             <% } %>
-        </section>
+                            <% if(nome==undefined ) { %>
+                                <li>
+                                    <a class="login-btn" href="/login">
+                                        <button>
+                                            <i class="bi bi-person">Entre agora</i>
+                                        </button>
+                                    </a>
+                                </li>
+                                <% } else { %>
+                                    <li>
+                                        <a class="sair-btn" href="/fazerLogout">
+                                            <button>
+                                                <i class="bi bi-person">Sair</i>
+                                            </button>
+                                        </a>
+                                    </li>
 
-        <section class="historico">
-            <% if(nome == undefined) {  %>
-            <h4 class="wllc"><span>Faça Login para acessar seus dados!</span></h4>
-            <% } else { %>
-                <h4 class="wllc"><span>Bem vindo:</span> <%= nome %> </h4>
-            <% } %>
-                <section class="account">
-                    <section class="nog">
-                        <h2>PEDIDOS</h2>
+                                    <% } %>
+                        </section>
 
-                        <ul class="desc">
-                            <li>
-                                <p>Ultimos pedidos</p>
-                            </li>
-                        </ul>
-                    </section>
-                    <section class="nog">
-                        <h2>MEU CADASTRO</h2>
-                        <ul class="desc">
-                            <li>
-                                <p><a href="/alter">Alterar meus dados pessoais</a></p>
-                            </li>
-                            <li>
-                                <p><a href="/alter-account">Alterar meu e-mail e Senha</a></p>
-                            </li>
-                        </ul>
-                    </section>
-                    <section class="nog">
-                        <h2>PAGAMENTO</h2>
-                        <ul class="desc">
-                            <li>
-                                <p><a href="/">Imprimir 2ª via de boleto</a></p>
-                            </li>
-                        </ul>
-                    </section>
-                    <section class="nog">
+                        <section class="historico">
+                            <% if(nome==undefined) { %>
+                                <h4 class="wllc"><span>Faça Login para acessar seus dados!</span></h4>
+                                <% } else { %>
+                                    <h4 class="wllc"><span>Bem vindo:</span>
+                                        <%= nome %>
+                                    </h4>
+                                    <% } %>
+                                        <section class="account">
+                                            <section class="nog">
+                                                <h2>PEDIDOS</h2>
 
-                        <section class="aviso-card"></section>
+                                                <ul class="desc">
+                                                    <li>
+                                                        <p>Ultimos pedidos</p>
+                                                    </li>
+                                                </ul>
+                                            </section>
+                                            <section class="nog">
+                                                <h2>MEU CADASTRO</h2>
+                                                <ul class="desc">
+                                                    <li>
+                                                        <p><a href="/alter">Alterar meus dados pessoais</a>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p><a href="/alter-account">Alterar meu e-mail e
+                                                                Senha</a></p>
+                                                    </li>
+                                                </ul>
+                                            </section>
+                                            <section class="nog">
+                                                <h2>PAGAMENTO</h2>
+                                                <ul class="desc">
+                                                    <li>
+                                                        <p><a href="/">Imprimir 2ª via de boleto</a></p>
+                                                    </li>
+                                                </ul>
+                                            </section>
+                                            <section class="nog">
 
-                        <h2>SERVIÇOS</h2>
-                        <ul class="desc">
-                            <li>
-                                <p><a href="favoritos.html">Produtos favoritos</a></p>
-                                <p><a href="favoritos.html">Locais favoritos</a></p>
-                            </li>
-                        </ul>
-                    </section>
-                </section>
+                                                <section class="aviso-card"></section>
+
+                                                <h2>SERVIÇOS</h2>
+                                                <ul class="desc">
+                                                    <li>
+                                                        <p><a href="favoritos.html">Produtos favoritos</a>
+                                                        </p>
+                                                        <p><a href="favoritos.html">Locais favoritos</a></p>
+                                                    </li>
+                                                </ul>
+                                            </section>
+                                        </section>
 
 
 
-        </section>
-        </section>
+                        </section>
+                        </section>
 
 
-        <%- include("../partial/footer") %>
+                        <%- include("../partial/footer") %>
 
 </body>
 
 
 <script src="js/script.js"></script>
-<script src="js/logout.js"></script>
-<script src="js/updateUI-profile.js"></script>
 <script src="js/profile.js"></script>
+<script src="js/notify.js"></script>
 
 
 </html>

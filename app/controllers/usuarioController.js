@@ -6,82 +6,75 @@ const { removeImg } = require("../util/removeImg");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const https = require('https');
 
-const usuarioController = {
+// Regras de validação para o formulário de login
 
-    regrasValidacaoFormLogin: [
-        body("nome_usu")
-            .isLength({ min: 8, max: 45 })
-            .withMessage("O nome de usuário/e-mail deve ter de 8 a 45 caracteres"),
-        body("senha_usu")
-            .isStrongPassword()
-            .withMessage("A senha deve ter no mínimo 8 caracteres (mínimo 1 letra maiúscula, 1 caractere especial e 1 número)")
-    ],
+const regrasValidacaoFormLogin = [
+    body('email')
+        .isEmail().withMessage('Insira um email válido')
+        .normalizeEmail(),
+    body('senha')
+        .isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres')
+];
 
-    regrasValidacaoFormCad: [
-        body("nome_usu")
-            .isLength({ min: 3, max: 45 }).withMessage("Nome deve ter de 3 a 45 caracteres!"),
-        body("nomeusu_usu")
-            .isLength({ min: 8, max: 45 }).withMessage("Nome de usuário deve ter de 8 a 45 caracteres!")
-            .custom(async value => {
-                const nomeUsu = await usuario.findCampoCustom({ 'user_usuario': value });
-                if (nomeUsu > 0) {
-                    throw new Error('Nome de usuário em uso!');
-                }
-            }),
-        body("email_usu")
-            .isEmail().withMessage("Digite um e-mail válido!")
-            .custom(async value => {
-                const nomeUsu = await usuario.findCampoCustom({ 'email_usuario': value });
-                if (nomeUsu > 0) {
-                    throw new Error('E-mail em uso!');
-                }
-            }),
-        body("senha_usu")
-            .isStrongPassword()
-            .withMessage("A senha deve ter no mínimo 8 caracteres (mínimo 1 letra maiúscula, 1 caractere especial e 1 número)")
-    ],
+// Função de login
+const logar = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('pages/login', {
+            userId: req.session.userId,
+            listaErros: errors.array(),
+            dadosNotificacao: null,
+            valores: {
+                nome_usu: "",
+                nomeusu_usu: "",
+                email_usu: req.body.email,
+                senha_usu: ""
+            },
+        });
+    }
 
+    const { email, senha } = req.body;
 
-    regrasValidacaoPerfil: [
-        body("nome_usu")
-            .isLength({ min: 3, max: 45 }).withMessage("Nome deve ter de 3 a 45 caracteres!"),
-        body("nomeusu_usu")
-            .isLength({ min: 8, max: 45 }).withMessage("Nome de usuário deve ter de 8 a 45 caracteres!"),
-        body("email_usu")
-            .isEmail().withMessage("Digite um e-mail válido!"),
-        body("fone_usu")
-            .isLength({ min: 12, max: 15 }).withMessage("Digite um telefone válido!"),
-        body("cep")
-            .isPostalCode('BR').withMessage("Digite um CEP válido!"),
-        body("numero")
-            .isNumeric().withMessage("Digite um número para o endereço!"),
-    ],
+    try {
+        const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ?", [email]);
 
-    cadastrar: (req, res) => {
-        const erros = validationResult(req);
-        var dadosForm = {
-            senha: bcrypt.hashSync(req.body.senha_usu, salt),
-            nome: req.body.nome_usu,
-            email: req.body.email_usu,
-        };
-        if (!erros.isEmpty()) {
-            return res.render("pages/register", { listaErros: erros, dadosNotificacao: null, valores: req.body })
+        if (accounts.length > 0) {
+            const account = accounts[0];
+
+            // Verificar se a senha corresponde
+            const passwordMatch = bcrypt.compareSync(senha, account.senha);
+
+            if (!passwordMatch) {
+                req.flash('msg', "As senhas não conferem");
+                return res.redirect('/login'); // Redireciona para a página de login se as senhas não conferem
+            }
+
+            // Armazenar informações do usuário na sessão
+            req.session.email = account.email;
+            req.session.nome = account.nome;
+            req.session.sobrenome = account.sobrenome;
+            req.session.cep = account.cep;
+            req.session.numero = account.numero;
+
+            res.render('pages/profile', {
+                userId: req.session.userId,
+                logado: req.session.logado,
+                email: req.session.email,
+                nome: req.session.nome,
+                sobrenome: req.session.sobrenome,
+            });
+        } else {
+            req.flash('msg', "Usuário não encontrado");
+            res.redirect('/login');
         }
-        try {
-            let create = usuario.create(dadosForm);
-            res.render("pages/register", {
-                listaErros: null, dadosNotificacao: {
-                    titulo: "Cadastro realizado!", mensagem: "Novo usuário criado com sucesso!", tipo: "success"
-                }, valores: req.body
-            })
-        } catch (e) {
-            console.log(e);
-            res.render("pages/register", {
-                listaErros: erros, dadosNotificacao: {
-                    titulo: "Erro ao cadastrar!", mensagem: "Verifique os valores digitados!", tipo: "error"
-                }, valores: req.body
-            })
-        }
-    },
-    
-}
+
+    } catch (err) {
+        console.error("Erro na consulta: ", err);
+        res.status(500).send('Erro interno do servidor');
+    }
+};
+
+module.exports = {
+    regrasValidacaoFormLogin,
+    logar
+};

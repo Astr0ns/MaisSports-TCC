@@ -5,16 +5,14 @@ var salt = bcrypt.genSaltSync(12);
 var connection = require("../../config/pool_conexoes");
 const mysql = require('mysql2/promise');
 const flash = require('connect-flash');
-const authMiddleware = require('.././models/middleware');
+const usuarioController = require('../controllers/usuarioController'); // Certifique-se de que o caminho está correto
+const gravarUsuAutenticado = require('../models/usuarioModel').gravarUsuAutenticado; // Certifique-se de que a função está corretamente exportada
+
 
 const {
-    verificarUsuAutenticado,
-    limparSessao,
-    gravarUsuAutenticado,
-    verificarUsuAutorizado,
+    verificarAutenticacao,
+    verificarAutorizacao,
 } = require("../models/middleware");
-
-const usuarioController = require("../controllers/usuarioController");
 
 const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
 // const uploadFile = require("../util/uploader")();
@@ -27,17 +25,20 @@ router.get("/", function (req, res) {
 });
 
 router.get("/", verificarAutenticacao, function (req, res) {
-    res.render("pages/index", {
+    res.render("pages/home", {
         userId: req.session.userId,
-        login: req.session.logado,
+        listaErros: null,
+        dadosNotificacao: null,
+        valores: { nome_usu: "", nomeusu_usu: "", email_usu: "", senha_usu: "" },
     });
 });
 
 // 
 
 router.get("/login", function (req, res) {
-    res.render("pages/login");
+    res.render("pages/login", { listaErros: null, dadosNotificacao: null });
 });
+
 router.get("/locais-esportivos", function (req, res) {
     var email = req.session.email;
     res.render("pages/locais-esportivos", { email: email });
@@ -60,7 +61,14 @@ router.get("/profile", async function (req, res) {
     req.session.cep = cep;
     req.session.numero = numero;
 
-    res.render("pages/profile", { nome: nome, email: email, autenticado: autenticado, numero: numero, cep: cep });
+    res.render("pages/profile", {
+        nome: nome,
+        email: email,
+        autenticado: autenticado,
+        numero: numero,
+        cep: cep,
+        messages: req.flash('msg')
+    });
 });
 
 // router.post("/alterType", async function (req, res){
@@ -208,41 +216,46 @@ router.get('/guardarCEP', async (req, res) => {
     }
 });
 
-router.post("/fazerLogin", async function (req, res) {
-    const { email, senha } = req.body;
+router.post("/fazerLogin",
+    usuarioController.regrasValidacaoFormLogin,
+    gravarUsuAutenticado,
+    async function (req, res) {
+        const { email, senha } = req.body;
 
-    try {
-        const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ?", [email]);
+        try {
+            const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ?", [email]);
 
-        if (accounts.length > 0) {
-            const account = accounts[0];
+            if (accounts.length > 0) {
+                const account = accounts[0];
 
-            // Verificar se a senha corresponde
-            const passwordMatch = bcrypt.compareSync(senha, account.senha);
+                // Verificar se a senha corresponde
+                const passwordMatch = bcrypt.compareSync(senha, account.senha);
 
-            if (!passwordMatch) {
-                req.flash('msg', "As senhas não conferem");
-                return res.redirect('/login'); // Redireciona para a página de login se as senhas não conferem
+                if (!passwordMatch) {
+                    req.flash('msg', "As senhas não conferem");
+                    return res.redirect('/login');
+                }
+
+                // Armazenar informações do usuário na sessão
+                req.session.email = account.email;
+                req.session.nome = account.nome;
+                req.session.sobrenome = account.sobrenome;
+                req.session.cep = account.cep;
+                req.session.numero = account.numero;
+
+                req.flash('msg', 'Login efetuado com sucesso!');
+                res.redirect('/profile'); // Redireciona para a página de perfil
+            } else {
+                req.flash('msg', "Usuário não encontrado");
+                res.redirect('/login');
             }
 
-            // Armazenar informações do usuário na sessão
-            req.session.email = account.email; // Armazenar o email na sessão
-            req.session.nome = account.nome;
-            req.session.sobrenome = account.sobrenome;
-            req.session.cep = account.cep;
-            req.session.numero = account.numero;
-
-            res.redirect('/profile');
-        } else {
-            req.flash('msg', "Usuário não encontrado");
-            res.redirect('/login');
+        } catch (err) {
+            console.error("Erro na consulta: ", err);
+            res.status(500).send('Erro interno do servidor');
         }
-
-    } catch (err) {
-        console.error("Erro na consulta: ", err);
-        res.status(500).send('Erro interno do servidor');
     }
-});
+);
 
 router.post('/delCEP', async function (req, res) {
     const { email } = req.body;
