@@ -63,7 +63,10 @@ const logar = async (req, res) => {
                 email: req.session.email,
                 nome: req.session.nome,
                 sobrenome: req.session.sobrenome,
+                mensage: req.flash('msg', "logado"),
             });
+
+            console.log(re.flash('msg'))
         } else {
             req.flash('msg', "Usuário não encontrado");
             res.redirect('/login');

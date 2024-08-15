@@ -5,6 +5,7 @@ var salt = bcrypt.genSaltSync(12);
 var connection = require("../../config/pool_conexoes");
 const mysql = require('mysql2/promise');
 const flash = require('connect-flash');
+const app = require('../../app')
 const usuarioController = require('../controllers/usuarioController'); // Certifique-se de que o caminho está correto
 const gravarUsuAutenticado = require('../models/usuarioModel').gravarUsuAutenticado; // Certifique-se de que a função está corretamente exportada
 
@@ -29,6 +30,7 @@ router.get("/", verificarAutenticacao, function (req, res) {
         userId: req.session.userId,
         listaErros: null,
         dadosNotificacao: null,
+        messages: req.flash('msg', "logado com sucesso!"),
         valores: { nome_usu: "", nomeusu_usu: "", email_usu: "", senha_usu: "" },
     });
 });
@@ -60,16 +62,16 @@ router.get("/profile", async function (req, res) {
 
     req.session.cep = cep;
     req.session.numero = numero;
-
+    req.flash('success_msg', 'Você foi logado com sucesso!');
     res.render("pages/profile", {
         nome: nome,
         email: email,
         autenticado: autenticado,
         numero: numero,
         cep: cep,
-        messages: req.flash('msg', "logado com sucesso!"),
     });
 });
+
 
 // router.post("/alterType", async function (req, res){
 // UPDATE usuario_clientes SET tipo = 'usuario' WHERE id = 57;
@@ -80,10 +82,9 @@ router.get("/register", function (req, res) {
     res.render("pages/register", {
         listaErros: null,
         dadosNotificacao: null,
-        valores: { nome_usu: "", nomeusu_usu: "", email_usu: "", senha_usu: "" },
+        valores: { nome: "", sobrenome: "", email: "" }
     });
 });
-
 
 
 router.post("/alterType", async function (req, res) {
@@ -152,25 +153,39 @@ router.get('/alter', async (req, res) => {
 router.post("/fazerRegistro", async function (req, res) {
     const { nome, sobrenome, email, senha, cSenha } = req.body;
 
-    if (senha != cSenha) {
-        req.flash("msg", "As senhas não coicidem");
-        return res.render('/register');
+    // Verificar se as senhas conferem
+    if (senha !== cSenha) {
+        req.flash('error_msg', 'As senhas não conferem.');
+        return res.redirect('/register'); // Redireciona para o formulário de registro
     }
-
-    const hash = await bcrypt.hash(senha, 10);
 
     try {
-        const emailExist = await connection.query("SELECT id FROM usuario_clientes WHERE email = ?", [email]);
+        // Verificar se o email já existe
+        const [emailExist] = await connection.query("SELECT id FROM usuario_clientes WHERE email = ?", [email]);
 
-        await connection.query("INSERT INTO usuario_clientes (nome, sobrenome, email, senha, tipo, cep, numero) VALUES (?, ?, ?, ?, 'usuario', '00000000', '0000')", [nome, sobrenome, email, hash]); {
-            res.render('pages/login', { pagina: "login", logado: null });
+        if (emailExist.length > 0) {
+            req.flash('error_msg', 'Email já está em uso.');
+            return res.redirect('/register'); // Redireciona para o formulário de registro
         }
+
+        // Criptografar a senha
+        const hash = await bcrypt.hash(senha, 10);
+
+        // Inserir o novo usuário na base de dados
+        await connection.query("INSERT INTO usuario_clientes (nome, sobrenome, email, senha, tipo, cep, numero) VALUES (?, ?, ?, ?, 'usuario', '00000000', '0000')", [nome, sobrenome, email, hash]);
+
+        req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para a página de login em breve.');
+        res.redirect('/register?success=true');
+         // Redireciona para a página de registro, indicando sucesso
+
     } catch (error) {
         console.error(error);
-        res.status(400).send(error.message);
+        req.flash('error_msg', 'Erro ao criar usuário. Tente novamente mais tarde.');
+        res.redirect('/register'); // Redireciona para o formulário de registro
     }
-    // Verificar se os dados estão chegando corretamente
 });
+
+
 
 router.get('/guardarCEP', async (req, res) => {
     const { cep, numero } = req.query;
@@ -232,7 +247,7 @@ router.post("/fazerLogin",
                 const passwordMatch = bcrypt.compareSync(senha, account.senha);
 
                 if (!passwordMatch) {
-                    req.flash('msg', "As senhas não conferem");
+                    req.flash('error_msg', "As senhas não conferem");
                     return res.redirect('/login');
                 }
 
@@ -243,11 +258,10 @@ router.post("/fazerLogin",
                 req.session.cep = account.cep;
                 req.session.numero = account.numero;
 
-                console.log(req.flash('msg', "Logado com sucesso!"))
-                req.flash('msg', 'Login efetuado com sucesso!');
+                req.flash('success_msg', 'Login efetuado com sucesso!');
                 res.redirect('/profile'); // Redireciona para a página de perfil
             } else {
-                req.flash('msg', "Usuário não encontrado");
+                req.flash('error_msg', "Usuário não encontrado! Email ou senhas incorretos");
                 res.redirect('/login');
             }
 
@@ -299,8 +313,6 @@ router.get("/fazerLogout", function (req, res) {
         res.redirect('/');
     })
 });
-
-
 
 
 

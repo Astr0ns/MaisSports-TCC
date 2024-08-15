@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const router = express.Router();
 const usuario = require("./usuarioModel");
 const app = require('../../app');
+const flash = require('connect-flash');
 
 // Middleware de autenticação
 // middleware.js
@@ -10,8 +11,10 @@ const app = require('../../app');
 const verificarAutenticacao = (req, res, next) => {
     if (req.session.userId) {
         req.session.logado = req.session.logado + 1;
+        
         next();
     } else {
+        req.flash('error_msg', 'Você deve estar logado para acessar esta página.');
         req.session.logado = 0;
         res.redirect('/login'); // Redireciona se não estiver autenticado
     }
