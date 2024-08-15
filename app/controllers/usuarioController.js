@@ -6,6 +6,7 @@ const { removeImg } = require("../util/removeImg");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const https = require('https');
 
+
 // Regras de validação para o formulário de login
 
 const regrasValidacaoFormLogin = [

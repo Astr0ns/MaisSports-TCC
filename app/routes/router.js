@@ -67,13 +67,24 @@ router.get("/profile", async function (req, res) {
         autenticado: autenticado,
         numero: numero,
         cep: cep,
-        messages: req.flash('msg')
+        messages: req.flash('msg', "logado com sucesso!"),
     });
 });
 
 // router.post("/alterType", async function (req, res){
 // UPDATE usuario_clientes SET tipo = 'usuario' WHERE id = 57;
 // });
+
+
+router.get("/register", function (req, res) {
+    res.render("pages/register", {
+        listaErros: null,
+        dadosNotificacao: null,
+        valores: { nome_usu: "", nomeusu_usu: "", email_usu: "", senha_usu: "" },
+    });
+});
+
+
 
 router.post("/alterType", async function (req, res) {
     const { email, senha, cnpj, cSenha } = req.body;
@@ -94,17 +105,6 @@ router.post("/alterType", async function (req, res) {
         res.status(400).send(error.message);
     }
 });
-router.get("/register", function (req, res) {
-    res.render("pages/register", {
-        listaErros: null,
-        dadosNotificacao: null,
-        valores: { nome_usu: "", nomeusu_usu: "", email_usu: "", senha_usu: "" },
-    });
-});
-
-
-
-
 router.get("/soccer", function (req, res) {
     var email = req.session.email;
     res.render("pages/soccer", { email: email });
@@ -243,6 +243,7 @@ router.post("/fazerLogin",
                 req.session.cep = account.cep;
                 req.session.numero = account.numero;
 
+                console.log(req.flash('msg', "Logado com sucesso!"))
                 req.flash('msg', 'Login efetuado com sucesso!');
                 res.redirect('/profile'); // Redireciona para a página de perfil
             } else {
