@@ -49,10 +49,7 @@ router.get("/product-page", function (req, res) {
     var email = req.session.email;
     res.render("pages/product-page", { email: email });
 });
-router.get("/product-page-2", function (req, res) {
-    var email = req.session.email;
-    res.render("pages/product-page-2", { email: email });
-});
+
 router.get("/profile", async function (req, res) {
     var nome = req.session.nome;
     var email = req.session.email;
@@ -73,10 +70,29 @@ router.get("/profile", async function (req, res) {
 });
 
 
-router.get("/alter-account", function (req, res){
+router.get("/alter-account", function (req, res) {
     email = req.session.email;
-    res.render("pages/alter-account", {email: email});
+    nome = req.session.nome;
+    sobrenome = req.session.sobrenome;
+    celular = req.session.celular;
+    res.render("pages/alter-account", {
+        email: email,
+        nome: nome,
+        sobrenome: sobrenome,
+        celular: celular
+    });
 });
+
+router.get("/regs-empr", function (req, res) {
+    res.render("pages/regs-empr", {
+        listaErros: null,
+        dadosNotificacao: null,
+        valores: { nome: "", sobrenome: "", email: "" }
+    });
+});
+
+
+
 
 // router.post("/alterType", async function (req, res){
 // UPDATE usuario_clientes SET tipo = 'usuario' WHERE id = 57;
@@ -181,12 +197,46 @@ router.post("/fazerRegistro", async function (req, res) {
 
         req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para a página de login em breve.');
         res.redirect('/register?success=true');
-         // Redireciona para a página de registro, indicando sucesso
+        // Redireciona para a página de registro, indicando sucesso
 
     } catch (error) {
         console.error(error);
         req.flash('error_msg', 'Erro ao criar usuário. Tente novamente mais tarde.');
         res.redirect('/register'); // Redireciona para o formulário de registro
+    }
+});
+router.post("/fazerRegisEmpr", async function (req, res) {
+    const { nome, cnpj, email, senha, cSenha } = req.body;
+
+    // Verificar se as senhas conferem
+    if (senha !== cSenha) {
+        req.flash('error_msg', 'As senhas não conferem.');
+        return res.redirect('/empresa'); // Redireciona para o formulário de registro
+    }
+
+    try {
+        // Verificar se o email já existe
+        const [emailExist] = await connection.query("SELECT id FROM empresas WHERE email = ?", [email]);
+
+        if (emailExist.length > 0) {
+            req.flash('error_msg', 'Email corporativo em uso.');
+            return res.redirect('/regs-empr'); // Redireciona para o formulário de registro
+        }
+
+        // Criptografar a senha
+        const hash = await bcrypt.hash(senha, 10);
+
+        // Inserir o novo usuário na base de dados
+        await connection.query("INSERT INTO empresas (nome, cnpj, email, senha, tipo, cep, numero) VALUES (?, ?, ?, ?, 'empresa', '00000000', '0000')", [nome, cnpj, email, hash]);
+
+        req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para o "Dashboard" em breve.');
+        res.redirect('/regs-empr?success=true');
+        // Redireciona para a página de registro, indicando sucesso
+
+    } catch (error) {
+        console.error(error);
+        req.flash('error_msg', 'Erro ao criar empresa. Tente novamente mais tarde.');
+        res.redirect('/regs-empr'); // Redireciona para o formulário de registro
     }
 });
 

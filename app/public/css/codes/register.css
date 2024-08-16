@@ -26,7 +26,7 @@
 
 .bg {
     width: 100%;
-    height: 100vh;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,7 +36,6 @@
     animation: AnimateBG 20s ease infinite;
     flex-direction: column;
 }
-
 
 .area-login {
     margin-top: -50px;

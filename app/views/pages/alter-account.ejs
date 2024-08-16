@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="css/codes/nav-bar.css">
     <link rel="stylesheet" href="css/codes/footer.css">
     <link rel="stylesheet" href="css/codes/profile.css">
+    <link rel="stylesheet" href="css/codes/alter-acct.css">
 
     <!-- Others Links -->
 
@@ -71,6 +72,27 @@
                                     <h4>Deseja alterar seu <span>e-mail?</span></h4>
                                     <input id="email" type="text" name="email" placeholder="Deseja alterar seu email?"
                                         required>
+                                    <% } %>
+                        </li>
+                    </ul>
+                </section>
+                <section class="nog">
+                    <h2>SOU EMPRESA</h2>
+                    <ul class="desc">
+                        <li>
+                            <% if(nome==false) { %>
+                                <h4>Logue para acessar as informações!</h4>
+                                <% }else{ %>
+                                    <h4 class="lr">Deseja criar uma <span>empresa</span>?</h4>
+                                    <li>
+                                        <section class="btn">
+                                            <a class="login-btn" href="/regs-empr">
+                                                <button>
+                                                    <i class="bi bi-person">Sou Empresa</i>
+                                                </button>
+                                            </a>
+                                        </section>
+                                    </li>
                                     <% } %>
                         </li>
                     </ul>
