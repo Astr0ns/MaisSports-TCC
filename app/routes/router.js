@@ -73,6 +73,11 @@ router.get("/profile", async function (req, res) {
 });
 
 
+router.get("/alter-account", function (req, res){
+    email = req.session.email;
+    res.render("pages/alter-account", {email: email});
+});
+
 // router.post("/alterType", async function (req, res){
 // UPDATE usuario_clientes SET tipo = 'usuario' WHERE id = 57;
 // });

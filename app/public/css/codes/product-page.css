@@ -300,7 +300,7 @@ section .btn-vermais {
 
 body.dark {
     .card {
-        background-color: var(--cor-fundo6);
+        background-color: var(--cor-bar-dark);
     }
 
     h3 {
@@ -316,14 +316,16 @@ body.dark {
         mix-blend-mode: normal;
     }
 
-    .mini-pics-product img:hover{
+    .mini-pics-product img:hover {
         border: 2px solid var(--cor-fundo2);
     }
-    .relacionados{
-        background-color: var(--cor-fundo6);
+
+    .relacionados {
+        background-color: var(--cor-bar-dark);
     }
 
 }
+
 
 
 
