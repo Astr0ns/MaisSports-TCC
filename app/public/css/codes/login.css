@@ -91,7 +91,7 @@ section.area-login {
 .area-login p {
     color: var(--cor-fonte2);
     font-size: 14px;
-    padding: 20px;
+    padding: 5px;
 }
 
 .form-group {

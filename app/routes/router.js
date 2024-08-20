@@ -5,9 +5,13 @@ var salt = bcrypt.genSaltSync(12);
 var connection = require("../../config/pool_conexoes");
 const mysql = require('mysql2/promise');
 const flash = require('connect-flash');
-const app = require('../../app')
-const usuarioController = require('../controllers/usuarioController'); // Certifique-se de que o caminho está correto
-const gravarUsuAutenticado = require('../models/usuarioModel').gravarUsuAutenticado; // Certifique-se de que a função está corretamente exportada
+const app = require('../../app');
+const usuarioController = require('../controllers/usuarioController');
+const empresaController = require('../controllers/empresaController');
+const gravarUsuAutenticado = require('../models/usuarioModel').gravarUsuAutenticado;
+const registrarUsu = require('../models/usuarioModel').registrarUsu;
+const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
+
 
 
 const {
@@ -38,7 +42,18 @@ router.get("/", verificarAutenticacao, function (req, res) {
 // 
 
 router.get("/login", function (req, res) {
-    res.render("pages/login", { listaErros: null, dadosNotificacao: null });
+    res.render("pages/login", {
+        listaErros: null,
+        dadosNotificacao: null,
+        valores: { nome: "", sobrenome: "", email: "" }
+    });
+});
+router.get("/login-empr", function (req, res) {
+    res.render("pages/login-empr", {
+        listaErros: null,
+        dadosNotificacao: null,
+        valores: { nome: "", sobrenome: "", email: "" }
+    });
 });
 
 router.get("/locais-esportivos", function (req, res) {
@@ -131,10 +146,25 @@ router.get("/soccer", function (req, res) {
     var email = req.session.email;
     res.render("pages/soccer", { email: email });
 });
-router.get("/empresa", function (req, res) {
+router.get("/empresa", async function (req, res) {
+    var nome = req.session.nome;
     var email = req.session.email;
-    res.render("pages/empresa");
+    var cep = req.session.cep;
+    var numero = req.session.numero;
+    var autenticado = req.session.autenticado;
+
+    req.session.cep = cep;
+    req.session.numero = numero;
+    req.flash('success_msg', 'Você foi logado com sucesso!');
+    res.render("pages/empresa", {
+        nome: nome,
+        email: email,
+        autenticado: autenticado,
+        numero: numero,
+        cep: cep,
+    });
 });
+
 router.get("/add-product", function (req, res) {
     res.render("pages/add-product");
 });
@@ -171,47 +201,18 @@ router.get('/alter', async (req, res) => {
     }
 });
 
-router.post("/fazerRegistro", async function (req, res) {
-    const { nome, sobrenome, email, senha, cSenha } = req.body;
+router.post("/fazerRegistro", usuarioController.registrarUsu, async function (req, res) {
 
-    // Verificar se as senhas conferem
-    if (senha !== cSenha) {
-        req.flash('error_msg', 'As senhas não conferem.');
-        return res.redirect('/register'); // Redireciona para o formulário de registro
-    }
-
-    try {
-        // Verificar se o email já existe
-        const [emailExist] = await connection.query("SELECT id FROM usuario_clientes WHERE email = ?", [email]);
-
-        if (emailExist.length > 0) {
-            req.flash('error_msg', 'Email já está em uso.');
-            return res.redirect('/register'); // Redireciona para o formulário de registro
-        }
-
-        // Criptografar a senha
-        const hash = await bcrypt.hash(senha, 10);
-
-        // Inserir o novo usuário na base de dados
-        await connection.query("INSERT INTO usuario_clientes (nome, sobrenome, email, senha, tipo, cep, numero) VALUES (?, ?, ?, ?, 'usuario', '00000000', '0000')", [nome, sobrenome, email, hash]);
-
-        req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para a página de login em breve.');
-        res.redirect('/register?success=true');
-        // Redireciona para a página de registro, indicando sucesso
-
-    } catch (error) {
-        console.error(error);
-        req.flash('error_msg', 'Erro ao criar usuário. Tente novamente mais tarde.');
-        res.redirect('/register'); // Redireciona para o formulário de registro
-    }
 });
+
+
 router.post("/fazerRegisEmpr", async function (req, res) {
     const { nome, cnpj, email, senha, cSenha } = req.body;
 
     // Verificar se as senhas conferem
     if (senha !== cSenha) {
         req.flash('error_msg', 'As senhas não conferem.');
-        return res.redirect('/empresa'); // Redireciona para o formulário de registro
+        return res.redirect('/login-empr'); // Redireciona para o formulário de registro
     }
 
     try {
@@ -318,6 +319,47 @@ router.post("/fazerLogin",
             } else {
                 req.flash('error_msg', "Usuário não encontrado! Email ou senhas incorretos");
                 res.redirect('/login');
+            }
+
+        } catch (err) {
+            console.error("Erro na consulta: ", err);
+            res.status(500).send('Erro interno do servidor');
+        }
+    }
+);
+
+router.post("/loginEmpr",
+    usuarioController.regrasValidacaoFormLogin,
+    gravarEmprAutenticado,
+    async function (req, res) {
+        const { email, senha } = req.body;
+
+        try {
+            const [accounts] = await connection.query("SELECT * FROM empresas WHERE email = ?", [email]);
+
+            if (accounts.length > 0) {
+                const account = accounts[0];
+
+                // Verificar se a senha corresponde
+                const passwordMatch = bcrypt.compareSync(senha, account.senha);
+
+                if (!passwordMatch) {
+                    req.flash('error_msg', "As senhas não conferem");
+                    return res.redirect('/login');
+                }
+
+                // Armazenar informações do usuário na sessão
+                req.session.email = account.email;
+                req.session.nome = account.nome;
+                req.session.cpnj = account.cpnj;
+                req.session.cep = account.cep;
+                req.session.numero = account.numero;
+
+                req.flash('success_msg', 'Login efetuado com sucesso!');
+                res.redirect('/empresa'); // Redireciona para a página de perfil
+            } else {
+                req.flash('error_msg', "Usuário não encontrado! Email ou senhas incorretos");
+                res.redirect('/login-empr');
             }
 
         } catch (err) {

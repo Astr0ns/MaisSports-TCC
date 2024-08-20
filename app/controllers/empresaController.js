@@ -6,50 +6,129 @@ const { removeImg } = require("../util/removeImg");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const https = require('https');
 
-gravarEmpresa: async (req, res) => {
+
+// Regras de validação para o formulário de login
+
+const regrasValidacaoFormLogin = [
+    body('email')
+        .isEmail().withMessage('Insira um email válido')
+        .normalizeEmail(),
+    body('senha')
+        .isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres')
+];
+
+// Função de login
+
+const registrarEmpr = async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('pages/regs-empr', {
+            userId: req.session.userId,
+            listaErros: errors.array(),
+            dadosNotificacao: null,
+            valores: {
+                nome_usu: "",
+                nomeusu_usu: "",
+                email_usu: req.body.email,
+                senha_usu: ""
+            },
+        });
+    }
+
+    const { nome, cnpj, email, senha, cSenha } = req.body;
+
+    // Verificar se as senhas conferem
+    if (senha !== cSenha) {
+        req.flash('error_msg', 'As senhas não conferem.');
+        return res.redirect('/login-empr'); // Redireciona para o formulário de registro
+    }
+
     try {
-        let results = await usuario.findId(req.session.autenticado.id);
-        if (results[0].cep != null) {
-            const httpsAgent = new https.Agent({
-                rejectUnauthorized: false,
-            });
+        // Verificar se o email já existe
+        const [emailExist] = await connection.query("SELECT id FROM empresas WHERE email = ?", [email]);
 
-            if (!req.file) {
-                console.log("falha no carregamento");
-            } else {
-                caminhoArquivo = "imagem/empresa/" + req.file.filename;
-                if (dadosForm.img_produto_pasta != caminhoArquivo) {
-
-                }
-                dadosForm.img_produto_pasta = caminhoArquivo;
-                dadosForm.img_produto_banco = null;
-
-            }
-            let resultUpdate = await empresa.update(dadosForm, req.session.autenticado.id);
-            id(!resultUpdate.isEmpty){
-                if (resultUpdate.changeRows == 1) {
-                    var result = await empresa.findId(req.session.autenticado.id);
-                    var autenticado = {
-                        id: result[0].id,
-                        tipo: result[0].tipo,
-                        img_produto_banco: result[0].img_produto_banco != null ? `data:image/jpeg;base64, ${result[0].img_produto_banco.toString('base64')}` : null,
-                        img_produto_pasta: result[0].img_produto_pasta
-                    };
-                    req.session.autenticado = autenticado;
-                    var campos = {
-                        nome_prod: result[0].nome_prod, email_prod: result[0].email.empresa,
-                        img_produto_pasta: result[0].img_produto_pasta, img_produto_banco: result[0].img_produto_banco,
-                        nome_prod: result[0].user_empr, celular
-                    }
-                }
-            }
+        if (emailExist.length > 0) {
+            req.flash('error_msg', 'Email corporativo em uso.');
+            return res.redirect('/regs-empr'); // Redireciona para o formulário de registro
         }
-    } catch {
-        return error
+
+        // Criptografar a senha
+        const hash = await bcrypt.hash(senha, 10);
+
+        // Inserir o novo usuário na base de dados
+        await connection.query("INSERT INTO empresas (nome, cnpj, email, senha, tipo, cep, numero) VALUES (?, ?, ?, ?, 'empresa', '00000000', '0000')", [nome, cnpj, email, hash]);
+
+        req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para o "Dashboard" em breve.');
+        res.redirect('/regs-empr?success=true');
+        // Redireciona para a página de registro, indicando sucesso
+
+    } catch (error) {
+        console.error(error);
+        req.flash('error_msg', 'Erro ao criar empresa. Tente novamente mais tarde.');
+        res.redirect('/regs-empr'); // Redireciona para o formulário de registro
     }
 }
 
-module.exports(
-    gravarEmpresa,
-)
+const logarEmpr = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('pages/login-empr', {
+            userId: req.session.userId,
+            listaErros: errors.array(),
+            dadosNotificacao: null,
+            valores: {
+                nome_usu: "",
+                nomeusu_usu: "",
+                email_usu: req.body.email,
+                senha_usu: ""
+            },
+        });
+    }
 
+    const { email, senha } = req.body;
+
+    try {
+        const [accounts] = await connection.query("SELECT * FROM empresas WHERE email = ?", [email]);
+
+        if (accounts.length > 0) {
+            const account = accounts[0];
+
+            // Verificar se a senha corresponde
+            const passwordMatch = bcrypt.compareSync(senha, account.senha);
+
+            if (!passwordMatch) {
+                req.flash('msg', "As senhas não conferem");
+                return res.redirect('/login'); // Redireciona para a página de login se as senhas não conferem
+            }
+
+            // Armazenar informações do usuário na sessão
+            req.session.email = account.email;
+            req.session.nome = account.nome;
+            req.session.cep = account.cep;
+            req.session.numero = account.numero;
+
+            res.render('pages/profile', {
+                userId: req.session.userId,
+                logado: req.session.logado,
+                email: req.session.email,
+                nome: req.session.nome,
+                mensage: req.flash('msg', "logado"),
+            });
+
+            console.log(re.flash('msg'))
+        } else {
+            req.flash('msg', "Empresa não encontrada");
+            res.redirect('/login-empr');
+        }
+
+    } catch (err) {
+        console.error("Erro na consulta: ", err);
+        res.status(500).send('Erro interno do servidor');
+    }
+};
+
+module.exports = {
+    regrasValidacaoFormLogin,
+    logarEmpr
+};

@@ -1,47 +1,119 @@
-:root {
-    --cor-fonte: #FFFF;
-    --cor-fonte2: #000;
-    --cor-fonte3: #c70074d2;
-    --cor-bar: #ffffff;
-    --cor-fundo: #f80091bd;
-    --cor-fundo2: #d12089;
-    --cor-fundo3: rgba(0, 33, 123, 0.562);
-}
-
-.img-inic {
-    padding: 35px;
+#map {
+    height: 800px;
     width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    flex: 1;
+    /* O mapa ocupará o restante do espaço disponível */
+    display: flex;
+    flex-direction: column;
+    /* Define a orientação vertical para o mapa */
+    align-items: center;
+    /* Centraliza o mapa horizontalmente */
+    padding: 20px;
 }
 
-.img-inic img {
-    width: 75%;
+/* Definindo o layout da página */
+html,
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
 }
 
-.espt-img-pc {
+/* Estilos para o filtro e entrada de endereço */
+#filter,
+#addressSearch {
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 8px;
+    margin: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#addressSearch {
+    width: 70%;
+    display: block;
+    margin: 20px auto;
+}
+
+#filter label,
+#addressSearch label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.checkbox-group label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+#address {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    width: calc(100% - 20px);
+    /* Ajusta o width para incluir o padding */
+}
+
+/* Estilo para a imagem */
+.place-photo {
     width: 100%;
-    height: 55vh;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
 }
 
-.espt-img-mob {
+/* Estilo para o botão de centralização e busca */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para a centralização e busca */
+#centerButton {
+    display: block;
+    margin: 20px auto;
+}
+
+.h2_filtros {
+    padding-left: 20px;
+}
+
+.map_zone {
+    display: flex;
+    margin: 40px;
+    margin-right: 150px;
+}
+
+/* Estilos para o filtro */
+.filters {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    align-items: center;
+    /* Centraliza o filtro verticalmente */
+}
+
+/* Esconde checkboxes adicionais inicialmente */
+.more-checkboxes {
     display: none;
-}
-
-@media screen and (max-width:600px) {
-
-    .espt-img-pc{
-        display: none;
-    }
-
-    .espt-img-mob{
-        display: block;
-        width: 100%;
-        height: 50%;
-        padding: 15px;
-    }
-
-    .img-inic{
-        padding: 5px;
-    }
-
-
 }

@@ -46,5 +46,5 @@ const verificarUsuAutorizado = (tipoPermitido, destinoFalha) => {
 module.exports = {
     verificarAutenticacao,
     verificarAutorizacao,
-    verificarUsuAutorizado
+    verificarUsuAutorizado,
 };
