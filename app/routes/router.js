@@ -174,8 +174,6 @@ router.get("/add-product", function (req, res) {
     res.render("pages/add-product");
 });
 router.get("/cart", function (req, res) {
-    var email = req.session.email;
-    res.render("pages/cart", { email: email });
 });
 
 router.get('/alter', async (req, res) => {

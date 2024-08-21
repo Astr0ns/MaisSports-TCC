@@ -3,157 +3,96 @@
     --cor-fonte2: #000;
     --cor-fonte3: #c70074d2;
     --cor-bar: #f5f5f5;
+    --cor-bar-dark: #010c1aa9;
+    --cor-bar-dark-mob: #010c1a;
     --cor-fundo: #f80091bd;
     --cor-fundo2: #d12089;
-    --cor-fundo3: rgba(26, 52, 137, 0.753);
+    --cor-fundo3: rgba(0, 33, 123, 0.562);
+    --cor-fundo4: rgb(235, 235, 235);
+    --cor-fundo5: #12488ded;
+    --cor-fundo-body: #010c1aed;
 }
 
-/* Cart items */
-
-.cart-page {
-    margin: 80px auto;
+.cartTab {
+    width: 400px;
+    background-color: #353432;
+    color: #eee;
+    position: fixed;
+    top: 0;
+    right: -400px;
+    bottom: 0;
+    display: grid;
+    grid-template-rows: 70px 1fr 70px;
+    transition: .5s;
 }
 
-.center-text {
-    color: var(--cor-fonte2);
-    font-size: 18px;
-    text-transform: capitalize;
-    text-align: start;
+body.showCart .cartTab {
+    right: 0;
 }
 
-section.container {
-    padding: 6%;
+body.showCart .container {
+    transform: translateX(-250px);
 }
 
-section.cart-container {
-    padding: 35px;
-    border-radius: 20px;
-    background: #f2f2f2;
+.cartTab h1 {
+    padding: 20px;
+    margin: 0;
+    font-weight: 300;
 }
 
-section.cart-prod {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: flex-start;
+.cartTab .btn {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 
-#no-background {
-    border-radius: 15px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.cart-info {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 7px;
-    border: 1px solid #cdcdcd;
-    border-radius: 15px;
-}
-
-th {
-    text-align: center;
-    padding: 5px;
-    color: #ffff;
-    background: var(--cor-fundo3);
-    font-weight: normal;
-    border-radius: 10px;
-}
-
-td {
-    padding: 10px 5px;
-}
-
-.btn{
-    background-color: var(--cor-bar);
-    border-radius: 5px;
+.cartTab button {
+    background-color: #E8BC0E;
+    border: none;
+    font-family: Poppins;
+    font-weight: 500;
     cursor: pointer;
-    float: left;
-    font: normal 14px/1.6 "Helbetica Neue", Arial, sans-serif;
-    height: 32px;
-    margin-right: 10px;
 }
 
-.btn .icone, .btn .contador{
-    float: left;
-    line-height: 32px;
-    text-align: center;
-    user-select: none;
-    width: 50%;
+.cartTab .close {
+    background-color: #eee;
 }
 
-.btn .icone img{
-    display: block;
-    margin: 0 auto;
-    width: 32px;
-}
-
-.btn .icone span{
-    text-align: center;
-    width: 32px;
-}
-
-.btn .contador{
-    color: #333;
-    font-weight: 600;
-}
-
-#quantidade{
-    border: 1px solid #0984ff;
-    width: 120px;
-}
-
-#quantidade .icone, #quantidade .contador {
-    width: 33.333%;
-}
-
-#quantidade .contador {
-    background: #0984ff;
-    color: var(--cor-fonte);
-}
-
-td .preco {
-    border-radius: 10px;
-    border: 1px solid #c2c2c2;
-    background-color: var(--cor-fonte);
-    color: var(--cor-fonte3);
-    font-weight: bold;
-}
-
-td a {
-    color: var(--cor-fonte3);
-    font-size: 14px;
-    font-weight: bold;
-}
-
-td img {
-    width: 80px;
-    margin-right: 10px;
-    margin-right: 10px;
-}
-
-.total-price {
-    display: flex;
-    justify-content: flex-end;
-
-}
-
-.total-price table {
-    border-top: 3px solid var(--cor-fundo3);
+.listCart .item img {
     width: 100%;
-    max-width: 50%;
 }
 
-td:last-child {
-    text-align: right;
+.listCart .item {
+    display: grid;
+    grid-template-columns: 70px 150px 50px 1fr;
+    gap: 10px;
+    text-align: center;
+    align-items: center;
 }
 
-th:last-child {
-    text-align: right;
+.listCart .quantity span {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-color: #eee;
+    border-radius: 50%;
+    color: #555;
+    cursor: pointer;
 }
 
+.listCart .quantity span:nth-child(2) {
+    background-color: transparent;
+    color: #eee;
+    cursor: auto;
+}
+
+.listCart .item:nth-child(even) {
+    background-color: #eee1;
+}
+
+.listCart {
+    overflow: auto;
+}
+
+.listCart::-webkit-scrollbar {
+    width: 0;
+}

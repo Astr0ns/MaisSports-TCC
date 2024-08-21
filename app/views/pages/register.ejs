@@ -73,6 +73,26 @@
     </header>
 
     <main class="bg">
+        <section class="notify">
+            <% if (error_msg || success_msg) { %>
+                <section class="flash-message" style="display: none;">
+                    <% if (error_msg) { %>
+                        <section class="error">
+                            <%= error_msg %>
+                        </section>
+                        <% } %>
+                            <% if (success_msg) { %>
+                                <section class="success">
+                                    <%= success_msg %>
+                                </section>
+                                <% } %>
+                                    <section class="progress-bar">
+                                        <section class="progress-bar-inner"></section>
+                                    </section>
+                </section>
+                <% } %>
+
+        </section>
         <section class="area-login">
             <section class="sub-og">
                 <section class="login">
@@ -143,26 +163,7 @@
             </section>
         </section>
 
-        <section class="notify">
-            <% if (error_msg || success_msg) { %>
-                <section class="flash-message" style="display: none;">
-                    <% if (error_msg) { %>
-                        <section class="error">
-                            <%= error_msg %>
-                        </section>
-                    <% } %>
-                    <% if (success_msg) { %>
-                        <section class="success">
-                            <%= success_msg %>
-                        </section>
-                    <% } %>
-                    <section class="progress-bar">
-                        <section class="progress-bar-inner"></section>
-                    </section>
-                </section>
-            <% } %>
-            
-        </section>
+
     </main>
 
     <%- include("../partial/footer") %>

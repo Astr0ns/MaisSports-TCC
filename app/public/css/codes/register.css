@@ -24,18 +24,7 @@
     --cor-fundo-body: #010c1aed;
 }
 
-.bg {
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-size: 300% 300%;
-    background-image: linear-gradient(-45deg, #2c2957 0%, #2c2957 25%, #2c2957 51%, #ff0099 100%);
-    -webkit-animation: AnimateBG 20s ease infinite;
-    animation: AnimateBG 20s ease infinite;
-    flex-direction: column;
-}
+
 
 .area-login {
     margin-top: -50px;
