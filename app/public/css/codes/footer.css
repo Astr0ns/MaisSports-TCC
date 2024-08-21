@@ -126,6 +126,20 @@ footer .footer-social-medias img {
   border-radius: 4px;
 }
 
+#input_group i{
+  font-size: 15px;
+}
+
+img.footer-social-medias {
+  width: 29px;
+}
+
+body.dark footer{
+  h3{
+    color: var(--cor-fundo);
+  }
+}
+
 #input_group input {
   all: unset;
   padding: 0.75rem;

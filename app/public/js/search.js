@@ -67,15 +67,15 @@ for (let i of products.data) {
 
   //cria o Card
 
-  let card = document.createElement("div");
+  let card = document.createElement("section");
 
   //O cartão deve ter categoria e permanecer oculto inicialmente
 
   card.classList.add("card", i.category, "hide");
 
-  //image div
+  //image section
 
-  let imgContainer = document.createElement("div");
+  let imgContainer = document.createElement("section");
   imgContainer.classList.add("image-container");
 
   //img tag
@@ -87,7 +87,7 @@ for (let i of products.data) {
 
   //container
 
-  let container = document.createElement("div");
+  let container = document.createElement("section");
   container.classList.add("container");
 
   //nome do produto

@@ -31,15 +31,17 @@
     </head>
 
     <body>
+        <%- include("../partial/header-home", {email: email }) %>
 
-        <%- include("../partial/header-home", { email: email }) %>
-
-        <% if(cnpj && tipo ===undefined ) {%>
+        <% if(nome==undefined ) {%>
 
             <section class="container">
                 <section class="aviso">
                     <h4>Você não tem acesso a essa página! </h4>
-                    <h4>Por Favor, Volte para a <a href="/">Página inicial do site</a></h4>
+                    <h4>Por Favor, Volte para a <span><a href="/">Página inicial do site</a></span></h4>
+                </section>
+                <section class="alert">
+                    <img src="../../public/imagem/alert.png" alt="">
                 </section>
             </section>
 
@@ -256,7 +258,7 @@
                 <% } %>
 
 
-                    <%- include("../partial/footer") %>
+        <%- include("../partial/footer") %>
 
     </body>
 </ejs>

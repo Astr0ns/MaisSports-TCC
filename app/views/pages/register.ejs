@@ -145,21 +145,21 @@
 
         <section class="notify">
             <% if (error_msg || success_msg) { %>
-                <div class="flash-message" style="display: none;">
+                <section class="flash-message" style="display: none;">
                     <% if (error_msg) { %>
-                        <div class="error">
+                        <section class="error">
                             <%= error_msg %>
-                        </div>
+                        </section>
                     <% } %>
                     <% if (success_msg) { %>
-                        <div class="success">
+                        <section class="success">
                             <%= success_msg %>
-                        </div>
+                        </section>
                     <% } %>
-                    <div class="progress-bar">
-                        <div class="progress-bar-inner"></div>
-                    </div>
-                </div>
+                    <section class="progress-bar">
+                        <section class="progress-bar-inner"></section>
+                    </section>
+                </section>
             <% } %>
             
         </section>

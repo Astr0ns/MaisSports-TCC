@@ -55,7 +55,7 @@
     }
 
     .nav-manual .manual-btn,
-    .nav-auto div {
+    .nav-auto section {
         align-items: center;
         justify-content: center;
         border-bottom: 2px solid var(--cor-fundo);
@@ -66,7 +66,7 @@
     }
 
     .nav-manual .manual-btn:not(:last-child),
-    .nav-auto div:not(:last-child) {
+    .nav-auto section:not(:last-child) {
         margin-right: 10px;
     }
 

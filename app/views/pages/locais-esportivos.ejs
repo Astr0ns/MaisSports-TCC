@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE ejs>
+<ejs lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa com Filtragem de Pontos de Interesse Esportivos</title>
 
-      <!-- Link Responsives CSS's-->
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="css/small.css">
-    <link rel="stylesheet" media="screen and (max-width: 534px)" href="css/verysmall.css">
-    <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)">
+        <!-- Link Responsives CSS's-->
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+        <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="css/small.css">
+        <link rel="stylesheet" media="screen and (max-width: 534px)" href="css/verysmall.css">
+        <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)"
+            href="../../public/css/medium.css">
 
      <link rel="stylesheet" href="css/codes/sessoes.css">
     <link rel="stylesheet" href="css/codes/interface.css">
@@ -19,26 +20,20 @@
     <link rel="stylesheet" href="css/codes/nav-bar.css">
     <link rel="stylesheet" href="css/codes/footer.css">
 
-
-
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places">
-    </script>
-
     <script src="js/locais.js"></script>
+
+    <link rel="stylesheet" href="css/codes/locais.css">
 
     <title>+S - Locais Esportivos</title>
 </head>
 <body>
     <%- include("../partial/header-home", { email: email }) %>
+
         <section id="addressSearch">
             <label for="address">Digite o endereço (rua, bairro, cidade):</label>
             <input type="text" id="address" placeholder="Nome da rua, bairro, cidade">
         </section>
-
+        
         <section class="map_zone">
             <section class="filters">
                 <section class="container">
@@ -49,25 +44,24 @@
                         <label><input type="checkbox" value="football"> Futebol (Campo e Quadra)</label>
                         <label><input type="checkbox" value="skatepark"> Pista de Skate</label>
                         <label><input type="checkbox" value="bicycle"> Pista de Bicicleta</label>
-
+    
                         <!-- Checkboxes adicionais escondidos inicialmente -->
                         <section class="more-checkboxes">
                             <label><input type="checkbox" value="tennis"> Quadra de Tênis</label>
                             <label><input type="checkbox" value="basketball"> Quadra de Basquete</label>
                             <label><input type="checkbox" value="park"> Parque</label>
                         </section>
-
+                        
                         <button id="toggleFiltersButton">Ver Mais</button>
-
+                        
                     </section>
                     <button id="centerButton">Centralizar na minha localização</button>
                 </section>
-
+                
             </section>
-
+    
             <section id="map"></section>
         </section>
 
-
 </body>
-</html>
+</ejs>

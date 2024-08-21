@@ -152,7 +152,9 @@ router.get("/empresa", async function (req, res) {
     var cep = req.session.cep;
     var numero = req.session.numero;
     var autenticado = req.session.autenticado;
-    var cnpj = req.session.autenticado;
+    var tipo = req.session.tipo;
+    var cnpj = req.session.cnpj;
+
 
     req.session.cep = cep;
     req.session.numero = numero;
@@ -164,6 +166,7 @@ router.get("/empresa", async function (req, res) {
         numero: numero,
         cep: cep,
         cnpj: cnpj,
+        tipo: tipo,
     });
 });
 
@@ -296,7 +299,7 @@ router.post("/fazerLogin",
         const { email, senha } = req.body;
 
         try {
-            const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ?", [email]);
+            const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ? AND tipo = 'usuario' ", [email]);
 
             if (accounts.length > 0) {
                 const account = accounts[0];
@@ -315,6 +318,7 @@ router.post("/fazerLogin",
                 req.session.sobrenome = account.sobrenome;
                 req.session.cep = account.cep;
                 req.session.numero = account.numero;
+                req.session.tipo = account.tipo
 
                 req.flash('success_msg', 'Login efetuado com sucesso!');
                 res.redirect('/profile'); // Redireciona para a página de perfil
