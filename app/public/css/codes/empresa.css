@@ -181,11 +181,18 @@ section .buttons-line button {
     color: #FFFF;
 }
 
-section .aviso{
+section .aviso {
     display: flex;
-    width: 100%;
-    height: 100vh;
+    width: auto;
+    height: 61%;
     flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.aviso a {
+    color: #d12089;
 }
 
 main {

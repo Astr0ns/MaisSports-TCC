@@ -13,7 +13,6 @@ const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 
 
-
 const {
     verificarAutenticacao,
     verificarAutorizacao,
@@ -147,11 +146,13 @@ router.get("/soccer", function (req, res) {
     res.render("pages/soccer", { email: email });
 });
 router.get("/empresa", async function (req, res) {
+
     var nome = req.session.nome;
     var email = req.session.email;
     var cep = req.session.cep;
     var numero = req.session.numero;
     var autenticado = req.session.autenticado;
+    var cnpj = req.session.autenticado;
 
     req.session.cep = cep;
     req.session.numero = numero;
@@ -162,6 +163,7 @@ router.get("/empresa", async function (req, res) {
         autenticado: autenticado,
         numero: numero,
         cep: cep,
+        cnpj: cnpj,
     });
 });
 

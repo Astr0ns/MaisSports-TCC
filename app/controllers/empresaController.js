@@ -7,6 +7,7 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 const https = require('https');
 
 
+
 // Regras de validação para o formulário de login
 
 const regrasValidacaoFormLogin = [
@@ -68,7 +69,7 @@ const registrarEmpr = async (req, res) => {
         req.flash('error_msg', 'Erro ao criar empresa. Tente novamente mais tarde.');
         res.redirect('/regs-empr'); // Redireciona para o formulário de registro
     }
-}
+};
 
 const logarEmpr = async (req, res) => {
     const errors = validationResult(req);
@@ -128,7 +129,24 @@ const logarEmpr = async (req, res) => {
     }
 };
 
+const adicionarProduto = async (req, res) => {
+    const { nome, descricao, preco, quantidade, marca, localizacao } = req.body;
+
+    try {
+        const result = await pool.query(
+            'INSERT INTO produtos (nome, descricao, preco, quantidade, marca, localizacao) VALUES (R$1, R$2, R$3, R$4, R$5, R$6) RETURNING *',
+            [nome, descricao, preco, quantidade, marca, localizacao]
+        );
+        res.status(201).json(result.rows[0]);
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro ao adicionar produto' });
+    }
+}
+
 module.exports = {
     regrasValidacaoFormLogin,
-    logarEmpr
+    logarEmpr,
+    registrarEmpr,
+    adicionarProduto,
 };

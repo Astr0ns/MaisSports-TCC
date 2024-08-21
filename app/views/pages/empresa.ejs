@@ -31,63 +31,15 @@
     </head>
 
     <body>
-        <header>
-            <nav>
-                <a class="logo" href="/"><img src="imagem/LOGO.png"></a>
-                <section class="box">
-                    <input type="checkbox" id="check">
-                    <section class="search-box">
-                        <input type="text" placeholder="Pesquise aqui...">
-                        <label for="check" class="icon">
-                            <i class='bx bx-search'></i>
-                        </label>
-                    </section>
-                </section>
 
-                <section class="mobile-menu">
-                    <section class="line1"></section>
-                    <section class="line2"></section>
-                    <section class="line3"></section>
-                </section>
+        <%- include("../partial/header-home", { email: email }) %>
 
-                <ul class="nav-list">
-                    <li><a class="mob-og" href="pages/login"><button><i class="bi bi-person">Entrar</i></button></a>
-                    </li>
-                    <li><a class="prof" href="pages/profile">Perfil</a></li>
-                    <li><a class="sair-btn mob" href="pages/login">
-                    <li><a class="log-out" onclick="logOut()">Sair</a></li>
-                    <li class="mob-og"><a>
-                            <button onclick="logOut()">
-                                <i class="bi bi-person">Sair</i>
-                            </button>
-                        </a></li>
-                    <li><a class="pc-og" href="pages/login">Entrar</a></li>
-                    <li><a href="pages/index">Inicio</a></li>
-                    <li><a href="pages/carrinho">Publicar</a></li>
-                    <li><a href="pageslocais-esportivos">Editar</a></li>
-                </ul>
-            </nav>
-        </header>
-
-        <section class="box-2">
-            <input type="checkbox" id="check-2">
-            <section class="search-box-2">
-                <input id="search-input" type="text" placeholder="Pesquise aqui...">
-                <label for="check-2" class="icon-2">
-                    <i class='bx bx-search'></i>
-                </label>
-            </section>
-        </section>
-
-        <% if(nome==undefined ) {%>
+        <% if(cnpj && tipo ===undefined ) {%>
 
             <section class="container">
                 <section class="aviso">
                     <h4>Você não tem acesso a essa página! </h4>
-                    <h4>Por Favor, Volte para a <span><a href="/">Página inicial do site</a></span></h4>
-                </section>
-                <section class="alert">
-                    <img src="../../public/imagem/alert.png" alt="">
+                    <h4>Por Favor, Volte para a <a href="/">Página inicial do site</a></h4>
                 </section>
             </section>
 

@@ -11,7 +11,7 @@ let autocomplete;
 function initMap() {
     geocoder = new google.maps.Geocoder();
     autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById('address'), {
+        document.getElementById('address'), { 
             types: ['geocode'] // Aceita endereço completo, bairro e cidade
         }
     );
@@ -147,18 +147,18 @@ function getKeywords(type) {
 
 function generateContent(place) {
     let content = `<div><strong>${place.name}</strong><br>`;
-   
+    
     if (place.photos && place.photos.length > 0) {
         const photoUrl = place.photos[0].getUrl({ maxWidth: 200, maxHeight: 150 });
         content += `<img src="${photoUrl}" class="place-photo"><br>`;
     } else {
         content += `<p>Imagem não disponível</p>`;
     }
-   
+    
     if (place.vicinity) {
         content += `<p>${place.vicinity}</p>`;
     }
-   
+    
     content += `</div>`;
     return content;
 }
