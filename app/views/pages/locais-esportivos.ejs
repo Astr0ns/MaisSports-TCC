@@ -1,83 +1,366 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="imagem/png" href="imagem/icon-msports.jpg">
+    <title>Mapa com Filtragem de Pontos de Interesse Esportivos</title>
 
-    <!-- Link Responsives CSS's-->
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="css/small.css">
-    <link rel="stylesheet" media="screen and (max-width: 534px)" href="css/verysmall.css">
-    <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)"
-        href="../../public/css/medium.css">
-    <!-- End Responsives CSS's-->
+    <style>
+        /* Definindo o tamanho do mapa */
+        #map {
+            height: 800px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            flex: 1; /* O mapa ocupará o restante do espaço disponível */
+            display: flex;
+            flex-direction: column; /* Define a orientação vertical para o mapa */
+            align-items: center; /* Centraliza o mapa horizontalmente */
+            padding: 20px;
+        }
+        /* Definindo o layout da página */
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        /* Estilos para o filtro e entrada de endereço */
+        #filter, #addressSearch {
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            border-radius: 8px;
+            margin: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-    <!-- Link CSS's of Mains, Sections, etc. -->
+        #addressSearch {
+            width: 70%;
+            display: block;
+            margin: 20px auto;
+        }
 
-    <link rel="stylesheet" href="css/codes/sessoes.css">
-    <link rel="stylesheet" href="css/codes/interface.css">
-    <link rel="stylesheet" href="css/codes/tendencia.css">
-    <link rel="stylesheet" href="css/codes/categorias.css">
-    <link rel="stylesheet" href="css/codes/product-page.css">
-    <link rel="stylesheet" href="css/codes/nav-bar.css">
-    <link rel="stylesheet" href="css/codes/footer.css">
-    <link rel="stylesheet" href="css/codes/locais.css">
+        #filter label, #addressSearch label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
 
-    <!-- Others Links -->
+        .checkbox-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
 
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
 
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places">
+        #address {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: calc(100% - 20px); /* Ajusta o width para incluir o padding */
+        }
+        /* Estilo para a imagem */
+        .place-photo {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        /* Estilo para o botão de centralização e busca */
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        /* Estilos para a centralização e busca */
+        #centerButton {
+            display: block;
+            margin: 20px auto;
+        }
+
+        .h2_filtros {
+            padding-left: 20px;
+        }
+
+        .map_zone {
+            display: flex;
+            margin: 40px;
+            margin-right: 150px;
+        }
+        /* Estilos para o filtro */
+        .filters {
+            display: flex;
+            flex-direction: column;
+            width: 20%;
+            align-items: center; /* Centraliza o filtro verticalmente */
+        }
+
+        /* Esconde checkboxes adicionais inicialmente */
+        .more-checkboxes {
+            display: none;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places"></script>
+    <script>
+        let map;
+        let service;
+        let infowindow;
+        let markers = [];
+        let currentLocation = { lat: -23.5372544, lng: -46.8516864 };
+        let userMarker;
+        let geocoder;
+        let autocomplete;
+
+        function initMap() {
+            geocoder = new google.maps.Geocoder();
+            autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('address'), { 
+                    types: ['geocode'] // Aceita endereço completo, bairro e cidade
+                }
+            );
+            autocomplete.addListener('place_changed', onPlaceChanged);
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        currentLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        initializeMap();
+                    },
+                    () => initializeMap()
+                );
+            } else {
+                initializeMap();
+            }
+        }
+
+        function initializeMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: currentLocation,
+                zoom: 13
+            });
+
+            service = new google.maps.places.PlacesService(map);
+            infowindow = new google.maps.InfoWindow();
+
+            userMarker = new google.maps.Marker({
+                position: currentLocation,
+                map: map,
+                title: 'Sua Localização',
+                icon: {
+                    url: 'https://cdn-icons-png.flaticon.com/512/811/811872.png',
+                    scaledSize: new google.maps.Size(30, 30)
+                }
+            });
+
+            // Adiciona o evento de mudança para os checkboxes
+            document.querySelectorAll('.checkbox-group input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', handleCheckboxChange);
+            });
+            document.getElementById('centerButton').addEventListener('click', centerMapOnUser);
+            document.getElementById('toggleFiltersButton').addEventListener('click', toggleFilters);
+
+            updateMap();
+        }
+
+        function handleCheckboxChange(event) {
+            const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox !== event.target) {
+                    checkbox.checked = false; // Desmarca todos os outros checkboxes
+                }
+            });
+            updateMap(); // Atualiza o mapa com base na seleção atual
+        }
+
+        function updateMap() {
+            clearMarkers();
+
+            const selectedType = getSelectedType();
+            if (!selectedType) return;
+
+            const request = {
+                location: currentLocation,
+                radius: '10000',
+                keyword: getKeywords(selectedType)
+            };
+
+            service.nearbySearch(request, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    for (let i = 0; i < results.length; i++) {
+                        const place = results[i];
+                        const marker = new google.maps.Marker({
+                            position: place.geometry.location,
+                            map: map,
+                            title: place.name
+                        });
+
+                        google.maps.event.addListener(marker, 'click', () => {
+                            infowindow.setContent(generateContent(place));
+                            infowindow.open(map, marker);
+                        });
+
+                        markers.push(marker);
+                    }
+                } else {
+                    console.error('Erro na busca de locais:', status);
+                }
+            });
+        }
+
+        function clearMarkers() {
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            markers = [];
+        }
+
+        function getSelectedType() {
+            const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+            for (let checkbox of checkboxes) {
+                if (checkbox.checked) {
+                    return checkbox.value;
+                }
+            }
+            return null; // Nenhum checkbox selecionado
+        }
+
+        function getKeywords(type) {
+            switch (type) {
+                case 'football':
+                    return ['soccer field', 'football field', 'soccer stadium', 'football stadium', 'soccer', 'futsal', 'futebol', 'quadra', 'society', 'campo de futebol'];
+                case 'skatepark':
+                    return ['skate park', 'skateboarding park', 'pista','skate'];
+                case 'bicycle':
+                    return ['bike park', 'bicycle park'];
+                case 'tennis':
+                    return ['tennis court', 'tennis stadium', 'quadra' ];
+                case 'basketball':
+                    return ['court', 'basketball stadium', 'quadra', 'basquete' ];
+                case 'park':
+                    return ['park', 'parque'];
+                case 'gym':
+                    return ['gym', 'fitness center'];
+                default:
+                    return [];
+            }
+        }
+
+        function generateContent(place) {
+            let content = `<div><strong>${place.name}</strong><br>`;
+            
+            if (place.photos && place.photos.length > 0) {
+                const photoUrl = place.photos[0].getUrl({ maxWidth: 200, maxHeight: 150 });
+                content += `<img src="${photoUrl}" class="place-photo"><br>`;
+            } else {
+                content += `<p>Imagem não disponível</p>`;
+            }
+            
+            if (place.vicinity) {
+                content += `<p>${place.vicinity}</p>`;
+            }
+            
+            content += `</div>`;
+            return content;
+        }
+
+        function centerMapOnUser() {
+            map.setCenter(currentLocation);
+            map.setZoom(12);
+        }
+
+        function onPlaceChanged() {
+            const place = autocomplete.getPlace();
+            if (place.geometry) {
+                currentLocation = place.geometry.location;
+                map.setCenter(currentLocation);
+                map.setZoom(15);
+
+                if (userMarker) {
+                    userMarker.setPosition(currentLocation);
+                } else {
+                    userMarker = new google.maps.Marker({
+                        position: currentLocation,
+                        map: map,
+                        title: 'Sua Localização',
+                        icon: {
+                            url: 'https://cdn-icons-png.flaticon.com/512/811/811872.png',
+                            scaledSize: new google.maps.Size(30, 30)
+                        }
+                    });
+                }
+
+                updateMap(); // Atualiza a busca de pontos de interesse para a nova localização
+            } else {
+                console.error('Nenhum resultado encontrado para o endereço fornecido.');
+            }
+        }
+
+        function toggleFilters() {
+            const moreCheckboxes = document.querySelector('.more-checkboxes');
+            const toggleButton = document.getElementById('toggleFiltersButton');
+            if (moreCheckboxes.style.display === 'none') {
+                moreCheckboxes.style.display = 'block';
+                toggleButton.textContent = 'Ver Menos';
+            } else {
+                moreCheckboxes.style.display = 'none';
+                toggleButton.textContent = 'Ver Mais';
+            }
+        }
+
+        window.onload = initMap;
     </script>
-
-    <script src="js/locais.js"></script>
-
-    <title>+S - Locais Esportivos</title>
 </head>
-
 <body>
-    <%- include("../partial/header-home", { email: email }) %>
-        <section id="addressSearch">
-            <label for="address">Digite o endereço (rua, bairro, cidade):</label>
-            <input type="text" id="address" placeholder="Nome da rua, bairro, cidade">
+    
+    <div id="addressSearch">
+        <label for="address">Digite o endereço (rua, bairro, cidade):</label>
+        <input type="text" id="address" placeholder="Nome da rua, bairro, cidade">
+    </div>
+    
+    <section class="map_zone">
+        <section class="filters">
+            <div class="container">
+                <h2 class="h2_filtros">Filtros</h2>
+                <div id="filter" class="checkbox-group">
+                    <h2>Esportes</h2>
+                    <label><input type="checkbox" value="gym"> Academia</label>
+                    <label><input type="checkbox" value="football"> Futebol (Campo e Quadra)</label>
+                    <label><input type="checkbox" value="skatepark"> Pista de Skate</label>
+                    <label><input type="checkbox" value="bicycle"> Pista de Bicicleta</label>
+
+                    <!-- Checkboxes adicionais escondidos inicialmente -->
+                    <div class="more-checkboxes">
+                        <label><input type="checkbox" value="tennis"> Quadra de Tênis</label>
+                        <label><input type="checkbox" value="basketball"> Quadra de Basquete</label>
+                        <label><input type="checkbox" value="park"> Parque</label>
+                    </div>
+                    
+                    <button id="toggleFiltersButton">Ver Mais</button>
+                    
+                </div>
+                <button id="centerButton">Centralizar na minha localização</button>
+            </div>
+            
         </section>
 
-        <section class="map_zone">
-            <section class="filters">
-                <section class="container">
-                    <h2 class="h2_filtros">Filtros</h2>
-                    <section class="filter" id="filter" class="checkbox-group">
-                        <h2>Esportes</h2>
-                        <label><input type="checkbox" value="gym"> Academia</label>
-                        <label><input type="checkbox" value="football"> Futebol (Campo e Quadra)</label>
-                        <label><input type="checkbox" value="skatepark"> Pista de Skate</label>
-                        <label><input type="checkbox" value="bicycle"> Pista de Bicicleta</label>
-
-                        <!-- Checkboxes adicionais escondidos inicialmente -->
-                        <section class="more-checkboxes">
-                            <label><input type="checkbox" value="tennis"> Quadra de Tênis</label>
-                            <label><input type="checkbox" value="basketball"> Quadra de Basquete</label>
-                            <label><input type="checkbox" value="park"> Parque</label>
-                        </section>
-
-                        <button id="toggleFiltersButton">Ver Mais</button>
-
-                    </section>
-                    <button id="centerButton">Centralizar na minha localização</button>
-                </section>
-
-            </section>
-
-            <section id="map"></section>
-        </section>
-
-        <%- include("../partial/footer", { email: email }) %>
+        <div id="map"></div>
+    </section>
 
 </body>
-
 </html>
