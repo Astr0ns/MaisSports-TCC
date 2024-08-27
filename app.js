@@ -4,6 +4,7 @@ const port = process.env.PORT || 3001;
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 const flash = require("connect-flash");
+const productRouter = require('./app/routes/productRouter');
 
 //configurações do app
 app.use(express.static("app/public"));

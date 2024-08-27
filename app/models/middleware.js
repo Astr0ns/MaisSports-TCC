@@ -43,6 +43,8 @@ const verificarUsuAutorizado = (tipoPermitido, destinoFalha) => {
     };
 };
 
+
+
 module.exports = {
     verificarAutenticacao,
     verificarAutorizacao,

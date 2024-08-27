@@ -13,6 +13,7 @@ const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 
 
+
 const {
     verificarAutenticacao,
     verificarAutorizacao,
@@ -205,7 +206,7 @@ router.get('/alter', async (req, res) => {
 });
 
 router.post("/fazerRegistro", usuarioController.registrarUsu, async function (req, res) {
-
+    // Lógica adicional aqui
 });
 
 
@@ -407,7 +408,9 @@ router.post('/delCEP', async function (req, res) {
 
 })
 
+router.post('/comprar', async (req, res) => {
 
+});
 
 router.get("/fazerLogout", function (req, res) {
     req.session.destroy(function (err) {

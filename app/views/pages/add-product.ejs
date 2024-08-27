@@ -70,206 +70,216 @@
     <section class="container-product">
         <section class="container">
             <section class="card">
-                <section class="product-card">
+                <form action="/adicionarProduto" method="POST" enctype="multipart/form-data">
+                    <section class="product-card">
 
-                    <section class="MainIgm">
-                        <a href=""><i class="bi bi-plus-circle"></i></a>
-                    </section>
-                    <section class="MainIgm">
-                        <a href=""><i class="bi bi-plus-circle"></i></a>
-                    </section>
-                    <section class="MainIgm">
-                        <a href=""><i class="bi bi-plus-circle"></i></a>
-                    </section>
-                    <section class="MainIgm">
-                        <a href=""><i class="bi bi-plus-circle"></i></a>
-                    </section>
-                    <section class="MainIgm">
-                        <a href=""><i class="bi bi-plus-circle"></i></a>
-                    </section>
-                    <section class="MainIgm">
-                        <a href=""><i class="bi bi-plus-circle"></i></a>
-                    </section>
-                    <section class="MainIgm">
-                        <a href=""><i class="bi bi-plus-circle"></i></a>
-                    </section>
-                    <section class="MainIgm">
-                        <a href=""><i class="bi bi-plus-circle"></i></a>
-                    </section>
-                </section>
+                        <section class="MainIgm">
+                            <input type="file" id="file-upload" name="images" class="hidden-input" multiple>
 
-                <!-- DESCRIÇAO DO PRODUTO/PREÇO -->
-
-                <section class="product-info">
-
-                    <section class="title-prod">
-                        <label for="name">Editar nome do produto:</label><br>
-                        <input class="name" type="text" id="name_product" name="name" placeholder="Digite o nome"><br>
-                        <label for="lname">Editar Categoria:</label><br>
-                    </section>
-                    <section class="categorias">
-                        <select>
-                            <option>Basquete</option>
-                            <option>Futebol</option>
-                            <option>Vôlei</option>
-                            <option>Treino</option>
-                            <option>Acessório</option>
-                            <option>Camiseta</option>
-                            <option>Bermuda</option>
-                            <option>Shorts</option>
-                            <option>Calça</option>
-                            <option>Calçados</option>
-                        </select>
-                    </section>
-
-                    <section class="ratting-prod">
-                        <i class="bi bi-star"></i>
-                        <i class="bi bi-star"></i>
-                        <i class="bi bi-star"></i>
-                        <i class="bi bi-star"></i>
-                        <i class="bi bi-star"></i>
-                        <p>sem avalições</p>
-                    </section>
-
-                    <section class="price">
-                        <label for="name">Editar preço do produto:</label><br>
-                        <input class="name" type="text" id="name_product" name="name" placeholder="Digite o preço">
-                        <section class="center-text">
-                            <h2>Pré-visualização do texto:</h2>
-                            <p>R$:999,99 ou <span>6x</span> de <span>R$:166,66</span></p>
+                            <!-- Link estilizado -->
+                            <a href="#" class="upload-link" id="upload-link">
+                                <i class="bi bi-plus-circle"></i> Adicionar Imagens
+                            </a>
                         </section>
-                    </section>
-
-
-                    <!-- Fotos das otras colorways/variantes do produto -->
-                    <section class="mini-imgs">
-                        <section class="mini-pics-product">
+                        <section class="MainIgm">
                             <a href=""><i class="bi bi-plus-circle"></i></a>
                         </section>
-                    </section>
-
-                    <!-- Seleção de tamanhos  -->
-                    <section class="tamanhos">
-                        <h2 class="tam-inf"><span>Tamanho</span></h2>
-                        <section class="tam">
-                            <section class="num-tam">36</section>
-                            <section class="num-tam">37</section>
-                            <section class="num-tam">38</section>
-                            <section class="num-tam">39</section>
-                            <section class="num-tam">40</section>
-                            <section class="num-tam">41</section>
-                            <section class="num-tam">42</section>
-                            <section class="num-tam">43</section>
-                            <section class="num-tam">44</section>
-                            <section class="num-tam">45</section>
+                        <section class="MainIgm">
+                            <a href=""><i class="bi bi-plus-circle"></i></a>
                         </section>
-                    </section>
-                    <!-- descrição -->
-                    <section class="descricao">
-                        <h2>Descrição do produto:</h2>
-                        <p>ESTILO AF1 LENDÁRIO.</p>
-                        <br>
-                        <p>
-                            O Air Force 1 Mid "07 é tudo aquilo que você conhece bem: sobreposições impecáveis,
-                            detalhes ousados e a quantidade perfeita de brilho para que você se destaque. A boca
-                            almofadada de corte médio com fecho aderente clássico adiciona o conforto clássico do
-                            basquete, enquanto as perfurações na ponta mantêm o frescor.</p>
-                        <br>
-                        <section id="moreContent" class="content">
-
-                            <p>Benefícios</p>
-
-                            <br>
-
-                            <li>Há mais de 35 anos, o conforto e a durabilidade estão prontos para serem
-                                usados.
-                                Apresentando sobreposições costuradas e duráveis, couro viçoso e um design
-                                prático,
-                                esse
-                                tênis estará com você nos subúrbios, no centro da cidade e em todos os
-                                outros
-                                lugares.
-                            </li>
-                            <li>
-                                Desenvolvido originalmente para o treino de basquete, o amortecimento Nike
-                                Air
-                                proporciona um conforto duradouro, enquanto a boca e a língua almofadadas
-                                garantem
-                                uma
-                                passada suave.
-                            </li>
-                            <li>
-                                A parte superior viçosa e fácil de limpar proporciona um look ideal fora das
-                                quadras, enquanto o design de cano médio e o acabamento da forma de sola
-                                debaixo
-                                do pé remetem ao DNA do basquete. É história, look e conforto, tudo em um.
-
-                            </li>
-                            <li></li>
-                            <li></li>
-
-                            <p>Detalhes do produto</p>
-
-                            <ul>
-                                <li>Entressola de espuma</li>
-                                <li>Sistema de amarração de largura variável</li>
-                                <li> O fecho aderente permite personalizar o estilo e caimento</li>
-                                <li> Perfurações na ponta</li>
-                                <li>Sola de borracha sem marcação para maior tração e durabilidade</li>
-                            </ul>
-
-                            <p>Origens do Air Force 1</p>
-
-                            <p>Estreando em 1982, o AF1 foi o primeiro tênis de basquete a abrigar o Nike Air,
-                                revolucionando o jogo e ganhando tração rapidamente em todo o mundo. Hoje, o Air
-                                Force 1
-                                permanece fiel às suas raízes com o mesmo amortecimento macio e flexível que mudou a
-                                história dos sneakers.</p>
+                        <section class="MainIgm">
+                            <a href=""><i class="bi bi-plus-circle"></i></a>
                         </section>
-                        <button id="toggleButton" class="btn-vermais">Ver mais</button>
+                        <section class="MainIgm">
+                            <a href=""><i class="bi bi-plus-circle"></i></a>
+                        </section>
+                        <section class="MainIgm">
+                            <a href=""><i class="bi bi-plus-circle"></i></a>
+                        </section>
+                        <section class="MainIgm">
+                            <a href=""><i class="bi bi-plus-circle"></i></a>
+                        </section>
+                        <section class="MainIgm">
+                            <a href=""><i class="bi bi-plus-circle"></i></a>
+                        </section>
                         <script>
-                            document.addEventListener("DOMContentLoaded", function () {
-                                var content = document.getElementById("moreContent");
-                                var button = document.getElementById("toggleButton");
-
-                                // Inicialmente o conteúdo está visível e o botão deve mostrar "Ver menos"
-                                content.classList.remove("collapsed");
-                                button.textContent = "Ver mais";
-                            });
-
-                            document.getElementById("toggleButton").addEventListener("click", function () {
-                                var content = document.getElementById("moreContent");
-                                var button = this;
-
-                                if (content.classList.contains("collapsed")) {
-                                    content.classList.remove("collapsed");
-                                    button.textContent = "Ver mais";
-                                } else {
-                                    content.classList.add("collapsed");
-                                    button.textContent = "Ver menos";
-                                }
+                            document.getElementById('upload-link').addEventListener('click', function(event) {
+                                event.preventDefault(); // Impede o comportamento padrão do link
+                                document.getElementById('file-upload').click(); // Aciona o clique no input file
                             });
                         </script>
                     </section>
-                    <!-- Botão para comprar/adicionar no carrinho -->
-                    <section class="button">
-                        <section class="button-wrapper">
-                            <section class="text">Compre agora!</section>
-                            <span class="icon">
-                                <svg viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" height="16" width="16"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z">
-                                    </path>
-                                </svg>
-                            </span>
+                    <section class="product-info">
+
+                        <section class="title-prod">
+                            <label for="name">Editar nome do produto:</label><br>
+                            <input class="name" type="text" id="name_product" name="name"
+                                placeholder="Digite o nome"><br>
+                            <label for="lname">Editar Categoria:</label><br>
+                        </section>
+                        <section class="categorias">
+                            <select>
+                                <option>Basquete</option>
+                                <option>Futebol</option>
+                                <option>Vôlei</option>
+                                <option>Treino</option>
+                                <option>Acessório</option>
+                                <option>Camiseta</option>
+                                <option>Bermuda</option>
+                                <option>Shorts</option>
+                                <option>Calça</option>
+                                <option>Calçados</option>
+                            </select>
+                        </section>
+
+                        <section class="ratting-prod">
+                            <i class="bi bi-star"></i>
+                            <i class="bi bi-star"></i>
+                            <i class="bi bi-star"></i>
+                            <i class="bi bi-star"></i>
+                            <i class="bi bi-star"></i>
+                            <p>sem avalições</p>
+                        </section>
+
+                        <section class="price">
+                            <label for="name">Editar preço do produto:</label><br>
+                            <input class="name" type="text" id="name_product" name="name" placeholder="Digite o preço">
+                            <section class="center-text">
+                                <h2>Pré-visualização do texto:</h2>
+                                <p>R$:999,99 ou <span>6x</span> de <span>R$:166,66</span></p>
+                            </section>
+                        </section>
+
+
+
+                        <section class="mini-imgs">
+                            <section class="mini-pics-product">
+                                <a href=""><i class="bi bi-plus-circle"></i></a>
+                            </section>
+                        </section>
+
+
+                        <section class="tamanhos">
+                            <h2 class="tam-inf"><span>Tamanho</span></h2>
+                            <section class="tam">
+                                <section class="num-tam">36</section>
+                                <section class="num-tam">37</section>
+                                <section class="num-tam">38</section>
+                                <section class="num-tam">39</section>
+                                <section class="num-tam">40</section>
+                                <section class="num-tam">41</section>
+                                <section class="num-tam">42</section>
+                                <section class="num-tam">43</section>
+                                <section class="num-tam">44</section>
+                                <section class="num-tam">45</section>
+                            </section>
+                        </section>
+
+                        <section class="descricao">
+                            <h2>Descrição do produto:</h2>
+                            <p>ESTILO AF1 LENDÁRIO.</p>
+                            <br>
+                            <p>
+                                O Air Force 1 Mid "07 é tudo aquilo que você conhece bem: sobreposições impecáveis,
+                                detalhes ousados e a quantidade perfeita de brilho para que você se destaque. A boca
+                                almofadada de corte médio com fecho aderente clássico adiciona o conforto clássico do
+                                basquete, enquanto as perfurações na ponta mantêm o frescor.</p>
+                            <br>
+                            <section id="moreContent" class="content">
+
+                                <p>Benefícios</p>
+
+                                <br>
+
+                                <li>Há mais de 35 anos, o conforto e a durabilidade estão prontos para serem
+                                    usados.
+                                    Apresentando sobreposições costuradas e duráveis, couro viçoso e um design
+                                    prático,
+                                    esse
+                                    tênis estará com você nos subúrbios, no centro da cidade e em todos os
+                                    outros
+                                    lugares.
+                                </li>
+                                <li>
+                                    Desenvolvido originalmente para o treino de basquete, o amortecimento Nike
+                                    Air
+                                    proporciona um conforto duradouro, enquanto a boca e a língua almofadadas
+                                    garantem
+                                    uma
+                                    passada suave.
+                                </li>
+                                <li>
+                                    A parte superior viçosa e fácil de limpar proporciona um look ideal fora das
+                                    quadras, enquanto o design de cano médio e o acabamento da forma de sola
+                                    debaixo
+                                    do pé remetem ao DNA do basquete. É história, look e conforto, tudo em um.
+
+                                </li>
+                                <li></li>
+                                <li></li>
+
+                                <p>Detalhes do produto</p>
+
+                                <ul>
+                                    <li>Entressola de espuma</li>
+                                    <li>Sistema de amarração de largura variável</li>
+                                    <li> O fecho aderente permite personalizar o estilo e caimento</li>
+                                    <li> Perfurações na ponta</li>
+                                    <li>Sola de borracha sem marcação para maior tração e durabilidade</li>
+                                </ul>
+
+                                <p>Origens do Air Force 1</p>
+
+                                <p>Estreando em 1982, o AF1 foi o primeiro tênis de basquete a abrigar o Nike Air,
+                                    revolucionando o jogo e ganhando tração rapidamente em todo o mundo. Hoje, o Air
+                                    Force 1
+                                    permanece fiel às suas raízes com o mesmo amortecimento macio e flexível que mudou a
+                                    história dos sneakers.</p>
+                            </section>
+                            <button id="toggleButton" class="btn-vermais">Ver mais</button>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    var content = document.getElementById("moreContent");
+                                    var button = document.getElementById("toggleButton");
+
+                                    // Inicialmente o conteúdo está visível e o botão deve mostrar "Ver menos"
+                                    content.classList.remove("collapsed");
+                                    button.textContent = "Ver mais";
+                                });
+
+                                document.getElementById("toggleButton").addEventListener("click", function () {
+                                    var content = document.getElementById("moreContent");
+                                    var button = this;
+
+                                    if (content.classList.contains("collapsed")) {
+                                        content.classList.remove("collapsed");
+                                        button.textContent = "Ver mais";
+                                    } else {
+                                        content.classList.add("collapsed");
+                                        button.textContent = "Ver menos";
+                                    }
+                                });
+                            </script>
+                        </section>
+
+                        <section class="button">
+                            <section class="button-wrapper">
+                                <section class="text"><button type="submit">Compre agora!</button></section>
+                                <span class="icon">
+                                    <svg viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" height="16"
+                                        width="16" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z">
+                                        </path>
+                                    </svg>
+                                </span>
+                            </section>
+                        </section>
+                        <section class="button-fav">
+                            <button>Adicionar aos favoritos <i class="bi bi-heart"></i></button>
                         </section>
                     </section>
-                    <section class="button-fav">
-                        <button>Adicionar aos favoritos <i class="bi bi-heart"></i></button>
-                    </section>
-                </section>
-
+                </form>
             </section>
         </section>
     </section>

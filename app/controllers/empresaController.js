@@ -5,6 +5,7 @@ var salt = bcrypt.genSaltSync(12);
 const { removeImg } = require("../util/removeImg");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const https = require('https');
+const upload = require('../models/upload-middleware');
 
 
 

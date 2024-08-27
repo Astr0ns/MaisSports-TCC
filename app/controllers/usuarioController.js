@@ -132,8 +132,45 @@ const registrarUsu = async (req, res) => {
     }
 }
 
+const comprar = async (req, res) => {
+    const { produto_id, comprador_id, quantidade } = req.body;
+
+    try {
+        // Verificar se o produto está disponível
+        const produto = await pool.query('SELECT * FROM produtos WHERE id = $1', [produto_id]);
+
+        if (produto.rows.length === 0) {
+            return res.status(404).json({ error: 'Produto não encontrado' });
+        }
+
+        const produtoData = produto.rows[0];
+
+        if (produtoData.quantidade < quantidade) {
+            return res.status(400).json({ error: 'Quantidade insuficiente em estoque' });
+        }
+
+        // Registrar a venda
+        const venda = await pool.query(
+            'INSERT INTO vendas (produto_id, comprador_id, quantidade, vendedor) VALUES ($1, $2, $3, $4) RETURNING *',
+            [produto_id, comprador_id, quantidade, produtoData.marca]
+        );
+
+        // Atualizar o estoque
+        await pool.query(
+            'UPDATE produtos SET quantidade = quantidade - $1 WHERE id = $2',
+            [quantidade, produto_id]
+        );
+
+        res.status(201).json(venda.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro ao realizar compra' });
+    }
+};
+
 module.exports = {
     regrasValidacaoFormLogin,
     logar,
     registrarUsu,
+    comprar
 };
