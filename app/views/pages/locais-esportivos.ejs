@@ -1,208 +1,335 @@
-<!DOCTYPE ejs>
-<ejs lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa com Filtragem de Pontos de Interesse Esportivos</title>
+<!DOCTYPE html> 
 
-    <link rel="stylesheet" href="css/codes/interface.css">
-    <link rel="stylesheet" href="css/codes/nav-bar.css">
- 
-    <style>
-        /* Definindo o tamanho do mapa */
-        #map {
-            height: 800px;
-            width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            flex: 1; /* O mapa ocupará o restante do espaço disponível */
-            display: flex;
-            flex-direction: column; /* Define a orientação vertical para o mapa */
-            align-items: center; /* Centraliza o mapa horizontalmente */
-            padding: 20px;
+<html lang="pt-BR"> 
+
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Mapa com Filtragem de Pontos de Interesse Esportivos</title> 
+
+  
+    <style> 
+
+        /* Definindo o tamanho do mapa */ 
+        #map { 
+            height: 800px; 
+            width: calc(100% - 300px); /* Ajuste o width do mapa para deixar espaço para a aba lateral */ 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
+            flex: 1; /* O mapa ocupará o restante do espaço disponível */ 
+            display: flex; 
+            flex-direction: column; /* Define a orientação vertical para o mapa */ 
+            align-items: center; /* Centraliza o mapa horizontalmente */ 
+            padding: 20px; 
+        } 
+
+        /* Definindo o layout da página */ 
+
+        html, body { 
+            height: 100%; 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            color: #333; 
         }
-        /* Definindo o layout da página */
-        ejs, body {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-        /* Estilos para o filtro e entrada de endereço */
-        #filter, #addressSearch {
-            padding: 20px;
-            box-sizing: border-box;
-            background-color: #ffffff;
-            border-radius: 8px;
-            margin: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
- 
-        #addressSearch {
-            width: 70%;
+
+        h1{
+            color: #CF1684;
             display: block;
-            margin: 20px auto;
+            margin: 20px auto; 
+            width: 70%; 
+            text-align: center;
         }
- 
-        #filter label, #addressSearch label {
-            font-weight: bold;
-            margin-right: 10px;
+
+        /* Estilos para o filtro e entrada de endereço */ 
+
+        #filter, #addressSearch { 
+            padding: 20px; 
+            box-sizing: border-box; 
+            background-color: #ffffff; 
+            border-radius: 8px; 
+            margin: 20px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        } 
+
+        #addressSearch { 
+            width: 65%; 
+            display: block; 
+            margin: 20px auto; 
+        } 
+
+        #filter label, #addressSearch label { 
+            font-weight: bold; 
+            margin-right: 10px; 
+        } 
+
+        .checkbox-group label { 
+            display: block; 
+            margin-bottom: 10px; 
+        } 
+
+        .checkbox-group input[type="checkbox"] { 
+            margin-right: 10px; 
+        } 
+
+        #address { 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            font-size: 16px; 
+            width: calc(100% - 20px); /* Ajusta o width para incluir o padding */ 
+        } 
+
+        /* Estilo para a imagem */ 
+
+        .place-photo { 
+            width: 100%; 
+            height: auto; 
+            border-radius: 8px; 
+            object-fit: cover; 
+            max-height: 180px;
+            min-width: 210px;
+        } 
+
+        /* Estilo para o botão de centralização e busca */ 
+
+        button { 
+            background-color: #CF1684; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            padding: 12px 20px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            margin: 10px 0; 
+            transition: background-color 0.3s; 
+        } 
+
+        .google_color{
+            color: #CF1684;
+            font-weight: 700;
         }
- 
-        .checkbox-group label {
-            display: block;
-            margin-bottom: 10px;
+
+        strong{
+            font-size: 1.4em;
+            display: block; /* Garante que o <strong> se comporte como um bloco */
+            max-width: 250px; /* Define a largura máxima */
+            overflow-wrap: break-word; /* Quebra a palavra se necessário */
+            word-break: break-word; /* Quebra palavras longas */
+            white-space: normal; /* Permite que o texto quebre em várias linhas */
         }
- 
-        .checkbox-group input[type="checkbox"] {
-            margin-right: 10px;
-        }
- 
-        #address {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            width: calc(100% - 20px); /* Ajusta o width para incluir o padding */
-        }
-        /* Estilo para a imagem */
-        .place-photo {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-        /* Estilo para o botão de centralização e busca */
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 10px 0;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        /* Estilos para a centralização e busca */
-        #centerButton {
-            display: block;
-            margin: 20px auto;
-        }
- 
-        .h2_filtros {
-            padding-left: 20px;
-        }
- 
-        .map_zone {
-            display: flex;
-            margin: 40px;
-            margin-right: 150px;
-        }
-        /* Estilos para o filtro */
-        .filters {
-            display: flex;
-            flex-direction: column;
-            width: 20%;
-            align-items: center; /* Centraliza o filtro verticalmente */
-        }
- 
-        /* Esconde checkboxes adicionais inicialmente */
-        .more-checkboxes {
-            display: none;
-        }
-    </style>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places"></script>
-    <script>
-        let map;
-        let service;
-        let infowindow;
-        let markers = [];
-        let currentLocation = { lat: -23.5372544, lng: -46.8516864 };
-        let userMarker;
-        let geocoder;
-        let autocomplete;
- 
-        function initMap() {
-            geocoder = new google.maps.Geocoder();
-            autocomplete = new google.maps.places.Autocomplete(
-                document.getElementById('address'), {
-                    types: ['geocode'] // Aceita endereço completo, bairro e cidade
-                }
-            );
-            autocomplete.addListener('place_changed', onPlaceChanged);
- 
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        currentLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        initializeMap();
-                    },
-                    () => initializeMap()
-                );
-            } else {
-                initializeMap();
+        
+        .break{
+            display: block; /* Garante que o <strong> se comporte como um bloco */
+            max-width: 250px; /* Define a largura máxima */
+            overflow-wrap: break-word; /* Quebra a palavra se necessário */
+            word-break: break-word; /* Quebra palavras longas */
+            white-space: normal; /* Permite que o texto quebre em várias linhas */
             }
-        }
- 
-        function initializeMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: currentLocation,
-                zoom: 13
-            });
- 
-            service = new google.maps.places.PlacesService(map);
-            infowindow = new google.maps.InfoWindow();
- 
-            userMarker = new google.maps.Marker({
-                position: currentLocation,
-                map: map,
-                title: 'Sua Localização',
-                icon: {
-                    url: '../../public/imagem/localizacaoYOU-PNG.png',
-                    scaledSize: new google.maps.Size(30, 30)
-                }
-            });
- 
-            // Adiciona o evento de mudança para os checkboxes
-            document.querySelectorAll('.checkbox-group input[type="checkbox"]').forEach(checkbox => {
-                checkbox.addEventListener('change', handleCheckboxChange);
-            });
-            document.getElementById('centerButton').addEventListener('click', centerMapOnUser);
-            document.getElementById('toggleFiltersButton').addEventListener('click', toggleFilters);
- 
-            updateMap();
-        }
- 
-        function handleCheckboxChange(event) {
-            const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                if (checkbox !== event.target) {
-                    checkbox.checked = false; // Desmarca todos os outros checkboxes
-                }
-            });
-            updateMap(); // Atualiza o mapa com base na seleção atual
-        }
- 
+
+        button:hover { 
+            background-color: #a8126c; 
+        } 
+
+        /* Estilos para a centralização e busca */ 
+
+        #centerButton { 
+            display: block; 
+            margin: 20px auto; 
+        } 
+
+        .h2_filtros { 
+            padding-left: 20px; 
+        } 
+
+        .map_zone { 
+            display: flex; 
+            margin: 40px; 
+            margin-right: 150px; 
+        } 
+
+        /* Estilos para o filtro */ 
+
+        .filters { 
+            display: flex; 
+            flex-direction: column; 
+            width: 20%; 
+            align-items: center; /* Centraliza o filtro verticalmente */ 
+        } 
+
+        /* Esconde checkboxes adicionais inicialmente */ 
+
+        .more-checkboxes { 
+            display: none; 
+        } 
+
+        /* Estilo para a aba lateral */ 
+
+        #sidePanel { 
+            position: fixed; 
+            top: 0; 
+            right: 0; 
+            width: 0; /* Começa com largura 0 */ 
+            height: 100%; 
+            background-color: #ffffff; 
+            border-left: 1px solid #ddd; 
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1); 
+            padding: 20px; 
+            display: none; /* Inicialmente escondido */ 
+            overflow-y: auto; 
+            transition: width 0.3s ease, opacity 0.3s ease; /* Animação para largura e opacidade */ 
+            opacity: 0; /* Começa com opacidade 0 */ 
+        } 
+
+        #sidePanel img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 8px; 
+        } 
+
+        #sidePanel button { 
+            background-color: #CF1684; 
+            width: 30px;
+            height: 30px;
+            align-items: center;
+            text-align: center;
+        } 
+
+        #sidePanel button:hover { 
+            background-color: #a8126c; 
+        } 
+
+        #sidePanel h2 { 
+            margin-top: 0; 
+        } 
+
+        /* Botão de fechar */ 
+
+        #closePanel { 
+            background-color: #dc3545; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            padding: 10px; 
+            cursor: pointer; 
+            margin-bottom: 20px; 
+        } 
+  
+
+        #closePanel:hover { 
+            background-color: #c82333; 
+
+        } 
+
+    
+        
+
+        
+
+    </style> 
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places"></script> 
+
+    <script> 
+        let map; 
+        let service; 
+        let infowindow; 
+        let markers = []; 
+        let currentLocation = { lat: -23.5372544, lng: -46.8516864 }; 
+        let userMarker; 
+        let geocoder; 
+        let autocomplete; 
+        let sidePanelContent = ''; 
+
+  
+
+        function initMap() { 
+            geocoder = new google.maps.Geocoder(); 
+            autocomplete = new google.maps.places.Autocomplete( 
+                document.getElementById('address'), {  
+                    types: ['geocode'] // Aceita endereço completo, bairro e cidade 
+                } 
+            ); 
+            autocomplete.addListener('place_changed', onPlaceChanged); 
+
+            if (navigator.geolocation) { 
+                navigator.geolocation.getCurrentPosition( 
+                    (position) => { 
+                        currentLocation = { 
+                            lat: position.coords.latitude, 
+                            lng: position.coords.longitude 
+                        }; 
+                        initializeMap(); 
+                    }, 
+                    () => initializeMap() 
+                ); 
+            } else { 
+                initializeMap(); 
+            } 
+        } 
+
+  
+
+        function initializeMap() { 
+            map = new google.maps.Map(document.getElementById('map'), { 
+                center: currentLocation, 
+                zoom: 13 
+            }); 
+
+  
+
+            service = new google.maps.places.PlacesService(map); 
+            infowindow = new google.maps.InfoWindow(); 
+            userMarker = new google.maps.Marker({ 
+                position: currentLocation, 
+                map: map, 
+                title: 'Sua Localização', 
+                icon: { 
+                    url: '../../public/imagem/localizacaoYOU-PNG.png', 
+                    scaledSize: new google.maps.Size(30, 30) 
+                } 
+            }); 
+
+  
+
+            // Adiciona o evento de mudança para os checkboxes 
+
+            document.querySelectorAll('.checkbox-group input[type="checkbox"]').forEach(checkbox => { 
+                checkbox.addEventListener('change', handleCheckboxChange); 
+            }); 
+            document.getElementById('centerButton').addEventListener('click', centerMapOnUser); 
+            document.getElementById('toggleFiltersButton').addEventListener('click', toggleFilters); 
+
+  
+            updateMap(); 
+        } 
+
+  
+
+        function handleCheckboxChange(event) { 
+            const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]'); 
+            checkboxes.forEach(checkbox => { 
+                if (checkbox !== event.target) { 
+                    checkbox.checked = false; // Desmarca todos os outros checkboxes 
+                } 
+            }); 
+            updateMap(); // Atualiza o mapa com base na seleção atual 
+        } 
+
+  
+
         function updateMap() {
             clearMarkers();
- 
+
             const selectedType = getSelectedType();
             if (!selectedType) return;
- 
+
             const request = {
                 location: currentLocation,
                 radius: '10000',
                 keyword: getKeywords(selectedType)
             };
- 
+
             service.nearbySearch(request, (results, status) => {
                 if (status === google.maps.places.PlacesServiceStatus.OK) {
                     for (let i = 0; i < results.length; i++) {
@@ -210,14 +337,19 @@
                         const marker = new google.maps.Marker({
                             position: place.geometry.location,
                             map: map,
-                            title: place.name
+                            title: place.name,
+                            icon: {
+                                url: '../../public/imagem/localizacaoLOCAIS-PNG.png', // URL do ícone
+                                scaledSize: new google.maps.Size(35, 35) // Define o tamanho do ícone
+                            }
+                            
                         });
- 
+
                         google.maps.event.addListener(marker, 'click', () => {
                             infowindow.setContent(generateContent(place));
                             infowindow.open(map, marker);
                         });
- 
+
                         markers.push(marker);
                     }
                 } else {
@@ -225,145 +357,230 @@
                 }
             });
         }
- 
-        function clearMarkers() {
-            for (let i = 0; i < markers.length; i++) {
-                markers[i].setMap(null);
-            }
-            markers = [];
-        }
- 
-        function getSelectedType() {
-            const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
-            for (let checkbox of checkboxes) {
-                if (checkbox.checked) {
-                    return checkbox.value;
-                }
-            }
-            return null; // Nenhum checkbox selecionado
-        }
- 
-        function getKeywords(type) {
-            switch (type) {
-                case 'football':
-                    return ['soccer field', 'football field', 'soccer stadium', 'football stadium', 'soccer', 'futsal', 'futebol', 'quadra', 'society', 'campo de futebol'];
-                case 'skatepark':
-                    return ['skate park', 'skateboarding park', 'pista','skate'];
-                case 'bicycle':
-                    return ['bike park', 'bicycle park'];
-                case 'tennis':
-                    return ['tennis court', 'tennis stadium', 'quadra' ];
-                case 'basketball':
-                    return ['court', 'basketball stadium', 'quadra', 'basquete' ];
-                case 'park':
-                    return ['park', 'parque'];
-                case 'gym':
-                    return ['gym', 'fitness center'];
-                default:
-                    return [];
-            }
-        }
- 
+
+  
+
+        function clearMarkers() { 
+            for (let i = 0; i < markers.length; i++) { 
+                markers[i].setMap(null); 
+            } 
+            markers = []; 
+        } 
+
+  
+
+        function getSelectedType() { 
+            const selectedCheckbox = document.querySelector('.checkbox-group input[type="checkbox"]:checked'); 
+            return selectedCheckbox ? selectedCheckbox.value : ''; 
+        } 
+
+  
+
+        function getKeywords(type) { 
+            switch (type) { 
+                case 'gym': 
+                    return ['gym', 'fitness center']; 
+                case 'football': 
+                    return ['soccer stadium', 'football stadium', 'soccer', 'futsal', 'futebol', 'quadra', 'society', 'campo de futebol']; 
+                case 'skatepark': 
+                    return ['skate park', 'skateboarding park', 'pista', 'skate']; 
+                case 'bicycle': 
+                    return ['bike park', 'bicycle park']; 
+                case 'tennis': 
+                    return ['tennis court', 'tennis stadium', 'quadra']; 
+                case 'basketball': 
+                    return ['court', 'basketball stadium', 'quadra', 'basquete']; 
+                case 'park': 
+                    return ['park', 'parque']; 
+                default: 
+                    return []; 
+            } 
+        } 
+
+  
+
         function generateContent(place) {
-            let content = `<div><strong>${place.name}</strong><br>`;
-           
+            let content = `<div class="card_local"><strong>${place.name}</strong>`;
+            content += `<p>recomendado por: <span class="google_color">Google Maps</span></p>`;
+
             if (place.photos && place.photos.length > 0) {
                 const photoUrl = place.photos[0].getUrl({ maxWidth: 200, maxHeight: 150 });
                 content += `<img src="${photoUrl}" class="place-photo"><br>`;
             } else {
                 content += `<p>Imagem não disponível</p>`;
             }
-           
+
             if (place.vicinity) {
-                content += `<p>${place.vicinity}</p>`;
+                content += `<p class="break">${place.vicinity}</p>`;
             }
-           
-            content += `</div>`;
+
+            if (place.rating) {
+                content += `<p>Avaliação: ${getStarRatingHtml(place.rating)}</p>`;
+            } else {
+                content += `<p>Avaliação não disponível</p>`;
+            }
+            
+            content += `<button class="saiba_mais" onclick="showSidePanel('${place.place_id}')">Saiba Mais</button></div>`;
             return content;
         }
- 
-        function centerMapOnUser() {
-            map.setCenter(currentLocation);
-            map.setZoom(12);
-        }
- 
-        function onPlaceChanged() {
-            const place = autocomplete.getPlace();
-            if (place.geometry) {
-                currentLocation = place.geometry.location;
-                map.setCenter(currentLocation);
-                map.setZoom(15);
- 
-                if (userMarker) {
-                    userMarker.setPosition(currentLocation);
-                } else {
-                    userMarker = new google.maps.Marker({
-                        position: currentLocation,
-                        map: map,
-                        title: 'Sua Localização',
-                        icon: {
-                            url: 'https://cdn-icons-png.flaticon.com/512/811/811872.png',
-                            scaledSize: new google.maps.Size(30, 30)
-                        }
-                    });
-                }
- 
-                updateMap(); // Atualiza a busca de pontos de interesse para a nova localização
-            } else {
-                console.error('Nenhum resultado encontrado para o endereço fornecido.');
-            }
-        }
- 
-        function toggleFilters() {
-            const moreCheckboxes = document.querySelector('.more-checkboxes');
-            const toggleButton = document.getElementById('toggleFiltersButton');
-            if (moreCheckboxes.style.display === 'none') {
-                moreCheckboxes.style.display = 'block';
-                toggleButton.textContent = 'Ver Menos';
-            } else {
-                moreCheckboxes.style.display = 'none';
-                toggleButton.textContent = 'Ver Mais';
-            }
-        }
- 
-        window.onload = initMap;
-    </script>
-</head>
-<body>
 
-    <div id="addressSearch">
-        <label for="address">Digite o endereço (rua, bairro, cidade):</label>
-        <input type="text" id="address" placeholder="Nome da rua, bairro, cidade">
-    </div>
-   
-    <section class="map_zone">
-        <section class="filters">
-            <div class="container">
-                <h2 class="h2_filtros">Filtros</h2>
-                <div id="filter" class="checkbox-group">
-                    <h2>Esportes</h2>
-                    <label><input type="checkbox" value="gym"> Academia</label>
-                    <label><input type="checkbox" value="football"> Futebol (Campo e Quadra)</label>
-                    <label><input type="checkbox" value="skatepark"> Pista de Skate</label>
-                    <label><input type="checkbox" value="bicycle"> Pista de Bicicleta</label>
- 
-                    <!-- Checkboxes adicionais escondidos inicialmente -->
-                    <div class="more-checkboxes">
-                        <label><input type="checkbox" value="tennis"> Quadra de Tênis</label>
-                        <label><input type="checkbox" value="basketball"> Quadra de Basquete</label>
-                        <label><input type="checkbox" value="park"> Parque</label>
-                    </div>
-                   
-                    <button id="toggleFiltersButton">Ver Mais</button>
-                   
+
+        // estrela na avaliação
+        function getStarRatingHtml(rating) {
+            const maxStars = 5;
+            let starsHtml = '';
+
+            for (let i = 1; i <= maxStars; i++) {
+                if (i <= rating) {
+                    starsHtml += '★'; // Estrela preenchida
+                } else {
+                    starsHtml += '☆'; // Estrela vazia
+                }
+            }
+
+            return starsHtml;
+        }
+
+
+
+  
+
+        function centerMapOnUser() { 
+            map.setCenter(currentLocation); 
+            map.setZoom(12); 
+        } 
+        function onPlaceChanged() { 
+            const place = autocomplete.getPlace(); 
+            if (place.geometry) { 
+                currentLocation = place.geometry.location; 
+                map.setCenter(currentLocation); 
+                map.setZoom(15); 
+                if (userMarker) { 
+                    userMarker.setPosition(currentLocation); 
+                } else { 
+                    userMarker = new google.maps.Marker({ 
+                        position: currentLocation, 
+                        map: map, 
+                        title: 'Sua Localização', 
+                        icon: { 
+                            url: '../../public/imagem/localizacaoLOCAIS-PNG.png', 
+                            scaledSize: new google.maps.Size(30, 30)
+                        } 
+                    }); 
+                } 
+                updateMap(); // Atualiza a busca de pontos de interesse para a nova localização 
+            } else { 
+
+                console.error('Nenhum resultado encontrado para o endereço fornecido.'); 
+            } 
+        } 
+
+  
+        function toggleFilters() { 
+            const moreCheckboxes = document.querySelector('.more-checkboxes'); 
+            const toggleButton = document.getElementById('toggleFiltersButton'); 
+            if (moreCheckboxes.style.display === 'none') {
+                moreCheckboxes.style.display = 'block'; 
+                toggleButton.textContent = 'Ver Menos'; 
+            } else { 
+                moreCheckboxes.style.display = 'none'; 
+                toggleButton.textContent = 'Ver Mais'; 
+            } 
+        } 
+
+
+        function showSidePanel(placeId) {
+            const sidePanel = document.getElementById('sidePanel');
+            sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="position: absolute; top: 10px; right: 10px;">×</button>`;
+
+            const request = {
+                placeId: placeId,
+                fields: ['name', 'vicinity', 'rating', 'photos', 'reviews'] // Inclui reviews aqui
+            };
+
+            service.getDetails(request, (place, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    sidePanel.innerHTML += `
+                        <h2>${place.name}</h2>
+                        ${place.photos && place.photos.length > 0 ? `<img src="${place.photos[0].getUrl({ maxWidth: 500, maxHeight: 300 })}" alt="Foto do local" style="width:100%; height:auto;">` : ''}
+                        <p>${place.vicinity}</p>
+                        <p>Avaliação: ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
+                        ${place.reviews && place.reviews.length > 0 ? `<h3>Comentários:</h3><ul>${place.reviews.map(review => `<li><strong>${review.author_name}:</strong> ${review.text}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                    `;
+                } else {
+                    console.error('Erro ao buscar detalhes do local:', status);
+                    sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
+                }
+
+                sidePanel.style.display = 'block'; 
+                // Aplicar animação de abertura 
+                setTimeout(() => { 
+                    sidePanel.style.width = '500px'; // Largura desejada da aba lateral 
+                    sidePanel.style.opacity = 1; 
+                }, 10); // Um pequeno delay para garantir que a transição seja visível 
+            });
+        }
+
+
+
+
+
+        function hideSidePanel() { 
+            const sidePanel = document.getElementById('sidePanel'); 
+            sidePanel.style.width = '0'; // Reduz a largura para 0 
+            sidePanel.style.opacity = 0; 
+            setTimeout(() => {
+                sidePanel.style.display = 'none'; // Esconde a aba lateral após a animação 
+            }, 300); // O tempo deve coincidir com a duração da transição 
+
+        } 
+        window.onload = initMap; 
+    </script> 
+</head> 
+<body> 
+
+    <h1>LOCALIZAR LOCAIS</h1>
+
+    <div id="addressSearch"> 
+        <label for="address">Digite o endereço (rua, bairro, cidade):</label> 
+        <input type="text" id="address" placeholder="Nome da rua, bairro, cidade"> 
+    </div> 
+
+  
+    <section class="map_zone"> 
+        <section class="filters"> 
+            <div class="container"> 
+                <h2 class="h2_filtros">Filtros</h2> 
+                <div id="filter" class="checkbox-group"> 
+                    <h2>Esportes</h2> 
+                    <label><input type="checkbox" value="gym"> Academia</label> 
+                    <label><input type="checkbox" value="football"> Futebol (Campo e Quadra)</label> 
+                    <label><input type="checkbox" value="skatepark"> Pista de Skate</label> 
+                    <label><input type="checkbox" value="bicycle"> Pista de Bicicleta</label> 
+
+  
+                    <!-- Checkboxes adicionais escondidos inicialmente --> 
+                    <div class="more-checkboxes"> 
+                        <label><input type="checkbox" value="tennis"> Quadra de Tênis</label> 
+                        <label><input type="checkbox" value="basketball"> Quadra de Basquete</label> 
+                        <label><input type="checkbox" value="park"> Parque</label> 
+                    </div>                  
+                    <button id="toggleFiltersButton">Ver Mais</button>   
                 </div>
-                <button id="centerButton">Centralizar na minha localização</button>
-            </div>
-           
-        </section>
- 
-        <div id="map"></div>
-    </section>
- 
-</body>
-</ejs>
+                
+                <div id="raio">
+
+                </div>
+                <button id="centerButton">Centralizar localização</button> 
+            </div> 
+        </section>  
+
+        <div id="map"></div> 
+
+    </section> 
+
+    <section id="sidePanel"> 
+        <!-- Conteúdo da aba lateral será adicionado dinamicamente pelo JavaScript --> 
+    </section> 
+</body> 
+</html> 
