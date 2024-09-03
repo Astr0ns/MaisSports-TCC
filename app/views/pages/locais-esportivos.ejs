@@ -610,6 +610,19 @@
             document.getElementById('selectedCoordinates').textContent = "Clique no mapa para escolher um local.";
         }
 
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const location = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.setCenter(location);
+                    if (userMarker) userMarker.setPosition(location);
+                });
+            }
+        }
+
         window.onload = initMap; 
     </script> 
 </head> 
