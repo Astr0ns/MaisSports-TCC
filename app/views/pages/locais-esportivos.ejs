@@ -316,39 +316,37 @@
 
   
 
-        function initializeMap() { 
-            map = new google.maps.Map(document.getElementById('map'), { 
-                center: currentLocation, 
-                zoom: 13 
-            }); 
+        function initializeMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: currentLocation,
+                zoom: 13
+            });
 
-  
+            service = new google.maps.places.PlacesService(map);
+            infowindow = new google.maps.InfoWindow();
+            userMarker = new google.maps.Marker({
+                position: currentLocation,
+                map: map,
+                title: 'Sua Localização',
+                icon: {
+                    url: 'localizacaoYOU-PNG.png',
+                    scaledSize: new google.maps.Size(30, 30)
+                }
+            });
 
-            service = new google.maps.places.PlacesService(map); 
-            infowindow = new google.maps.InfoWindow(); 
-            userMarker = new google.maps.Marker({ 
-                position: currentLocation, 
-                map: map, 
-                title: 'Sua Localização', 
-                icon: { 
-                    url: 'localizacaoYOU-PNG.png', 
-                    scaledSize: new google.maps.Size(30, 30) 
-                } 
-            }); 
+            // Adiciona o evento de clique ao mapa
+            map.addListener('click', handleMapClick);
 
-  
+            // Adiciona o evento de mudança para os checkboxes
+            document.querySelectorAll('.checkbox-group input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', handleCheckboxChange);
+            });
+            document.getElementById('centerButton').addEventListener('click', centerMapOnUser);
+            document.getElementById('toggleFiltersButton').addEventListener('click', toggleFilters);
 
-            // Adiciona o evento de mudança para os checkboxes 
+            updateMap();
+        }
 
-            document.querySelectorAll('.checkbox-group input[type="checkbox"]').forEach(checkbox => { 
-                checkbox.addEventListener('change', handleCheckboxChange); 
-            }); 
-            document.getElementById('centerButton').addEventListener('click', centerMapOnUser); 
-            document.getElementById('toggleFiltersButton').addEventListener('click', toggleFilters); 
-
-  
-            updateMap(); 
-        } 
 
   
 
@@ -592,6 +590,25 @@
             const addNewLocalWindow = document.getElementById('addNewLocalWindow');
             addNewLocalWindow.style.display = 'none';
         }
+        
+        function handleMapClick(event) {
+            if (!mapSelectionEnabled) return; // Só processa o clique se a seleção estiver ativada
+
+            const latLng = event.latLng;
+            const lat = latLng.lat();
+            const lng = latLng.lng();
+
+            // Exibe as coordenadas selecionadas
+            document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`;
+            
+            // Desativa a seleção
+            mapSelectionEnabled = false;
+        }
+
+        function enableMapSelection() {
+            mapSelectionEnabled = true; // Habilita a seleção
+            document.getElementById('selectedCoordinates').textContent = "Clique no mapa para escolher um local.";
+        }
 
         window.onload = initMap; 
     </script> 
@@ -652,10 +669,11 @@
         
         <div class="add-local-buttons">
             
-            <button>Pegar localização atual</button>
-            <button>Escolher no mapa</button>
-            <button id="seguinte">seguinte</button>
+            <button onclick="getCurrentLocation()">Pegar localização atual</button>
+            <button onclick="enableMapSelection()">Escolher no mapa</button>
+            <button id="seguinte">Seguinte</button>
         </div>
+        <p id="selectedCoordinates"></p> <!-- Exibe coordenadas selecionadas -->
     </section>
 </body> 
 </html> 
