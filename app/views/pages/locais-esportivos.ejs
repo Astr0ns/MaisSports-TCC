@@ -221,7 +221,52 @@
 
         } 
 
+        
+        /* Estilo para a janela de adicionar novo local */
+
+        #addNewLocalWindow {
+            display: none; /* Inicialmente escondida */
+            position: fixed; /* Fixa a posição na tela */
+            top: 50%;
+            left: 30%;
+            transform: translate(-50%, -50%); /* Centraliza a janela */
+            width: 300px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        #addNewLocalWindow div{
+            display: flex;
+            flex-direction: column;
+        }
+
+        #addNewLocalWindow h2 {
+            margin-top: 0;
+            align-self: center;
+        }
+
+        #addNewLocalWindow button {
+            background-color: #CF1684;
+             
+        }
+
+        
+        /* Estilos para os botões da janela */
+
+        .add-local-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #addNewLocalButton{
+            display: block; 
+            margin: 20px auto;
+        }
     
+        #seguinte{
+            align-self: flex-end;
+        }
         
 
         
@@ -240,6 +285,7 @@
         let geocoder; 
         let autocomplete; 
         let sidePanelContent = ''; 
+        let mapSelectionEnabled = false;
 
   
 
@@ -285,7 +331,7 @@
                 map: map, 
                 title: 'Sua Localização', 
                 icon: { 
-                    url: '../../public/imagem/localizacaoYOU-PNG.png', 
+                    url: 'localizacaoYOU-PNG.png', 
                     scaledSize: new google.maps.Size(30, 30) 
                 } 
             }); 
@@ -339,7 +385,7 @@
                             map: map,
                             title: place.name,
                             icon: {
-                                url: '../../public/imagem/localizacaoLOCAIS-PNG.png', // URL do ícone
+                                url: 'localizacaoLOCAIS-PNG.png', // URL do ícone
                                 scaledSize: new google.maps.Size(35, 35) // Define o tamanho do ícone
                             }
                             
@@ -463,7 +509,7 @@
                         map: map, 
                         title: 'Sua Localização', 
                         icon: { 
-                            url: '../../public/imagem/localizacaoLOCAIS-PNG.png', 
+                            url: 'LocalizacaoLOCAIS-PNG.png', 
                             scaledSize: new google.maps.Size(30, 30)
                         } 
                     }); 
@@ -534,6 +580,19 @@
             }, 300); // O tempo deve coincidir com a duração da transição 
 
         } 
+
+        function showAddNewLocalWindow() {
+            const addNewLocalWindow = document.getElementById('addNewLocalWindow');
+            addNewLocalWindow.style.display = 'block';
+        }
+
+  
+
+        function hideAddNewLocalWindow() {
+            const addNewLocalWindow = document.getElementById('addNewLocalWindow');
+            addNewLocalWindow.style.display = 'none';
+        }
+
         window.onload = initMap; 
     </script> 
 </head> 
@@ -572,6 +631,8 @@
 
                 </div>
                 <button id="centerButton">Centralizar localização</button> 
+                <button id="addNewLocalButton" onclick="showAddNewLocalWindow()">Adicionar Novo Local</button>
+                
             </div> 
         </section>  
 
@@ -582,5 +643,19 @@
     <section id="sidePanel"> 
         <!-- Conteúdo da aba lateral será adicionado dinamicamente pelo JavaScript --> 
     </section> 
+
+    <section id="addNewLocalWindow">
+        <div>
+            <h2>Adicionar Novo Local</h2>
+            <button onclick="hideAddNewLocalWindow()">Fechar</button>
+        </div>
+        
+        <div class="add-local-buttons">
+            
+            <button>Pegar localização atual</button>
+            <button>Escolher no mapa</button>
+            <button id="seguinte">seguinte</button>
+        </div>
+    </section>
 </body> 
 </html> 
