@@ -623,6 +623,22 @@
             }
         }
 
+        function saveCoordinates() {
+            const selectedCoordinates = document.getElementById('selectedCoordinates').textContent;
+            const latLng = selectedCoordinates.match(/Latitude (-?\d+\.\d+), Longitude (-?\d+\.\d+)/);
+
+            if (latLng) {
+                const lat = latLng[1];
+                const lng = latLng[2];
+                localStorage.setItem('latitude', lat);
+                localStorage.setItem('longitude', lng);
+                window.location.href = 'proxima-pagina.html';
+            } else {
+                alert("Selecione uma localização antes de prosseguir.");
+            }
+        }
+
+
         window.onload = initMap; 
     </script> 
 </head> 
@@ -684,7 +700,7 @@
             
             <button onclick="getCurrentLocation()">Pegar localização atual</button>
             <button onclick="enableMapSelection()">Escolher no mapa</button>
-            <button id="seguinte">Seguinte</button>
+            <button id="seguinte" onclick="saveCoordinates()">Seguinte</button>
         </div>
         <p id="selectedCoordinates"></p> <!-- Exibe coordenadas selecionadas -->
     </section>
