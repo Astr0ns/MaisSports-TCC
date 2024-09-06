@@ -286,6 +286,7 @@
         let autocomplete; 
         let sidePanelContent = ''; 
         let mapSelectionEnabled = false;
+        let currentMarker = null;
 
   
 
@@ -591,6 +592,8 @@
             addNewLocalWindow.style.display = 'none';
         }
         
+        
+
         function handleMapClick(event) {
             if (!mapSelectionEnabled) return; // Só processa o clique se a seleção estiver ativada
 
@@ -598,9 +601,25 @@
             const lat = latLng.lat();
             const lng = latLng.lng();
 
+            // Remove o marcador atual, se houver
+            if (currentMarker) {
+                currentMarker.setMap(null);
+            }
+
+            // Cria um novo marcador
+            currentMarker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                title: `Latitude: ${lat}, Longitude: ${lng}`, // Corrige a sintaxe para a string
+                icon: {
+                    url: '../../public/imagem/LocalizacaoblueLOCAIS-PNG.png', // URL do ícone
+                    scaledSize: new google.maps.Size(35, 35) // Define o tamanho do ícone
+                }
+            });
+
             // Exibe as coordenadas selecionadas
-            document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`;
-            
+            document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`; // Corrige a sintaxe para a string
+
             // Desativa a seleção
             mapSelectionEnabled = false;
         }
