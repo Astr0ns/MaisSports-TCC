@@ -251,10 +251,22 @@
             align-self: center;
         }
 
-        #addNewLocalWindow button {
-            background-color: #CF1684;
-             
+        /* Estilo para a janela de adicionar novo local opção select */
+
+        #selectLocalConfirm {
+            display: none; /* Inicialmente escondida */
+            position: fixed; /* Fixa a posição na tela */
+            top: 90%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centraliza a janela */
+            width: 300px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
+
+       
 
         
         /* Estilos para os botões da janela */
@@ -272,6 +284,26 @@
         #seguinte{
             align-self: flex-end;
         }
+
+        /* Estilo para o botão de fechar */
+        .fechar_newLocal {
+            background: none; /* Remove o fundo */
+            background-color: none;
+            border: none; /* Remove a borda */
+            font-size: 24px; /* Tamanho do ícone */
+            color: #333; /* Cor do ícone */
+            cursor: pointer; /* Cursor de ponteiro */
+            display: flex;
+            padding: 0px;
+            justify-content: flex-end;
+            margin: 0 0 20px 0;
+            
+        }
+
+        .fechar_newLocal i {
+            margin: 0;
+        }
+
         
 
         
