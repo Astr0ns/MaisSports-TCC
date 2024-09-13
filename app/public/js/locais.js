@@ -417,6 +417,8 @@ function saveCoordinates() {
     }
 }
 
+
+// obter o endereço mais próximo do local selecionado
 function getNearestAddress(latLng, callback) {
     geocoder.geocode({ location: latLng }, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK && results[0]) {
