@@ -360,12 +360,22 @@ function handleMapClick(event) {
         }
     });
 
+    // Obtém o endereço mais próximo e atualiza o <h1>
+    getNearestAddress(latLng, (address) => {
+        if (address) {
+            document.querySelector('#selectLocalConfirm h1').textContent = address;
+        } else {
+            document.querySelector('#selectLocalConfirm h1').textContent = 'Endereço não disponível';
+        }
+    });
+
     // Exibe as coordenadas selecionadas
     document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`; // Corrige a sintaxe para a string
 
     // Desativa a seleção
     mapSelectionEnabled = false;
 }
+
 
 // habilita o clique no mapa
 function enableMapSelection() {
@@ -405,6 +415,19 @@ function saveCoordinates() {
         alert("Selecione uma localização antes de prosseguir.");
     }
 }
+
+function getNearestAddress(latLng, callback) {
+    geocoder.geocode({ location: latLng }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK && results[0]) {
+            const address = results[0].formatted_address;
+            callback(address);
+        } else {
+            console.error('Erro ao obter o endereço:', status);
+            callback(null);
+        }
+    });
+}
+
 
 
 window.onload = initMap; 
