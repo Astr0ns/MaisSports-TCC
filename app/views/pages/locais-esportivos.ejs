@@ -534,6 +534,8 @@
         } 
 
 
+
+        //mostrar mais informações do local quando clica em saiba mais
         function showSidePanel(placeId) {
             const sidePanel = document.getElementById('sidePanel');
             sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="position: absolute; top: 10px; right: 10px;">×</button>`;
@@ -569,7 +571,7 @@
 
 
 
-
+        // esconde painel
         function hideSidePanel() { 
             const sidePanel = document.getElementById('sidePanel'); 
             sidePanel.style.width = '0'; // Reduz a largura para 0 
@@ -580,6 +582,8 @@
 
         } 
 
+
+        // mostra aba de adiconar novo local
         function showAddNewLocalWindow() {
             const addNewLocalWindow = document.getElementById('addNewLocalWindow');
             addNewLocalWindow.style.display = 'block';
@@ -594,6 +598,7 @@
         
         
 
+        // colocar o pin no mapa aonde clicou
         function handleMapClick(event) {
             if (!mapSelectionEnabled) return; // Só processa o clique se a seleção estiver ativada
 
@@ -624,11 +629,14 @@
             mapSelectionEnabled = false;
         }
 
+        // habilita o clique no mapa
         function enableMapSelection() {
             mapSelectionEnabled = true; // Habilita a seleção
             document.getElementById('selectedCoordinates').textContent = "Clique no mapa para escolher um local.";
         }
 
+
+        // pegar localização atual
         function getCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -642,6 +650,9 @@
             }
         }
 
+
+
+        // função para pegar localização ao selecionar
         function saveCoordinates() {
             const selectedCoordinates = document.getElementById('selectedCoordinates').textContent;
             const latLng = selectedCoordinates.match(/Latitude (-?\d+\.\d+), Longitude (-?\d+\.\d+)/);
