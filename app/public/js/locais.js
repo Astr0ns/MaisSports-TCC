@@ -377,6 +377,7 @@ function handleMapClick(event) {
 }
 
 
+
 // habilita o clique no mapa
 function enableMapSelection() {
     mapSelectionEnabled = true; // Habilita a seleção
@@ -419,14 +420,42 @@ function saveCoordinates() {
 function getNearestAddress(latLng, callback) {
     geocoder.geocode({ location: latLng }, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK && results[0]) {
-            const address = results[0].formatted_address;
-            callback(address);
+            const addressComponents = results[0].address_components;
+            let street = '';
+            let city = '';
+            let administrativeAreaLevel1 = '';
+
+            // Extrair nome da rua
+            addressComponents.forEach(component => {
+                if (component.types.includes('route')) {
+                    street = component.long_name;
+                }
+                // Extrair nome da cidade
+                if (component.types.includes('locality')) {
+                    city = component.long_name;
+                }
+                // Tentar extrair nome da cidade do nível administrativo
+                if (component.types.includes('administrative_area_level_1')) {
+                    administrativeAreaLevel1 = component.long_name;
+                }
+            });
+
+            // Se a cidade não for encontrada, usar o nível administrativo
+            if (!city && administrativeAreaLevel1) {
+                city = administrativeAreaLevel1;
+            }
+
+            // Formatar o endereço
+            const formattedAddress = `${street}, ${city}`;
+            callback(formattedAddress);
         } else {
             console.error('Erro ao obter o endereço:', status);
             callback(null);
         }
     });
 }
+
+
 
 
 
