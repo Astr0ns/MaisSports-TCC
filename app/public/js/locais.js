@@ -320,6 +320,21 @@ function hideAddNewLocalWindow() {
 }
 
 
+// mostra aba de adiconar novo local opção select
+function showselectLocalConfirm() {
+    const addNewLocalWindow = document.getElementById('selectLocalConfirm');
+    addNewLocalWindow.style.display = 'block';
+    enableMapSelection()
+}
+
+
+
+function hideselectLocalConfirm() {
+    const addNewLocalWindow = document.getElementById('selectLocalConfirm');
+    addNewLocalWindow.style.display = 'none';
+}
+
+
 
 // colocar o pin no mapa aonde clicou
 function handleMapClick(event) {
