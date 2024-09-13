@@ -12,6 +12,8 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places"></script> 
 
     <script src="js/locais.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head> 
 <body> 
 
@@ -63,17 +65,26 @@
 
     <section id="addNewLocalWindow">
         <div>
-            <button class="fechar_newLocal" onclick="hideAddNewLocalWindow()">Fechar</button>
+            <button class="fechar_newLocal" onclick="hideAddNewLocalWindow()"><i class="fas fa-times"></i></button>
             <h2>Adicionar Novo Local</h2>
         </div>
         
         <div class="add-local-buttons">
             
             <button onclick="getCurrentLocation()">Pegar localização atual</button>
-            <button onclick="enableMapSelection()">Escolher no mapa</button>
+            <button onclick="showselectLocalConfirm()">Escolher no mapa</button>
             <button id="seguinte" onclick="saveCoordinates()">Seguinte</button>
         </div>
         <p id="selectedCoordinates"></p> <!-- Exibe coordenadas selecionadas -->
+    </section>
+
+    <section id="selectLocalConfirm">
+        <section>
+            <h1>teste</h1>
+        </section>
+        <div>
+
+        </div>
     </section>
 </body> 
 </html> 
