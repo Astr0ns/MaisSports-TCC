@@ -295,43 +295,8 @@ router.post("/fazerLogin",
     usuarioController.regrasValidacaoFormLogin,
     gravarUsuAutenticado,
     async function (req, res) {
-        const { email, senha } = req.body;
-
-        try {
-            const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ? AND tipo = 'usuario' ", [email]);
-
-            if (accounts.length > 0) {
-                const account = accounts[0];
-
-                // Verificar se a senha corresponde
-                const passwordMatch = bcrypt.compareSync(senha, account.senha);
-
-                if (!passwordMatch) {
-                    req.flash('error_msg', "As senhas não conferem");
-                    return res.redirect('/login');
-                }
-
-                // Armazenar informações do usuário na sessão
-                req.session.email = account.email;
-                req.session.nome = account.nome;
-                req.session.sobrenome = account.sobrenome;
-                req.session.cep = account.cep;
-                req.session.numero = account.numero;
-                req.session.tipo = account.tipo
-
-                req.flash('success_msg', 'Login efetuado com sucesso!');
-                res.redirect('/profile'); // Redireciona para a página de perfil
-            } else {
-                req.flash('error_msg', "Usuário não encontrado! Email ou senhas incorretos");
-                res.redirect('/login');
-            }
-
-        } catch (err) {
-            console.error("Erro na consulta: ", err);
-            res.status(500).send('Erro interno do servidor');
-        }
-    }
-);
+        usuarioController.logar(req, res)
+    });
 
 router.post("/loginEmpr",
     usuarioController.regrasValidacaoFormLogin,

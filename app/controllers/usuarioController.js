@@ -39,7 +39,6 @@ const logar = async (req, res) => {
 
     try {
         const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ?", [email]);
-
         if (accounts.length > 0) {
             const account = accounts[0];
 
@@ -48,8 +47,9 @@ const logar = async (req, res) => {
 
             if (!passwordMatch) {
                 req.flash('msg', "As senhas não conferem");
-                return res.redirect('/login'); // Redireciona para a página de login se as senhas não conferem
+                 // Redireciona para a página de login se as senhas não conferem
             }
+           
 
             // Armazenar informações do usuário na sessão
             req.session.email = account.email;
@@ -57,8 +57,8 @@ const logar = async (req, res) => {
             req.session.sobrenome = account.sobrenome;
             req.session.cep = account.cep;
             req.session.numero = account.numero;
-
-            res.render('pages/profile', {
+            
+            return res.render('pages/profile', {
                 userId: req.session.userId,
                 logado: req.session.logado,
                 email: req.session.email,
@@ -67,9 +67,10 @@ const logar = async (req, res) => {
                 mensage: req.flash('msg', "logado"),
             });
 
-            console.log(re.flash('msg'))
+
         } else {
             req.flash('msg', "Usuário não encontrado");
+            console.log("usuario n encontrado");
             res.redirect('/login');
         }
 
