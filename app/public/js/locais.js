@@ -341,8 +341,8 @@ function handleMapClick(event) {
     if (!mapSelectionEnabled) return; // Só processa o clique se a seleção estiver ativada
 
     const latLng = event.latLng;
-    const lat = latLng.lat();
-    const lng = latLng.lng();
+    const lat = latLng.lat(); // <-----
+    const lng = latLng.lng();// <-----
 
     // Remove o marcador atual, se houver
     if (currentMarker) {

@@ -39,7 +39,12 @@ router.get("/", verificarAutenticacao, function (req, res) {
     });
 });
 
-// 
+//
+
+router.get("/add-locais", function (req, res){
+    var email = req.session.email;
+    res.render("pages/add-locais", {email: email});
+});
 
 router.get("/login", function (req, res) {
     res.render("pages/login", {

@@ -4,20 +4,20 @@ const upload = require('../models/upload-middleware'); // Middleware para upload
 
 // Renderiza o formulário de adicionar produto
 const exibirFormularioProduto = (req, res) => {
-    res.render('adicionarProduto'); // Certifique-se de que o nome da view corresponde ao seu arquivo EJS
+    res.render('adicionarLocais'); // Certifique-se de que o nome da view corresponde ao seu arquivo EJS
 };
 
 // Adiciona um novo produto ao banco de dados
-const adicionarProduto = async (req, res) => {
-    const { name, category, price, description, sizes, stock } = req.body;
+const adicionarLocais = async (req, res) => {
+    const { name, category, description } = req.body;
     const images = req.files;
 
     try {
         // Inserir informações do produto no banco de dados
         const [result] = await connection.query(
-            `INSERT INTO produtos (nome, categoria, preco, descricao, estoque)
-             VALUES (?, ?, ?, ?, ?)`,
-            [name, category, price, description, stock]
+            `INSERT INTO produtos (nome, categoria, descricao)
+             VALUES (?, ?, ?)`,
+            [name, category, description]
         );
 
         const productId = result.insertId;
@@ -33,17 +33,6 @@ const adicionarProduto = async (req, res) => {
             }
         }
 
-        // Inserir tamanhos disponíveis no banco de dados
-        if (sizes && Array.isArray(sizes)) {
-            for (const size of sizes) {
-                await connection.query(
-                    `INSERT INTO tamanhos_produtos (produto_id, tamanho)
-                     VALUES (?, ?)`,
-                    [productId, size]
-                );
-            }
-        }
-
         res.redirect('/adicionarProduto?success=true');
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
@@ -51,7 +40,9 @@ const adicionarProduto = async (req, res) => {
     }
 };
 
+
+
 module.exports = {
     exibirFormularioProduto,
-    adicionarProduto
+    adicionarLocais
 };

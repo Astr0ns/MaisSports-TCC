@@ -18,7 +18,7 @@
     "express-session": "^1.18.0",
     "express-validator": "^7.2.0",
     "multer": "^1.4.5-lts.1",
-    "mysql2": "^3.11.2",
+    "mysql2": "^3.11.3",
     "node-modules": "^1.0.1",
     "nodemon": "^3.1.0",
     "session-file-store": "^1.5.0"
