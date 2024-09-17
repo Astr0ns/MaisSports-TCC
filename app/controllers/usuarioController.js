@@ -39,6 +39,7 @@ const logar = async (req, res) => {
 
     try {
         const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ?", [email]);
+
         if (accounts.length > 0) {
             const account = accounts[0];
 
@@ -47,9 +48,9 @@ const logar = async (req, res) => {
 
             if (!passwordMatch) {
                 req.flash('msg', "As senhas não conferem");
-                 // Redireciona para a página de login se as senhas não conferem
+                // Redireciona para a página de login se as senhas não conferem
+                return res.redirect('/login');
             }
-           
 
             // Armazenar informações do usuário na sessão
             req.session.email = account.email;
@@ -67,18 +68,19 @@ const logar = async (req, res) => {
                 mensage: req.flash('msg', "logado"),
             });
 
-
         } else {
             req.flash('msg', "Usuário não encontrado");
-            console.log("usuario n encontrado");
-            res.redirect('/login');
+            console.log("Usuário não encontrado");
+            return res.redirect('/login');
         }
 
     } catch (err) {
         console.error("Erro na consulta: ", err);
-        res.status(500).send('Erro interno do servidor');
+        // Enviar um erro de status 500 e uma mensagem adequada
+        return res.status(500).send('Erro interno do servidor');
     }
 };
+
 
 // Função Registrar
 
