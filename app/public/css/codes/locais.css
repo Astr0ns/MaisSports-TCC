@@ -49,6 +49,10 @@ h1{
 
 /* Estilos para o filtro e entrada de endereço */ 
 
+.filters_mobile{
+    display: none;
+}
+
 #filter, #addressSearch { 
     padding: 20px; 
     box-sizing: border-box; 
@@ -336,6 +340,19 @@ button:hover {
 
     #addNewLocalWindow, #selectLocalConfirm, #sidePanel {
         display: none; /* Oculta outras seções se necessário */
+    }
+
+    .filters_mobile{
+        display: flex;
+        position: fixed; /* Fixa a posição na tela */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Centraliza a janela */
+        width: 300px;
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 }
 
