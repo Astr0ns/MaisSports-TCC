@@ -1,7 +1,6 @@
 const path = require('path');
 var connection = require("../../config/pool_conexoes");
-const upload = require('../models/upload-middleware'); // Middleware para upload
-
+const upload = require('../models/upload-middleware');
 // Renderiza o formulário de adicionar produto
 const exibirFormularioProduto = (req, res) => {
     res.render('adicionarLocais'); // Certifique-se de que o nome da view corresponde ao seu arquivo EJS
@@ -15,7 +14,7 @@ const adicionarLocais = async (req, res) => {
     try {
         // Inserir informações do produto no banco de dados
         const [result] = await connection.query(
-            `INSERT INTO produtos (nome, categoria, descricao)
+            `INSERT INTO produtos (nome, categoria, descricao, )
              VALUES (?, ?, ?)`,
             [name, category, description]
         );

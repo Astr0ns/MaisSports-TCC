@@ -1,42 +1,42 @@
 
-let map; 
-let service; 
-let infowindow; 
-let markers = []; 
-let currentLocation = { lat: -23.5372544, lng: -46.8516864 }; 
-let userMarker; 
-let geocoder; 
-let autocomplete; 
-let sidePanelContent = ''; 
+let map;
+let service;
+let infowindow;
+let markers = [];
+let currentLocation = { lat: -23.5372544, lng: -46.8516864 };
+let userMarker;
+let geocoder;
+let autocomplete;
+let sidePanelContent = '';
 let mapSelectionEnabled = false;
 let currentMarker = null;
 
 
 
-function initMap() { 
-    geocoder = new google.maps.Geocoder(); 
-    autocomplete = new google.maps.places.Autocomplete( 
-        document.getElementById('address'), {  
-            types: ['geocode'] // Aceita endereço completo, bairro e cidade 
-        } 
-    ); 
-    autocomplete.addListener('place_changed', onPlaceChanged); 
+function initMap() {
+    geocoder = new google.maps.Geocoder();
+    autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById('address'), {
+        types: ['geocode'] // Aceita endereço completo, bairro e cidade 
+    }
+    );
+    autocomplete.addListener('place_changed', onPlaceChanged);
 
-    if (navigator.geolocation) { 
-        navigator.geolocation.getCurrentPosition( 
-            (position) => { 
-                currentLocation = { 
-                    lat: position.coords.latitude, 
-                    lng: position.coords.longitude 
-                }; 
-                initializeMap(); 
-            }, 
-            () => initializeMap() 
-        ); 
-    } else { 
-        initializeMap(); 
-    } 
-} 
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                currentLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                initializeMap();
+            },
+            () => initializeMap()
+        );
+    } else {
+        initializeMap();
+    }
+}
 
 
 
@@ -74,15 +74,15 @@ function initializeMap() {
 
 
 
-function handleCheckboxChange(event) { 
-    const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]'); 
-    checkboxes.forEach(checkbox => { 
-        if (checkbox !== event.target) { 
+function handleCheckboxChange(event) {
+    const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        if (checkbox !== event.target) {
             checkbox.checked = false; // Desmarca todos os outros checkboxes 
-        } 
-    }); 
+        }
+    });
     updateMap(); // Atualiza o mapa com base na seleção atual 
-} 
+}
 
 
 
@@ -110,7 +110,7 @@ function updateMap() {
                         url: 'imagem/LocalizacaoLOCAIS-PNG.png', // URL do ícone
                         scaledSize: new google.maps.Size(35, 35) // Define o tamanho do ícone
                     }
-                    
+
                 });
 
                 google.maps.event.addListener(marker, 'click', () => {
@@ -128,42 +128,42 @@ function updateMap() {
 
 
 
-function clearMarkers() { 
-    for (let i = 0; i < markers.length; i++) { 
-        markers[i].setMap(null); 
-    } 
-    markers = []; 
-} 
+function clearMarkers() {
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    markers = [];
+}
 
 
 
-function getSelectedType() { 
-    const selectedCheckbox = document.querySelector('.checkbox-group input[type="checkbox"]:checked'); 
-    return selectedCheckbox ? selectedCheckbox.value : ''; 
-} 
+function getSelectedType() {
+    const selectedCheckbox = document.querySelector('.checkbox-group input[type="checkbox"]:checked');
+    return selectedCheckbox ? selectedCheckbox.value : '';
+}
 
 
 
-function getKeywords(type) { 
-    switch (type) { 
-        case 'gym': 
-            return ['gym', 'fitness center']; 
-        case 'football': 
-            return ['soccer stadium', 'football stadium', 'soccer', 'futsal', 'futebol', 'quadra', 'society', 'campo de futebol']; 
-        case 'skatepark': 
-            return ['skate park', 'skateboarding park', 'pista', 'skate']; 
-        case 'bicycle': 
-            return ['bike park', 'bicycle park']; 
-        case 'tennis': 
-            return ['tennis court', 'tennis stadium', 'quadra']; 
-        case 'basketball': 
-            return ['court', 'basketball stadium', 'quadra', 'basquete']; 
-        case 'park': 
-            return ['park', 'parque']; 
-        default: 
-            return []; 
-    } 
-} 
+function getKeywords(type) {
+    switch (type) {
+        case 'gym':
+            return ['gym', 'fitness center'];
+        case 'football':
+            return ['soccer stadium', 'football stadium', 'soccer', 'futsal', 'futebol', 'quadra', 'society', 'campo de futebol'];
+        case 'skatepark':
+            return ['skate park', 'skateboarding park', 'pista', 'skate'];
+        case 'bicycle':
+            return ['bike park', 'bicycle park'];
+        case 'tennis':
+            return ['tennis court', 'tennis stadium', 'quadra'];
+        case 'basketball':
+            return ['court', 'basketball stadium', 'quadra', 'basquete'];
+        case 'park':
+            return ['park', 'parque'];
+        default:
+            return [];
+    }
+}
 
 
 
@@ -187,7 +187,7 @@ function generateContent(place) {
     } else {
         content += `<p>Avaliação não disponível</p>`;
     }
-    
+
     content += `<button class="saiba_mais" onclick="showSidePanel('${place.place_id}')">Saiba Mais</button></div>`;
     return content;
 }
@@ -213,48 +213,48 @@ function getStarRatingHtml(rating) {
 
 
 
-function centerMapOnUser() { 
-    map.setCenter(currentLocation); 
-    map.setZoom(12); 
-} 
-function onPlaceChanged() { 
-    const place = autocomplete.getPlace(); 
-    if (place.geometry) { 
-        currentLocation = place.geometry.location; 
-        map.setCenter(currentLocation); 
-        map.setZoom(15); 
-        if (userMarker) { 
-            userMarker.setPosition(currentLocation); 
-        } else { 
-            userMarker = new google.maps.Marker({ 
-                position: currentLocation, 
-                map: map, 
-                title: 'Sua Localização', 
-                icon: { 
-                    url: 'imagem/LocalizacaoLOCAIS-PNG.png', 
+function centerMapOnUser() {
+    map.setCenter(currentLocation);
+    map.setZoom(12);
+}
+function onPlaceChanged() {
+    const place = autocomplete.getPlace();
+    if (place.geometry) {
+        currentLocation = place.geometry.location;
+        map.setCenter(currentLocation);
+        map.setZoom(15);
+        if (userMarker) {
+            userMarker.setPosition(currentLocation);
+        } else {
+            userMarker = new google.maps.Marker({
+                position: currentLocation,
+                map: map,
+                title: 'Sua Localização',
+                icon: {
+                    url: 'imagem/LocalizacaoLOCAIS-PNG.png',
                     scaledSize: new google.maps.Size(30, 30)
-                } 
-            }); 
-        } 
+                }
+            });
+        }
         updateMap(); // Atualiza a busca de pontos de interesse para a nova localização 
-    } else { 
+    } else {
 
-        console.error('Nenhum resultado encontrado para o endereço fornecido.'); 
-    } 
-} 
+        console.error('Nenhum resultado encontrado para o endereço fornecido.');
+    }
+}
 
 
-function toggleFilters() { 
-    const moreCheckboxes = document.querySelector('.more-checkboxes'); 
-    const toggleButton = document.getElementById('toggleFiltersButton'); 
+function toggleFilters() {
+    const moreCheckboxes = document.querySelector('.more-checkboxes');
+    const toggleButton = document.getElementById('toggleFiltersButton');
     if (moreCheckboxes.style.display === 'none') {
-        moreCheckboxes.style.display = 'block'; 
-        toggleButton.textContent = 'Ver Menos'; 
-    } else { 
-        moreCheckboxes.style.display = 'none'; 
-        toggleButton.textContent = 'Ver Mais'; 
-    } 
-} 
+        moreCheckboxes.style.display = 'block';
+        toggleButton.textContent = 'Ver Menos';
+    } else {
+        moreCheckboxes.style.display = 'none';
+        toggleButton.textContent = 'Ver Mais';
+    }
+}
 
 
 
@@ -282,11 +282,11 @@ function showSidePanel(placeId) {
             sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
         }
 
-        sidePanel.style.display = 'block'; 
+        sidePanel.style.display = 'block';
         // Aplicar animação de abertura 
-        setTimeout(() => { 
+        setTimeout(() => {
             sidePanel.style.width = '500px'; // Largura desejada da aba lateral 
-            sidePanel.style.opacity = 1; 
+            sidePanel.style.opacity = 1;
         }, 10); // Um pequeno delay para garantir que a transição seja visível 
     });
 }
@@ -295,15 +295,15 @@ function showSidePanel(placeId) {
 
 
 // esconde painel
-function hideSidePanel() { 
-    const sidePanel = document.getElementById('sidePanel'); 
+function hideSidePanel() {
+    const sidePanel = document.getElementById('sidePanel');
     sidePanel.style.width = '0'; // Reduz a largura para 0 
-    sidePanel.style.opacity = 0; 
+    sidePanel.style.opacity = 0;
     setTimeout(() => {
         sidePanel.style.display = 'none'; // Esconde a aba lateral após a animação 
     }, 300); // O tempo deve coincidir com a duração da transição 
 
-} 
+}
 
 
 // mostra aba de adiconar novo local
@@ -343,6 +343,8 @@ function handleMapClick(event) {
     const latLng = event.latLng;
     const lat = latLng.lat(); // <-----
     const lng = latLng.lng();// <-----
+
+
 
     // Remove o marcador atual, se houver
     if (currentMarker) {
@@ -411,9 +413,25 @@ function saveCoordinates() {
         const lng = latLng[2];
         localStorage.setItem('latitude', lat);
         localStorage.setItem('longitude', lng);
-        window.location.href = 'proxima-pagina.html';
+        window.location.href = '/add-locais';
     } else {
         alert("Selecione uma localização antes de prosseguir.");
+    }
+}
+
+function getCoordinates() {
+    const selectedCoordinates = document.getElementById('selectedCoordinates').textContent;
+    const latLng = selectedCoordinates.match(/Latitude (-?\d+\.\d+), Longitude (-?\d+\.\d+)/);
+
+    if (latLng) {
+        const lat = latLng[1];
+        const lng = latLng[1];
+        localStorage.getitem('latitude', lat);
+        localStorage.getitem('longititude', lng);
+
+        document.getElementById('latd_select').textContent = `${lat}`;
+        document.getElementById('long_select').textContent = `${lng}`;
+        
     }
 }
 
