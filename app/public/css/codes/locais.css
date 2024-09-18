@@ -31,6 +31,7 @@
 /* Definindo o layout da página */ 
 
 html, body { 
+    
     height: 100%; 
     margin: 0; 
     font-family: Arial, sans-serif; 
@@ -372,28 +373,35 @@ button:hover {
     .filters_mobile{
         display: flex;
         position: fixed; /* Fixa a posição na tela */
+        overflow-x: auto;
+        white-space: nowrap;
         top: 30%;
-        left: 50%;
-        transform: translate(-50%, -50%); /* Centraliza a janela */
-        width: 300px;
+        width: 100vw;
+        transform: translate(0%, -50%); /* Centraliza a janela */ 
         background-color: #fff;
         border-radius: 8px;
         padding: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         z-index: 11;
+        scrollbar-width: none; /* firefox */
     }
 
     .filter-button{
+        display: inline-block;
         background-color: #CF1684; 
         color: white; 
         border: none; 
-        border-radius: 5px; 
+        border-radius: 5px;
         padding: 12px 20px; 
         font-size: 16px; 
         cursor: pointer; 
-        margin: 10px 0; 
+        margin: 10px 10px 10px 0; 
         transition: background-color 0.3s; 
         border-radius: 25px;
+    }
+
+    .filters_mobile::-webkit-scrollbar {
+        display: none; /* Para Chrome, Safari e Opera */
     }
 
 }
