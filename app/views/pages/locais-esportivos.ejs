@@ -13,6 +13,7 @@
 
     <script src="js/locais.js"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
 
 </head> 
 <body> 
@@ -60,15 +61,22 @@
                 <div id="raio">
 
                 </div>
-                <button id="centerButton">Centralizar localização</button> 
-                <button id="addNewLocalButton" onclick="showAddNewLocalWindow()">Adicionar Novo Local</button>
+                <button id="centerButton" class="centerButton">Centralizar localização</button> 
+                <button id="addNewLocalButton" class="addNewLocalButton" onclick="showAddNewLocalWindow()">Adicionar Novo Local</button>
                 
             </div> 
         </section>  
 
         <div id="map"></div> 
 
+        <div class="userButtonMobile">
+            <button id="centerButton"><i class="fa-solid fa-bullseye"></i></button> 
+            <button id="addNewLocalButton" onclick="showAddNewLocalWindow()"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
     </section> 
+
+
 
     <section id="sidePanel"> 
         <!-- Conteúdo da aba lateral será adicionado dinamicamente pelo JavaScript --> 
