@@ -18,8 +18,8 @@ function initMap() {
     autocomplete = new google.maps.places.Autocomplete( 
         document.getElementById('address'), {  
             types: ['geocode'] // Aceita endereço completo, bairro e cidade 
-        } 
-    ); 
+            
+        }); 
     autocomplete.addListener('place_changed', onPlaceChanged); 
 
     if (navigator.geolocation) { 
@@ -58,6 +58,11 @@ function initializeMap() {
         }
     });
 
+    // Adiciona o evento de clique aos botões de filtro móvel
+    document.querySelectorAll('.filters_mobile .filter-button').forEach(button => {
+        button.addEventListener('click', handleMobileFilterClick);
+    });
+
     // Adiciona o evento de clique ao mapa
     map.addListener('click', handleMapClick);
 
@@ -69,6 +74,21 @@ function initializeMap() {
     document.getElementById('toggleFiltersButton').addEventListener('click', toggleFilters);
 
     updateMap();
+}
+
+function handleMobileFilterClick(event) {
+    const button = event.target;
+    const value = button.getAttribute('value');
+
+    // Marca/desmarca o checkbox correspondente ao botão de filtro móvel
+    const checkbox = document.querySelector(`.checkbox-group input[type="checkbox"][value="${value}"]`);
+    if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+        handleCheckboxChange({ target: checkbox }); // Atualiza o mapa com base na nova seleção
+    }
+
+    // Opcional: você pode alterar a aparência do botão para indicar que está selecionado ou não
+    button.classList.toggle('selected');
 }
 
 
@@ -261,7 +281,7 @@ function toggleFilters() {
 //mostrar mais informações do local quando clica em saiba mais
 function showSidePanel(placeId) {
     const sidePanel = document.getElementById('sidePanel');
-    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
+    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="position: absolute; top: 10px; right: 10px;">×</button>`;
 
     const request = {
         placeId: placeId,
@@ -271,26 +291,11 @@ function showSidePanel(placeId) {
     service.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             sidePanel.innerHTML += `
-                
-                <div class="sidepanel_card">
-                    ${place.photos && place.photos.length > 0 ? `<img src="${place.photos[0].getUrl({ maxWidth: 500, maxHeight: 300 })}" alt="Foto do local" style="width:100%; ">` : ''}
-                    <div class="overlay"></div>
-                    <h2>${place.name}</h2>
-                </div>
-                
-                <section class="sidepanel_info">
+                <h2>${place.name}</h2>
+                ${place.photos && place.photos.length > 0 ? `<img src="${place.photos[0].getUrl({ maxWidth: 500, maxHeight: 300 })}" alt="Foto do local" style="width:100%; height:auto;">` : ''}
                 <p>${place.vicinity}</p>
-                <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
-
-                <hr class="separator">
-
-                copiar, favoritar, comunicar
-
-                <hr class="separator">
-
+                <p>Avaliação: ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
                 ${place.reviews && place.reviews.length > 0 ? `<h3>Comentários:</h3><ul>${place.reviews.map(review => `<li><strong>${review.author_name}:</strong> ${review.text}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
-                </section>
-
             `;
         } else {
             console.error('Erro ao buscar detalhes do local:', status);
@@ -356,8 +361,8 @@ function handleMapClick(event) {
     if (!mapSelectionEnabled) return; // Só processa o clique se a seleção estiver ativada
 
     const latLng = event.latLng;
-    const lat = latLng.lat(); // <-----
-    const lng = latLng.lng();// <-----
+    const lat = latLng.lat();
+    const lng = latLng.lng();
 
     // Remove o marcador atual, se houver
     if (currentMarker) {
