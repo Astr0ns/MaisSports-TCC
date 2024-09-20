@@ -42,13 +42,11 @@ const logar = async (req, res) => {
 
         if (accounts.length > 0) {
             const account = accounts[0];
+            const passwordMatch = await bcrypt.compare(senha, account.senha);
 
-            // Verificar se a senha corresponde
-            const passwordMatch = bcrypt.compareSync(senha, account.senha);
 
             if (!passwordMatch) {
                 req.flash('msg', "As senhas não conferem");
-                // Redireciona para a página de login se as senhas não conferem
                 return res.redirect('/login');
             }
 
@@ -56,30 +54,23 @@ const logar = async (req, res) => {
             req.session.email = account.email;
             req.session.nome = account.nome;
             req.session.sobrenome = account.sobrenome;
-            req.session.cep = account.cep;
-            req.session.numero = account.numero;
-            
-            return res.render('pages/profile', {
-                userId: req.session.userId,
-                logado: req.session.logado,
-                email: req.session.email,
-                nome: req.session.nome,
-                sobrenome: req.session.sobrenome,
-                mensage: req.flash('msg', "logado"),
-            });
+            req.session.logado = true; // Atualizando a sessão
+
+            req.flash('msg', "Logado com sucesso");
+            return res.redirect('/profile'); // Redireciona após o login
 
         } else {
             req.flash('msg', "Usuário não encontrado");
-            console.log("Usuário não encontrado");
             return res.redirect('/login');
         }
 
     } catch (err) {
         console.error("Erro na consulta: ", err);
-        // Enviar um erro de status 500 e uma mensagem adequada
         return res.status(500).send('Erro interno do servidor');
     }
 };
+
+
 
 
 // Função Registrar

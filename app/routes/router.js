@@ -211,7 +211,10 @@ router.get('/alter', async (req, res) => {
 });
 
 router.post("/fazerRegistro", usuarioController.registrarUsu, async function (req, res) {
-    // Lógica adicional aqui
+    // 
+});
+router.post("/fazerLogin", usuarioController.logar, async function (req, res) {
+    //
 });
 
 
@@ -295,13 +298,6 @@ router.get('/guardarCEP', async (req, res) => {
         }
     }
 });
-
-router.post("/fazerLogin",
-    usuarioController.regrasValidacaoFormLogin,
-    gravarUsuAutenticado,
-    async function (req, res) {
-        usuarioController.logar(req, res)
-    });
 
 router.post("/loginEmpr",
     usuarioController.regrasValidacaoFormLogin,
