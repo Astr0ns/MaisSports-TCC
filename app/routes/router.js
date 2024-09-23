@@ -11,7 +11,7 @@ const empresaController = require('../controllers/empresaController');
 const gravarUsuAutenticado = require('../models/usuarioModel').gravarUsuAutenticado;
 const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
-
+const locaisController = require('../controllers/locaisController').adicionarLocais;
 
 
 const {
@@ -45,6 +45,9 @@ router.get("/add-locais", function (req, res){
     var email = req.session.email;
     res.render("pages/add-locais", {email: email});
 });
+
+router.post("/adicionarLocal", upload.array('imagens'), locaisController.adicionarLocais);
+
 
 router.get("/login", function (req, res) {
     res.render("pages/login", {

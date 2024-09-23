@@ -25,14 +25,14 @@ const adicionarLocais = async (req, res) => {
         if (images) {
             for (const image of images) {
                 await connection.query(
-                    `INSERT INTO imagens_produtos (produto_id, caminho)
+                    `INSERT INTO imagens_locais (locais_id, caminho)
                      VALUES (?, ?)`,
                     [productId, image.path]
                 );
             }
         }
 
-        res.redirect('/adicionarProduto?success=true');
+        res.redirect('/adicionarLocais?success=true');
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
         res.status(500).send('Erro ao adicionar produto.');
