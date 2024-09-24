@@ -1,23 +1,12 @@
-const adicionarLocais = async (req, res) => {
+const adicionarLocais = async  (req, res) => {
     const { nome, categoria, descricao, latitude, longitude } = req.body;
-    const images = req.files; // Caso você use imagens, deve adicionar lógica para isso.
-
+    console.log('sadasdasd');
     try {
-        const [localExist] = await connection.query(
-            "SELECT id FROM locais WHERE latitude = ? AND longitude = ?",
-            [latitude, longitude]
-        );
-
-        if (localExist.length > 0) {
-            req.flash('error_msg', 'O local já foi adicionado.');
-            return res.redirect('/locais-esportivos');
-        }
-
         const [addL] = await connection.query(
             `INSERT INTO locais (nome, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
             [nome, categoria, descricao, latitude, longitude]
         );
-
+        console.log(addL);
         req.flash('success_msg', 'Local adicionado com sucesso!');
         const locaisId = addL.insertId;
 
@@ -26,6 +15,11 @@ const adicionarLocais = async (req, res) => {
 
     } catch (error) {
         req.flash('error_msg', 'Erro ao adicionar Local: ' + error.message);
+        console.log('adasdasda')
         res.redirect('/locais-esportivos');
     }
 };
+
+module.exports ={ 
+    adicionarLocais
+}

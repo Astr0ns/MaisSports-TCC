@@ -431,11 +431,13 @@ function saveCoordinates() {
         const lng = latLng[2];
         localStorage.setItem('latitude', lat);
         localStorage.setItem('longitude', lng);
-        window.location.href = 'proxima-pagina.html';
+        console.log(`Coordenadas salvas: Latitude ${lat}, Longitude ${lng}`);
+        window.location.href = '/add-locais';
     } else {
-        alert("Selecione uma localização antes de prosseguir.");
+        alert("Selecione uma localização válida antes de prosseguir.");
     }
 }
+
 
 
 // obter o endereço mais próximo do local selecionado
