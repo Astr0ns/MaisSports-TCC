@@ -1,12 +1,14 @@
+var connection = require("../../config/pool_conexoes");
+
 const adicionarLocais = async  (req, res) => {
+    
     const { nome, categoria, descricao, latitude, longitude } = req.body;
-    console.log('sadasdasd');
+    console.log(req.body);
     try {
         const [addL] = await connection.query(
             `INSERT INTO locais (nome, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
             [nome, categoria, descricao, latitude, longitude]
         );
-        console.log(addL);
         req.flash('success_msg', 'Local adicionado com sucesso!');
         const locaisId = addL.insertId;
 
@@ -15,7 +17,7 @@ const adicionarLocais = async  (req, res) => {
 
     } catch (error) {
         req.flash('error_msg', 'Erro ao adicionar Local: ' + error.message);
-        console.log('adasdasda')
+        console.log(error);
         res.redirect('/locais-esportivos');
     }
 };

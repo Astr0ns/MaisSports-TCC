@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/codes/notify.css">
     <title>Document</title>
 
     <link rel="stylesheet" href="../../public/css/codes/add-locais.css">
@@ -11,34 +13,56 @@
 
 <body>
     <main>
-        <section id="info_local">
-            <form action="/adicionarLocal" method="post">
-                <section class="grp-form">
-                    <label for="nome_local">Nome do Local:</label>
-                    <input type="name" name="nome" id="nome_local">
+
+        <section class="notify"></section>
+        <% if (error_msg || success_msg) { %>
+            <section class="flash-message" style="display: none;">
+                <% if (error_msg) { %>
+                    <section class="error">
+                        <%= error_msg %>
+                    </section>
+                    <% } %>
+                        <% if (success_msg) { %>
+                            <section class="success">
+                                <%= success_msg %>
+                            </section>
+                            <% } %>
+                                <section class="progress-bar">
+                                    <section class="progress-bar-inner"></section>
+                                </section>
+            </section>
+            <% } %>
+
                 </section>
-                <section class="grp-form">
-                    <label for="local_category">Selecione a categoria do seu local:</label>
-                    <select id="local_category" name="categoria">
-                        <option value="">Selecione uma opção</option>
-                        <option value="basquete">Basquete</option>
-                        <option value="futebol">Futebol</option>
-                        <option value="volei">Volei</option>
-                    </select>
+
+                <section id="info_local">
+                    <form action="/adicionarLocais" method="post">
+                        <section class="grp-form">
+                            <label for="nome_local">Nome do Local:</label>
+                            <input type="name" name="nome" id="nome_local">
+                        </section>
+                        <section class="grp-form">
+                            <label for="local_category">Selecione a categoria do seu local:</label>
+                            <select id="local_category" name="categoria">
+                                <option value="">Selecione uma opção</option>
+                                <option value="basquete">Basquete</option>
+                                <option value="futebol">Futebol</option>
+                                <option value="volei">Volei</option>
+                            </select>
+                        </section>
+                        <section class="grp-form">
+                            <label for="desc_local">Descrição:</label>
+                            <input type="text" name="descricao" id="desc_local">
+                        </section>
+                        <section class="grp-fo">
+                            <label for="latitude">Latidute</label>
+                            <input type="text" id="latitude" name="latitude" placeholder="Latitude">
+                            <label for="longitude">Longitude</label>
+                            <input type="text" id="longitude" name="longitude" placeholder="Longitude">
+                        </section>
+                        <button type="submit">Adicionar Local</button>
+                    </form>
                 </section>
-                <section class="grp-form">
-                    <label for="desc_local">Descrição:</label>
-                    <input type="text" name="descricao" id="desc_local">
-                </section>
-                <section class="grp-fo">
-                    <label for="latitude">Latidute</label>
-                    <input type="text" id="latitude" placeholder="Latitude">
-                    <label for="longitude">Longitude</label>
-                    <input type="text" id="longitude" placeholder="Longitude">
-                </section>
-                <button type="submit">Adicionar Local</button>
-            </form>
-        </section>
 
     </main>
 

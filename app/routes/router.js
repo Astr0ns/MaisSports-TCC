@@ -47,8 +47,8 @@ router.get("/add-locais", function (req, res){
     res.render("pages/add-locais", {email: email});
 });
 
-router.post("/adicionarLocal", locaisController.adicionarLocais, async function (req, res) {
-    res.render("/locais-esportivos");
+router.post("/adicionarLocais", locaisController.adicionarLocais, async function (req, res) {
+    
 });
 
 
