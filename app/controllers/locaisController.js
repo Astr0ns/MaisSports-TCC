@@ -12,6 +12,10 @@ const adicionarLocais = async  (req, res) => {
         req.flash('success_msg', 'Local adicionado com sucesso!');
         const locaisId = addL.insertId;
 
+        //Pegar informações do BD e armazenar na sessão do usuário
+
+        req.session.nome = nome;
+
         // Você pode redirecionar para outra página aqui ou enviar uma resposta.
         res.redirect('/locais-esportivos'); // Redirecionar após sucesso
 
