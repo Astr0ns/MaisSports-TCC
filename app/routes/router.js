@@ -47,6 +47,12 @@ router.get("/add-locais", function (req, res){
     res.render("pages/add-locais", {email: email});
 });
 
+router.get("/info-locais", async function (req, res) {
+    var nome = req.session.nome;
+    var email = req.session.email;
+    res.render("pages/info-locais", {email: email, nome:nome}); 
+});
+
 router.post("/adicionarLocais", locaisController.adicionarLocais, async function (req, res) {
     
 });
