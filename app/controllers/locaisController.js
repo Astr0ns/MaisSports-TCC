@@ -5,6 +5,14 @@ const adicionarLocais = async  (req, res) => {
     const { nome, categoria, descricao, latitude, longitude } = req.body;
     console.log(req.body);
     try {
+
+        const [endExist] = await connection.query("SELECT INTO locais (latitude, longitude) VALUES (?, ?)", [latitude, longitude]);
+        
+        if (endExist.length > 0) {
+            req.flash('error_msg', 'Esse endereço já foi adicionado ao Sports Map.');
+            return res.redirect('/locais-esportivos'); // Redireciona para o formulário de registro
+        }
+        
         const [addL] = await connection.query(
             `INSERT INTO locais (nome, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
             [nome, categoria, descricao, latitude, longitude]
