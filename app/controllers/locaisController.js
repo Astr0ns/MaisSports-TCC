@@ -1,4 +1,5 @@
 var connection = require("../../config/pool_conexoes");
+const express = require('express');
 
 const adicionarLocais = async  (req, res) => {
     
@@ -35,10 +36,9 @@ const adicionarLocais = async  (req, res) => {
 };
 
 const locaisBanco = async (req, res) => {
-    const {nome, latitude, longitude} = req.body; 
 
      try {
-        const [results] = await connection.query("SELECT nome, latitude, longitude FROM locais", [nome, latitude, longitude]);
+        const [results] = await connection.query("SELECT nome, latitude, longitude FROM locais");
         res.json(results);
     } catch (error) {
         console.error("Erro ao buscar locais do banco de dados:", error);

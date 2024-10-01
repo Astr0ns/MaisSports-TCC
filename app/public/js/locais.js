@@ -114,7 +114,12 @@ function updateMap() {
 
     // Adiciona os locais do banco de dados
     fetch('/locaisBanco')
-        .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
         .then(locaisBanco => {
             // Exibe os dados no h1
             document.getElementById('jsonData').innerText = JSON.stringify(locaisBanco, null, 2);

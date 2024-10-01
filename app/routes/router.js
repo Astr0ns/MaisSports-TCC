@@ -74,10 +74,12 @@ router.get("/login-empr", function (req, res) {
 router.get("/locais-esportivos", async function (req, res) {
     var email = req.session.email;
     var nome = req.session.nome;
+
+    
     res.render("pages/locais-esportivos", {nome:nome, email: email });
 })
 
-router.post("/locaisBanco", locaisController.locaisBanco, async function (req, res){
+router.get("/locaisBanco", locaisController.locaisBanco, async function (req, res){
 //
 });
 
