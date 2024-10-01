@@ -116,6 +116,9 @@ function updateMap() {
     fetch('/locaisBanco')
         .then(response => response.json())
         .then(locaisBanco => {
+            // Exibe os dados no h1
+            document.getElementById('jsonData').innerText = JSON.stringify(locaisBanco, null, 2);
+
             locaisBanco.forEach(local => {
                 const marker = new google.maps.Marker({
                     position: { lat: parseFloat(local.latitude), lng: parseFloat(local.longitude) },
@@ -135,7 +138,10 @@ function updateMap() {
                 markers.push(marker);
             });
         })
-        .catch(error => console.error('Erro ao buscar locais do banco:', error));
+        .catch(error => {
+            console.error('Erro ao buscar locais do banco:', error);
+            document.getElementById('jsonData').innerText = 'Erro ao buscar locais do banco.';
+        });
 
     // Busca os locais do Google Maps
     const request = {
@@ -169,6 +175,7 @@ function updateMap() {
         }
     });
 }
+
 
 
 
