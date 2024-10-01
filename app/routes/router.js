@@ -12,6 +12,7 @@ const gravarUsuAutenticado = require('../models/usuarioModel').gravarUsuAutentic
 const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 const locaisController = require('../controllers/locaisController');
+const locaisBanco = require('../controllers/locaisController').locaisBanco;
 
 
 
@@ -42,14 +43,14 @@ router.get("/", verificarAutenticacao, function (req, res) {
 
 //
 
-router.get("/add-locais", function (req, res){
+router.get("/add-locais", function (req, res) {
     var email = req.session.email;
-    res.render("pages/add-locais", {email: email});
+    res.render("pages/add-locais", { email: email });
 });
 
 
 router.post("/adicionarLocais", locaisController.adicionarLocais, async function (req, res) {
-    
+
 });
 
 
@@ -69,29 +70,16 @@ router.get("/login-empr", function (req, res) {
 });
 
 
-//pagina locais
-//router.get("/locais-esportivos", function (req, res) {
-//    var email = req.session.email;
-//    var nome = req.session.nome;
-//    res.render("pages/locais-esportivos", { email: email, nome: nome });
-//});
+// pagina locais
+router.get("/locais-esportivos", async function (req, res) {
+    var email = req.session.email;
+    var nome = req.session.nome;
+    res.render("pages/locais-esportivos", {nome:nome, email: email });
+})
 
-router.get("/locais-banco", async function (req, res) {
-    try {
-        const [results] = await connection.query("SELECT nome, latitude, longitude FROM locais");
-        res.json(results);
-    } catch (error) {
-        console.error("Erro ao buscar locais do banco de dados:", error);
-        res.status(500).send("Erro ao buscar locais");
-    }
+router.get("/locais-banco", bancoLocais, function async  (req, res) {
+   
 });
-
-
-
-
-
-
-
 
 
 router.get("/product-page", function (req, res) {

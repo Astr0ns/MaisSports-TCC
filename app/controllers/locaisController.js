@@ -34,6 +34,18 @@ const adicionarLocais = async  (req, res) => {
     }
 };
 
+const locaisBanco = async (req, res) => {
+    const {nome, latitude, longitude} = req.body; 
+
+     try {
+        const [results] = await connection.query("SELECT nome, latitude, longitude FROM locais", [nome, latitude, longitude]);
+        res.json(results);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
+}
+
 module.exports ={ 
-    adicionarLocais
+    adicionarLocais, locaisBanco
 }
