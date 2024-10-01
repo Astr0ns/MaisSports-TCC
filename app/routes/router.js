@@ -12,7 +12,7 @@ const gravarUsuAutenticado = require('../models/usuarioModel').gravarUsuAutentic
 const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 const locaisController = require('../controllers/locaisController');
-const locaisBanco = require('../controllers/locaisController').locaisBanco;
+
 
 
 
@@ -77,8 +77,8 @@ router.get("/locais-esportivos", async function (req, res) {
     res.render("pages/locais-esportivos", {nome:nome, email: email });
 })
 
-router.get("/locais-banco", bancoLocais, function async  (req, res) {
-   
+router.post("/locaisBanco", locaisController.locaisBanco, async function (req, res){
+//
 });
 
 
