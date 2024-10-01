@@ -47,5 +47,5 @@ const locaisBanco = async (req, res) => {
 }
 
 module.exports ={ 
-    adicionarLocais, locaisBanco
+    adicionarLocais, locaisBanco,
 }
