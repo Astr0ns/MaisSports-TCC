@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="css/codes/footer.css">
     <link rel="stylesheet" href="css/codes/nav-bar.css">
     <link rel="stylesheet" href="css/codes/login.css">
+    <link rel="stylesheet" href="css/codes/notify.css">
 
     <!-- Links Js's -->
 
@@ -66,44 +67,69 @@
         </nav>
     </header>
 
-        <section class="area-login">
+    <section class="notificacao">
+        <section class="notify">
+            <% if (error_msg || success_msg) { %>
+                <section class="flash-message" style="display: none;">
+                    <% if (error_msg) { %>
+                        <section class="error">
+                            <%= error_msg %>
+                        </section>
+                        <% } %>
+                            <% if (success_msg) { %>
+                                <section class="success">
+                                    <%= success_msg %>
+                                </section>
+                                <% } %>
+                                    <section class="progress-bar">
+                                        <section class="progress-bar-inner"></section>
+                                    </section>
+                </section>
+                <% } %>
 
-            <section class="login">
-                <h1>LOGIN</h1>
-                <form action="/loginEmpr" method="post" class="login_form">
-
-                    <section class="form-group">
-                        <h3 class="lr">E-mail</h3>
-                        <label for="email"></label>
-                        <input id="email" type="text" name="email" placeholder="Digite seu E-mail" required>
-                    </section>
-
-                    <section class="form-group">
-                        <h3 class="lr">Senha</h3>
-                        <label for="password"></label>
-                        <input id="password" type="password" name="senha" placeholder="Digite sua senha" required
-                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
-                            title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
-                    </section>
-
-                    <section id="valid"></section>
-
-                    <section class="text-center">
-                        <button type="submit" class="btn btn-primary" id="save-btn">Entrar</button>
-                    </section>
-
-                    <section id="valid-sucess"></section>
-
-                </form>
-
-                <p class="butun">Ainda não tem uma <span>empresa</span> cadastrada?<a href="/regs-empr">Cadastre-se</a>.</p>
-
-            </section>
         </section>
+    </section>
 
-        <%- include("../partial/footer") %>
-            <script src="js/script.js"></script>
-            <script src="js/save-date.js"></script>
+    <section class="area-login">
+
+
+
+        <section class="login">
+            <h1>LOGIN</h1>
+            <form action="/loginEmpr" method="post" class="login_form">
+
+                <section class="form-group">
+                    <h3 class="lr">E-mail</h3>
+                    <label for="email"></label>
+                    <input id="email" type="text" name="email" placeholder="Digite seu E-mail" required>
+                </section>
+
+                <section class="form-group">
+                    <h3 class="lr">Senha</h3>
+                    <label for="password"></label>
+                    <input id="password" type="password" name="senha" placeholder="Digite sua senha" required
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
+                        title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
+                </section>
+
+                <section id="valid"></section>
+
+                <section class="text-center">
+                    <button type="submit" class="btn btn-primary" id="save-btn">Entrar</button>
+                </section>
+
+                <section id="valid-sucess"></section>
+
+            </form>
+
+            <p class="butun">Ainda não tem uma <span>empresa</span> cadastrada?<a href="/regs-empr">Cadastre-se</a>.</p>
+
+        </section>
+    </section>
+
+    <%- include("../partial/footer") %>
+        <script src="js/script.js"></script>
+        <script src="js/save-date.js"></script>
 </body>
 
 

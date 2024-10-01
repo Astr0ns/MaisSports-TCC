@@ -101,7 +101,7 @@ const logarEmpr = async (req, res) => {
 
             if (!passwordMatch) {
                 req.flash('msg', "As senhas não conferem");
-                return res.redirect('/login'); // Redireciona para a página de login se as senhas não conferem
+                return res.redirect('/login-empr'); // Redireciona para a página de login se as senhas não conferem
             }
 
             // Armazenar informações do usuário na sessão
@@ -110,7 +110,7 @@ const logarEmpr = async (req, res) => {
             req.session.cep = account.cep;
             req.session.numero = account.numero;
 
-            res.render('pages/profile', {
+            res.render('pages/empresa', {
                 userId: req.session.userId,
                 logado: req.session.logado,
                 email: req.session.email,
