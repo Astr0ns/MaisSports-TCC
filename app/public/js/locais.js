@@ -112,6 +112,32 @@ function updateMap() {
     const selectedType = getSelectedType();
     if (!selectedType) return;
 
+    // Adiciona os locais do banco de dados
+    fetch('/locais-banco')
+        .then(response => response.json())
+        .then(locaisBanco => {
+            locaisBanco.forEach(local => {
+                const marker = new google.maps.Marker({
+                    position: { lat: parseFloat(local.latitude), lng: parseFloat(local.longitude) },
+                    map: map,
+                    title: local.nome,
+                    icon: {
+                        url: 'imagem/LocalizacaoLOCAIS-PNG.png',
+                        scaledSize: new google.maps.Size(35, 35)
+                    }
+                });
+
+                google.maps.event.addListener(marker, 'click', () => {
+                    infowindow.setContent(`<strong>${local.nome}</strong>`);
+                    infowindow.open(map, marker);
+                });
+
+                markers.push(marker);
+            });
+        })
+        .catch(error => console.error('Erro ao buscar locais do banco:', error));
+
+    // Busca os locais do Google Maps
     const request = {
         location: currentLocation,
         radius: '10000',
@@ -120,17 +146,15 @@ function updateMap() {
 
     service.nearbySearch(request, (results, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            for (let i = 0; i < results.length; i++) {
-                const place = results[i];
+            results.forEach(place => {
                 const marker = new google.maps.Marker({
                     position: place.geometry.location,
                     map: map,
                     title: place.name,
                     icon: {
-                        url: 'imagem/LocalizacaoLOCAIS-PNG.png', // URL do ícone
-                        scaledSize: new google.maps.Size(35, 35) // Define o tamanho do ícone
+                        url: 'imagem/LocalizacaoLOCAIS-PNG.png',
+                        scaledSize: new google.maps.Size(35, 35)
                     }
-                    
                 });
 
                 google.maps.event.addListener(marker, 'click', () => {
@@ -139,12 +163,13 @@ function updateMap() {
                 });
 
                 markers.push(marker);
-            }
+            });
         } else {
-            console.error('Erro na busca de locais:', status);
+            console.error('Erro na busca de locais do Google Maps:', status);
         }
     });
 }
+
 
 
 

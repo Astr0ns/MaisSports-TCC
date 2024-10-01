@@ -47,11 +47,6 @@ router.get("/add-locais", function (req, res){
     res.render("pages/add-locais", {email: email});
 });
 
-router.get("/info-locais", async function (req, res) {
-    var nome = req.session.nome;
-    var email = req.session.email;
-    res.render("pages/info-locais", {email: email, nome:nome}); 
-});
 
 router.post("/adicionarLocais", locaisController.adicionarLocais, async function (req, res) {
     
@@ -73,10 +68,32 @@ router.get("/login-empr", function (req, res) {
     });
 });
 
-router.get("/locais-esportivos", function (req, res) {
-    var email = req.session.email;
-    res.render("pages/locais-esportivos", { email: email });
+
+//pagina locais
+//router.get("/locais-esportivos", function (req, res) {
+//    var email = req.session.email;
+//    var nome = req.session.nome;
+//    res.render("pages/locais-esportivos", { email: email, nome: nome });
+//});
+
+router.get("/locais-banco", async function (req, res) {
+    try {
+        const [results] = await connection.query("SELECT nome, latitude, longitude FROM locais");
+        res.json(results);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
 });
+
+
+
+
+
+
+
+
+
 router.get("/product-page", function (req, res) {
     var email = req.session.email;
     res.render("pages/product-page", { email: email });
