@@ -113,7 +113,7 @@ function updateMap() {
     if (!selectedType) return;
 
     // Adiciona os locais do banco de dados
-    fetch('/locais-banco')
+    fetch('/locaisBanco')
         .then(response => response.json())
         .then(locaisBanco => {
             locaisBanco.forEach(local => {
