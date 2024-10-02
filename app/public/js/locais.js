@@ -200,7 +200,6 @@ function getSelectedType() {
 } 
 
 
-
 function getKeywords(type) { 
     switch (type) { 
         case 'gym': 
@@ -217,10 +216,17 @@ function getKeywords(type) {
             return ['court', 'basketball stadium', 'quadra', 'basquete']; 
         case 'park': 
             return ['park', 'parque']; 
+        case 'volleyball': 
+            return ['volleyball court', 'volleyball', 'volei', 'voleibol']; 
+        case 'swimming': 
+            return ['swimming pool', 'pool', 'swimming']; 
+        case 'running': 
+            return ['running trail', 'jogging track', 'running']; 
         default: 
             return []; 
     } 
-} 
+}
+
 
 
 
