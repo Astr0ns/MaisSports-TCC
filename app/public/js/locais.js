@@ -322,7 +322,7 @@ function toggleFilters() {
 //mostrar mais informações do local quando clica em saiba mais
 function showSidePanel(placeId) {
     const sidePanel = document.getElementById('sidePanel');
-    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="position: absolute; top: 10px; right: 10px;">×</button>`;
+    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
 
     const request = {
         placeId: placeId,
@@ -332,11 +332,26 @@ function showSidePanel(placeId) {
     service.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             sidePanel.innerHTML += `
-                <h2>${place.name}</h2>
-                ${place.photos && place.photos.length > 0 ? `<img src="${place.photos[0].getUrl({ maxWidth: 500, maxHeight: 300 })}" alt="Foto do local" style="width:100%; height:auto;">` : ''}
+                
+                <div class="sidepanel_card">
+                    ${place.photos && place.photos.length > 0 ? `<img src="${place.photos[0].getUrl({ maxWidth: 500, maxHeight: 300 })}" alt="Foto do local" style="width:100%; ">` : ''}
+                    <div class="overlay"></div>
+                    <h2>${place.name}</h2>
+                </div>
+                
+                <section class="sidepanel_info">
                 <p>${place.vicinity}</p>
-                <p>Avaliação: ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
+                <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
+
+                <hr class="separator">
+
+                copiar, favoritar, comunicar
+
+                <hr class="separator">
+
                 ${place.reviews && place.reviews.length > 0 ? `<h3>Comentários:</h3><ul>${place.reviews.map(review => `<li><strong>${review.author_name}:</strong> ${review.text}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                </section>
+
             `;
         } else {
             console.error('Erro ao buscar detalhes do local:', status);
