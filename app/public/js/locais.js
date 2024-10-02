@@ -112,16 +112,15 @@ function updateMap() {
     const selectedType = getSelectedType();
     if (!selectedType) return;
 
-    // Adiciona os locais do banco de dados
-    fetch('/locaisBanco')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
-    })
+    // Adiciona os locais do banco de dados, filtrando pela categoria selecionada
+    fetch(`/locaisBanco?categoria=${selectedType}`) // Envia a categoria como query string
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(locaisBanco => {
-            // Exibe os dados no h1
             document.getElementById('jsonData').innerText = JSON.stringify(locaisBanco, null, 2);
 
             locaisBanco.forEach(local => {
@@ -180,6 +179,7 @@ function updateMap() {
         }
     });
 }
+
 
 
 
