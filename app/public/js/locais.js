@@ -211,7 +211,7 @@ function getKeywords(type) {
         case 'bicycle': 
             return ['bike park', 'bicycle park']; 
         case 'tennis': 
-            return ['tennis court', 'tennis stadium', 'quadra']; 
+            return ['tennis court', 'quadra', 'tennis', 'tenis']; 
         case 'basketball': 
             return ['court', 'basketball stadium', 'quadra', 'basquete']; 
         case 'park': 
@@ -220,8 +220,6 @@ function getKeywords(type) {
             return ['volleyball court', 'volleyball', 'volei', 'voleibol']; 
         case 'swimming': 
             return ['swimming pool', 'pool', 'swimming']; 
-        case 'running': 
-            return ['running trail', 'jogging track', 'running']; 
         default: 
             return []; 
     } 
