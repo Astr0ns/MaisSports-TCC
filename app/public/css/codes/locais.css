@@ -445,6 +445,11 @@ button:hover {
     .filters_mobile::-webkit-scrollbar {
         display: none; /* Para Chrome, Safari e Opera */
     }
+    
+
+    .userButtonMobile{
+
+    }
 
 }
 

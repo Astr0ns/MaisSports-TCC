@@ -1,32 +1,35 @@
 var connection = require("../../config/pool_conexoes");
 const express = require('express');
 
-const adicionarLocais = async  (req, res) => {
-    
+const adicionarLocais = async (req, res) => {
     const { nome, categoria, descricao, latitude, longitude } = req.body;
     console.log(req.body);
     try {
-
-        const [endExist] = await connection.query("SELECT INTO locais (latitude, longitude) VALUES (?, ?)", [latitude, longitude]);
+        // Verifica se o local já existe
+        const [endExist] = await connection.query(
+            "SELECT * FROM locais WHERE latitude = ? AND longitude = ?",
+            [latitude, longitude]
+        );
         
         if (endExist.length > 0) {
             req.flash('error_msg', 'Esse endereço já foi adicionado ao Sports Map.');
-            return res.redirect('/locais-esportivos'); // Redireciona para o formulário de registro
+            return res.redirect('/locais-esportivos'); // Redireciona para o formulário
         }
         
+        // Insere o novo local
         const [addL] = await connection.query(
             `INSERT INTO locais (nome, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
             [nome, categoria, descricao, latitude, longitude]
         );
+
         req.flash('success_msg', 'Local adicionado com sucesso!');
         const locaisId = addL.insertId;
 
-        //Pegar informações do BD e armazenar na sessão do usuário
-
+        // Armazena informações na sessão do usuário
         req.session.nome = nome;
 
-        // Você pode redirecionar para outra página aqui ou enviar uma resposta.
-        res.redirect('/locais-esportivos'); // Redirecionar após sucesso
+        // Redireciona após sucesso
+        res.redirect('/locais-esportivos'); 
 
     } catch (error) {
         req.flash('error_msg', 'Erro ao adicionar Local: ' + error.message);
@@ -34,6 +37,7 @@ const adicionarLocais = async  (req, res) => {
         res.redirect('/locais-esportivos');
     }
 };
+
 
 const locaisBanco = async (req, res) => {
     const { categoria } = req.query; // Pega a categoria da query string
