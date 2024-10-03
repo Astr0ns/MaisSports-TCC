@@ -259,7 +259,7 @@ function generateContent(place) {
 // informações que vem do bancos estilo
 function generateContentFromLocal(local) {
     let content = `<div class="card_local"><strong>${local.nome}</strong>`;
-    content += `<p>recomendado por: <span class="google_color">Seu Banco de Dados</span></p>`;
+    content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
 
     if (local.imagens && local.imagens.length > 0) {
         content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
