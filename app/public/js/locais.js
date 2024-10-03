@@ -10,6 +10,8 @@ let autocomplete;
 let sidePanelContent = ''; 
 let mapSelectionEnabled = false;
 let currentMarker = null;
+let locationMethod = ''; // 'current' ou 'map'
+
 
 
 
@@ -448,9 +450,13 @@ function handleMapClick(event) {
     // Exibe as coordenadas selecionadas
     document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`; // Corrige a sintaxe para a string
 
+    // Atualiza o método de localização
+    locationMethod = 'map'; // Atualiza o método de localização
+
     // Desativa a seleção
     mapSelectionEnabled = false;
 }
+
 
 
 
@@ -471,28 +477,40 @@ function getCurrentLocation() {
             };
             map.setCenter(location);
             if (userMarker) userMarker.setPosition(location);
+            locationMethod = 'current'; // Atualiza o método de localização
         });
     }
 }
 
 
 
+
 // função para pegar localização ao selecionar
 function saveCoordinates() {
-    const selectedCoordinates = document.getElementById('selectedCoordinates').textContent;
-    const latLng = selectedCoordinates.match(/Latitude (-?\d+\.\d+), Longitude (-?\d+\.\d+)/);
+    let lat, lng;
 
-    if (latLng) {
-        const lat = latLng[1];
-        const lng = latLng[2];
-        localStorage.setItem('latitude', lat);
-        localStorage.setItem('longitude', lng);
-        console.log(`Coordenadas salvas: Latitude ${lat}, Longitude ${lng}`);
-        window.location.href = '/add-locais';
+    if (locationMethod === 'current') {
+        lat = currentLocation.lat; // Usa a localização atual
+        lng = currentLocation.lng;
     } else {
-        alert("Selecione uma localização válida antes de prosseguir.");
+        const selectedCoordinates = document.getElementById('selectedCoordinates').textContent;
+        const latLng = selectedCoordinates.match(/Latitude (-?\d+\.\d+), Longitude (-?\d+\.\d+)/);
+
+        if (latLng) {
+            lat = latLng[1];
+            lng = latLng[2];
+        } else {
+            alert("Selecione uma localização válida antes de prosseguir.");
+            return;
+        }
     }
+
+    localStorage.setItem('latitude', lat);
+    localStorage.setItem('longitude', lng);
+    console.log(`Coordenadas salvas: Latitude ${lat}, Longitude ${lng}`);
+    window.location.href = '/add-locais';
 }
+
 
 
 
