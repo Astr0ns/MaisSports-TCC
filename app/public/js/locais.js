@@ -137,8 +137,7 @@ function updateMap() {
                 });
 
                 google.maps.event.addListener(marker, 'click', () => {
-                    const imagensHtml = local.imagens.map(img => `<img src="uploads/${img}" alt="${local.nome}" style="width:100%; height:auto;">`).join('');
-                    infowindow.setContent(`<strong>${local.nome}</strong><br>${imagensHtml}`);
+                    infowindow.setContent(generateContentFromLocal(local)); // Use a nova função para locais do banco
                     infowindow.open(map, marker);
                 });
 
@@ -256,6 +255,32 @@ function generateContent(place) {
     content += `<button class="saiba_mais" onclick="showSidePanel('${place.place_id}')">Saiba Mais</button></div>`;
     return content;
 }
+
+// informações que vem do bancos estilo
+function generateContentFromLocal(local) {
+    let content = `<div class="card_local"><strong>${local.nome}</strong>`;
+    content += `<p>recomendado por: <span class="google_color">Seu Banco de Dados</span></p>`;
+
+    if (local.imagens && local.imagens.length > 0) {
+        content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
+    } else {
+        content += `<p>Imagem não disponível</p>`;
+    }
+
+    if (local.endereco) {
+        content += `<p class="break">${local.endereco}</p>`;
+    }
+
+    if (local.avaliacao) {
+        content += `<p>Avaliação: ${getStarRatingHtml(local.avaliacao)}</p>`;
+    } else {
+        content += `<p>Avaliação não disponível</p>`;
+    }
+    
+    content += `<button class="saiba_mais" onclick="showSidePanel('${local.id}')">Saiba Mais</button></div>`;
+    return content;
+}
+
 
 
 // estrela na avaliação
