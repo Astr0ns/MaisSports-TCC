@@ -230,7 +230,7 @@ function getKeywords(type) {
 
 
 
-
+// card pin google maps
 function generateContent(place) {
     let content = `<div class="card_local"><strong>${place.name}</strong>`;
     content += `<p>recomendado por: <span class="google_color">Google Maps</span></p>`;
@@ -276,10 +276,12 @@ function generateContentFromLocal(local) {
     } else {
         content += `<p>Avaliação não disponível</p>`;
     }
-    
-    content += `<button class="saiba_mais" onclick="showSidePanel('${local.id}')">Saiba Mais</button></div>`;
+
+    // Chama a função showSidePanelFromLocal passando o ID do local do banco
+    content += `<button class="saiba_mais" onclick="showSidePanelFromLocal('${local.id}')">Saiba Mais</button></div>`;
     return content;
 }
+
 
 
 
@@ -396,6 +398,53 @@ function showSidePanel(placeId) {
     });
 }
 
+function showSidePanelFromLocal(localId) {
+    const sidePanel = document.getElementById('sidePanel');
+    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
+
+    // Faz uma requisição para buscar as informações detalhadas do local
+    fetch(`/getLocalFromId?id=${localId}`)
+        .then(response => response.json())
+        .then(localArray => {
+            const local = localArray[0];  // Acessa o primeiro local do array
+            document.getElementById('jsonData').innerText = JSON.stringify(localArray, null, 2);
+        
+            if (local) {
+                sidePanel.innerHTML += `
+                    <div class="sidepanel_card">
+                        ${local.imagens && local.imagens.length > 0 ? `<img src="uploads/${local.imagens[0]}" alt="Foto do local" style="width:100%; ">` : ''}
+                        <div class="overlay"></div>
+                        <h2>${local.nome}</h2>
+                    </div>
+        
+                    <section class="sidepanel_info">
+                        <p>${local.endereco || 'Endereço não disponível'}</p>
+                        <p><strong>Avaliação:</strong> ${local.avaliacao ? getStarRatingHtml(local.avaliacao) : 'Não disponível'}</p>
+        
+                        <hr class="separator">
+                        copiar, favoritar, comunicar
+        
+                        <hr class="separator">
+        
+                        ${local.comentarios && local.comentarios.length > 0 ? `<h3>Comentários:</h3><ul>${local.comentarios.map(comment => `<li><strong>${comment.autor}:</strong> ${comment.texto}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                    </section>
+                `;
+            } else {
+                sidePanel.innerHTML += '<p>Local não encontrado.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar os detalhes do local:', error);
+            sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
+        });
+
+    sidePanel.style.display = 'block'; 
+    // Aplicar animação de abertura 
+    setTimeout(() => { 
+        sidePanel.style.width = '500px'; // Largura desejada da aba lateral 
+        sidePanel.style.opacity = 1; 
+    }, 10); // Um pequeno delay para garantir que a transição seja visível 
+}
 
 
 

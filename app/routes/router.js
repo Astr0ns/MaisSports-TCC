@@ -73,13 +73,16 @@ router.get("/add-locais", function (req, res) {
 });
 
 // Rota para adicionar locais com upload de imagens
-router.post("/adicionarLocais", upload, locaisController.adicionarLocais);
+
 
 
 
 router.post("/adicionarLocais",upload, locaisController.adicionarLocais, async function (req, res) {
 
 });
+
+
+
 
 
 router.get("/login", function (req, res) {
@@ -108,6 +111,10 @@ router.get("/locais-esportivos", async function (req, res) {
 })
 
 router.get("/locaisBanco", locaisController.locaisBanco, async function (req, res){
+//
+});
+
+router.get("/getLocalFromId", locaisController.getLocalFromId, async function (req, res){
 //
 });
 

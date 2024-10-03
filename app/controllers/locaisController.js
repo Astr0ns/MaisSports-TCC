@@ -71,7 +71,7 @@ const locaisBanco = async (req, res) => {
 
     try {
         const query = `
-            SELECT l.nome, l.latitude, l.longitude, i.nome_imagem 
+            SELECT l.id, l.nome, l.latitude, l.longitude, i.nome_imagem 
             FROM locais l 
             LEFT JOIN imagens i ON l.id = i.fk_local_id 
             WHERE l.categoria = ?
@@ -80,7 +80,7 @@ const locaisBanco = async (req, res) => {
 
         // Formata os resultados para agrupar imagens por local
         const formattedResults = results.reduce((acc, row) => {
-            const { nome, latitude, longitude, nome_imagem } = row;
+            const { id, nome, latitude, longitude, nome_imagem } = row;
             const local = acc.find(loc => loc.nome === nome);
             if (local) {
                 if (nome_imagem) {
@@ -88,6 +88,7 @@ const locaisBanco = async (req, res) => {
                 }
             } else {
                 acc.push({
+                    id,
                     nome,
                     latitude,
                     longitude,
@@ -105,7 +106,48 @@ const locaisBanco = async (req, res) => {
 };
 
 
+const getLocalFromId = async (req, res) => {
+    const localId = req.query.id;
+
+    try {
+        const query = `
+            SELECT l.id, l.nome, l.latitude, l.longitude, l.descricao, i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais
+            FROM locais l 
+            LEFT JOIN imagens i ON l.id = i.fk_local_id 
+            LEFT JOIN avaliacao_local a ON l.id = a.fk_id_local 
+            WHERE l.id = ?
+        `;
+        const [results] = await connection.query(query, [localId]); // Filtra pela categoria
+
+        // Formata os resultados para agrupar imagens por local
+        const formattedResults = results.reduce((acc, row) => {
+            const { nome, latitude, longitude, nome_imagem, comentario_local,avaliacao_estrela_locais } = row;
+            const local = acc.find(loc => loc.nome === nome);
+            if (local) {
+                if (nome_imagem) {
+                    local.imagens.push(nome_imagem);
+                }
+            } else {
+                acc.push({
+                    nome,
+                    latitude,
+                    longitude,
+                    imagens: nome_imagem ? [nome_imagem] : [],
+                    comentario_local,
+                    avaliacao_estrela_locais
+                });
+            }
+            return acc;
+        }, []);
+
+        res.json(formattedResults);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
+}
+
 
 module.exports ={ 
-    adicionarLocais, locaisBanco,
+    adicionarLocais, locaisBanco, getLocalFromId,
 }
