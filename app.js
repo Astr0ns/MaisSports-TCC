@@ -34,6 +34,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/uploads', express.static('uploads'));
+
+
 
 var router = require("./app/routes/router");
 app.use("/", router);
