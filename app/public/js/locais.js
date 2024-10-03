@@ -399,6 +399,9 @@ function showSidePanel(placeId) {
 
 
 
+
+
+
 // esconde painel
 function hideSidePanel() { 
     const sidePanel = document.getElementById('sidePanel'); 
