@@ -115,7 +115,7 @@ function updateMap() {
     if (!selectedType) return;
 
     // Adiciona os locais do banco de dados, filtrando pela categoria selecionada
-    fetch(`/locaisBanco?categoria=${selectedType}`) // Envia a categoria como query string
+    fetch(`/locaisBanco?categoria=${selectedType}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
@@ -137,7 +137,8 @@ function updateMap() {
                 });
 
                 google.maps.event.addListener(marker, 'click', () => {
-                    infowindow.setContent(`<strong>${local.nome}</strong>`);
+                    const imagensHtml = local.imagens.map(img => `<img src="uploads/${img}" alt="${local.nome}" style="width:100%; height:auto;">`).join('');
+                    infowindow.setContent(`<strong>${local.nome}</strong><br>${imagensHtml}`);
                     infowindow.open(map, marker);
                 });
 
@@ -181,6 +182,7 @@ function updateMap() {
         }
     });
 }
+
 
 
 

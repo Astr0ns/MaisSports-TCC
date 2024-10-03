@@ -70,14 +70,40 @@ const locaisBanco = async (req, res) => {
     const { categoria } = req.query; // Pega a categoria da query string
 
     try {
-        const query = "SELECT nome, latitude, longitude FROM locais WHERE categoria = ?";
+        const query = `
+            SELECT l.nome, l.latitude, l.longitude, i.nome_imagem 
+            FROM locais l 
+            LEFT JOIN imagens i ON l.id = i.fk_local_id 
+            WHERE l.categoria = ?
+        `;
         const [results] = await connection.query(query, [categoria]); // Filtra pela categoria
-        res.json(results);
+
+        // Formata os resultados para agrupar imagens por local
+        const formattedResults = results.reduce((acc, row) => {
+            const { nome, latitude, longitude, nome_imagem } = row;
+            const local = acc.find(loc => loc.nome === nome);
+            if (local) {
+                if (nome_imagem) {
+                    local.imagens.push(nome_imagem);
+                }
+            } else {
+                acc.push({
+                    nome,
+                    latitude,
+                    longitude,
+                    imagens: nome_imagem ? [nome_imagem] : []
+                });
+            }
+            return acc;
+        }, []);
+
+        res.json(formattedResults);
     } catch (error) {
         console.error("Erro ao buscar locais do banco de dados:", error);
         res.status(500).send("Erro ao buscar locais");
     }
 };
+
 
 
 module.exports ={ 
