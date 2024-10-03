@@ -36,7 +36,7 @@
                 </section>
 
                 <section id="info_local">
-                    <form action="/adicionarLocais" method="post">
+                    <form action="/adicionarLocais" method="post" enctype="multipart/form-data">
                         <section class="grp-form">
                             <label for="nome_local">Nome do Local:</label>
                             <input type="name" name="nome" id="nome_local">
@@ -65,7 +65,9 @@
                             <input type="text" id="latitude" name="latitude" placeholder="Latitude">
                             <label for="longitude">Longitude</label>
                             <input type="text" id="longitude" name="longitude" placeholder="Longitude">
+                            <input type="file" name="imagens" accept="image/*" multiple>
                         </section>
+                        
                         <button type="submit">Adicionar Local</button>
                     </form>
                 </section>

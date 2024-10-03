@@ -1,35 +1,61 @@
 var connection = require("../../config/pool_conexoes");
 const express = require('express');
+const multer = require('multer');
+
+
+// Configuração do armazenamento
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Pasta onde as imagens serão salvas
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname); // Renomeia o arquivo
+    }
+});
+
+// Configuração do multer
+const upload = multer({ storage: storage }).array('imagens', 4); // 'imagens' é o nome do campo no formulário, 4 é o limite
+
 
 const adicionarLocais = async (req, res) => {
     const { nome, categoria, descricao, latitude, longitude } = req.body;
-    console.log(req.body);
+
     try {
         // Verifica se o local já existe
         const [endExist] = await connection.query(
             "SELECT * FROM locais WHERE latitude = ? AND longitude = ?",
             [latitude, longitude]
         );
-        
+
         if (endExist.length > 0) {
             req.flash('error_msg', 'Esse endereço já foi adicionado ao Sports Map.');
-            return res.redirect('/locais-esportivos'); // Redireciona para o formulário
+            return res.redirect('/locais-esportivos');
         }
-        
+
         // Insere o novo local
         const [addL] = await connection.query(
             `INSERT INTO locais (nome, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
             [nome, categoria, descricao, latitude, longitude]
         );
 
-        req.flash('success_msg', 'Local adicionado com sucesso!');
         const locaisId = addL.insertId;
 
-        // Armazena informações na sessão do usuário
+        // Armazena as imagens no banco de dados
+        if (req.files && req.files.length > 0) {
+            const imagens = req.files.map(file => file.filename);
+            for (let imagem of imagens) {
+                await connection.query(
+                    `INSERT INTO imagens (fk_local_id, nome_imagem) VALUES (?, ?)`,
+                    [locaisId, imagem]
+                );
+            }
+        }
+
+        req.flash('success_msg', 'Local adicionado com sucesso!');
         req.session.nome = nome;
 
         // Redireciona após sucesso
-        res.redirect('/locais-esportivos'); 
+        res.redirect('/locais-esportivos');
 
     } catch (error) {
         req.flash('error_msg', 'Erro ao adicionar Local: ' + error.message);
@@ -37,6 +63,7 @@ const adicionarLocais = async (req, res) => {
         res.redirect('/locais-esportivos');
     }
 };
+
 
 
 const locaisBanco = async (req, res) => {

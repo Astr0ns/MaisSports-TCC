@@ -12,6 +12,30 @@ const gravarUsuAutenticado = require('../models/usuarioModel').gravarUsuAutentic
 const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 const locaisController = require('../controllers/locaisController');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+
+// Configuração do armazenamento
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadPath = 'uploads/';
+        
+        // Verifica se a pasta existe
+        fs.mkdir(uploadPath, { recursive: true }, (err) => {
+            if (err) {
+                return cb(err);
+            }
+            cb(null, uploadPath); // Passa a pasta como destino
+        });
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname); // Renomeia o arquivo
+    }
+});
+
+// Configuração do multer
+const upload = multer({ storage: storage }).array('imagens', 4);
 
 
 
@@ -48,8 +72,12 @@ router.get("/add-locais", function (req, res) {
     res.render("pages/add-locais", { email: email });
 });
 
+// Rota para adicionar locais com upload de imagens
+router.post("/adicionarLocais", upload, locaisController.adicionarLocais);
 
-router.post("/adicionarLocais", locaisController.adicionarLocais, async function (req, res) {
+
+
+router.post("/adicionarLocais",upload, locaisController.adicionarLocais, async function (req, res) {
 
 });
 
