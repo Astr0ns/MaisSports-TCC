@@ -64,7 +64,7 @@ const adicionarLocais = async (req, res) => {
     }
 };
 
-
+const avaliarLocais = async (req, res) => {}
 
 const locaisBanco = async (req, res) => {
     const { categoria } = req.query; // Pega a categoria da query string
