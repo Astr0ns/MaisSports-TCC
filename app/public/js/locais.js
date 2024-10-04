@@ -206,15 +206,15 @@ function getSelectedType() {
 function getKeywords(type) { 
     switch (type) { 
         case 'gym': 
-            return ['gym', 'fitness center']; 
+            return ['gym', 'fitness center', 'academia']; 
         case 'football': 
-            return ['soccer stadium', 'football stadium', 'soccer', 'futsal', 'futebol', 'quadra', 'society', 'campo de futebol']; 
+            return ['campo', 'soccer', 'futsal', 'futebol', 'quadra', 'society', 'campo de futebol']; 
         case 'skatepark': 
             return ['skate park', 'skateboarding park', 'pista', 'skate']; 
         case 'bicycle': 
             return ['bike park', 'bicycle park']; 
         case 'tennis': 
-            return ['tennis court', 'quadra', 'tennis', 'tenis']; 
+            return ['tennis court', 'quadra de tênis', 'tennis', 'tenis', 'club de tênis', 'clube de tênis', 'tennis stadium', 'campo de tênis']; 
         case 'basketball': 
             return ['court', 'basketball stadium', 'quadra', 'basquete']; 
         case 'park': 
