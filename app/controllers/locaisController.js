@@ -18,7 +18,7 @@ const upload = multer({ storage: storage }).array('imagens', 4); // 'imagens' é
 
 
 const adicionarLocais = async (req, res) => {
-    const { nome, categoria, descricao, latitude, longitude } = req.body;
+    const { nome_local, categoria, descricao, latitude, longitude } = req.body;
 
     try {
         // Verifica se o local já existe
@@ -34,8 +34,8 @@ const adicionarLocais = async (req, res) => {
 
         // Insere o novo local
         const [addL] = await connection.query(
-            `INSERT INTO locais (nome, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
-            [nome, categoria, descricao, latitude, longitude]
+            `INSERT INTO locais (nome_local, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
+            [nome_local, categoria, descricao, latitude, longitude]
         );
 
         const locaisId = addL.insertId;
@@ -113,30 +113,42 @@ const getLocalFromId = async (req, res) => {
 
     try {
         const query = `
-            SELECT l.id, l.nome_local, l.latitude, l.longitude, l.descricao, i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais
-            FROM locais l 
+            SELECT l.id, l.nome_local, l.latitude, l.longitude, l.descricao, 
+                   i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais,
+                   u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente
+            FROM locais l
             LEFT JOIN imagens i ON l.id = i.fk_local_id 
             LEFT JOIN avaliacao_local a ON l.id = a.fk_id_local 
+            LEFT JOIN usuario_clientes u ON a.fk_id_cliente = u.id  -- Adiciona o JOIN para pegar o nome do cliente
             WHERE l.id = ?
         `;
-        const [results] = await connection.query(query, [localId]); // Filtra pela categoria
+        const [results] = await connection.query(query, [localId]);
 
-        // Formata os resultados para agrupar imagens por local
+        // Formata os resultados para agrupar imagens e comentários por local
         const formattedResults = results.reduce((acc, row) => {
-            const { nome_local, latitude, longitude, nome_imagem, comentario_local,avaliacao_estrela_locais } = row;
+            const { nome_local, latitude, longitude, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente } = row;
             const local = acc.find(loc => loc.nome_local === nome_local);
             if (local) {
                 if (nome_imagem) {
                     local.imagens.push(nome_imagem);
                 }
+                // Adiciona comentários e avaliações
+                local.comentarios.push({
+                    comentario_local,
+                    avaliacao_estrela_locais,
+                    cliente: `${nome_cliente} ${sobrenome_cliente}`
+                });
             } else {
                 acc.push({
                     nome_local,
                     latitude,
                     longitude,
                     imagens: nome_imagem ? [nome_imagem] : [],
-                    comentario_local,
-                    avaliacao_estrela_locais
+                    comentarios: [{
+                        comentario_local,
+                        avaliacao_estrela_locais,
+                        cliente: `${nome_cliente} ${sobrenome_cliente}`
+                    }]
                 });
             }
             return acc;
@@ -148,6 +160,7 @@ const getLocalFromId = async (req, res) => {
         res.status(500).send("Erro ao buscar locais");
     }
 }
+
 
 
 module.exports ={ 
