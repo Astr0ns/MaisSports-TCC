@@ -354,6 +354,7 @@ function toggleFilters() {
 function showSidePanel(placeId) {
     const sidePanel = document.getElementById('sidePanel');
     sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
+    let currentImageIndex = 0; // Index para controlar a imagem atual
 
     const request = {
         placeId: placeId,
@@ -363,27 +364,42 @@ function showSidePanel(placeId) {
     service.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             sidePanel.innerHTML += `
-                
-                <div class="sidepanel_card">
-                    ${place.photos && place.photos.length > 0 ? `<img src="${place.photos[0].getUrl({ maxWidth: 500, maxHeight: 300 })}" alt="Foto do local" style="width:100%; ">` : ''}
+                <div class="sidepanel_card" style="position: relative;">
+                    ${place.photos && place.photos.length > 0 ? `<img id="placeImage" src="${place.photos[0].getUrl({ maxWidth: 500, maxHeight: 300 })}" alt="Foto do local" style="width:100%; height:auto;">` : ''}
                     <div class="overlay"></div>
                     <h2>${place.name}</h2>
+                    ${place.photos && place.photos.length > 1 ? `
+                        <span id="prevImage" class="image-nav left-arrow" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10094;</span>
+                        <span id="nextImage" class="image-nav right-arrow" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10095;</span>
+                    ` : ''}
                 </div>
                 
                 <section class="sidepanel_info">
-                <p>${place.vicinity}</p>
-                <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
+                    <p>${place.vicinity}</p>
+                    <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
 
-                <hr class="separator">
+                    <hr class="separator">
 
-                copiar, favoritar, comunicar
+                    copiar, favoritar, comunicar
 
-                <hr class="separator">
+                    <hr class="separator">
 
-                ${place.reviews && place.reviews.length > 0 ? `<h3>Comentários:</h3><ul>${place.reviews.map(review => `<li><strong>${review.author_name}:</strong> ${review.text}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                    ${place.reviews && place.reviews.length > 0 ? `<h3>Comentários:</h3><ul>${place.reviews.map(review => `<li><strong>${review.author_name}:</strong> ${review.text}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
                 </section>
-
             `;
+
+            // Adiciona eventos para navegação entre as imagens
+            if (place.photos && place.photos.length > 1) {
+                document.getElementById('prevImage').addEventListener('click', () => {
+                    currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : place.photos.length - 1;
+                    document.getElementById('placeImage').src = place.photos[currentImageIndex].getUrl({ maxWidth: 500, maxHeight: 300 });
+                });
+
+                document.getElementById('nextImage').addEventListener('click', () => {
+                    currentImageIndex = (currentImageIndex < place.photos.length - 1) ? currentImageIndex + 1 : 0;
+                    document.getElementById('placeImage').src = place.photos[currentImageIndex].getUrl({ maxWidth: 500, maxHeight: 300 });
+                });
+            }
         } else {
             console.error('Erro ao buscar detalhes do local:', status);
             sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
@@ -398,9 +414,19 @@ function showSidePanel(placeId) {
     });
 }
 
+
 function showSidePanelFromLocal(localId) {
     const sidePanel = document.getElementById('sidePanel');
     sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
+    let currentImageIndex = 0;
+
+    // Função para atualizar a exibição da imagem
+    function updateImageDisplay(local) {
+        const imageContainer = document.getElementById('localImage');
+        if (local.imagens && local.imagens.length > 0) {
+            imageContainer.src = `uploads/${local.imagens[currentImageIndex]}`;
+        }
+    }
 
     // Faz uma requisição para buscar as informações detalhadas do local
     fetch(`/getLocalFromId?id=${localId}`)
@@ -408,27 +434,44 @@ function showSidePanelFromLocal(localId) {
         .then(localArray => {
             const local = localArray[0];  // Acessa o primeiro local do array
             document.getElementById('jsonData').innerText = JSON.stringify(localArray, null, 2);
-        
+
             if (local) {
                 sidePanel.innerHTML += `
-                    <div class="sidepanel_card">
-                        ${local.imagens && local.imagens.length > 0 ? `<img src="uploads/${local.imagens[0]}" alt="Foto do local" style="width:100%; ">` : ''}
+                    <div class="sidepanel_card" style="position: relative;">
+                        ${local.imagens && local.imagens.length > 0 ? `<img id="localImage" src="uploads/${local.imagens[0]}" alt="Foto do local" style="width:100%; height: auto;">` : ''}
                         <div class="overlay"></div>
                         <h2>${local.nome}</h2>
+                        ${local.imagens && local.imagens.length > 1 ? `
+                            <span id="prevImage" class="image-nav left-arrow" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10094;</span>
+                            <span id="nextImage" class="image-nav right-arrow" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10095;</span>
+                        ` : ''}
                     </div>
-        
+
                     <section class="sidepanel_info">
                         <p>${local.endereco || 'Endereço não disponível'}</p>
                         <p><strong>Avaliação:</strong> ${local.avaliacao ? getStarRatingHtml(local.avaliacao) : 'Não disponível'}</p>
-        
+
                         <hr class="separator">
                         copiar, favoritar, comunicar
-        
+
                         <hr class="separator">
-        
+
                         ${local.comentarios && local.comentarios.length > 0 ? `<h3>Comentários:</h3><ul>${local.comentarios.map(comment => `<li><strong>${comment.autor}:</strong> ${comment.texto}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
                     </section>
                 `;
+
+                // Adicionar evento de navegação de imagens se houver mais de uma imagem
+                if (local.imagens && local.imagens.length > 1) {
+                    document.getElementById('prevImage').addEventListener('click', () => {
+                        currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : local.imagens.length - 1;
+                        updateImageDisplay(local);
+                    });
+
+                    document.getElementById('nextImage').addEventListener('click', () => {
+                        currentImageIndex = (currentImageIndex < local.imagens.length - 1) ? currentImageIndex + 1 : 0;
+                        updateImageDisplay(local);
+                    });
+                }
             } else {
                 sidePanel.innerHTML += '<p>Local não encontrado.</p>';
             }
@@ -445,6 +488,7 @@ function showSidePanelFromLocal(localId) {
         sidePanel.style.opacity = 1; 
     }, 10); // Um pequeno delay para garantir que a transição seja visível 
 }
+
 
 
 
