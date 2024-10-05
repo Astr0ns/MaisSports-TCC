@@ -428,6 +428,16 @@ function showSidePanelFromLocal(localId) {
         }
     }
 
+    // Função para formatar os comentários
+    function formatComment(comment) {
+        const { cliente, avaliacao_estrela_locais, comentario_local } = comment;
+        const nomeCliente = cliente || "Anônimo";
+        const avaliacao = avaliacao_estrela_locais ? `${avaliacao_estrela_locais} estrelas` : "Sem avaliação";
+        const comentario = comentario_local ? comentario_local : "Sem comentário";
+
+        return `<li><strong>${nomeCliente}:</strong> Avaliação: ${avaliacao} <br> Comentário: ${comentario}</li>`;
+    }
+
     // Faz uma requisição para buscar as informações detalhadas do local
     fetch(`/getLocalFromId?id=${localId}`)
         .then(response => response.json())
@@ -456,7 +466,7 @@ function showSidePanelFromLocal(localId) {
 
                         <hr class="separator">
 
-                        ${local.comentarios && local.comentarios.length > 0 ? `<h3>Comentários:</h3><ul>${local.comentarios.map(comment => `<li><strong>${comment.autor}:</strong> ${comment.texto}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                        ${local.comentarios && local.comentarios.length > 0 ? `<h3>Comentários:</h3><ul>${local.comentarios.map(formatComment).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
                     </section>
                 `;
 
@@ -488,6 +498,7 @@ function showSidePanelFromLocal(localId) {
         sidePanel.style.opacity = 1; 
     }, 10); // Um pequeno delay para garantir que a transição seja visível 
 }
+
 
 
 

@@ -119,7 +119,7 @@ const getLocalFromId = async (req, res) => {
             FROM locais l
             LEFT JOIN imagens i ON l.id = i.fk_local_id 
             LEFT JOIN avaliacao_local a ON l.id = a.fk_id_local 
-            LEFT JOIN usuario_clientes u ON a.fk_id_cliente = u.id  -- Adiciona o JOIN para pegar o nome do cliente
+            LEFT JOIN usuario_clientes u ON a.fk_id_cliente = u.id  
             WHERE l.id = ?
         `;
         const [results] = await connection.query(query, [localId]);
@@ -128,29 +128,40 @@ const getLocalFromId = async (req, res) => {
         const formattedResults = results.reduce((acc, row) => {
             const { nome_local, latitude, longitude, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente } = row;
             const local = acc.find(loc => loc.nome_local === nome_local);
+            
             if (local) {
-                if (nome_imagem) {
+                // Adiciona as imagens, sem duplicar
+                if (nome_imagem && !local.imagens.includes(nome_imagem)) {
                     local.imagens.push(nome_imagem);
                 }
-                // Adiciona comentários e avaliações
-                local.comentarios.push({
-                    comentario_local,
-                    avaliacao_estrela_locais,
-                    cliente: `${nome_cliente} ${sobrenome_cliente}`
-                });
+                
+                // Adiciona os comentários, sem duplicar
+                const comentarioExistente = local.comentarios.find(com => 
+                    com.comentario_local === comentario_local &&
+                    com.cliente === `${nome_cliente} ${sobrenome_cliente}`
+                );
+                
+                if (!comentarioExistente) {
+                    local.comentarios.push({
+                        comentario_local,
+                        avaliacao_estrela_locais,
+                        cliente: `${nome_cliente} ${sobrenome_cliente}`
+                    });
+                }
             } else {
                 acc.push({
                     nome_local,
                     latitude,
                     longitude,
                     imagens: nome_imagem ? [nome_imagem] : [],
-                    comentarios: [{
+                    comentarios: comentario_local ? [{
                         comentario_local,
                         avaliacao_estrela_locais,
                         cliente: `${nome_cliente} ${sobrenome_cliente}`
-                    }]
+                    }] : []
                 });
             }
+
             return acc;
         }, []);
 
@@ -159,7 +170,8 @@ const getLocalFromId = async (req, res) => {
         console.error("Erro ao buscar locais do banco de dados:", error);
         res.status(500).send("Erro ao buscar locais");
     }
-}
+};
+
 
 
 
