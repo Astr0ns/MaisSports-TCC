@@ -203,9 +203,18 @@ button:hover {
     width: auto; /* Mantém a proporção da largura */
     height: 100%; /* Define a altura para 100% do contêiner */
     object-fit: cover; /* Cobre o contêiner sem esticar */
-
-    
 }
+
+.image-nav {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Sombras para dar destaque à seta */
+    padding: 10px;
+}
+
+.image-nav:hover {
+    color: #ffcc00; /* Muda a cor quando o mouse passa por cima */
+}
+
 
 .overlay {
     position: absolute;
