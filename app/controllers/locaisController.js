@@ -71,7 +71,7 @@ const locaisBanco = async (req, res) => {
 
     try {
         const query = `
-            SELECT l.id, l.nome, l.latitude, l.longitude, i.nome_imagem, a.avaliacao_estrela_locais
+            SELECT l.id, l.nome_local, l.latitude, l.longitude, i.nome_imagem, a.avaliacao_estrela_locais
             FROM locais l 
             LEFT JOIN imagens i ON l.id = i.fk_local_id
             LEFT JOIN avaliacao_local a ON l.id = a.fk_id_local  
@@ -81,8 +81,8 @@ const locaisBanco = async (req, res) => {
 
         // Formata os resultados para agrupar imagens por local
         const formattedResults = results.reduce((acc, row) => {
-            const { id, nome, latitude, longitude, nome_imagem, avaliacao_estrela_locais } = row;
-            const local = acc.find(loc => loc.nome === nome);
+            const { id, nome_local, latitude, longitude, nome_imagem, avaliacao_estrela_locais } = row;
+            const local = acc.find(loc => loc.nome_local === nome_local);
             if (local) {
                 if (nome_imagem) {
                     local.imagens.push(nome_imagem);
@@ -90,7 +90,7 @@ const locaisBanco = async (req, res) => {
             } else {
                 acc.push({
                     id,
-                    nome,
+                    nome_local,
                     latitude,
                     longitude,
                     imagens: nome_imagem ? [nome_imagem] : [],
@@ -113,7 +113,7 @@ const getLocalFromId = async (req, res) => {
 
     try {
         const query = `
-            SELECT l.id, l.nome, l.latitude, l.longitude, l.descricao, i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais
+            SELECT l.id, l.nome_local, l.latitude, l.longitude, l.descricao, i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais
             FROM locais l 
             LEFT JOIN imagens i ON l.id = i.fk_local_id 
             LEFT JOIN avaliacao_local a ON l.id = a.fk_id_local 
@@ -123,15 +123,15 @@ const getLocalFromId = async (req, res) => {
 
         // Formata os resultados para agrupar imagens por local
         const formattedResults = results.reduce((acc, row) => {
-            const { nome, latitude, longitude, nome_imagem, comentario_local,avaliacao_estrela_locais } = row;
-            const local = acc.find(loc => loc.nome === nome);
+            const { nome_local, latitude, longitude, nome_imagem, comentario_local,avaliacao_estrela_locais } = row;
+            const local = acc.find(loc => loc.nome_local === nome_local);
             if (local) {
                 if (nome_imagem) {
                     local.imagens.push(nome_imagem);
                 }
             } else {
                 acc.push({
-                    nome,
+                    nome_local,
                     latitude,
                     longitude,
                     imagens: nome_imagem ? [nome_imagem] : [],

@@ -129,7 +129,7 @@ function updateMap() {
                 const marker = new google.maps.Marker({
                     position: { lat: parseFloat(local.latitude), lng: parseFloat(local.longitude) },
                     map: map,
-                    title: local.nome,
+                    title: local.nome_local,
                     icon: {
                         url: 'imagem/LocalizacaoLOCAIS-PNG.png',
                         scaledSize: new google.maps.Size(35, 35)
@@ -258,7 +258,7 @@ function generateContent(place) {
 
 // informações que vem do bancos estilo
 function generateContentFromLocal(local) {
-    let content = `<div class="card_local"><strong>${local.nome}</strong>`;
+    let content = `<div class="card_local"><strong>${local.nome_local}</strong>`;
     content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
 
     if (local.imagens && local.imagens.length > 0) {
@@ -440,7 +440,7 @@ function showSidePanelFromLocal(localId) {
                     <div class="sidepanel_card" style="position: relative;">
                         ${local.imagens && local.imagens.length > 0 ? `<img id="localImage" src="uploads/${local.imagens[0]}" alt="Foto do local" style="width:100%; height: auto;">` : ''}
                         <div class="overlay"></div>
-                        <h2>${local.nome}</h2>
+                        <h2>${local.nome_local}</h2>
                         ${local.imagens && local.imagens.length > 1 ? `
                             <span id="prevImage" class="image-nav left-arrow" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10094;</span>
                             <span id="nextImage" class="image-nav right-arrow" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10095;</span>
