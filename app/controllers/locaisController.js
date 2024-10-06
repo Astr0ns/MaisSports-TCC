@@ -71,7 +71,8 @@ const locaisBanco = async (req, res) => {
 
     try {
         const query = `
-            SELECT l.id, l.nome_local, l.latitude, l.longitude, i.nome_imagem, a.avaliacao_estrela_locais
+            SELECT l.id, l.nome_local, l.latitude, l.longitude, i.nome_imagem, AVG(a.avaliacao_estrela_locais) AS media_avaliacao
+            
             FROM locais l 
             LEFT JOIN imagens i ON l.id = i.fk_local_id
             LEFT JOIN avaliacao_local a ON l.id = a.fk_id_local  
@@ -81,7 +82,7 @@ const locaisBanco = async (req, res) => {
 
         // Formata os resultados para agrupar imagens por local
         const formattedResults = results.reduce((acc, row) => {
-            const { id, nome_local, latitude, longitude, nome_imagem, avaliacao_estrela_locais } = row;
+            const { id, nome_local, latitude, longitude, nome_imagem, media_avaliacao } = row;
             const local = acc.find(loc => loc.nome_local === nome_local);
             if (local) {
                 if (nome_imagem) {
@@ -94,7 +95,8 @@ const locaisBanco = async (req, res) => {
                     latitude,
                     longitude,
                     imagens: nome_imagem ? [nome_imagem] : [],
-                    avaliacao_estrela_locais
+  
+                    media_avaliacao
                 });
             }
             return acc;
@@ -115,18 +117,21 @@ const getLocalFromId = async (req, res) => {
         const query = `
             SELECT l.id, l.nome_local, l.latitude, l.longitude, l.descricao, 
                    i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais,
-                   u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente
+                   u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente,
+                   AVG(a.avaliacao_estrela_locais) AS media_avaliacao  -- Calcula a média das avaliações
             FROM locais l
             LEFT JOIN imagens i ON l.id = i.fk_local_id 
             LEFT JOIN avaliacao_local a ON l.id = a.fk_id_local 
             LEFT JOIN usuario_clientes u ON a.fk_id_cliente = u.id  
             WHERE l.id = ?
+            GROUP BY l.id, i.nome_imagem, a.comentario_local, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
         `;
+
         const [results] = await connection.query(query, [localId]);
 
         // Formata os resultados para agrupar imagens e comentários por local
         const formattedResults = results.reduce((acc, row) => {
-            const { nome_local, latitude, longitude, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente } = row;
+            const { nome_local, latitude, longitude, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
             const local = acc.find(loc => loc.nome_local === nome_local);
             
             if (local) {
@@ -153,6 +158,7 @@ const getLocalFromId = async (req, res) => {
                     nome_local,
                     latitude,
                     longitude,
+                    media_avaliacao, // Inclui a média de avaliação
                     imagens: nome_imagem ? [nome_imagem] : [],
                     comentarios: comentario_local ? [{
                         comentario_local,
@@ -171,6 +177,7 @@ const getLocalFromId = async (req, res) => {
         res.status(500).send("Erro ao buscar locais");
     }
 };
+
 
 
 

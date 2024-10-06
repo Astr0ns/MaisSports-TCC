@@ -376,7 +376,7 @@ function showSidePanel(placeId) {
                 
                 <section class="sidepanel_info">
                     <p>${place.vicinity}</p>
-                    <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
+                    <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating.toFixed(1)) : 'Não disponível'}</p>
 
                     <hr class="separator">
 
@@ -459,7 +459,7 @@ function showSidePanelFromLocal(localId) {
 
                     <section class="sidepanel_info">
                         <p>${local.endereco || 'Endereço não disponível'}</p>
-                        <p><strong>Avaliação:</strong> ${local.avaliacao ? getStarRatingHtml(local.avaliacao) : 'Não disponível'}</p>
+                        <p><strong>Avaliação:</strong> ${local.media_avaliacao ? getStarRatingHtml(local.media_avaliacao) : 'Não disponível'}</p>
 
                         <hr class="separator">
                         copiar, favoritar, comunicar
