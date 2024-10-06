@@ -447,8 +447,6 @@ function showSidePanel(placeId) {
 
                     <div class="sidePanelAvaliar" id="sidePanelAvaliar">
                         <form action="/adicionarLocais" method="post" enctype="multipart/form-data">
-                            <label for="nome_local">Nome do Local:</label>
-                            <input type="text" name="nome_local" id="nome_local" required>
 
                             <div class="rating" id="rating">
                                 <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
@@ -597,12 +595,9 @@ function toggleSidePanelAvaliacao() {
     if (sidePanelAvaliacao.style.display === 'none' || sidePanelAvaliacao.style.display === '') {
         sidePanelAvaliacao.style.display = 'block';
         avaliarButton.style.color = '#d12089';
-            avaliarButton.classList.add('hover-effect');
     } else {
         sidePanelAvaliacao.style.display = 'none';
         avaliarButton.style.color = '#333';
-
-        avaliarButton.classList.remove('hover-effect');
 
     }
 }
