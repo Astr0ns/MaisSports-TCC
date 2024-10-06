@@ -292,14 +292,15 @@ function getStarRatingHtml(rating) {
 
     for (let i = 1; i <= maxStars; i++) {
         if (i <= rating) {
-            starsHtml += '★'; // Estrela preenchida
+            starsHtml += '<i class="fas fa-star" style="color: #d12089;"></i>'; // Estrela preenchida
         } else {
-            starsHtml += '☆'; // Estrela vazia
+            starsHtml += '<i class="far fa-star" style="color: #d12089;"></i>'; // Estrela vazia
         }
     }
 
     return starsHtml;
 }
+
 
 
 
@@ -376,11 +377,15 @@ function showSidePanel(placeId) {
                 
                 <section class="sidepanel_info">
                     <p>${place.vicinity}</p>
-                    <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
+                    <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'} <span>${place.rating ? place.rating.toFixed(1) : ''}</span></p>
 
                     <hr class="separator">
 
-                    copiar, favoritar, comunicar
+                    <div class="sidePanelInteracao">
+                    <p><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
+                    <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
+                    <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
+                    </div>
 
                     <hr class="separator">
 

@@ -239,6 +239,24 @@ button:hover {
     padding: 0 20px;
 }
 
+.sidePanelInteracao{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+.sidePanelInteracao p{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 0.7; /* Reduz o espaçamento entre ícone e texto */
+}
+
+.sidePanelInteracao p:hover{
+    cursor: pointer;
+    color: var(--cor-fundo2);
+}
+
 /* linha horizontal */
 .separator {
     border: none;
