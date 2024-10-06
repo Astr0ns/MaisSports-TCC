@@ -271,8 +271,8 @@ function generateContentFromLocal(local) {
         content += `<p class="break">${local.endereco}</p>`;
     }
 
-    if (local.avaliacao) {
-        content += `<p>Avaliação: ${getStarRatingHtml(local.avaliacao)}</p>`;
+    if (local.media_avaliacao) {
+        content += `<p>Avaliação: ${getStarRatingHtml(local.media_avaliacao)}</p>`;
     } else {
         content += `<p>Avaliação não disponível</p>`;
     }
@@ -376,7 +376,7 @@ function showSidePanel(placeId) {
                 
                 <section class="sidepanel_info">
                     <p>${place.vicinity}</p>
-                    <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating.toFixed(1)) : 'Não disponível'}</p>
+                    <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
 
                     <hr class="separator">
 
