@@ -355,6 +355,11 @@ button:hover {
     
 }
 
+.fechar_newLocal:hover { 
+    background-color: nonde; 
+}
+
+
 .fechar_newLocal i {
     margin: 0;
 }
