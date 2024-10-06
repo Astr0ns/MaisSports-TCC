@@ -35,8 +35,10 @@ html, body {
     height: 100%; 
     margin: 0; 
     font-family: Arial, sans-serif; 
-    background-color: #f4f4f9; 
+    background-color: #ebebeb; 
     color: #333; 
+    width: 100vw;
+    height: 100%;
 }
 
 
@@ -55,8 +57,16 @@ h1{
     display: none;
 }
 
+
+#filter{
+    padding: 20px 40px 20px 30px;
+}
+
+.h2_filtros{
+    margin-left: 10px;
+}
+
 #filter, #addressSearch { 
-    padding: 20px; 
     box-sizing: border-box; 
     background-color: #ffffff; 
     border-radius: 8px; 
@@ -65,9 +75,10 @@ h1{
 } 
 
 #addressSearch { 
-    width: 65%; 
+    width: 55%; 
     display: block; 
     margin: 20px auto; 
+    padding: 20px;
 } 
 
 #filter label, #addressSearch label { 
