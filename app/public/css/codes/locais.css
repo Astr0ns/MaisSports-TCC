@@ -17,7 +17,7 @@
 
 /* Definindo o tamanho do mapa */ 
 #map { 
-    height: 800px; 
+    height: 70vh; 
     width: calc(100% - 300px); /* Ajuste o width do mapa para deixar espaço para a aba lateral */ 
     border-radius: 8px; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
@@ -422,7 +422,7 @@ button:hover {
 
 /* Estilo padrão para o mapa */
 #map {
-    height: 800px; /* altura padrão */
+    /* height: 800px; */
     width: 100%;   /* largura padrão */
 }
 
