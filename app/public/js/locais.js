@@ -583,6 +583,7 @@ function handleMapClick(event) {
 
     // Exibe as coordenadas selecionadas
     document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`; // Corrige a sintaxe para a string
+    document.getElementById('selectedCoordinatesUser').textContent = `localização selecionada salva`; // Corrige a sintaxe para a string
 
     // Atualiza o método de localização
     locationMethod = 'map'; // Atualiza o método de localização
@@ -597,7 +598,7 @@ function handleMapClick(event) {
 // habilita o clique no mapa
 function enableMapSelection() {
     mapSelectionEnabled = true; // Habilita a seleção
-    document.getElementById('selectedCoordinates').textContent = "Clique no mapa para escolher um local.";
+    document.getElementById('selectedCoordinatesUser').textContent = "Clique no mapa para escolher um local.";
 }
 
 
@@ -609,7 +610,7 @@ function getCurrentLocation() {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-            document.getElementById('selectedCoordinates').textContent = "Localização salva";
+            document.getElementById('selectedCoordinatesUser').textContent = "Localização salva";
             map.setCenter(location);
             if (userMarker) userMarker.setPosition(location);
             locationMethod = 'current'; // Atualiza o método de localização

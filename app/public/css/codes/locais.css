@@ -356,7 +356,8 @@ button:hover {
 }
 
 .fechar_newLocal:hover { 
-    background-color: none; 
+    background-color: transparent; 
+    color: #868686;
 }
 
 
@@ -366,6 +367,10 @@ button:hover {
 
 
 .userButtonMobile{
+    display: none;
+}
+
+#selectedCoordinates{
     display: none;
 }
 
