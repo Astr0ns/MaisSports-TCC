@@ -609,6 +609,7 @@ function getCurrentLocation() {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
+            document.getElementById('selectedCoordinates').textContent = "Localização salva";
             map.setCenter(location);
             if (userMarker) userMarker.setPosition(location);
             locationMethod = 'current'; // Atualiza o método de localização
