@@ -432,7 +432,7 @@ function showSidePanelFromLocal(localId) {
     function formatComment(comment) {
         const { cliente, avaliacao_estrela_locais, comentario_local } = comment;
         const nomeCliente = cliente || "Anônimo";
-        const avaliacao = avaliacao_estrela_locais ? `${avaliacao_estrela_locais} estrelas` : "Sem avaliação";
+        const avaliacao = avaliacao_estrela_locais ? `${getStarRatingHtml(avaliacao_estrela_locais)}` : "Sem avaliação";
         const comentario = comentario_local ? comentario_local : "Sem comentário";
 
         return `<li><strong>${nomeCliente}:</strong> Avaliação: ${avaliacao} <br> Comentário: ${comentario}</li>`;
@@ -459,7 +459,7 @@ function showSidePanelFromLocal(localId) {
 
                     <section class="sidepanel_info">
                         <p>${local.endereco || 'Endereço não disponível'}</p>
-                        <p><strong>Avaliação:</strong> ${local.media_avaliacao ? getStarRatingHtml(local.media_avaliacao) : 'Não disponível'}</p>
+                        <p><strong>Avaliação:</strong> ${local.media_avaliacao ? getStarRatingHtml(local.media_avaliacao) : 'Não disponível'}<span>${local.media_avaliacao ? Number(local.media_avaliacao).toFixed(1) : ''}</span></p>
 
                         <hr class="separator">
                         copiar, favoritar, comunicar
