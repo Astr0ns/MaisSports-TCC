@@ -440,7 +440,7 @@ function showSidePanel(placeId) {
                     <hr class="separator">
 
                     <div class="sidePanelInteracao">
-                        <p onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
+                        <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
                         <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
                         <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
                     </div>
@@ -593,10 +593,17 @@ function showSidePanelFromLocal(localId) {
 
 function toggleSidePanelAvaliacao() {
     const sidePanelAvaliacao = document.getElementById('sidePanelAvaliar');
+    const avaliarButton = document.getElementById('avaliarButton');
     if (sidePanelAvaliacao.style.display === 'none' || sidePanelAvaliacao.style.display === '') {
         sidePanelAvaliacao.style.display = 'block';
+        avaliarButton.style.color = '#d12089';
+            avaliarButton.classList.add('hover-effect');
     } else {
         sidePanelAvaliacao.style.display = 'none';
+        avaliarButton.style.color = '#333';
+
+        avaliarButton.classList.remove('hover-effect');
+
     }
 }
 
