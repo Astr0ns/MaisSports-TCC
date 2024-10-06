@@ -257,6 +257,10 @@ button:hover {
     color: var(--cor-fundo2);
 }
 
+.sidePanelAvaliar{
+    display: none;
+}
+
 
 .rating .star {
     cursor: pointer; /* Muda o cursor para indicar que é clicável */
