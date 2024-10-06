@@ -302,6 +302,64 @@ function getStarRatingHtml(rating) {
 }
 
 
+// começa avaliação estrela pelo usuario
+function selectRating(selectedStar) {
+    const ratingValue = selectedStar.getAttribute('data-value');
+    const stars = document.querySelectorAll('.rating .star');
+    const ratingSelect = document.getElementById('ratingSelect');
+
+    // Preenche as estrelas até a estrela selecionada
+    stars.forEach(star => {
+        const icon = star.querySelector('i');
+        if (parseInt(star.getAttribute('data-value')) <= ratingValue) {
+            icon.classList.remove('far'); // Remove a classe 'far' para a estrela preenchida
+            icon.classList.add('fas');    // Adiciona a classe 'fas' para a estrela preenchida
+        } else {
+            icon.classList.remove('fas'); // Remove a classe 'fas' para a estrela vazia
+            icon.classList.add('far');     // Adiciona a classe 'far' para a estrela vazia
+        }
+    });
+
+    ratingSelect.value = ratingValue; // Atualiza o valor no campo oculto
+}
+
+function hoverRating(hoveredStar) {
+    const hoverValue = hoveredStar.getAttribute('data-value');
+    const stars = document.querySelectorAll('.rating .star');
+
+    // Preenche as estrelas até a estrela que está sendo passada o mouse
+    stars.forEach(star => {
+        const icon = star.querySelector('i');
+        if (parseInt(star.getAttribute('data-value')) <= hoverValue) {
+            icon.classList.remove('far'); // Remove a classe 'far' para a estrela em hover
+            icon.classList.add('fas');    // Adiciona a classe 'fas' para a estrela em hover
+        } else {
+            icon.classList.remove('fas'); // Remove a classe 'fas' para a estrela não em hover
+            icon.classList.add('far');     // Adiciona a classe 'far' para a estrela não em hover
+        }
+    });
+}
+
+function resetRating() {
+    const stars = document.querySelectorAll('.rating .star');
+    const ratingValue = document.getElementById('ratingSelect').value;
+
+    // Retorna as estrelas à sua classificação original
+    stars.forEach(star => {
+        const icon = star.querySelector('i');
+        if (parseInt(star.getAttribute('data-value')) <= ratingValue) {
+            icon.classList.remove('far');
+            icon.classList.add('fas');
+        } else {
+            icon.classList.remove('fas');
+            icon.classList.add('far');
+        }
+    });
+}
+
+
+
+
 
 
 
@@ -382,10 +440,34 @@ function showSidePanel(placeId) {
                     <hr class="separator">
 
                     <div class="sidePanelInteracao">
-                    <p><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
-                    <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
-                    <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
+                        <p><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
+                        <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
+                        <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
                     </div>
+
+                    <div class="sidePanelAvaliacao">
+                        <form action="/adicionarLocais" method="post" enctype="multipart/form-data">
+                        <label for="nome_local">Nome do Local:</label>
+                        <input type="text" name="nome_local" id="nome_local" required>
+
+                        <div class="rating" id="rating">
+    <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+    <span class="star" data-value="2" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+    <span class="star" data-value="3" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+    <span class="star" data-value="4" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+    <span class="star" data-value="5" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+</div>
+
+<!-- Campo oculto para armazenar o valor da avaliação -->
+<input type="hidden" name="rating" id="ratingSelect" value="">
+
+                        <section class="grp-form">
+                            <label for="desc_local">Descrição:</label>
+                            <input type="text" name="descricao" id="desc_local" required>
+                        </section>
+
+                        <button type="submit">Adicionar Local</button>
+                    </form>
 
                     <hr class="separator">
 

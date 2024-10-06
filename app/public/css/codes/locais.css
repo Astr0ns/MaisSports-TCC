@@ -257,6 +257,16 @@ button:hover {
     color: var(--cor-fundo2);
 }
 
+
+.rating .star {
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+    color: #d12089; /* Cor padrão das estrelas não selecionadas */
+    transition: color 0.2s; /* Transição suave ao mudar a cor */
+}
+
+
+
+
 /* linha horizontal */
 .separator {
     border: none;
