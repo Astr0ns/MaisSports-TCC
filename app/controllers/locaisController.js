@@ -91,7 +91,7 @@ const avaliarLocais = async (req, res) => {
         );
 
         // 3. Adiciona uma mensagem de sucesso e redireciona
-        req.flash('success_msg', 'Avaliação adicionada com sucesso!');
+        req.flash('success_msg', 'Avaliação adicionada com sucesso');
         res.redirect('/locais-esportivos');
 
     } catch (error) {
