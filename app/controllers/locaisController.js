@@ -66,6 +66,7 @@ const adicionarLocais = async (req, res) => {
 
 const avaliarLocais = async (req, res) => {
     const { placeId, rating, comentario, email } = req.body;
+    console.log('req.body:', req.body);
 
     try {
         // 1. Busca o ID do cliente (usuario) baseado no email

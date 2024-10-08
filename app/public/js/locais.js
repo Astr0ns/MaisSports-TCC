@@ -448,7 +448,7 @@ function showSidePanel(placeId) {
                     </div>
 
                     <div class="sidePanelAvaliar" id="sidePanelAvaliar">
-                        <form action="/avaliarLocais" method="post" enctype="multipart/form-data">
+                        <form action="/avaliarLocais" method="post" enctype="application/x-www-form-urlencoded">
 
                             <input type="hidden" name="placeId" id="placeId" value="${placeId}">
 
