@@ -6,6 +6,7 @@ const { removeImg } = require("../util/removeImg");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const https = require('https');
 const upload = require('../models/upload-middleware');
+const connection = require("../../config/pool_conexoes");
 
 
 
@@ -43,15 +44,21 @@ const registrarEmpr = async (req, res) => {
     // Verificar se as senhas conferem
     if (senha !== cSenha) {
         req.flash('error_msg', 'As senhas não conferem.');
-        return res.redirect('/login-empr'); // Redireciona para o formulário de registro
+        return res.redirect('/regs-empr'); // Redireciona para o formulário de registro
     }
 
     try {
         // Verificar se o email já existe
         const [emailExist] = await connection.query("SELECT id FROM empresas WHERE email = ?", [email]);
+        // Verificar se o CNPJ já existe
+        const [cnpjExist] = await connection.query("SELECT id FROM empresas WHERE cnpj = ?", [cnpj]);
 
         if (emailExist.length > 0) {
             req.flash('error_msg', 'Email corporativo em uso.');
+            return res.redirect('/regs-empr'); // Redireciona para o formulário de registro
+        }
+        if (cnpjExist.length > 0) {
+            req.flash('error_msg', 'CNPJ corporativo em uso.');
             return res.redirect('/regs-empr'); // Redireciona para o formulário de registro
         }
 
@@ -59,10 +66,10 @@ const registrarEmpr = async (req, res) => {
         const hash = await bcrypt.hash(senha, 10);
 
         // Inserir o novo usuário na base de dados
-        await connection.query("INSERT INTO empresas (nome, cnpj, email, senha, tipo, cep, numero) VALUES (?, ?, ?, ?, 'empresa', '00000000', '0000')", [nome, cnpj, email, hash]);
+        await connection.query("INSERT INTO empresas (nome, cnpj, email, senha, tipo, cep, logradouro) VALUES (?, ?, ?, ?, 'empresa', '00000000', '0000')", [nome, cnpj, email, hash]);
 
-        req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para o "Dashboard" em breve.');
-        res.redirect('/regs-empr?success=true');
+        req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para a página de Login em breve.');
+        res.redirect('/regs-empr?successEmpr=true');
         // Redireciona para a página de registro, indicando sucesso
 
     } catch (error) {
@@ -93,34 +100,39 @@ const logarEmpr = async (req, res) => {
     try {
         const [accounts] = await connection.query("SELECT * FROM empresas WHERE email = ?", [email]);
 
+        
         if (accounts.length > 0) {
             const account = accounts[0];
-
-            // Verificar se a senha corresponde
-            const passwordMatch = bcrypt.compareSync(senha, account.senha);
-
+            const passwordMatch = await bcrypt.compare(senha, account.senha);
+        
+            console.log('Senha fornecida:', senha);
+            console.log('Hash armazenado:', account.senha);
+            console.log('Senha corresponde:', passwordMatch);
+        
             if (!passwordMatch) {
-                req.flash('msg', "As senhas não conferem");
-                return res.redirect('/login-empr'); // Redireciona para a página de login se as senhas não conferem
+                req.flash('error_msg', "As senhas não conferem");
+                return res.redirect('/login-empr');
             }
+        
+        
 
             // Armazenar informações do usuário na sessão
             req.session.email = account.email;
             req.session.nome = account.nome;
             req.session.cep = account.cep;
             req.session.numero = account.numero;
+            req.session.logado = true;
 
             res.render('pages/empresa', {
                 userId: req.session.userId,
                 logado: req.session.logado,
                 email: req.session.email,
                 nome: req.session.nome,
-                mensage: req.flash('msg', "logado"),
+                mensage: req.flash('success_msg', "logado"),
             });
 
-            console.log(re.flash('msg'))
         } else {
-            req.flash('msg', "Empresa não encontrada");
+            req.flash('error_msg', "Empresa não encontrada");
             res.redirect('/login-empr');
         }
 
