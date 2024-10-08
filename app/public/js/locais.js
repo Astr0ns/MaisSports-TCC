@@ -15,6 +15,7 @@ let locationMethod = ''; // 'current' ou 'map'
 
 
 
+
 function initMap() { 
     geocoder = new google.maps.Geocoder(); 
     autocomplete = new google.maps.places.Autocomplete( 
@@ -414,6 +415,7 @@ function showSidePanel(placeId) {
     const sidePanel = document.getElementById('sidePanel');
     sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
     let currentImageIndex = 0; // Index para controlar a imagem atual
+    let h2Email = document.querySelector('.userEmail');
 
     const request = {
         placeId: placeId,
@@ -446,7 +448,13 @@ function showSidePanel(placeId) {
                     </div>
 
                     <div class="sidePanelAvaliar" id="sidePanelAvaliar">
-                        <form action="/adicionarLocais" method="post" enctype="multipart/form-data">
+                        <form action="/avaliarLocais" method="post" enctype="multipart/form-data">
+
+                            <input type="hidden" name="placeId" id="placeId" value="${placeId}">
+
+                            <!-- Campo oculto para armazenar o email do usuário -->
+                            <input type="hidden" name="email" id="email" value="${email}"> <!-- Substituir por email dinâmico -->
+                            <h3>${email}</h3>
 
                             <div class="rating" id="rating">
                                 <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
@@ -461,7 +469,7 @@ function showSidePanel(placeId) {
 
                             <section class="grp-form">
                                 <label for="desc_local">Descrição:</label>
-                                <input type="text" name="descricao" id="desc_local" required>
+                                <input type="text" name="comentario" id="addComentario" required>
                             </section>
 
                             <button type="submit">Adicionar Local</button>

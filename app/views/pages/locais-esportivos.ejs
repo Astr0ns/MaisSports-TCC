@@ -35,7 +35,7 @@
     <%- include("../partial/header-home", { email: email }) %>
     <h1 id="jsonData"></h1>
     <h1 class="desativar_mobile">LOCALIZAR LOCAIS</h1>
-    <!-- <h2><%= nome %></h2> -->
+    <h2 class="userEmail"></h2>
     
 
     <div id="addressSearch"> 
@@ -132,4 +132,8 @@
 
     <%- include("../partial/footer") %>
 </body> 
+<script>
+    // Definindo a variável email no JavaScript com o valor vindo do backend
+    const email = "<%= email %>";
+</script>
 </html> 

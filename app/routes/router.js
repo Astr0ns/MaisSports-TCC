@@ -38,6 +38,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).array('imagens', 4);
 
 
+function verificarLogado(req, res, next) {
+    if (req.session.email) {
+        return next(); // O usuário está autenticado, prossiga
+    } else {
+        res.redirect('/login'); // Redirecione para a página de login
+    }
+}
 
 
 const {
@@ -82,6 +89,12 @@ router.post("/adicionarLocais",upload, locaisController.adicionarLocais, async f
 });
 
 
+router.post("/avaliarLocais", verificarLogado, locaisController.avaliarLocais, async function (req, res) {
+
+});
+
+
+
 
 
 
@@ -105,9 +118,10 @@ router.get("/login-empr", function (req, res) {
 router.get("/locais-esportivos", async function (req, res) {
     var email = req.session.email;
     var nome = req.session.nome;
+    
 
     
-    res.render("pages/locais-esportivos", {nome:nome, email: email });
+    res.render("pages/locais-esportivos", {nome:nome, email: email});
 })
 
 router.get("/locaisBanco", locaisController.locaisBanco, async function (req, res){
