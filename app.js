@@ -34,6 +34,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/uploads', express.static('uploads'));
+
+
 
 var router = require("./app/routes/router");
 app.use("/", router);
@@ -42,3 +45,5 @@ app.use("/", router);
 app.listen(port, () => {
   console.log(`Servidor ouvindo na porta ${port}\nhttp://localhost:${port}`);
 });
+
+

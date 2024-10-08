@@ -10,6 +10,8 @@ let autocomplete;
 let sidePanelContent = ''; 
 let mapSelectionEnabled = false;
 let currentMarker = null;
+let locationMethod = ''; // 'current' ou 'map'
+
 
 
 
@@ -112,15 +114,22 @@ function updateMap() {
     const selectedType = getSelectedType();
     if (!selectedType) return;
 
-    // Adiciona os locais do banco de dados
-    fetch('/locaisBanco')
-        .then(response => response.json())
+    // Adiciona os locais do banco de dados, filtrando pela categoria selecionada
+    fetch(`/locaisBanco?categoria=${selectedType}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(locaisBanco => {
+            document.getElementById('jsonData').innerText = JSON.stringify(locaisBanco, null, 2);
+
             locaisBanco.forEach(local => {
                 const marker = new google.maps.Marker({
                     position: { lat: parseFloat(local.latitude), lng: parseFloat(local.longitude) },
                     map: map,
-                    title: local.nome,
+                    title: local.nome_local,
                     icon: {
                         url: 'imagem/LocalizacaoLOCAIS-PNG.png',
                         scaledSize: new google.maps.Size(35, 35)
@@ -128,14 +137,17 @@ function updateMap() {
                 });
 
                 google.maps.event.addListener(marker, 'click', () => {
-                    infowindow.setContent(`<strong>${local.nome}</strong>`);
+                    infowindow.setContent(generateContentFromLocal(local)); // Use a nova função para locais do banco
                     infowindow.open(map, marker);
                 });
 
                 markers.push(marker);
             });
         })
-        .catch(error => console.error('Erro ao buscar locais do banco:', error));
+        .catch(error => {
+            console.error('Erro ao buscar locais do banco:', error);
+            document.getElementById('jsonData').innerText = 'Erro ao buscar locais do banco.';
+        });
 
     // Busca os locais do Google Maps
     const request = {
@@ -173,6 +185,9 @@ function updateMap() {
 
 
 
+
+
+
 function clearMarkers() { 
     for (let i = 0; i < markers.length; i++) { 
         markers[i].setMap(null); 
@@ -188,30 +203,34 @@ function getSelectedType() {
 } 
 
 
-
 function getKeywords(type) { 
     switch (type) { 
         case 'gym': 
-            return ['gym', 'fitness center']; 
+            return ['gym', 'fitness center', 'academia']; 
         case 'football': 
-            return ['soccer stadium', 'football stadium', 'soccer', 'futsal', 'futebol', 'quadra', 'society', 'campo de futebol']; 
+            return ['campo', 'soccer', 'futsal', 'futebol', 'quadra', 'society', 'campo de futebol']; 
         case 'skatepark': 
             return ['skate park', 'skateboarding park', 'pista', 'skate']; 
         case 'bicycle': 
             return ['bike park', 'bicycle park']; 
         case 'tennis': 
-            return ['tennis court', 'tennis stadium', 'quadra']; 
+            return ['tennis court', 'quadra de tênis', 'tennis', 'tenis', 'club de tênis', 'clube de tênis', 'tennis stadium', 'campo de tênis']; 
         case 'basketball': 
             return ['court', 'basketball stadium', 'quadra', 'basquete']; 
         case 'park': 
             return ['park', 'parque']; 
+        case 'volleyball': 
+            return ['volleyball court', 'volleyball', 'volei', 'voleibol']; 
+        case 'swimming': 
+            return ['swimming pool', 'pool', 'swimming']; 
         default: 
             return []; 
     } 
-} 
+}
 
 
 
+// card pin google maps
 function generateContent(place) {
     let content = `<div class="card_local"><strong>${place.name}</strong>`;
     content += `<p>recomendado por: <span class="google_color">Google Maps</span></p>`;
@@ -237,6 +256,34 @@ function generateContent(place) {
     return content;
 }
 
+// informações que vem do bancos estilo
+function generateContentFromLocal(local) {
+    let content = `<div class="card_local"><strong>${local.nome_local}</strong>`;
+    content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
+
+    if (local.imagens && local.imagens.length > 0) {
+        content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
+    } else {
+        content += `<p>Imagem não disponível</p>`;
+    }
+
+    if (local.endereco) {
+        content += `<p class="break">${local.endereco}</p>`;
+    }
+
+    if (local.media_avaliacao) {
+        content += `<p>Avaliação: ${getStarRatingHtml(local.media_avaliacao)}</p>`;
+    } else {
+        content += `<p>Avaliação não disponível</p>`;
+    }
+
+    // Chama a função showSidePanelFromLocal passando o ID do local do banco
+    content += `<button class="saiba_mais" onclick="showSidePanelFromLocal('${local.id}')">Saiba Mais</button></div>`;
+    return content;
+}
+
+
+
 
 // estrela na avaliação
 function getStarRatingHtml(rating) {
@@ -245,14 +292,73 @@ function getStarRatingHtml(rating) {
 
     for (let i = 1; i <= maxStars; i++) {
         if (i <= rating) {
-            starsHtml += '★'; // Estrela preenchida
+            starsHtml += '<i class="fas fa-star" style="color: #d12089;"></i>'; // Estrela preenchida
         } else {
-            starsHtml += '☆'; // Estrela vazia
+            starsHtml += '<i class="far fa-star" style="color: #d12089;"></i>'; // Estrela vazia
         }
     }
 
     return starsHtml;
 }
+
+
+// começa avaliação estrela pelo usuario
+function selectRating(selectedStar) {
+    const ratingValue = selectedStar.getAttribute('data-value');
+    const stars = document.querySelectorAll('.rating .star');
+    const ratingSelect = document.getElementById('ratingSelect');
+
+    // Preenche as estrelas até a estrela selecionada
+    stars.forEach(star => {
+        const icon = star.querySelector('i');
+        if (parseInt(star.getAttribute('data-value')) <= ratingValue) {
+            icon.classList.remove('far'); // Remove a classe 'far' para a estrela preenchida
+            icon.classList.add('fas');    // Adiciona a classe 'fas' para a estrela preenchida
+        } else {
+            icon.classList.remove('fas'); // Remove a classe 'fas' para a estrela vazia
+            icon.classList.add('far');     // Adiciona a classe 'far' para a estrela vazia
+        }
+    });
+
+    ratingSelect.value = ratingValue; // Atualiza o valor no campo oculto
+}
+
+function hoverRating(hoveredStar) {
+    const hoverValue = hoveredStar.getAttribute('data-value');
+    const stars = document.querySelectorAll('.rating .star');
+
+    // Preenche as estrelas até a estrela que está sendo passada o mouse
+    stars.forEach(star => {
+        const icon = star.querySelector('i');
+        if (parseInt(star.getAttribute('data-value')) <= hoverValue) {
+            icon.classList.remove('far'); // Remove a classe 'far' para a estrela em hover
+            icon.classList.add('fas');    // Adiciona a classe 'fas' para a estrela em hover
+        } else {
+            icon.classList.remove('fas'); // Remove a classe 'fas' para a estrela não em hover
+            icon.classList.add('far');     // Adiciona a classe 'far' para a estrela não em hover
+        }
+    });
+}
+
+function resetRating() {
+    const stars = document.querySelectorAll('.rating .star');
+    const ratingValue = document.getElementById('ratingSelect').value;
+
+    // Retorna as estrelas à sua classificação original
+    stars.forEach(star => {
+        const icon = star.querySelector('i');
+        if (parseInt(star.getAttribute('data-value')) <= ratingValue) {
+            icon.classList.remove('far');
+            icon.classList.add('fas');
+        } else {
+            icon.classList.remove('fas');
+            icon.classList.add('far');
+        }
+    });
+}
+
+
+
 
 
 
@@ -306,7 +412,8 @@ function toggleFilters() {
 //mostrar mais informações do local quando clica em saiba mais
 function showSidePanel(placeId) {
     const sidePanel = document.getElementById('sidePanel');
-    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="position: absolute; top: 10px; right: 10px;">×</button>`;
+    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
+    let currentImageIndex = 0; // Index para controlar a imagem atual
 
     const request = {
         placeId: placeId,
@@ -316,12 +423,69 @@ function showSidePanel(placeId) {
     service.getDetails(request, (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             sidePanel.innerHTML += `
-                <h2>${place.name}</h2>
-                ${place.photos && place.photos.length > 0 ? `<img src="${place.photos[0].getUrl({ maxWidth: 500, maxHeight: 300 })}" alt="Foto do local" style="width:100%; height:auto;">` : ''}
-                <p>${place.vicinity}</p>
-                <p>Avaliação: ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'}</p>
-                ${place.reviews && place.reviews.length > 0 ? `<h3>Comentários:</h3><ul>${place.reviews.map(review => `<li><strong>${review.author_name}:</strong> ${review.text}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                <div class="sidepanel_card" style="position: relative;">
+                    ${place.photos && place.photos.length > 0 ? `<img id="placeImage" src="${place.photos[0].getUrl({ maxWidth: 500, maxHeight: 300 })}" alt="Foto do local" style="width:100%; height:auto;">` : ''}
+                    <div class="overlay"></div>
+                    <h2>${place.name}</h2>
+                    ${place.photos && place.photos.length > 1 ? `
+                        <span id="prevImage" class="image-nav left-arrow" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10094;</span>
+                        <span id="nextImage" class="image-nav right-arrow" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10095;</span>
+                    ` : ''}
+                </div>
+                
+                <section class="sidepanel_info">
+                    <p>${place.vicinity}</p>
+                    <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'} <span>${place.rating ? place.rating.toFixed(1) : ''}</span></p>
+
+                    <hr class="separator">
+
+                    <div class="sidePanelInteracao">
+                        <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
+                        <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
+                        <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
+                    </div>
+
+                    <div class="sidePanelAvaliar" id="sidePanelAvaliar">
+                        <form action="/adicionarLocais" method="post" enctype="multipart/form-data">
+
+                            <div class="rating" id="rating">
+                                <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                <span class="star" data-value="2" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                <span class="star" data-value="3" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                <span class="star" data-value="4" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                <span class="star" data-value="5" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                            </div>
+
+                            <!-- Campo oculto para armazenar o valor da avaliação -->
+                            <input type="hidden" name="rating" id="ratingSelect" value="">
+
+                            <section class="grp-form">
+                                <label for="desc_local">Descrição:</label>
+                                <input type="text" name="descricao" id="desc_local" required>
+                            </section>
+
+                            <button type="submit">Adicionar Local</button>
+                        </form>
+                    </div>
+
+                    <hr class="separator">
+
+                    ${place.reviews && place.reviews.length > 0 ? `<h3>Comentários:</h3><ul>${place.reviews.map(review => `<li><strong>${review.author_name}:</strong> ${review.text}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                </section>
             `;
+
+            // Adiciona eventos para navegação entre as imagens
+            if (place.photos && place.photos.length > 1) {
+                document.getElementById('prevImage').addEventListener('click', () => {
+                    currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : place.photos.length - 1;
+                    document.getElementById('placeImage').src = place.photos[currentImageIndex].getUrl({ maxWidth: 500, maxHeight: 300 });
+                });
+
+                document.getElementById('nextImage').addEventListener('click', () => {
+                    currentImageIndex = (currentImageIndex < place.photos.length - 1) ? currentImageIndex + 1 : 0;
+                    document.getElementById('placeImage').src = place.photos[currentImageIndex].getUrl({ maxWidth: 500, maxHeight: 300 });
+                });
+            }
         } else {
             console.error('Erro ao buscar detalhes do local:', status);
             sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
@@ -334,6 +498,108 @@ function showSidePanel(placeId) {
             sidePanel.style.opacity = 1; 
         }, 10); // Um pequeno delay para garantir que a transição seja visível 
     });
+}
+
+
+function showSidePanelFromLocal(localId) {
+    const sidePanel = document.getElementById('sidePanel');
+    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
+    let currentImageIndex = 0;
+
+    // Função para atualizar a exibição da imagem
+    function updateImageDisplay(local) {
+        const imageContainer = document.getElementById('localImage');
+        if (local.imagens && local.imagens.length > 0) {
+            imageContainer.src = `uploads/${local.imagens[currentImageIndex]}`;
+        }
+    }
+
+    // Função para formatar os comentários
+    function formatComment(comment) {
+        const { cliente, avaliacao_estrela_locais, comentario_local } = comment;
+        const nomeCliente = cliente || "Anônimo";
+        const avaliacao = avaliacao_estrela_locais ? `${getStarRatingHtml(avaliacao_estrela_locais)}` : "Sem avaliação";
+        const comentario = comentario_local ? comentario_local : "Sem comentário";
+
+        return `<li><strong>${nomeCliente}:</strong> Avaliação: ${avaliacao} <br> Comentário: ${comentario}</li>`;
+    }
+
+    // Faz uma requisição para buscar as informações detalhadas do local
+    fetch(`/getLocalFromId?id=${localId}`)
+        .then(response => response.json())
+        .then(localArray => {
+            const local = localArray[0];  // Acessa o primeiro local do array
+            document.getElementById('jsonData').innerText = JSON.stringify(localArray, null, 2);
+
+            if (local) {
+                sidePanel.innerHTML += `
+                    <div class="sidepanel_card" style="position: relative;">
+                        ${local.imagens && local.imagens.length > 0 ? `<img id="localImage" src="uploads/${local.imagens[0]}" alt="Foto do local" style="width:100%; height: auto;">` : ''}
+                        <div class="overlay"></div>
+                        <h2>${local.nome_local}</h2>
+                        ${local.imagens && local.imagens.length > 1 ? `
+                            <span id="prevImage" class="image-nav left-arrow" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10094;</span>
+                            <span id="nextImage" class="image-nav right-arrow" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10095;</span>
+                        ` : ''}
+                    </div>
+
+                    <section class="sidepanel_info">
+                        <p>${local.endereco || 'Endereço não disponível'}</p>
+                        <p><strong>Avaliação:</strong> ${local.media_avaliacao ? getStarRatingHtml(local.media_avaliacao) : 'Não disponível'}<span>${local.media_avaliacao ? Number(local.media_avaliacao).toFixed(1) : ''}</span></p>
+
+                        <hr class="separator">
+                        copiar, favoritar, comunicar
+
+                        <hr class="separator">
+
+                        ${local.comentarios && local.comentarios.length > 0 ? `<h3>Comentários:</h3><ul>${local.comentarios.map(formatComment).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                    </section>
+                `;
+
+                // Adicionar evento de navegação de imagens se houver mais de uma imagem
+                if (local.imagens && local.imagens.length > 1) {
+                    document.getElementById('prevImage').addEventListener('click', () => {
+                        currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : local.imagens.length - 1;
+                        updateImageDisplay(local);
+                    });
+
+                    document.getElementById('nextImage').addEventListener('click', () => {
+                        currentImageIndex = (currentImageIndex < local.imagens.length - 1) ? currentImageIndex + 1 : 0;
+                        updateImageDisplay(local);
+                    });
+                }
+            } else {
+                sidePanel.innerHTML += '<p>Local não encontrado.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar os detalhes do local:', error);
+            sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
+        });
+
+    sidePanel.style.display = 'block'; 
+    // Aplicar animação de abertura 
+    setTimeout(() => { 
+        sidePanel.style.width = '500px'; // Largura desejada da aba lateral 
+        sidePanel.style.opacity = 1; 
+    }, 10); // Um pequeno delay para garantir que a transição seja visível 
+}
+
+
+
+
+
+function toggleSidePanelAvaliacao() {
+    const sidePanelAvaliacao = document.getElementById('sidePanelAvaliar');
+    const avaliarButton = document.getElementById('avaliarButton');
+    if (sidePanelAvaliacao.style.display === 'none' || sidePanelAvaliacao.style.display === '') {
+        sidePanelAvaliacao.style.display = 'block';
+        avaliarButton.style.color = '#d12089';
+    } else {
+        sidePanelAvaliacao.style.display = 'none';
+        avaliarButton.style.color = '#333';
+
+    }
 }
 
 
@@ -416,6 +682,10 @@ function handleMapClick(event) {
 
     // Exibe as coordenadas selecionadas
     document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`; // Corrige a sintaxe para a string
+    document.getElementById('selectedCoordinatesUser').textContent = `localização selecionada salva`; // Corrige a sintaxe para a string
+
+    // Atualiza o método de localização
+    locationMethod = 'map'; // Atualiza o método de localização
 
     // Desativa a seleção
     mapSelectionEnabled = false;
@@ -423,10 +693,11 @@ function handleMapClick(event) {
 
 
 
+
 // habilita o clique no mapa
 function enableMapSelection() {
     mapSelectionEnabled = true; // Habilita a seleção
-    document.getElementById('selectedCoordinates').textContent = "Clique no mapa para escolher um local.";
+    document.getElementById('selectedCoordinatesUser').textContent = "Clique no mapa para escolher um local.";
 }
 
 
@@ -438,30 +709,43 @@ function getCurrentLocation() {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
+            document.getElementById('selectedCoordinatesUser').textContent = "Localização salva";
             map.setCenter(location);
             if (userMarker) userMarker.setPosition(location);
+            locationMethod = 'current'; // Atualiza o método de localização
         });
     }
 }
 
 
 
+
 // função para pegar localização ao selecionar
 function saveCoordinates() {
-    const selectedCoordinates = document.getElementById('selectedCoordinates').textContent;
-    const latLng = selectedCoordinates.match(/Latitude (-?\d+\.\d+), Longitude (-?\d+\.\d+)/);
+    let lat, lng;
 
-    if (latLng) {
-        const lat = latLng[1];
-        const lng = latLng[2];
-        localStorage.setItem('latitude', lat);
-        localStorage.setItem('longitude', lng);
-        console.log(`Coordenadas salvas: Latitude ${lat}, Longitude ${lng}`);
-        window.location.href = '/add-locais';
+    if (locationMethod === 'current') {
+        lat = currentLocation.lat; // Usa a localização atual
+        lng = currentLocation.lng;
     } else {
-        alert("Selecione uma localização válida antes de prosseguir.");
+        const selectedCoordinates = document.getElementById('selectedCoordinates').textContent;
+        const latLng = selectedCoordinates.match(/Latitude (-?\d+\.\d+), Longitude (-?\d+\.\d+)/);
+
+        if (latLng) {
+            lat = latLng[1];
+            lng = latLng[2];
+        } else {
+            alert("Selecione uma localização válida antes de prosseguir.");
+            return;
+        }
     }
+
+    localStorage.setItem('latitude', lat);
+    localStorage.setItem('longitude', lng);
+    console.log(`Coordenadas salvas: Latitude ${lat}, Longitude ${lng}`);
+    window.location.href = '/add-locais';
 }
+
 
 
 

@@ -17,7 +17,7 @@
 
 /* Definindo o tamanho do mapa */ 
 #map { 
-    height: 800px; 
+    height: 70vh; 
     width: calc(100% - 300px); /* Ajuste o width do mapa para deixar espaço para a aba lateral */ 
     border-radius: 8px; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
@@ -35,8 +35,10 @@ html, body {
     height: 100%; 
     margin: 0; 
     font-family: Arial, sans-serif; 
-    background-color: #f4f4f9; 
+    background-color: #ebebeb; 
     color: #333; 
+    width: 100vw;
+    height: 100%;
 }
 
 
@@ -48,14 +50,23 @@ h1{
     text-align: center;
 }
 
+
 /* Estilos para o filtro e entrada de endereço */ 
 
 .filters_mobile{
     display: none;
 }
 
+
+#filter{
+    padding: 20px 40px 20px 30px;
+}
+
+.h2_filtros{
+    margin-left: 10px;
+}
+
 #filter, #addressSearch { 
-    padding: 20px; 
     box-sizing: border-box; 
     background-color: #ffffff; 
     border-radius: 8px; 
@@ -64,9 +75,10 @@ h1{
 } 
 
 #addressSearch { 
-    width: 65%; 
+    width: 55%; 
     display: block; 
     margin: 20px auto; 
+    padding: 20px;
 } 
 
 #filter label, #addressSearch label { 
@@ -203,9 +215,18 @@ button:hover {
     width: auto; /* Mantém a proporção da largura */
     height: 100%; /* Define a altura para 100% do contêiner */
     object-fit: cover; /* Cobre o contêiner sem esticar */
-
-    
 }
+
+.image-nav {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Sombras para dar destaque à seta */
+    padding: 10px;
+}
+
+.image-nav:hover {
+    color: #ffcc00; /* Muda a cor quando o mouse passa por cima */
+}
+
 
 .overlay {
     position: absolute;
@@ -229,6 +250,38 @@ button:hover {
 .sidepanel_info p{
     padding: 0 20px;
 }
+
+.sidePanelInteracao{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+.sidePanelInteracao p{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 0.7; /* Reduz o espaçamento entre ícone e texto */
+}
+
+.sidePanelInteracao p:hover{
+    cursor: pointer;
+    color: var(--cor-fundo2);
+}
+
+.sidePanelAvaliar{
+    display: none;
+}
+
+
+.rating .star {
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+    color: #d12089; /* Cor padrão das estrelas não selecionadas */
+    transition: color 0.2s; /* Transição suave ao mudar a cor */
+}
+
+
+
 
 /* linha horizontal */
 .separator {
@@ -346,16 +399,30 @@ button:hover {
     
 }
 
+.fechar_newLocal:hover { 
+    background-color: transparent; 
+    color: #868686;
+}
+
+
 .fechar_newLocal i {
     margin: 0;
 }
 
 
+.userButtonMobile{
+    display: none;
+}
+
+#selectedCoordinates{
+    display: none;
+}
+
 
 
 /* Estilo padrão para o mapa */
 #map {
-    height: 800px; /* altura padrão */
+    /* height: 800px; */
     width: 100%;   /* largura padrão */
 }
 
@@ -440,6 +507,11 @@ button:hover {
 
     .filters_mobile::-webkit-scrollbar {
         display: none; /* Para Chrome, Safari e Opera */
+    }
+    
+
+    .userButtonMobile{
+
     }
 
 }
