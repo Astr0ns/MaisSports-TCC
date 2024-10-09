@@ -556,7 +556,42 @@ function showSidePanelFromLocal(localId) {
                         <p><strong>Avaliação:</strong> ${local.media_avaliacao ? getStarRatingHtml(local.media_avaliacao) : 'Não disponível'}<span>${local.media_avaliacao ? Number(local.media_avaliacao).toFixed(1) : ''}</span></p>
 
                         <hr class="separator">
-                        copiar, favoritar, comunicar
+                        
+                        <div class="sidePanelInteracao">
+                            <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
+                            <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
+                            <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
+                        </div>
+                        
+                        <div class="sidePanelAvaliar" id="sidePanelAvaliar">
+                        
+                            <form action="/avaliarLocaisBanco" method="post" enctype="application/x-www-form-urlencoded">
+
+                                <input type="hidden" name="placeId" id="placeId" value="${localId}">
+
+                                <!-- Campo oculto para armazenar o email do usuário -->
+                                <input type="hidden" name="email" id="email" value="${email}"> <!-- Substituir por email dinâmico -->
+                                <h3>${email}</h3>
+
+                                <div class="rating" id="rating">
+                                    <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                    <span class="star" data-value="2" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                    <span class="star" data-value="3" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                    <span class="star" data-value="4" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                    <span class="star" data-value="5" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                </div>
+
+                                <!-- Campo oculto para armazenar o valor da avaliação -->
+                                <input type="hidden" name="rating" id="ratingSelect" value="">
+
+                                <section class="grp-form">
+                                    <label for="desc_local">Descrição:</label>
+                                    <input type="text" name="comentario" id="addComentario" required>
+                                </section>
+
+                                <button type="submit">Adicionar Local</button>
+                            </form>
+                        </div>
 
                         <hr class="separator">
 

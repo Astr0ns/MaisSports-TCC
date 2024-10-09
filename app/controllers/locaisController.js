@@ -101,6 +101,43 @@ const avaliarLocais = async (req, res) => {
         res.redirect('/locais-esportivos');
     }
 };
+const avaliarLocaisBanco = async (req, res) => {
+    const { localId, rating, comentario, email } = req.body;
+    console.log('req.body:', req.body);
+
+    try {
+        // 1. Busca o ID do cliente (usuario) baseado no email
+        const [user] = await connection.query(
+            `SELECT id FROM usuario_clientes WHERE email = ?`,
+            [email]
+        );
+
+        console.log('Resultado da consulta de usuário:', user); // Verifica o resultado
+
+        if (user.length === 0) {
+            req.flash('error_msg', 'Usuário não encontrado.');
+            return res.redirect('/add-locais'); // Adicione um return aqui
+        }
+
+        const fk_id_cliente = user[0].id; // Obtém o ID do cliente
+
+        // 2. Insere a avaliação do local na tabela avaliacao_googleplaces
+        const [addL] = await connection.query(
+            `INSERT INTO avaliacao_local (fk_id_cliente, fk_id_local, comentario_local, avaliacao_estrela_locais) 
+             VALUES (?, ?, ?, ?)`,
+            [fk_id_cliente, localId, comentario, rating]
+        );
+
+        // 3. Adiciona uma mensagem de sucesso e redireciona
+        req.flash('success_msg', 'Avaliação adicionada com sucesso');
+        res.redirect('/locais-esportivos');
+
+    } catch (error) {
+        req.flash('error_msg', 'Erro ao adicionar avaliação: ' + error.message);
+        console.log(error);
+        res.redirect('/locais-esportivos');
+    }
+};
 
 
 
@@ -221,5 +258,5 @@ const getLocalFromId = async (req, res) => {
 
 
 module.exports ={ 
-    adicionarLocais, locaisBanco, getLocalFromId, avaliarLocais,
+    adicionarLocais, locaisBanco, getLocalFromId, avaliarLocais, avaliarLocaisBanco,
 }
