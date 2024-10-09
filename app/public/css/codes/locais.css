@@ -203,8 +203,12 @@ button:hover {
     display: none; /* Inicialmente escondido */ 
     overflow-y: auto; 
     transition: width 0.3s ease, opacity 0.3s ease; /* Animação para largura e opacidade */ 
-    opacity: 0; /* Começa com opacidade 0 */ 
+    opacity: 0; /* Começa com opacidade 0 */
+    z-index: 10; 
+
 } 
+
+
 
 .sidepanel_card {
     width: 100%;
