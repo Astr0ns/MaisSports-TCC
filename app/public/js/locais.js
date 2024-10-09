@@ -455,6 +455,7 @@ function showSidePanel(placeId) {
                             <!-- Campo oculto para armazenar o email do usuário -->
                             <input type="hidden" name="email" id="email" value="${email}"> <!-- Substituir por email dinâmico -->
                             <h3>${email}</h3>
+                            <h3>${placeId}</h3>
 
                             <div class="rating" id="rating">
                                 <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
@@ -466,6 +467,9 @@ function showSidePanel(placeId) {
 
                             <!-- Campo oculto para armazenar o valor da avaliação -->
                             <input type="hidden" name="rating" id="ratingSelect" value="">
+
+                            <!-- Campo oculto para armazenar o valor da avaliação -->
+                            <input type="hidden" name="placeId_google" value="${placeId}">
 
                             <section class="grp-form">
                                 <label for="desc_local">Descrição:</label>
@@ -572,6 +576,7 @@ function showSidePanelFromLocal(localId) {
                                 <!-- Campo oculto para armazenar o email do usuário -->
                                 <input type="hidden" name="email" id="email" value="${email}"> <!-- Substituir por email dinâmico -->
                                 <h3>${email}</h3>
+                                <h3>${localId}</h3>
 
                                 <div class="rating" id="rating">
                                     <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
@@ -583,6 +588,9 @@ function showSidePanelFromLocal(localId) {
 
                                 <!-- Campo oculto para armazenar o valor da avaliação -->
                                 <input type="hidden" name="rating" id="ratingSelect" value="">
+
+                                <!-- Campo oculto para armazenar o valor da avaliação -->
+                                <input type="hidden" name="localId" value="${localId}">
 
                                 <section class="grp-form">
                                     <label for="desc_local">Descrição:</label>

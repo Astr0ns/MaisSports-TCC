@@ -65,7 +65,7 @@ const adicionarLocais = async (req, res) => {
 };
 
 const avaliarLocais = async (req, res) => {
-    const { placeId, rating, comentario, email } = req.body;
+    const { placeId_google, rating, comentario, email } = req.body;
     console.log('req.body:', req.body);
 
     try {
@@ -88,7 +88,7 @@ const avaliarLocais = async (req, res) => {
         const [addL] = await connection.query(
             `INSERT INTO avaliacao_googleplaces (fk_id_cliente, fk_id_google, comentario_local, avaliacao_estrela_locais) 
              VALUES (?, ?, ?, ?)`,
-            [fk_id_cliente, placeId, comentario, rating]
+            [fk_id_cliente, placeId_google, comentario, rating]
         );
 
         // 3. Adiciona uma mensagem de sucesso e redireciona
@@ -101,6 +101,7 @@ const avaliarLocais = async (req, res) => {
         res.redirect('/locais-esportivos');
     }
 };
+
 const avaliarLocaisBanco = async (req, res) => {
     const { localId, rating, comentario, email } = req.body;
     console.log('req.body:', req.body);
