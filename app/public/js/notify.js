@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (window.location.search.includes('success=true')) {
                         window.location.href = '/login';
                     }
+                    if (window.location.search.includes('successEmpr=true')){
+                        window.location.href = '/login-empr';
+                    }
                 }, 500); // Tempo para a animação de fade-out
             }, 3000); // Tempo que a mensagem ficará visível
         }, 100); // Pequeno atraso para garantir que não apareça imediatamente
