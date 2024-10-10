@@ -98,6 +98,9 @@ router.post("/avaliarLocaisBanco", verificarLogado, locaisController.avaliarLoca
 });
 
 
+router.post("/adicionarProd",upload, locaisController.adicionarLocais, async function (req, res) {
+
+});
 
 
 

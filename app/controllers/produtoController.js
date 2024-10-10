@@ -7,41 +7,55 @@ const exibirFormularioProduto = (req, res) => {
 };
 
 // Adiciona um novo produto ao banco de dados
-const adicionarLocais = async (req, res) => {
-    const { name, category, description } = req.body;
-    const images = req.files;
+const adicionarprod = async (req, res) => {
+    const { titulo_prod, descricao_prod, valor_prod, latitude, longitude } = req.body;
 
     try {
-        // Inserir informações do produto no banco de dados
-        const [result] = await connection.query(
-            `INSERT INTO produtos (nome, categoria, descricao, )
-             VALUES (?, ?, ?)`,
-            [name, category, description]
+        // Verifica se o local já existe
+        const [endExist] = await connection.query(
+            "SELECT * FROM locais WHERE latitude = ? AND longitude = ?",
+            [latitude, longitude]
         );
 
-        const productId = result.insertId;
+        if (endExist.length > 0) {
+            req.flash('error_msg', 'Esse endereço já foi adicionado ao Sports Map.');
+            return res.redirect('/add-product');
+        }
 
-        // Inserir as imagens no banco de dados
-        if (images) {
-            for (const image of images) {
+        // Insere o novo local
+        const [addL] = await connection.query(
+            `INSERT INTO locais (nome_local, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
+            [nome_local, categoria, descricao, latitude, longitude]
+        );
+
+        const locaisId = addL.insertId;
+
+        // Armazena as imagens no banco de dados
+        if (req.files && req.files.length > 0) {
+            const imagens = req.files.map(file => file.filename);
+            for (let imagem of imagens) {
                 await connection.query(
-                    `INSERT INTO imagens_locais (locais_id, caminho)
-                     VALUES (?, ?)`,
-                    [productId, image.path]
+                    `INSERT INTO imagens (fk_local_id, nome_imagem) VALUES (?, ?)`,
+                    [locaisId, imagem]
                 );
             }
         }
 
-        res.redirect('/adicionarLocais?success=true');
+        req.flash('success_msg', 'Local adicionado com sucesso!');
+        req.session.nome = nome;
+
+        // Redireciona após sucesso
+        res.redirect('/add-product');
+
     } catch (error) {
-        console.error('Erro ao adicionar produto:', error);
-        res.status(500).send('Erro ao adicionar produto.');
+        req.flash('error_msg', 'Erro ao adicionar Local: ' + error.message);
+        console.log(error);
+        res.redirect('/add-product');
     }
 };
 
 
-
 module.exports = {
     exibirFormularioProduto,
-    adicionarLocais
+    adicionarprod,
 };
