@@ -127,7 +127,7 @@ router.get("/locais-esportivos", async function (req, res) {
     var nome = req.session.nome;
 
     
-    res.render("pages/locais-esportivos", {nome:nome, email: email });
+    res.render("pages/locais-esportivos", { });
 })
 
 router.post("/locaisBanco", locaisController.locaisBanco, async function (req, res){
