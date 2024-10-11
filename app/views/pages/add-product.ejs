@@ -111,40 +111,40 @@
                                 placeholder="Digite o nome"><br>
                             <label for="lname">Editar Categoria:</label><br>
                         </section>
+
+
                         <section class="categoria_prod">
                             <select name="categoria_prod">
-                                <option>Basquete</option>
-                                <option>Futebol</option>
-                                <option>Vôlei</option>
-                                <option>Treino</option>
+                                <option value="" selected>Selecione</option>
+                                <option value="basquete">Basquete</option>
+                                <option value="futebol">Futebol</option>
+                                <option value="volei">Vôlei</option>
+                                <option value="treino">Treino</option>
                             </select>
                         </section>
+                        
                         <section class="categoria_prod">
                             <select class="tipo_prod" name="tipo_prod">
-                                <option>Roupa</option>
-                                <option>Equipamento</option>
-                            </select>
-                        </section>
-                        <section class="categoria_prod" id="roupa_prod">
-                            <select name="categoria_prod">
-                                <option>Camiseta</option>
-                                <option>Blusa</option>
-                                <option>Calça</option>
-                                <option>shorts</option>
-                                <option>Acessório</option>
-                                <option>Camiseta</option>
-                                <option>Calçados</option>
+                                <option value="" selected>Selecione</option>
+                                <option value="roupa">Roupa</option>
+                                <option value="equipamento">Equipamento</option>
                             </select>
                         </section>
 
-                        <section class="ratting-prod">
-                            <i class="bi bi-star"></i>
-                            <i class="bi bi-star"></i>
-                            <i class="bi bi-star"></i>
-                            <i class="bi bi-star"></i>
-                            <i class="bi bi-star"></i>
-                            <p>sem avalições</p>
+                        <section class="categoria_prod" id="roupa_prod">
+                            <select name="roupa_prod">
+                                <option value="" selected>Selecione</option>
+                                <option value="camiseta">Camiseta</option>
+                                <option value="blusa">Blusa</option>
+                                <option value="calca">Calça</option>
+                                <option value="shorts">Shorts</option>
+                                <option value="acessorio">Acessório</option>
+                                <option value="calçados">Calçados</option>
+                            </select>
                         </section>
+                        
+
+        
 
                         <section class="price">
                             <label for="name">Editar preço do produto:</label><br>
@@ -287,7 +287,7 @@
 
                         <section class="button">
                             <section class="button-wrapper">
-                                <section class="text"><button type="submit">Compre agora!</button></section>
+                                <section class="text"><button type="submit">Adicionar Agora!</button></section>
                                 <span class="icon">
                                     <svg viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" height="16"
                                         width="16" xmlns="http://www.w3.org/2000/svg">
