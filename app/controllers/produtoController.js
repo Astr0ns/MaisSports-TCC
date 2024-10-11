@@ -8,7 +8,7 @@ const exibirFormularioProduto = (req, res) => {
 
 // Adiciona um novo produto ao banco de dados
 const adicionarProd = async (req, res) => {
-    const { titulo_prod, descricao_prod, valor_prod, categoria_prod} = req.body;
+    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod} = req.body;
 
     try {
         // Verifica se o local já existe
