@@ -103,6 +103,15 @@ input#valor_prod {
     border: 1px solid var(--cor-fundo2);
     border-radius: 17px;
 }
+input#link_prod {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 0px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}
 
 input#descricao_prod {
     background-color: var(--cor-fonte);
@@ -117,11 +126,15 @@ input#descricao_prod {
 }
 
 
-.categoria_prod select {
+select {
     background-color: var(--cor-fonte);
     display: block;
     padding: 10px;
     margin-left: 0px;
     border: 1px solid var(--cor-fundo2);
     border-radius: 17px;
+}
+
+.tipo_prod{
+    display: none;
 }

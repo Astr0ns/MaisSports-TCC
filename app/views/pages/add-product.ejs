@@ -32,6 +32,8 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2310003761562398"
      crossorigin="anonymous"></script>
 
+     <script src="js/add-product.js"></script> 
+
     <title>+Sports</title>
 </head>
 
@@ -110,16 +112,27 @@
                             <label for="lname">Editar Categoria:</label><br>
                         </section>
                         <section class="categoria_prod">
-                            <select>
+                            <select name="categoria_prod">
                                 <option>Basquete</option>
                                 <option>Futebol</option>
                                 <option>Vôlei</option>
                                 <option>Treino</option>
+                            </select>
+                        </section>
+                        <section class="categoria_prod">
+                            <select class="tipo_prod" name="tipo_prod">
+                                <option>Roupa</option>
+                                <option>Equipamento</option>
+                            </select>
+                        </section>
+                        <section class="categoria_prod" id="roupa_prod">
+                            <select name="categoria_prod">
+                                <option>Camiseta</option>
+                                <option>Blusa</option>
+                                <option>Calça</option>
+                                <option>shorts</option>
                                 <option>Acessório</option>
                                 <option>Camiseta</option>
-                                <option>Bermuda</option>
-                                <option>Shorts</option>
-                                <option>Calça</option>
                                 <option>Calçados</option>
                             </select>
                         </section>
@@ -136,6 +149,15 @@
                         <section class="price">
                             <label for="name">Editar preço do produto:</label><br>
                             <input class="name" type="text" id="valor_prod" name="valor_prod" placeholder="Digite o preço">
+                            <section class="center-text">
+                                <h2>Pré-visualização do texto:</h2>
+                                <p>R$:999,99 ou <span>6x</span> de <span>R$:166,66</span></p>
+                            </section>
+                        </section>
+
+                        <section class="caminho_prod">
+                            <label for="link_prod">Adicionar link do produto:</label><br>
+                            <input class="name" type="text" id="link_prod" name="link_prod" placeholder="Digite o link">
                             <section class="center-text">
                                 <h2>Pré-visualização do texto:</h2>
                                 <p>R$:999,99 ou <span>6x</span> de <span>R$:166,66</span></p>
