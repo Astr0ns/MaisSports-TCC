@@ -11,38 +11,35 @@ const adicionarProd = async (req, res) => {
     const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod} = req.body;
 
     try {
-        // Verifica se o local já existe
-        const [endExist] = await connection.query(
-            "SELECT * FROM locais WHERE latitude = ? AND longitude = ?",
-            [latitude, longitude]
-        );
-
-        if (endExist.length > 0) {
-            req.flash('error_msg', 'Esse endereço já foi adicionado ao Sports Map.');
-            return res.redirect('/add-product');
-        }
 
         // Insere o novo local
         const [addL] = await connection.query(
-            `INSERT INTO locais (nome_local, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
-            [nome_local, categoria, descricao, latitude, longitude]
+            `INSERT INTO produtos_das_empresas (titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod) VALUES (?, ?, ?, ?, ?, ?)`,
+            [titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod]
         );
 
-        const locaisId = addL.insertId;
+        const ProdId = addL.insertId;
+        // Pegar a data de hoje no formato YYYY-MM-DD
+        const dataHoje = new Date().toISOString().split('T')[0]; // Gera a data no formato YYYY-MM-DD
+
+
+        const [addPreco] = await connection.query(
+            `INSERT INTO preco_prod (fk_id_prod, valor_prod, ini_vig) VALUES (?, ?, ?)`,
+            [ProdId, valor_prod, dataHoje]
+        );
 
         // Armazena as imagens no banco de dados
         if (req.files && req.files.length > 0) {
             const imagens = req.files.map(file => file.filename);
             for (let imagem of imagens) {
                 await connection.query(
-                    `INSERT INTO imagens (fk_local_id, nome_imagem) VALUES (?, ?)`,
+                    `INSERT INTO imagens (fk_id_prod, nome_imagem) VALUES (?, ?)`,
                     [locaisId, imagem]
                 );
             }
         }
 
         req.flash('success_msg', 'Local adicionado com sucesso!');
-        req.session.nome = nome;
 
         // Redireciona após sucesso
         res.redirect('/add-product');
