@@ -52,7 +52,50 @@ const adicionarProd = async (req, res) => {
 };
 
 
+const pegarProdutoBanco = async (req, res) => {
+    const { categoria } = req.query; // Pega a categoria da query string
+
+    try {
+        const query = `
+            SELECT l.id, l.nome_local, l.latitude, l.longitude, i.nome_imagem, AVG(a.avaliacao_estrela_locais) AS media_avaliacao
+            FROM locais l 
+            LEFT JOIN imagens i ON l.id = i.fk_local_id
+            LEFT JOIN avaliacao_local a ON l.id = a.fk_id_local  
+            WHERE l.categoria = ?
+            GROUP BY l.id, i.nome_imagem
+        `;
+        const [results] = await connection.query(query, [categoria]); // Filtra pela categoria
+
+        // Formata os resultados para agrupar imagens por local
+        const formattedResults = results.reduce((acc, row) => {
+            const { id, nome_local, latitude, longitude, nome_imagem, media_avaliacao } = row;
+            const local = acc.find(loc => loc.id === id); // Procura pelo ID único
+            if (local) {
+                if (nome_imagem) {
+                    local.imagens.push(nome_imagem);
+                }
+            } else {
+                acc.push({
+                    id,
+                    nome_local,
+                    latitude,
+                    longitude,
+                    imagens: nome_imagem ? [nome_imagem] : [], // Inicia array de imagens
+                    media_avaliacao
+                });
+            }
+            return acc;
+        }, []);
+
+        res.json(formattedResults);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
+};
+
+
 module.exports = {
     exibirFormularioProduto,
-    adicionarProd,
+    adicionarProd, pegarProdutoBanco,
 };

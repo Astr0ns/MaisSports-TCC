@@ -52,7 +52,7 @@ function renderProducts(products) {
 }
 
  // Fazer a requisição para pegar os produtos
- fetch('/api/products')
+ fetch('pegarProdutoBanco')
  .then(response => response.json())
  .then(products => {
      renderProducts(products); // Renderiza os produtos no include
