@@ -94,7 +94,7 @@ section.descricao {
     border-radius: 17px;
 }
 
-input#name_product {
+input#valor_prod {
     background-color: var(--cor-fonte);
     display: block;
     padding: 10px;
@@ -104,7 +104,20 @@ input#name_product {
     border-radius: 17px;
 }
 
-.categorias select {
+input#descricao_prod {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 0px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+    width: 200px;
+    height: 100px;
+}
+
+
+.categoria_prod select {
     background-color: var(--cor-fonte);
     display: block;
     padding: 10px;

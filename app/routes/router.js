@@ -12,6 +12,7 @@ const gravarUsuAutenticado = require('../models/usuarioModel').gravarUsuAutentic
 const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 const locaisController = require('../controllers/locaisController');
+const produtoController = require('../controllers/produtoController');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
@@ -98,6 +99,14 @@ router.post("/avaliarLocaisBanco", verificarLogado, locaisController.avaliarLoca
 });
 
 
+router.get("/add-product", function (req, res) {
+    var email = req.session.email;
+    res.render("pages/add-product", { email: email });
+});
+
+router.post("/adicionarProd",upload, produtoController.adicionarProd, async function (req, res) {
+
+});
 
 
 

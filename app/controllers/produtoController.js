@@ -7,8 +7,8 @@ const exibirFormularioProduto = (req, res) => {
 };
 
 // Adiciona um novo produto ao banco de dados
-const adicionarprod = async (req, res) => {
-    const { titulo_prod, descricao_prod, valor_prod, latitude, longitude } = req.body;
+const adicionarProd = async (req, res) => {
+    const { titulo_prod, descricao_prod, valor_prod, categoria_prod} = req.body;
 
     try {
         // Verifica se o local já existe
@@ -57,5 +57,5 @@ const adicionarprod = async (req, res) => {
 
 module.exports = {
     exibirFormularioProduto,
-    adicionarprod,
+    adicionarProd,
 };
