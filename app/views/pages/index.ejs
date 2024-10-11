@@ -38,7 +38,7 @@
         <title>+Sports</title>
     </head>
 
-    <body>
+    <body onload="renderProducts()">
 
         <%- include("../partial/header-home", { email: email }) %>
 
@@ -158,6 +158,8 @@
 
                 <%- include("../partial/produtos") %>
 
+                <section class="trending-products" id="trending"></section>
+
                     <section class="center-text">
                         <h2>Navegue por <span>Marcas</span></h2>
                     </section>
@@ -187,7 +189,9 @@
                     <%- include("../partial/footer") %>
 
                         <script src="js/script.js" defer></script>
+                        <script src="js/produto_index.js" defer></script>
                         <script src="js/carousel.js"></script>
+                        
                         
     </body>
 

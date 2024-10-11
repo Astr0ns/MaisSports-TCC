@@ -108,6 +108,16 @@ router.post("/adicionarProd",upload, produtoController.adicionarProd, async func
 
 });
 
+router.get('/pegarProdutoBanco', async (req, res) => {
+    try {
+        const produtos = await produtoController.getProdutos();  // Busca os produtos
+        res.json(produtos);  // Retorna em formato JSON
+    } catch (error) {
+        console.error('Erro ao obter produtos:', error);
+        res.status(500).json({ message: 'Erro ao obter produtos' });
+    }
+});
+
 
 
 
