@@ -27,48 +27,49 @@ const exibirFormularioProduto = (req, res) => {
 
 // Adiciona um novo produto ao banco de dados
 const adicionarProd = async (req, res) => {
-    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod} = req.body;
+    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod } = req.body;
 
     try {
-
-        // Insere o novo local
+        // Insere o novo produto
         const [addL] = await connection.query(
             `INSERT INTO produtos_das_empresas (titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod) VALUES (?, ?, ?, ?, ?, ?)`,
             [titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod]
         );
 
-        const ProdId = addL.insertId;
-        // Pegar a data de hoje no formato YYYY-MM-DD
-        const dataHoje = new Date().toISOString().split('T')[0]; // Gera a data no formato YYYY-MM-DD
+        const ProdId = addL.insertId; // Obtém o ID do produto recém-adicionado
 
+        // Pega a data atual no formato YYYY-MM-DD
+        const dataHoje = new Date().toISOString().split('T')[0];
 
-        const [addPreco] = await connection.query(
+        // Insere o valor do produto na tabela de preços
+        await connection.query(
             `INSERT INTO preco_prod (fk_id_prod, valor_prod, ini_vig) VALUES (?, ?, ?)`,
             [ProdId, valor_prod, dataHoje]
         );
 
-        // Armazena as imagens no banco de dados
+        // Verifica se existem arquivos enviados (imagens)
         if (req.files && req.files.length > 0) {
-            const imagens = req.files.map(file => file.filename);
+            const imagens = req.files.map(file => file.filename); // Obtem os nomes dos arquivos de imagem
             for (let imagem of imagens) {
+                // Insere cada imagem no banco de dados, vinculando ao ID do produto
                 await connection.query(
                     `INSERT INTO imagens (fk_id_prod, nome_imagem) VALUES (?, ?)`,
-                    [locaisId, imagem]
+                    [ProdId, imagem]
                 );
             }
         }
 
-        req.flash('success_msg', 'Local adicionado com sucesso!');
-
-        // Redireciona após sucesso
+        req.flash('success_msg', 'Produto adicionado com sucesso!');
         res.redirect('/add-product');
 
     } catch (error) {
-        req.flash('error_msg', 'Erro ao adicionar Local: ' + error.message);
+        req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
         console.log(error);
         res.redirect('/add-product');
     }
 };
+
+
 
 
 const pegarProdutoBanco = async (req, res) => {

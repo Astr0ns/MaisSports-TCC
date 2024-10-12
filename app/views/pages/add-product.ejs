@@ -79,29 +79,10 @@
                     <section class="product-card">
 
                         
-                        <section class="MainIgm" data-index="0">
-                            <input type="file" class="hidden-input" name="imagens" accept="image/*">
-                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>
-                        </section>
-                        <section class="MainIgm" data-index="1">
-                            <input type="file" class="hidden-input" accept="image/*">
-                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
-                        </section>
-                        <section class="MainIgm" data-index="2">
-                            <input type="file" class="hidden-input" accept="image/*">
-                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
-                        </section>
-                        <section class="MainIgm" data-index="3">
-                            <input type="file" class="hidden-input" accept="image/*">
-                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
-                        </section>
+                        <label for="imagens">Imagens do Produto</label>
+    <input type="file" name="imagens" accept="image/*" multiple> <!-- multiple permite múltiplas imagens -->
                         
-                        <script>
-                            document.getElementById('upload-link').addEventListener('click', function(event) {
-                                event.preventDefault(); // Impede o comportamento padrão do link
-                                document.getElementById('file-upload').click(); // Aciona o clique no input file
-                            });
-                        </script>
+                        
                     </section>
                     <section class="product-info">
 

@@ -39,6 +39,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).array('imagens', 4);
 
 
+
 function verificarLogado(req, res, next) {
     if (req.session.email) {
         return next(); // O usuário está autenticado, prossiga
