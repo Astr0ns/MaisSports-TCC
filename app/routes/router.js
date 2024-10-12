@@ -94,7 +94,7 @@ router.post("/avaliarLocais", verificarLogado, locaisController.avaliarLocais, a
 
 });
 
-router.post("/avaliarLocaisBanco", verificarLogado, locaisController.avaliarLocaisBanco, async function (req, res) {
+router.post("/avaliarLocaisBanco", upload, verificarLogado, locaisController.avaliarLocaisBanco, async function (req, res) {
 
 });
 
