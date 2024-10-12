@@ -15,6 +15,8 @@ function renderProducts(products) {
             <section class="row">
                 <a href="/product-page">
                     <img src="${imagens.length > 0 ? imagens[0] : 'default-image.jpg'}" alt="${titulo_prod}">
+                    <img src="${imagens.length > 0 ? `uploads/${imagens[0]}` : 'default-image.jpg'}" alt="${titulo_prod}">
+
                 </a>
                 <section class="product-text">
                     <h5>NEW</h5>
