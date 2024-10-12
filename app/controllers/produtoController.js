@@ -60,7 +60,7 @@ const pegarProdutoBanco = async (req, res) => {
             FROM produtos_das_empresas p 
             LEFT JOIN imagens i ON p.id_prod = i.fk_id_prod
             LEFT JOIN avaliacao_prod a ON p.id_prod = a.fk_id_prod  
-            LEFT JOIN preco_prod a ON p.id_prod = v.fk_id_prod  
+            LEFT JOIN preco_prod v ON p.id_prod = v.fk_id_prod  
             GROUP BY p.id_prod, i.nome_imagem
         `;
         const [results] = await connection.query(query); // Filtra pela categoria

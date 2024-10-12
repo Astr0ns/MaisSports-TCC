@@ -814,7 +814,31 @@ function getNearestAddress(latLng, callback) {
 }
 
 
+function renderStars(media) {
+    const maxStars = 5;
+    let fullStars = Math.floor(media); // Estrelas completas
+    let halfStar = media % 1 !== 0; // Se houver uma metade de estrela
+    let emptyStars = maxStars - fullStars - (halfStar ? 1 : 0); // Estrelas vazias
 
+    let starsHtml = '';
+
+    // Adiciona as estrelas completas
+    for (let i = 0; i < fullStars; i++) {
+        starsHtml += '<i class="bi bi-star-fill"></i>';
+    }
+
+    // Adiciona a meia estrela, se existir
+    if (halfStar) {
+        starsHtml += '<i class="bi bi-star-half"></i>';
+    }
+
+    // Adiciona as estrelas vazias
+    for (let i = 0; i < emptyStars; i++) {
+        starsHtml += '<i class="bi bi-star"></i>';
+    }
+
+    return starsHtml;
+}
 
 
 
