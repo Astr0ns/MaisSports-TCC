@@ -1,6 +1,8 @@
 function renderProducts(products) {
-    const trendingSection = document.getElementById('trending');
+    const trendingSection = document.querySelector('.products');
     trendingSection.innerHTML = ''; // Limpa a seção antes de renderizar
+
+    document.getElementById('teste').innerText = JSON.stringify(products, null, 2);
 
     products.forEach(product => {
         const { titulo_prod, valor_prod, imagens, media_avaliacao } = product;
@@ -13,41 +15,41 @@ function renderProducts(products) {
 {/* <img src="${imagens.length > 0 ? imagens[0] : 'default-image.jpg'}" alt="${titulo_prod}"></img> */}
 
         const productHTML = `
-        <section class="products">
-            <section class="row">
-                <a href="/product-page">
-                    
-                    <img src="${imagens.length > 0 ? `uploads/${imagens[0]}` : 'default-image.jpg'}" alt="${titulo_prod}">
+        
+        <section class="row">
+            <a href="/product-page">
+                
+                <img src="uploads/${imagens[0]}" alt="${titulo_prod}">
 
-                </a>
-                <section class="product-text">
-                    <h5>NEW</h5>
-                </section>
-                <section class="heart-icon">
-                    <i class='bx bx-heart'></i>
-                </section>
-                <section class="ratting">
-                    ${renderStars(media_avaliacao || 0)} <!-- Usa valor padrão se não houver avaliação -->
-                </section>
-                <section class="price">
-                    <h4>${titulo_prod}</h4>
-                    <section class="desc-price">
-                        <p class="desconto">-13%</p>
-                        <section class="preco">
-                            <p>$ ${precoFormatado} no PIX</p>
-                            <p>6 x R$${parcelaFormatada}</p>
-                        </section>
+            </a>
+            <section class="product-text">
+                <h5>NEW</h5>
+            </section>
+            <section class="heart-icon">
+                <i class='bx bx-heart'></i>
+            </section>
+            <section class="ratting">
+                ${renderStars(media_avaliacao || 0)} <!-- Usa valor padrão se não houver avaliação -->
+            </section>
+            <section class="price">
+                <h4>${titulo_prod}</h4>
+                <section class="desc-price">
+                    <p class="desconto">-13%</p>
+                    <section class="preco">
+                        <p>$ ${precoFormatado} no PIX</p>
+                        <p>6 x R$${parcelaFormatada}</p>
                     </section>
-                    <section class="desc-outher">
-                        <p class="estoque">em estoque</p>
-                        <section class="prod-colors">
-                            <p class="cores">cores</p>
-                            <section class="ballwht"></section>
-                        </section>
+                </section>
+                <section class="desc-outher">
+                    <p class="estoque">em estoque</p>
+                    <section class="prod-colors">
+                        <p class="cores">cores</p>
+                        <section class="ballwht"></section>
                     </section>
                 </section>
             </section>
         </section>
+        
         `;
 
         trendingSection.insertAdjacentHTML('beforeend', productHTML); // Adiciona o HTML do produto

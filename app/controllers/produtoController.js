@@ -76,7 +76,7 @@ const pegarProdutoBanco = async (req, res) => {
 
     try {
         const query = `
-            SELECT p.id_prod, p.titulo_prod, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
+            SELECT p.id_prod, p.titulo_prod, i.nome_imagem, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
             FROM produtos_das_empresas p 
             LEFT JOIN imagens i ON p.id_prod = i.fk_id_prod
             LEFT JOIN avaliacao_prod a ON p.id_prod = a.fk_id_prod  
