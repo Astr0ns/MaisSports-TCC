@@ -10,11 +10,13 @@ function renderProducts(products) {
         const precoFormatado = !isNaN(preco) ? preco.toFixed(2) : "0.00";
         const parcelaFormatada = !isNaN(preco) ? (preco / 6).toFixed(2) : "0.00";
 
+{/* <img src="${imagens.length > 0 ? imagens[0] : 'default-image.jpg'}" alt="${titulo_prod}"></img> */}
+
         const productHTML = `
         <section class="products">
             <section class="row">
                 <a href="/product-page">
-                    <img src="${imagens.length > 0 ? imagens[0] : 'default-image.jpg'}" alt="${titulo_prod}">
+                    
                     <img src="${imagens.length > 0 ? `uploads/${imagens[0]}` : 'default-image.jpg'}" alt="${titulo_prod}">
 
                 </a>

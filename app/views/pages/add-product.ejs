@@ -78,22 +78,22 @@
                 <form action="/adicionarProd" method="POST" enctype="multipart/form-data">
                     <section class="product-card">
 
-                        <section class="MainIgm">
-                            <input type="file" id="file-upload" name="images" class="hidden-input" multiple>
-
-                            <!-- Link estilizado -->
-                            <a href="#" class="upload-link" id="upload-link">
-                                <i class="bi bi-plus-circle"></i> Adicionar Imagens
-                            </a>
+                        
+                        <section class="MainIgm" data-index="0">
+                            <input type="file" class="hidden-input" name="imagens" accept="image/*">
+                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>
                         </section>
-                        <section class="MainIgm">
-                            <a href=""><i class="bi bi-plus-circle"></i></a>
+                        <section class="MainIgm" data-index="1">
+                            <input type="file" class="hidden-input" accept="image/*">
+                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
                         </section>
-                        <section class="MainIgm">
-                            <a href=""><i class="bi bi-plus-circle"></i></a>
+                        <section class="MainIgm" data-index="2">
+                            <input type="file" class="hidden-input" accept="image/*">
+                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
                         </section>
-                        <section class="MainIgm">
-                            <a href=""><i class="bi bi-plus-circle"></i></a>
+                        <section class="MainIgm" data-index="3">
+                            <input type="file" class="hidden-input" accept="image/*">
+                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
                         </section>
                         
                         <script>
@@ -371,6 +371,82 @@
     </script>
     <script src="js/script.js"></script>
     <script src="js/mini-imgs.js"></script>
+
+    <script>
+        // Seleciona todos os containers
+        const imageContainers = document.querySelectorAll('.MainIgm');
+
+        imageContainers.forEach(container => {
+        const uploadLink = container.querySelector('.upload-link');
+        const fileInput = container.querySelector('.hidden-input');
+
+        // Ao clicar no link, dispara o input de file
+        uploadLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            fileInput.click();
+        });
+
+        // Quando um arquivo é escolhido
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Substitui o conteúdo do container pela imagem selecionada
+                container.innerHTML = `
+                <img src="${e.target.result}" alt="Imagem Selecionada">
+                <button class="remove-btn">&times;</button>
+                `;
+
+                // Botão de remover imagem
+                const removeBtn = container.querySelector('.remove-btn');
+                removeBtn.addEventListener('click', function() {
+                // Remove a imagem e reseta o container para o estado inicial
+                container.innerHTML = `
+                    <input type="file" class="hidden-input" accept="image/*">
+                    <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>
+                `;
+                resetUpload(container); // Reativa o comportamento de upload
+                });
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+        });
+
+        // Função para resetar o comportamento de upload
+        function resetUpload(container) {
+        const uploadLink = container.querySelector('.upload-link');
+        const fileInput = container.querySelector('.hidden-input');
+        
+        uploadLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                container.innerHTML = `
+                <img src="${e.target.result}" alt="Imagem Selecionada">
+                <button class="remove-btn">&times;</button>
+                `;
+
+                const removeBtn = container.querySelector('.remove-btn');
+                removeBtn.addEventListener('click', function() {
+                container.innerHTML = `
+                    <input type="file" class="hidden-input" accept="image/*">
+                    <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>
+                `;
+                resetUpload(container);
+                });
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+        }
+
+    </script>
 </body>
 
 </html>

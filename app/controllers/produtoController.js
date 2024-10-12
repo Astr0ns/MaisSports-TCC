@@ -1,10 +1,29 @@
 const path = require('path');
 var connection = require("../../config/pool_conexoes");
-const upload = require('../models/upload-middleware');
+const multer = require('multer');
+
+
+// Configuração do armazenamento
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Pasta onde as imagens serão salvas
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname); // Renomeia o arquivo
+    }
+});
+
+// Configuração do multer
+const upload = multer({ storage: storage }).array('imagens', 4); // 'imagens' é o nome do campo no formulário, 4 é o limite
+
+
+
 // Renderiza o formulário de adicionar produto
 const exibirFormularioProduto = (req, res) => {
     res.render('adicionarLocais'); // Certifique-se de que o nome da view corresponde ao seu arquivo EJS
 };
+
+
 
 // Adiciona um novo produto ao banco de dados
 const adicionarProd = async (req, res) => {
