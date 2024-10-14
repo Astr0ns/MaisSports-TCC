@@ -17,10 +17,8 @@ function renderProducts(products) {
         const productHTML = `
         
         <section class="row">
-            <a href="/product-page">
-                
+            <a href="/product-page/${product.id_prod}">
                 <img src="uploads/${imagens[0]}" alt="${titulo_prod}">
-
             </a>
             <section class="product-text">
                 <h5>NEW</h5>

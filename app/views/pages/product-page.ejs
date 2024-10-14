@@ -6,26 +6,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="imagem/png" href="imagem/icon-msports.jpg">
+    <link rel="shortcut icon" type="imagem/png" href="/imagem/icon-msports.jpg">
 
     <!-- Link Responsives CSS's-->
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="css/small.css">
-    <link rel="stylesheet" media="screen and (max-width: 534px)" href="css/verysmall.css">
-    <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)" href="css/medium.css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="/css/small.css">
+    <link rel="stylesheet" media="screen and (max-width: 534px)" href="/css/verysmall.css">
+    <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)" href="/css/medium.css">
     <!-- End Responsives CSS's-->
 
     <!-- Link CSS's of Mains, Sections, etc. -->
 
-    <link rel="stylesheet" href="css/codes/sessoes.css">
-    <link rel="stylesheet" href="css/codes/interface.css">
-    <link rel="stylesheet" href="css/codes/tendencia.css">
-    <link rel="stylesheet" href="css/codes/categorias.css">
-    <link rel="stylesheet" href="css/codes/product-page.css">
-    <link rel="stylesheet" href="css/codes/nav-bar.css">
-    <link rel="stylesheet" href="css/codes/footer.css">
-    <link rel="stylesheet" href="css/codes/buttons.css">
-    <link rel="stylesheet" href="css/codes/cart.css">
+    <link rel="stylesheet" href="/css/codes/sessoes.css">
+    <link rel="stylesheet" href="/css/codes/interface.css">
+    <link rel="stylesheet" href="/css/codes/tendencia.css">
+    <link rel="stylesheet" href="/css/codes/categorias.css">
+    <link rel="stylesheet" href="/css/codes/product-page.css">
+    <link rel="stylesheet" href="/css/codes/nav-bar.css">
+    <link rel="stylesheet" href="/css/codes/footer.css">
+    <link rel="stylesheet" href="/css/codes/buttons.css">
+    <link rel="stylesheet" href="/css/codes/cart.css">
 
 
     <!-- Others Links -->
@@ -40,7 +40,7 @@
 </head>
 
 
-<link rel="stylesheet" href="css/codes/footer.css">
+<link rel="stylesheet" href="/css/codes/footer.css">
 
 <body>
 
@@ -54,12 +54,12 @@
                 <section class="container">
                     <section class="card">
                         <section class="product-card">
+                            <% product.imagens.forEach(function(imagem, index) { %>
+                                <img class="MainImg" src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
+                            <% }); %>
                             <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg">
                             <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A6.jpg">
-                            <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A2.jpg">
-                            <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A3.jpg">
-                            <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A7.jpg">
-                            <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A8.jpg">
+                            
                         </section>
 
                         <section class="carousel-container">
@@ -91,7 +91,7 @@
                         <section class="product-info">
 
                             <section class="title-prod">
-                                <h3>Nike Air Force 1 Mid "07 Masculino</h3>
+                                <h3><%= product.titulo_prod %></h3>
                                 <p>Casual</p>
                             </section>
                             <section class="ratting-prod">
@@ -104,7 +104,7 @@
                             </section>
 
                             <section class="price">
-                                <p>R$ 854,99 no Pix <br>ou <span>6x</span> de <span>R$:119,98</span></p>
+                                <p>R$ <%= product.valor_prod %> no Pix <br>ou <span>6x</span> de <span>R$:119,98</span></p>
                             </section>
 
 
@@ -156,11 +156,8 @@
                                 <h2>ESTILO AF1 LENDÁRIO.</h2>
                                 <br>
                                 <p>
-                                    O Air Force 1 Mid "07 é tudo aquilo que você conhece bem: sobreposições impecáveis,
-                                    detalhes ousados e a quantidade perfeita de brilho para que você se destaque. A boca
-                                    almofadada de corte médio com fecho aderente clássico adiciona o conforto clássico
-                                    do
-                                    basquete, enquanto as perfurações na ponta mantêm o frescor.</p>
+                                    <%= product.descricao_prod %></p>
+                                    
                                 <br>
                                 <section id="moreContent" class="content">
 
@@ -238,19 +235,22 @@
                                 </script>
                             </section>
                             <!-- Botão para comprar/adicionar no carrinho -->
-                            <section class="button">
-                                <section class="button-wrapper">
-                                    <section class="text">Compre agora!</section>
-                                    <span class="icon">
-                                        <svg viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" height="16"
-                                            width="16" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z">
-                                            </path>
-                                        </svg>
-                                    </span>
+                            <a href="<%= product.link_prod %>"> <!-- Adiciona o link aqui -->
+                                <section class="button">
+                                    <section class="button-wrapper">
+                                        <section class="text">Compre agora!</section>
+                                        <span class="icon">
+                                            <svg viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" height="16" width="16"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                    </section>
                                 </section>
-                            </section>
+                            </a>
+                            
                             <section class="button-fav">
                                 <button>Adicionar aos favoritos <i class="bi bi-heart"></i></button>
                             </section>
@@ -459,9 +459,9 @@
         </main>
         <%- include("../partial/footer") %>
 
-            <script src="js/script.js"></script>
-            <script src="js/mini-imgs.js"></script>
-            <script src="js/mobile-carousel.js"></script>
+            <script src="/js/script.js"></script>
+            <script src="/js/mini-imgs.js"></script>
+            <script src="/js/mobile-carousel.js"></script>
 </body>
 
 </html>
