@@ -110,7 +110,7 @@ const registrarUsu = async (req, res) => {
         }
 
         // Criptografar a senha
-        const hash = await bcrypt.hash(senha, 10);
+        const hash = await bcrypt.hash(senha, 12);
 
         // Inserir o novo usuário na base de dados
         await connection.query("INSERT INTO usuario_clientes (nome, sobrenome, email, senha, tipo, cep, numero) VALUES (?, ?, ?, ?, 'usuario', '00000000', '0000')", [nome, sobrenome, email, hash]);

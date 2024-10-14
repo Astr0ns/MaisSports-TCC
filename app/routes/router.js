@@ -21,8 +21,6 @@ const path = require('path');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = 'uploads/';
-        
-        // Verifica se a pasta existe
         fs.mkdir(uploadPath, { recursive: true }, (err) => {
             if (err) {
                 return cb(err);
@@ -38,8 +36,6 @@ const storage = multer.diskStorage({
 // Configuração do multer
 const upload = multer({ storage: storage }).array('imagens', 4);
 
-
-
 function verificarLogado(req, res, next) {
     if (req.session.email) {
         return next(); // O usuário está autenticado, prossiga
@@ -48,24 +44,15 @@ function verificarLogado(req, res, next) {
     }
 }
 
-
-const {
-    verificarAutenticacao,
-    verificarAutorizacao,
-} = require("../models/middleware");
+const { verificarAutenticacao, verificarAutorizacaoTipo } = require('../models/middleware');
 
 const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
-// const uploadFile = require("../util/uploader")();
-
-
-router.get("/", function (req, res) {
-    var email = req.session.email;
-    req.session.email;
-    res.render("pages/index", { email: email });
-});
 
 router.get("/", verificarAutenticacao, function (req, res) {
+    var email = req.session.email;
+    
     res.render("pages/home", {
+        email: email,
         userId: req.session.userId,
         listaErros: null,
         dadosNotificacao: null,
@@ -83,8 +70,13 @@ router.get("/add-locais", function (req, res) {
 
 // Rota para adicionar locais com upload de imagens
 
+router.get("/pagina-empresa", verificarAutenticacao, verificarAutorizacaoTipo(['empresa', 'adm'], '/login-empr'), (req, res) => {
+    res.render("pagina-empresa", { userId: req.session.userId });
+});
 
-
+router.get("/pagina-usuario", verificarAutenticacao, verificarAutorizacaoTipo(['usuario', 'adm'], '/login'), (req, res) => {
+    res.render("pagina-usuario", { userId: req.session.userId });
+});
 
 router.post("/adicionarLocais",upload, locaisController.adicionarLocais, async function (req, res) {
 
@@ -239,6 +231,7 @@ router.get("/soccer", function (req, res) {
     var email = req.session.email;
     res.render("pages/soccer", { email: email });
 });
+
 router.get("/empresa", async function (req, res) {
 
     var nome = req.session.nome;
@@ -306,42 +299,19 @@ router.post("/fazerLogin", usuarioController.logar, async function (req, res) {
 });
 
 
-router.post("/fazerRegisEmpr", async function (req, res) {
-    const { nome, cnpj, email, senha, cSenha } = req.body;
-
-    // Verificar se as senhas conferem
-    if (senha !== cSenha) {
-        req.flash('error_msg', 'As senhas não conferem.');
-        return res.redirect('/login-empr'); // Redireciona para o formulário de registro
-    }
-
-    try {
-        // Verificar se o email já existe
-        const [emailExist] = await connection.query("SELECT id FROM empresas WHERE email = ?", [email]);
-
-        if (emailExist.length > 0) {
-            req.flash('error_msg', 'Email corporativo em uso.');
-            return res.redirect('/regs-empr'); // Redireciona para o formulário de registro
-        }
-
-        // Criptografar a senha
-        const hash = await bcrypt.hash(senha, 10);
-
-        // Inserir o novo usuário na base de dados
-        await connection.query("INSERT INTO empresas (nome, cnpj, email, senha, tipo, cep, numero) VALUES (?, ?, ?, ?, 'empresa', '00000000', '0000')", [nome, cnpj, email, hash]);
-
-        req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para o "Dashboard" em breve.');
-        res.redirect('/regs-empr?success=true');
-        // Redireciona para a página de registro, indicando sucesso
-
-    } catch (error) {
-        console.error(error);
-        req.flash('error_msg', 'Erro ao criar empresa. Tente novamente mais tarde.');
-        res.redirect('/regs-empr'); // Redireciona para o formulário de registro
-    }
+router.post("/fazerRegisEmpr", empresaController.registrarEmpr, async function (req, res) {
+    //
 });
 
+router.post('/loginEmpr', empresaController.logarEmpr, async function(req, res){
+    //
+})
 
+router.get("/fazerLogout", function (req, res) {
+    req.session.destroy(function (err) {
+        res.redirect('/');
+    })
+});
 
 router.get('/guardarCEP', async (req, res) => {
     const { cep, numero } = req.query;
@@ -387,47 +357,6 @@ router.get('/guardarCEP', async (req, res) => {
     }
 });
 
-router.post("/loginEmpr",
-    usuarioController.regrasValidacaoFormLogin,
-    gravarEmprAutenticado,
-    async function (req, res) {
-        const { email, senha } = req.body;
-
-        try {
-            const [accounts] = await connection.query("SELECT * FROM empresas WHERE email = ?", [email]);
-
-            if (accounts.length > 0) {
-                const account = accounts[0];
-
-                // Verificar se a senha corresponde
-                const passwordMatch = bcrypt.compareSync(senha, account.senha);
-
-                if (!passwordMatch) {
-                    req.flash('error_msg', "As senhas não conferem");
-                    return res.redirect('/login');
-                }
-
-                // Armazenar informações do usuário na sessão
-                req.session.email = account.email;
-                req.session.nome = account.nome;
-                req.session.cpnj = account.cpnj;
-                req.session.cep = account.cep;
-                req.session.numero = account.numero;
-
-                req.flash('success_msg', 'Login efetuado com sucesso!');
-                res.redirect('/empresa'); // Redireciona para a página de perfil
-            } else {
-                req.flash('error_msg', "Usuário não encontrado! Email ou senhas incorretos");
-                res.redirect('/login-empr');
-            }
-
-        } catch (err) {
-            console.error("Erro na consulta: ", err);
-            res.status(500).send('Erro interno do servidor');
-        }
-    }
-);
-
 router.post('/delCEP', async function (req, res) {
     const { email } = req.body;
 
@@ -461,16 +390,11 @@ router.post('/delCEP', async function (req, res) {
     }
 
 })
-
 router.post('/comprar', async (req, res) => {
 
 });
 
-router.get("/fazerLogout", function (req, res) {
-    req.session.destroy(function (err) {
-        res.redirect('/');
-    })
-});
+
 
 
 
