@@ -132,6 +132,10 @@ router.get("/product-page/:id", produtoController.getProductById, async function
 });
 
 
+router.get("/favoritarProd/:id", produtoController.favoritarProd, async function (req, res){
+});
+
+
 
 router.get("/login", function (req, res) {
     res.render("pages/login", {

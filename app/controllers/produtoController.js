@@ -23,8 +23,6 @@ const exibirFormularioProduto = (req, res) => {
     res.render('adicionarLocais'); // Certifique-se de que o nome da view corresponde ao seu arquivo EJS
 };
 
-
-
 // Adiciona um novo produto ao banco de dados
 const adicionarProd = async (req, res) => {
     const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod } = req.body;
@@ -164,8 +162,56 @@ const getProductById = async (req, res) => {
 
 
 
+const favoritarProd = async (req, res) => {
+    const email = req.session.email;
+    const prodId = req.params.id;
+    console.error(email, prodId);
+
+    try {
+        // 1. Busca o ID do cliente (usuario) baseado no email
+        const [user] = await connection.query(
+            `SELECT id FROM usuario_clientes WHERE email = ?`,
+            [email]
+        );
+
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const fk_id_cliente = user[0].id;
+        console.log(fk_id_cliente);
+
+        // Verifica se o produto já foi favoritado
+        const [existingFavorite] = await connection.query(
+            `SELECT * FROM favorito_produto WHERE fk_id_cliente = ? AND fk_id_prod = ?`,
+            [fk_id_cliente, prodId]
+            
+        );
+        console.log(existingFavorite);
+
+        if (existingFavorite.length > 0) {
+            return res.status(400).json({ message: 'Produto já foi favoritado.' });
+            console.log("favoritado");
+        }
+
+        // Insere o novo produto favoritado
+        const [addL] = await connection.query(
+            `INSERT INTO favorito_produto (fk_id_cliente, fk_id_prod) VALUES (?, ?)` ,
+            [fk_id_cliente, prodId]
+        );
+
+        return res.status(200).json({ message: 'Produto favoritado com sucesso!' });
+        console.log("certo");
+
+    } catch (error) {
+        return res.status(500).json({ message: 'Erro ao favoritar produto: ' + error.message });
+        console.log("erro no banco");
+    }
+};
+
+
 
 module.exports = {
     exibirFormularioProduto,
-    adicionarProd, pegarProdutoBanco, getProductById,
+    adicionarProd, pegarProdutoBanco, getProductById, favoritarProd,
 };

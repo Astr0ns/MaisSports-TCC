@@ -235,7 +235,7 @@
                                 </script>
                             </section>
                             <!-- Botão para comprar/adicionar no carrinho -->
-                            <a href="<%= product.link_prod %>"> <!-- Adiciona o link aqui -->
+                            <a href="<%= product.link_prod %>" target="_blank"> <!-- Adiciona o link aqui -->
                                 <section class="button">
                                     <section class="button-wrapper">
                                         <section class="text">Compre agora!</section>
@@ -252,8 +252,9 @@
                             </a>
                             
                             <section class="button-fav">
-                                <button>Adicionar aos favoritos <i class="bi bi-heart"></i></button>
+                                <button data-id="{<%= product.id_prod %>}" class="favoritar-button">Adicionar aos favoritos <i class="bi bi-heart"></i></button>
                             </section>
+                            
                         </section>
                     </section>
                 </section>
@@ -459,9 +460,75 @@
         </main>
         <%- include("../partial/footer") %>
 
-            <script src="/js/script.js"></script>
-            <script src="/js/mini-imgs.js"></script>
-            <script src="/js/mobile-carousel.js"></script>
+        <script src="/js/script.js"></script>
+        <script src="/js/mini-imgs.js"></script>
+        <script src="/js/mobile-carousel.js"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const buttons = document.querySelectorAll(".favoritar-button");
+        
+                buttons.forEach(button => {
+                    button.addEventListener("click", async function() {
+                        const productId = button.getAttribute("data-id");
+                        try {
+                            const response = await fetch(`/favoritarProd/${productId}`, {
+                                method: "GET",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            });
+                            if (response.ok) {
+                                const data = await response.json();
+                                // Trate a resposta do servidor, ex: exibir uma mensagem de sucesso
+                                console.log("Produto adicionado aos favoritos:", data);
+                            } else {
+                                console.error("Erro ao adicionar aos favoritos:", response.statusText);
+                            }
+                        } catch (error) {
+                            console.error("Erro na solicitação:", error);
+                        }
+                    });
+                });
+            });
+
+            document.addEventListener("DOMContentLoaded", function() {
+    const buttons = document.querySelectorAll(".favoritar-button");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", async function() {
+            const productId = button.getAttribute("data-id");
+            try {
+                const response = await fetch(`/favoritarProd/${productId}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    if (data.message === "Produto favoritado com sucesso!") {
+                        // Produto favoritado com sucesso, altere a cor do ícone
+                        button.classList.add("favoritado"); // Adiciona a classe 'favoritado'
+                        console.log("Produto adicionado aos favoritos:", data);
+                    } else {
+                        console.error("Erro ao favoritar o produto:", data.message);
+                    }
+                } else {
+                    console.error("Erro ao adicionar aos favoritos:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Erro na solicitação:", error);
+            }
+        });
+    });
+});
+
+
+        </script>
+            
 </body>
 
 </html>
