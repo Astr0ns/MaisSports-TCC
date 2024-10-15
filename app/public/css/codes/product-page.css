@@ -24,10 +24,11 @@
     color: var(--cor-fundo2);
 }
 
-/* Ícone quando o produto está favoritado */
-.favoritado{
-    color: red;
+.desativo{
+    display: none;
 }
+
+
 
 
 

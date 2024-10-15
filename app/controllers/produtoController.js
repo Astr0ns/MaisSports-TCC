@@ -202,10 +202,17 @@ const favoritarProd = async (req, res) => {
 
         console.log("Favorito existente:", existingFavorite);
 
-        // Se o produto já foi favoritado, retorna uma mensagem de erro
+        // Se o produto já foi favoritado, você pode optar por removê-lo ou retornar uma mensagem de erro
         if (existingFavorite.length > 0) {
             console.log("Produto já foi favoritado");
-            return res.status(400).json({ message: 'Produto já foi favoritado.' });
+
+            // Aqui, removemos o produto dos favoritos
+            await connection.query(
+                `DELETE FROM favorito_produto WHERE fk_id_cliente = ? AND fk_id_prod = ?`,
+                [fk_id_cliente, prodId]
+            );
+
+            return res.status(200).json({ message: 'Produto removido dos favoritos.' });
         }
 
         // 4. Insere o novo produto favoritado
