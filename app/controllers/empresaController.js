@@ -79,7 +79,7 @@ const registrarEmpr = async (req, res) => {
 
 const logarEmpr = async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+   if (!errors.isEmpty()) {
         return res.render('pages/login-empr', {
             userId: req.session.userId,
             listaErros: errors.array(),
