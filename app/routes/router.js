@@ -21,6 +21,8 @@ const path = require('path');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = 'uploads/';
+        
+        // Verifica se a pasta existe
         fs.mkdir(uploadPath, { recursive: true }, (err) => {
             if (err) {
                 return cb(err);
@@ -36,6 +38,8 @@ const storage = multer.diskStorage({
 // Configuração do multer
 const upload = multer({ storage: storage }).array('imagens', 4);
 
+
+
 function verificarLogado(req, res, next) {
     if (req.session.email) {
         return next(); // O usuário está autenticado, prossiga
@@ -44,9 +48,21 @@ function verificarLogado(req, res, next) {
     }
 }
 
-const { verificarAutenticacao, verificarAutorizacaoTipo } = require('../models/middleware');
+
+const {
+    verificarAutenticacao,
+    verificarAutorizacaoTipo,
+} = require("../models/middleware");
 
 const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
+// const uploadFile = require("../util/uploader")();
+
+
+router.get("/", function (req, res) {
+    var email = req.session.email;
+    req.session.email;
+    res.render("pages/index", { email: email });
+});
 
 router.get("/", verificarAutenticacao, function (req, res) {
     var email = req.session.email;
@@ -61,6 +77,7 @@ router.get("/", verificarAutenticacao, function (req, res) {
     });
 });
 
+
 //
 
 router.get("/add-locais", function (req, res) {
@@ -70,6 +87,7 @@ router.get("/add-locais", function (req, res) {
 
 // Rota para adicionar locais com upload de imagens
 
+
 router.get("/pagina-empresa", verificarAutenticacao, verificarAutorizacaoTipo(['empresa', 'adm'], '/login-empr'), (req, res) => {
     res.render("pagina-empresa", { userId: req.session.userId });
 });
@@ -77,6 +95,8 @@ router.get("/pagina-empresa", verificarAutenticacao, verificarAutorizacaoTipo(['
 router.get("/pagina-usuario", verificarAutenticacao, verificarAutorizacaoTipo(['usuario', 'adm'], '/login'), (req, res) => {
     res.render("pagina-usuario", { userId: req.session.userId });
 });
+
+
 
 router.post("/adicionarLocais",upload, locaisController.adicionarLocais, async function (req, res) {
 
@@ -107,6 +127,9 @@ router.get("/pegarProdutoBanco", produtoController.pegarProdutoBanco, async func
     //
     });
 
+
+router.get("/product-page/:id", produtoController.getProductById, async function (req, res){
+});
 
 
 
@@ -144,8 +167,6 @@ router.get("/getLocalFromId", locaisController.getLocalFromId, async function (r
 //
 });
 
-router.get("/product-page/:id", produtoController.getProductById, async function (req, res){
-});
 
 router.get("/product-page", function (req, res) {
     var email = req.session.email;
@@ -233,7 +254,6 @@ router.get("/soccer", function (req, res) {
     var email = req.session.email;
     res.render("pages/soccer", { email: email });
 });
-
 router.get("/empresa", async function (req, res) {
 
     var nome = req.session.nome;
@@ -315,6 +335,8 @@ router.get("/fazerLogout", function (req, res) {
     })
 });
 
+
+
 router.get('/guardarCEP', async (req, res) => {
     const { cep, numero } = req.query;
     const email = req.session.email;
@@ -359,6 +381,47 @@ router.get('/guardarCEP', async (req, res) => {
     }
 });
 
+router.post("/loginEmpr",
+    usuarioController.regrasValidacaoFormLogin,
+    gravarEmprAutenticado,
+    async function (req, res) {
+        const { email, senha } = req.body;
+
+        try {
+            const [accounts] = await connection.query("SELECT * FROM empresas WHERE email = ?", [email]);
+
+            if (accounts.length > 0) {
+                const account = accounts[0];
+
+                // Verificar se a senha corresponde
+                const passwordMatch = bcrypt.compareSync(senha, account.senha);
+
+                if (!passwordMatch) {
+                    req.flash('error_msg', "As senhas não conferem");
+                    return res.redirect('/login');
+                }
+
+                // Armazenar informações do usuário na sessão
+                req.session.email = account.email;
+                req.session.nome = account.nome;
+                req.session.cpnj = account.cpnj;
+                req.session.cep = account.cep;
+                req.session.numero = account.numero;
+
+                req.flash('success_msg', 'Login efetuado com sucesso!');
+                res.redirect('/empresa'); // Redireciona para a página de perfil
+            } else {
+                req.flash('error_msg', "Usuário não encontrado! Email ou senhas incorretos");
+                res.redirect('/login-empr');
+            }
+
+        } catch (err) {
+            console.error("Erro na consulta: ", err);
+            res.status(500).send('Erro interno do servidor');
+        }
+    }
+);
+
 router.post('/delCEP', async function (req, res) {
     const { email } = req.body;
 
@@ -392,11 +455,16 @@ router.post('/delCEP', async function (req, res) {
     }
 
 })
+
 router.post('/comprar', async (req, res) => {
 
 });
 
-
+router.get("/fazerLogout", function (req, res) {
+    req.session.destroy(function (err) {
+        res.redirect('/');
+    })
+});
 
 
 
