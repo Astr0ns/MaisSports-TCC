@@ -19,15 +19,16 @@
     overflow-x: hidden;
 }
 
-/* Ícone padrão (não favoritado) */
-.bi-heart {
-    color: grey;
+
+.favoritar-button i{
+    color: var(--cor-fundo2);
 }
 
 /* Ícone quando o produto está favoritado */
-.favoritado .bi-heart {
+.favoritado{
     color: red;
 }
+
 
 
 .card {

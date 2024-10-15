@@ -164,50 +164,66 @@ const getProductById = async (req, res) => {
 
 const favoritarProd = async (req, res) => {
     const email = req.session.email;
-    const prodId = req.params.id;
-    console.error(email, prodId);
+    const prodId = Number(req.params.id); // Converter para número
+
+    // Log para verificar se o email e o prodId estão corretos
+    console.error("Email:", email, "Product ID:", prodId);
 
     try {
-        // 1. Busca o ID do cliente (usuario) baseado no email
+        // 1. Busca o ID do cliente (usuário) baseado no email
         const [user] = await connection.query(
             `SELECT id FROM usuario_clientes WHERE email = ?`,
             [email]
         );
 
+        // Verifica se o usuário foi encontrado
         if (user.length === 0) {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
 
         const fk_id_cliente = user[0].id;
-        console.log(fk_id_cliente);
+        console.log("ID do Cliente:", fk_id_cliente);
 
-        // Verifica se o produto já foi favoritado
+        // 2. Verifica se o produto existe na tabela de produtos
+        const [product] = await connection.query(
+            `SELECT id_prod FROM produtos_das_empresas WHERE id_prod = ?`,
+            [prodId]
+        );
+
+        if (product.length === 0) {
+            return res.status(404).json({ message: 'Produto não encontrado.' });
+        }
+
+        // 3. Verifica se o produto já foi favoritado por esse usuário
         const [existingFavorite] = await connection.query(
             `SELECT * FROM favorito_produto WHERE fk_id_cliente = ? AND fk_id_prod = ?`,
             [fk_id_cliente, prodId]
-            
         );
-        console.log(existingFavorite);
 
+        console.log("Favorito existente:", existingFavorite);
+
+        // Se o produto já foi favoritado, retorna uma mensagem de erro
         if (existingFavorite.length > 0) {
+            console.log("Produto já foi favoritado");
             return res.status(400).json({ message: 'Produto já foi favoritado.' });
-            console.log("favoritado");
         }
 
-        // Insere o novo produto favoritado
+        // 4. Insere o novo produto favoritado
         const [addL] = await connection.query(
             `INSERT INTO favorito_produto (fk_id_cliente, fk_id_prod) VALUES (?, ?)` ,
             [fk_id_cliente, prodId]
         );
 
+        console.log("Produto favoritado com sucesso!");
         return res.status(200).json({ message: 'Produto favoritado com sucesso!' });
-        console.log("certo");
 
     } catch (error) {
+        console.error("Erro ao favoritar produto:", error);
         return res.status(500).json({ message: 'Erro ao favoritar produto: ' + error.message });
-        console.log("erro no banco");
     }
 };
+
+
 
 
 
