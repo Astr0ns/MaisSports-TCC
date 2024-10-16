@@ -26,6 +26,7 @@ const exibirFormularioProduto = (req, res) => {
 // Adiciona um novo produto ao banco de dados
 const adicionarProd = async (req, res) => {
     const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod } = req.body;
+    const email = req.session.email;
 
     try {
         // Insere o novo produto
@@ -33,6 +34,13 @@ const adicionarProd = async (req, res) => {
             `INSERT INTO produtos_das_empresas (titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod) VALUES (?, ?, ?, ?, ?, ?)`,
             [titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod]
         );
+
+        const [user] = await connection.query(
+            `SELECT id FROM empresas WHERE email = ?`,
+            [email]
+        );
+
+        const fk_id_emp = user[0].id;
 
         const ProdId = addL.insertId; // Obtém o ID do produto recém-adicionado
 
@@ -43,6 +51,13 @@ const adicionarProd = async (req, res) => {
         await connection.query(
             `INSERT INTO preco_prod (fk_id_prod, valor_prod, ini_vig) VALUES (?, ?, ?)`,
             [ProdId, valor_prod, dataHoje]
+        );
+
+        // linka o produto com empresa
+        await connection.query(
+            `INSERT INTO empresas_produtos (fk_id_emp, fk_id_prod) VALUES (?, ?)`,
+            [fk_id_emp, ProdId]
+            
         );
 
         // Verifica se existem arquivos enviados (imagens)
@@ -115,6 +130,8 @@ const pegarProdutoBanco = async (req, res) => {
 
 
 const pegarProdutoEmpresa = async (req, res) => {
+
+    const email = req.session.email;
 
     try {
         
