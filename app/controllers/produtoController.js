@@ -72,6 +72,8 @@ const adicionarProd = async (req, res) => {
 
 const pegarProdutoBanco = async (req, res) => {
 
+    const email = req.session.email;
+
     try {
         const query = `
             SELECT p.id_prod, p.titulo_prod, i.nome_imagem, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
@@ -82,6 +84,76 @@ const pegarProdutoBanco = async (req, res) => {
             GROUP BY p.id_prod, i.nome_imagem
         `;
         const [results] = await connection.query(query); // Filtra pela categoria
+
+        // Formata os resultados para agrupar imagens por local
+        const produtos = results.reduce((acc, row) => {
+            const { id_prod, titulo_prod, valor_prod, nome_imagem, media_avaliacao } = row; // Use os nomes corretos das colunas
+            const produto = acc.find(prod => prod.id_prod === id_prod); // Procura pelo ID único do produto
+            if (produto) {
+                if (nome_imagem) {
+                    produto.imagens.push(nome_imagem); // Adiciona a imagem se já existir o produto
+                }
+            } else {
+                acc.push({
+                    id_prod,
+                    titulo_prod,
+                    valor_prod,
+                    imagens: nome_imagem ? [nome_imagem] : [], // Inicia array de imagens
+                    media_avaliacao
+                });
+            }
+            return acc;
+        }, []);
+        
+
+        res.json(produtos);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
+};
+
+
+const pegarProdutoEmpresa = async (req, res) => {
+
+    try {
+        
+
+        // 1. Busca o ID do cliente (usuário) baseado no email
+        const [user] = await connection.query(
+            `SELECT id FROM empresas WHERE email = ?`,
+            [email]
+        );
+
+        // Verifica se o usuário foi encontrado
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const fk_id_emp = user[0].id;
+
+        const [prod] = await connection.query(
+            `SELECT id FROM empresas_produtos WHERE fk_id_emp = ?`,
+            [fk_id_emp]
+        );
+
+        // Verifica se o usuário foi encontrado
+        if (prod.length === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const fk_id_prod = prod[0].id;
+
+        const query = `
+            SELECT p.id_prod, p.titulo_prod, i.nome_imagem, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
+            FROM produtos_das_empresas p 
+            LEFT JOIN imagens i ON p.id_prod = i.fk_id_prod
+            LEFT JOIN avaliacao_prod a ON p.id_prod = a.fk_id_prod  
+            LEFT JOIN preco_prod v ON p.id_prod = v.fk_id_prod  
+            WHERE p.id_prod = ?
+            GROUP BY p.id_prod, i.nome_imagem
+        `;
+        const [results] = await connection.query(query, [fk_id_prod]); // Filtra pela categoria
 
         // Formata os resultados para agrupar imagens por local
         const produtos = results.reduce((acc, row) => {
@@ -236,5 +308,5 @@ const favoritarProd = async (req, res) => {
 
 module.exports = {
     exibirFormularioProduto,
-    adicionarProd, pegarProdutoBanco, getProductById, favoritarProd,
+    adicionarProd, pegarProdutoBanco, getProductById, favoritarProd, pegarProdutoEmpresa,
 };

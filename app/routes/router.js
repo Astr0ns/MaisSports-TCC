@@ -92,6 +92,9 @@ router.post("/adicionarProd", upload, produtoController.adicionarProd, async fun
 router.get("/pegarProdutoBanco", produtoController.pegarProdutoBanco, async function (req, res) {
     //
 });
+router.get("/pegarProdutoEmpresa", produtoController.pegarProdutoEmpresa, async function (req, res) {
+    //
+});
 
 
 router.get("/painel-empresa", function (req, res) {
