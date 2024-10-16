@@ -16,6 +16,7 @@
 
     <!-- Link Responsives CSS's-->
     <link rel="stylesheet" href="css/codes/painel-empresa.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
     <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="css/small.css">
     <link rel="stylesheet" media="screen and (max-width: 534px)" href="css/verysmall.css">
     <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)" href="css/medium.css">
@@ -52,14 +53,8 @@
 
 <body>
 
-<header>
-  <nav>
-    <a class="logo" href="produtos.html"><img src="logomaisport002.png" alt="Logo MaisPort"></a>
-    <section class="elemento">
-      <!-- Elementos adicionais podem ser adicionados aqui -->
-    </section>
-  </nav>
-</header>
+
+<%- include("../partial/header-home", { email: email }) %>
 
 <main>
   <section class="container">
@@ -145,10 +140,17 @@
         </table>
         <a href="#">Mostrar Mais</a>
       </section>
+
+      <section class="trending-products" id="trending">
+        <section class="products">
+            
+        </section>
+    </section>
     </main>
   </section>
 </main>
 
-<script src="script.js"></script>
+<script src="js/painel-empresa.js"></script>
+<script src="js/produto_index.js" defer></script>
 </body>
       
