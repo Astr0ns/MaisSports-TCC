@@ -94,6 +94,11 @@ router.get("/pegarProdutoBanco", produtoController.pegarProdutoBanco, async func
 });
 
 
+router.get("/painel-empresa", function (req, res) {
+    var email = req.session.email;
+    res.render("pages/painel-empresa", { email: email });
+});
+
 
 
 router.get("/login", function (req, res) {
