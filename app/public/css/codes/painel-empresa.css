@@ -68,6 +68,35 @@
     grid-template-columns: 14rem auto 16rem;
     margin: 0 auto;
   }
+
+.editar_prod_sect{
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+.editar_prod_bt{
+  background-color: #CF1684; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 12px 20px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin: 10px 0; 
+    transition: background-color 0.3s; 
+    
+}
+
+
+
+
+
+
+
+
+
+
   
   a{
     color: var(--clr-dark);
@@ -111,9 +140,7 @@
   b{
     color: var(--clr-dark);
   }
-  .primary {
-    color: var(--clr-primary);
-  }
+
   
   .success {
     color: var(--clr-success);
@@ -352,46 +379,7 @@
   /* 
   pedido recente */
   
-  main .recent_order{
-     margin-top: 2rem;
-  }
   
-  main .recent_order h2{
-      color: var(--clr-dark);
-  }
-  
-  main .recent_order h2{
-    margin-bottom: 0.8rem;
-  }
-  main .recent_order table{
-    background: var(--clr-white);
-    width: 100%;
-    border-radius: var(--card-border-radius);
-    padding: var(--card-padding);
-    text-align: center;
-    box-shadow: var(--box-shadow);
-    transition: all .3s ease;
-    color: var(--clr-dark);
-  }
-  main .recent_order table:hover{
-    box-shadow: none;
-  }
-  
-  main table tbody td{
-     height: 3.8rem;
-     border-bottom: 1px solid var(--clr-white);
-     color:var(--clr-dark-variant)
-  }
-  main table tbody tr:last-child td{
-     border: none;
-  }
-  
-  
-  main .recent_order a{
-    text-align: center;
-    display: block;
-    margin: 1rem;
-  }
   
   
   /*********************
@@ -647,10 +635,7 @@
     gap: 1.6rem;
     padding: 40px;
    }
-   main .recent_order{
-    padding: 30px;
-    margin: 0 auto;
-   }
+   
   
   
   
@@ -677,9 +662,7 @@
        left: 1rem;
   
      }
-     .right .recent_order{
-      padding: 0 30px;
-     }
+     
      .right .recent_updates{
       padding: 0 40px;
      }
