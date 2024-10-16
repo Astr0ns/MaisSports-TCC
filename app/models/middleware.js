@@ -17,15 +17,15 @@ const verificarAutenticacao = (req, res, next) => {
 
 // Middleware para verificar autorização
 const verificarAutorizacao = (req, res, next) => {
-    const tipoUsuario = req.session.tipoUsuario; // Supondo que o tipo de usuário é armazenado na sessão
+    const tipo = req.session.tipo; // Supondo que o tipo de usuário é armazenado na sessão
 
     // Verifica a rota acessada
-    if (req.path === '/empresas' && tipoUsuario === 'usuario') {
+    if (req.path === '/empresas' && tipo === 'usuario') {
         req.flash('error_msg', 'Usuários não têm permissão para acessar a página de empresas.');
         return res.redirect('/'); // Redireciona para a página inicial ou outra de sua escolha
     }
 
-    if (req.path === '/profile' && tipoUsuario === 'empresa') {
+    if (req.path === '/profile' && tipo === 'empresa') {
         req.flash('error_msg', 'Empresas não têm permissão para acessar a página de perfil.');
         return res.redirect('/empresas'); // Redireciona para a página de empresas
     }
@@ -34,11 +34,11 @@ const verificarAutorizacao = (req, res, next) => {
 };
 
 // Middleware para buscar tipo de usuário no banco de dados e armazená-lo na sessão
-const buscarTipoUsuario = async (req, res, next) => {
+const buscarTipo = async (req, res, next) => {
     try {
         const user = await usuario.findById(req.session.userId);
         if (user) {
-            req.session.tipoUsuario = user.tipo; // Armazena o tipo de usuário na sessão
+            req.session.tipo = user.tipo; // Armazena o tipo de usuário na sessão
         }
         next();
     } catch (error) {
@@ -51,9 +51,9 @@ const buscarTipoUsuario = async (req, res, next) => {
 module.exports = {
     verificarAutenticacao,
     verificarAutorizacao,
-    buscarTipoUsuario,
+    buscarTipo,
 };
 
 // Exemplo de como usar os middlewares nas rotas
 router.use(verificarAutenticacao);
-router.use(buscarTipoUsuario);
+router.use(buscarTipo);

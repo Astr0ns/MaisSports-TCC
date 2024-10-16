@@ -37,26 +37,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).array('imagens', 4);
 
 
-
-function verificarLogado(req, res, next) {
-    if (req.session.email) {
-        return next(); // O usuário está autenticado, prossiga
-    } else {
-        res.redirect('/login'); // Redirecione para a página de login
-    }
-}
-
 const { verificarAutenticacao, verificarAutorizacaoTipo } = require('../models/middleware');
 
 const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
 // const uploadFile = require("../util/uploader")();
 
 
-router.get("/", function (req, res) {
-    var email = req.session.email;
-    req.session.email;
-    res.render("pages/index", { email: email });
-});
+
 
 router.get("/", async function (req, res) {
     var email = req.session.email;
@@ -79,14 +66,6 @@ router.get("/add-locais", function (req, res) {
 });
 
 // Rota para adicionar locais com upload de imagens
-
-router.get("/pagina-empresa", verificarAutenticacao, verificarAutorizacaoTipo(['empresa', 'adm'], '/login-empr'), (req, res) => {
-    res.render("pagina-empresa", { userId: req.session.userId });
-});
-
-router.get('/profile', verificarAutorizacao, (req, res) => {
-    // Lógica para a rota de perfil
-});
 
 
 
@@ -241,7 +220,7 @@ router.get("/soccer", function (req, res) {
     res.render("pages/soccer", { email: email });
 });
 
-router.get("/empresa", async function (req, res) {
+router.get("/empresa", verificarAutenticacao, function (req, res) {
 
     var nome = req.session.nome;
     var email = req.session.email;

@@ -53,7 +53,9 @@ const logar = async (req, res) => {
             // Armazenar informações do usuário na sessão
             req.session.email = account.email;
             req.session.nome = account.nome;
+            req.session.userId = account.id;
             req.session.sobrenome = account.sobrenome;
+            req.session.tipo = account.tipo;
             req.session.logado = true; // Atualizando a sessão
 
             req.flash('msg', "Logado com sucesso");
