@@ -16,7 +16,6 @@ const produtoController = require('../controllers/produtoController');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-
 // Configuração do armazenamento
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -32,26 +31,19 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname); // Renomeia o arquivo
     }
 });
-
 // Configuração do multer
 const upload = multer({ storage: storage }).array('imagens', 4);
 
-function verificarLogado(req, res, next) {
-    if (req.session.email) {
-        return next(); // O usuário está autenticado, prossiga
-    } else {
-        res.redirect('/login'); // Redirecione para a página de login
-    }
-}
-
-const { verificarAutenticacao, verificarAutorizacaoTipo } = require('../models/middleware');
+const { verificarAutenticacao,
+    verificarAutorizacao,
+    buscarTipoUsuario, } = require('../models/middleware');
 
 const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
 
-router.get("/", verificarAutenticacao, function (req, res) {
+router.get("/", async function (req, res) {
     var email = req.session.email;
-    
-    res.render("pages/home", {
+
+    res.render("pages/index", {
         email: email,
         userId: req.session.userId,
         listaErros: null,
@@ -61,54 +53,42 @@ router.get("/", verificarAutenticacao, function (req, res) {
     });
 });
 
-//
-
 router.get("/add-locais", function (req, res) {
     var email = req.session.email;
     res.render("pages/add-locais", { email: email });
 });
 
-// Rota para adicionar locais com upload de imagens
-
-router.get("/pagina-empresa", verificarAutenticacao, verificarAutorizacaoTipo(['empresa', 'adm'], '/login-empr'), (req, res) => {
-    res.render("pagina-empresa", { userId: req.session.userId });
+router.get('/empresas', verificarAutorizacao, (req, res) => {
+    // Lógica para a rota de empresas
 });
 
-router.get("/pagina-usuario", verificarAutenticacao, verificarAutorizacaoTipo(['usuario', 'adm'], '/login'), (req, res) => {
-    res.render("pagina-usuario", { userId: req.session.userId });
+router.get('/profile', verificarAutorizacao, (req, res) => {
+    // Lógica para a rota de perfil
 });
 
-router.post("/adicionarLocais",upload, locaisController.adicionarLocais, async function (req, res) {
-
+router.post("/adicionarLocais", upload, locaisController.adicionarLocais, async function (req, res) {
+    //
 });
-
-
-router.post("/avaliarLocais", verificarLogado, locaisController.avaliarLocais, async function (req, res) {
+router.post("/avaliarLocais", verificarAutenticacao, locaisController.avaliarLocais, async function (req, res) {
 
 });
 
-router.post("/avaliarLocaisBanco", upload, verificarLogado, locaisController.avaliarLocaisBanco, async function (req, res) {
+router.post("/avaliarLocaisBanco", upload, verificarAutenticacao, locaisController.avaliarLocaisBanco, async function (req, res) {
 
 });
-
 
 router.get("/add-product", function (req, res) {
     var email = req.session.email;
     res.render("pages/add-product", { email: email });
 });
 
-router.post("/adicionarProd",upload, produtoController.adicionarProd, async function (req, res) {
+router.post("/adicionarProd", upload, produtoController.adicionarProd, async function (req, res) {
 
 });
 
-
-
-router.get("/pegarProdutoBanco", produtoController.pegarProdutoBanco, async function (req, res){
+router.get("/pegarProdutoBanco", produtoController.pegarProdutoBanco, async function (req, res) {
     //
-    });
-
-
-
+});
 
 router.get("/login", function (req, res) {
     res.render("pages/login", {
@@ -130,21 +110,21 @@ router.get("/login-empr", function (req, res) {
 router.get("/locais-esportivos", async function (req, res) {
     var email = req.session.email;
     var nome = req.session.nome;
-    
 
-    
-    res.render("pages/locais-esportivos", {nome:nome, email: email});
+
+
+    res.render("pages/locais-esportivos", { nome: nome, email: email });
 })
 
-router.get("/locaisBanco", locaisController.locaisBanco, async function (req, res){
-//
+router.get("/locaisBanco", locaisController.locaisBanco, async function (req, res) {
+    //
 });
 
-router.get("/getLocalFromId", locaisController.getLocalFromId, async function (req, res){
-//
+router.get("/getLocalFromId", locaisController.getLocalFromId, async function (req, res) {
+    //
 });
 
-router.get("/product-page/:id", produtoController.getProductById, async function (req, res){
+router.get("/product-page/:id", produtoController.getProductById, async function (req, res) {
 });
 
 router.get("/product-page", function (req, res) {
@@ -152,7 +132,7 @@ router.get("/product-page", function (req, res) {
     res.render("pages/product-page", { email: email });
 });
 
-router.get("/profile", async function (req, res) {
+router.get("/profile", verificarAutenticacao, function (req, res) {
     var nome = req.session.nome;
     var email = req.session.email;
     var cep = req.session.cep;
@@ -234,7 +214,7 @@ router.get("/soccer", function (req, res) {
     res.render("pages/soccer", { email: email });
 });
 
-router.get("/empresa", async function (req, res) {
+router.get("/empresa", verificarAutenticacao, function (req, res) {
 
     var nome = req.session.nome;
     var email = req.session.email;
@@ -305,7 +285,7 @@ router.post("/fazerRegisEmpr", empresaController.registrarEmpr, async function (
     //
 });
 
-router.post('/loginEmpr', empresaController.logarEmpr, async function(req, res){
+router.post('/loginEmpr', empresaController.logarEmpr, async function (req, res) {
     //
 })
 
