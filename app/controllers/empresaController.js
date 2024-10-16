@@ -150,9 +150,48 @@ const adicionarProduto = async (req, res) => {
     }
 }
 
+
+const verSeEmpresa = async (req, res) => {
+    const email = req.session.email;
+    const nome = req.session.nome;
+
+    try {
+        // Primeiro, verificamos na tabela usuario_clientes
+        const queryClientes = `SELECT * FROM usuario_clientes WHERE email = ?`;
+        const [resultClientes] = await connection.query(queryClientes, [email]);
+
+        if (resultClientes.length > 0) {
+            // Se o usuário for encontrado na tabela usuario_clientes
+            const usuario = resultClientes[0];
+            // Coloque aqui o código que você já tem para o usuário encontrado
+            res.render("pages/profile", { user: usuario, nome: nome, email: email });
+        } else {
+            // Se não for encontrado, verificamos na tabela empresas
+            const queryEmpresas = `SELECT * FROM empresas WHERE email = ?`;
+            const [resultEmpresas] = await connection.query(queryEmpresas, [email]);
+
+            if (resultEmpresas.length > 0) {
+                // Se a empresa for encontrada
+                const empresa = resultEmpresas[0];
+                // Coloque aqui o código que você já tem para a empresa encontrada
+                res.render("pages/painel-empresa", { company: empresa, nome: nome, email: email  });
+            } else {
+                // Se não encontrar nem na tabela de clientes nem na de empresas
+                // Coloque aqui o código para lidar com a ausência de usuário/empresa
+                res.render("pages/login");
+            }
+        }
+    } catch (error) {
+        console.error("Erro ao buscar dados no banco de dados:", error);
+        res.status(500).send("Erro ao buscar dados");
+    }
+};
+
+
 module.exports = {
     regrasValidacaoFormLogin,
     logarEmpr,
     registrarEmpr,
     adicionarProduto,
+    verSeEmpresa,
 };

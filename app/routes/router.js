@@ -116,6 +116,10 @@ router.get("/login-empr", function (req, res) {
     });
 });
 
+router.get("/verSeEmpresa", empresaController.verSeEmpresa, async function (req, res) {
+    //
+});
+
 
 // pagina locais
 router.get("/locais-esportivos", async function (req, res) {
