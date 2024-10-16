@@ -119,7 +119,7 @@ const logarEmpr = async (req, res) => {
         // Armazenar informações do usuário na sessão
         req.session.email = account.email;
         req.session.nome = account.nome;
-        req.session.tipo = account.tipo;
+        req.session.userTipo = account.tipo;
         req.session.cnpj = account.cnpj;
         req.session.userId = account.id;
         req.session.logado = true;

@@ -17,15 +17,15 @@ const verificarAutenticacao = (req, res, next) => {
 
 // Middleware para verificar autorização
 const verificarAutorizacao = (req, res, next) => {
-    const tipo = req.session.tipo; // Supondo que o tipo de usuário é armazenado na sessão
+    const userTipo = req.session.userTipo; // Supondo que o tipo de usuário é armazenado na sessão
 
     // Verifica a rota acessada
-    if (req.path === '/empresas' && tipo === 'usuario') {
+    if (req.path === '/empresas' && userTipo === 'usuario') {
         req.flash('error_msg', 'Usuários não têm permissão para acessar a página de empresas.');
-        return res.redirect('/'); // Redireciona para a página inicial ou outra de sua escolha
+        return res.redirect('/login'); // Redireciona para a página inicial ou outra de sua escolha
     }
 
-    if (req.path === '/profile' && tipo === 'empresa') {
+    if (req.path === '/profile' && userTipo === 'empresa') {
         req.flash('error_msg', 'Empresas não têm permissão para acessar a página de perfil.');
         return res.redirect('/empresas'); // Redireciona para a página de empresas
     }

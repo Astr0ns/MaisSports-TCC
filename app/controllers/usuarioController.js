@@ -55,8 +55,10 @@ const logar = async (req, res) => {
             req.session.nome = account.nome;
             req.session.userId = account.id;
             req.session.sobrenome = account.sobrenome;
-            req.session.tipo = account.tipo;
+            req.session.userTipo = account.tipo;
             req.session.logado = true; // Atualizando a sessão
+
+            console.log(account.tipo);
 
             req.flash('msg', "Logado com sucesso");
             return res.redirect('/profile'); // Redireciona após o login

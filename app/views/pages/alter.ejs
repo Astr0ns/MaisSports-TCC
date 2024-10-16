@@ -31,7 +31,7 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2310003761562398"
-     crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
 
     <title>+Sports</title>
 </head>
@@ -48,7 +48,6 @@
         <section class="historico">
             <section class="account-alter">
                 <section class="nog">
-                    <h2>MEU CADASTRO </h2>
                     <ul class="desc">
                         <li>
                             <% if (email) { %> <!-- Verifica se o usuário está logado -->
@@ -160,10 +159,57 @@
                         </li>
                     </ul>
                 </section>
+                <section class="nog">
+                    <ul class="desc">
+                        <li>
+                            <% if (email) { %> <!-- Verifica se o usuário está logado -->
+                                <% if (celular> 0000 ) { %> <!-- Verifica se o CEP está disponível -->
+                                    <h2 class="lr">Seu número cadastrado:</h2>
+                                    <form method="get" action="/guardarCelular">
+                                        <section class="form-group">
+                                            <label for="celular">
+                                                <h3 class="lr">Digite seu Número de telefone</h3>
+                                                <input class="input-form" name="celular" type="text" id="celular"
+                                                    placeholder="<%= celular %>" size="11" value="<%= celular %>"
+                                                    maxlength="11" />
+                                            </label><br />
+                                        </section>
+                                        <section class="form-group">
+                                            <h3 class="lr">Celular:</h3>
+                                            <label for="celular">
+                                                <input class="input-form" name="celular" type="text" id="celular"
+                                                    size="11" />
+                                            </label><br />
+                                        </section>
+                                        <button type="submit" class="btn btn-primary" id="save-btn">Editar
+                                            Número</button>
+                                        <form action="/delcelular" method="post">
+                                            <button type="submit">Excluir Número</button>
+                                        </form>
+                                    </form>
+                                    <% } else { %> <!-- Se o celular não estiver disponível -->
+                                        <h2 class="lr">Adicionar número de telefone:</h2>
+                                        <form method="get" action="/guardarCelular">
+                                            <section class="form-group">
+                                                <label for="celular">
+                                                    <h3 class="lr">Digite seu celular</h3>
+                                                    <input class="input-form" name="celular" type="text" id="celular"
+                                                        placeholder="celular" size="10" maxlength="11" />
+                                                </label><br />
+                                            </section>
+                                            <button type="submit" class="btn btn-primary" id="save-btn">Salvar
+                                                número</button>
+                                        </form>
+
+
+                                        <% } %>
+                                            <% } else { %> <!-- Se o usuário não estiver logado -->
+                                                <h2>Logue para acessar suas informações!</h2>
+                                                <% } %>
+                        </li>
+                    </ul>
+                </section>
             </section>
-
-
-
         </section>
         </section>
 
