@@ -19,6 +19,19 @@
     overflow-x: hidden;
 }
 
+
+.favoritar-button i{
+    color: var(--cor-fundo2);
+}
+
+.desativo{
+    display: none;
+}
+
+
+
+
+
 .card {
     display: flex;
     position: relative;
