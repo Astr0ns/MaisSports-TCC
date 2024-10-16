@@ -27,6 +27,7 @@ const exibirFormularioProduto = (req, res) => {
 const adicionarProd = async (req, res) => {
     const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod } = req.body;
     const email = req.session.email;
+    console.log(req.files);
 
     try {
         // Insere o novo produto
