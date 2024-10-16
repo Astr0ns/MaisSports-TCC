@@ -81,24 +81,36 @@
                         
                         <section class="MainIgm" data-index="0">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
-                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>
+                            <div class="image-preview" id="preview-0">
+                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>
+                            </div>
                           </section>
+                        
                           <section class="MainIgm" data-index="1">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
-                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
+                            <div class="image-preview" id="preview-1">
+                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
+                            </div>
                           </section>
+                        
                           <section class="MainIgm" data-index="2">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
-                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
+                            <div class="image-preview" id="preview-2">
+                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
+                            </div>
                           </section>
+                        
                           <section class="MainIgm" data-index="3">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
-                            <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
+                            <div class="image-preview" id="preview-3">
+                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
+                            </div>
                           </section>
                     
                         
                         
                     </section>
+                    
                     <section class="product-info">
 
                         <section class="title-prod">
@@ -108,35 +120,36 @@
                             <label for="lname">Editar Categoria:</label><br>
                         </section>
 
+                        <section class="opt_catogorias">
+                            <section class="categoria_prod">
+                                <select name="categoria_prod">
+                                    <option value="" selected>Selecione</option>
+                                    <option value="basquete">Basquete</option>
+                                    <option value="futebol">Futebol</option>
+                                    <option value="volei">Vôlei</option>
+                                    <option value="treino">Treino</option>
+                                </select>
+                            </section>
+                            
+                            <section class="categoria_prod">
+                                <select class="tipo_prod" name="tipo_prod">
+                                    <option value="" selected>Selecione</option>
+                                    <option value="roupa">Roupa</option>
+                                    <option value="equipamento">Equipamento</option>
+                                </select>
+                            </section>
 
-                        <section class="categoria_prod">
-                            <select name="categoria_prod">
-                                <option value="" selected>Selecione</option>
-                                <option value="basquete">Basquete</option>
-                                <option value="futebol">Futebol</option>
-                                <option value="volei">Vôlei</option>
-                                <option value="treino">Treino</option>
-                            </select>
-                        </section>
-                        
-                        <section class="categoria_prod">
-                            <select class="tipo_prod" name="tipo_prod">
-                                <option value="" selected>Selecione</option>
-                                <option value="roupa">Roupa</option>
-                                <option value="equipamento">Equipamento</option>
-                            </select>
-                        </section>
-
-                        <section class="categoria_prod" id="roupa_prod">
-                            <select name="roupa_prod">
-                                <option value="" selected>Selecione</option>
-                                <option value="camiseta">Camiseta</option>
-                                <option value="blusa">Blusa</option>
-                                <option value="calca">Calça</option>
-                                <option value="shorts">Shorts</option>
-                                <option value="acessorio">Acessório</option>
-                                <option value="calçados">Calçados</option>
-                            </select>
+                            <section class="categoria_prod" id="roupa_prod">
+                                <select name="roupa_prod">
+                                    <option value="" selected>Selecione</option>
+                                    <option value="camiseta">Camiseta</option>
+                                    <option value="blusa">Blusa</option>
+                                    <option value="calca">Calça</option>
+                                    <option value="shorts">Shorts</option>
+                                    <option value="acessorio">Acessório</option>
+                                    <option value="calçados">Calçados</option>
+                                </select>
+                            </section>
                         </section>
                         
 
@@ -361,21 +374,54 @@
         </section>
     </footer>
 
+    <script src="js/script.js"></script>
+    <script src="js/mini-imgs.js"></script>
+
     <script>
         // Definindo a variável email no JavaScript com o valor vindo do backend
         const email = "<%= email %>";
-        </script>
-        <script src="js/script.js"></script>
-        <script src="js/mini-imgs.js"></script>
+    </script>
+        
 
-        <script>
-                document.querySelectorAll('.upload-link').forEach(link => {
-        link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const input = link.previousElementSibling;
-        input.click();
+    <script>
+        document.querySelectorAll('.upload-link').forEach((link, index) => {
+            link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const input = link.closest('.MainIgm').querySelector('.hidden-input');
+            input.click();
+            });
         });
-    });
+
+        document.querySelectorAll('.hidden-input').forEach((input, index) => {
+            input.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                const previewDiv = document.getElementById(`preview-${index}`);
+                previewDiv.innerHTML = `
+                    <img src="${e.target.result}" alt="Imagem do Produto" style="width: 100px; height: 100px;">
+                    <button type="button" class="remove-image">Remover Imagem</button>
+                `;
+
+                // Adicionar funcionalidade de remover imagem
+                const removeBtn = previewDiv.querySelector('.remove-image');
+                removeBtn.addEventListener('click', () => {
+                    input.value = ''; // Limpa o campo de input
+                    previewDiv.innerHTML = `<a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>`;
+                    
+                    // Reativar a funcionalidade de clicar para adicionar imagem
+                    const newLink = previewDiv.querySelector('.upload-link');
+                    newLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    input.click();
+                    });
+                });
+                };
+                reader.readAsDataURL(file);
+            }
+            });
+        });
 
     </script>
 </body>
