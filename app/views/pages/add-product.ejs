@@ -116,12 +116,13 @@
                         <section class="title-prod">
                             <label for="name">Editar nome do produto:</label><br>
                             <input class="name" type="text" id="titulo_prod" name="titulo_prod"
-                                placeholder="Digite o nome"><br>
-                            <label for="lname">Editar Categoria:</label><br>
+                                placeholder="Digite o nome">
+                            
                         </section>
 
                         <section class="opt_catogorias">
                             <section class="categoria_prod">
+                                <label for="categoria_prod">Categoria:</label>
                                 <select name="categoria_prod">
                                     <option value="" selected>Selecione</option>
                                     <option value="basquete">Basquete</option>
@@ -132,6 +133,7 @@
                             </section>
                             
                             <section class="categoria_prod">
+                                <label for="tipo_prod">Tipo:</label>
                                 <select class="tipo_prod" name="tipo_prod">
                                     <option value="" selected>Selecione</option>
                                     <option value="roupa">Roupa</option>
@@ -139,57 +141,27 @@
                                 </select>
                             </section>
 
-                            <section class="categoria_prod" id="roupa_prod">
-                                <select name="roupa_prod">
-                                    <option value="" selected>Selecione</option>
-                                    <option value="camiseta">Camiseta</option>
-                                    <option value="blusa">Blusa</option>
-                                    <option value="calca">Calça</option>
-                                    <option value="shorts">Shorts</option>
-                                    <option value="acessorio">Acessório</option>
-                                    <option value="calçados">Calçados</option>
-                                </select>
-                            </section>
                         </section>
                         
+                        <section class="categoria_prod" id="roupa_prod">
+                            <label for="roupa_prod">Peça:</label>
+                            <select name="roupa_prod">
+                                <option value="" selected>Selecione</option>
+                                <option value="camiseta">Camiseta</option>
+                                <option value="blusa">Blusa</option>
+                                <option value="calca">Calça</option>
+                                <option value="shorts">Shorts</option>
+                                <option value="acessorio">Acessório</option>
+                                <option value="calçados">Calçados</option>
+                            </select>
+                        </section>
 
         
 
                         <section class="price">
                             <label for="name">Editar preço do produto:</label><br>
                             <input class="name" type="text" id="valor_prod" name="valor_prod" placeholder="Digite o preço">
-                            <section class="center-text">
-                                <h2>Pré-visualização do texto:</h2>
-                                <p>R$:999,99 ou <span>6x</span> de <span>R$:166,66</span></p>
-                            </section>
                         </section>
-
-                        <section class="caminho_prod">
-                            <label for="link_prod">Adicionar link do produto:</label><br>
-                            <input class="name" type="text" id="link_prod" name="link_prod" placeholder="Digite o link">
-                            <section class="center-text">
-                                <h2>Pré-visualização do texto:</h2>
-                                <p>R$:999,99 ou <span>6x</span> de <span>R$:166,66</span></p>
-                            </section>
-                        </section>
-
-                        <section class="descricao_produto">
-                            <label for="descricao_prod">Editar descrição do produto:</label><br>
-                            <input type="text" id="descricao_prod" name="descricao_prod" placeholder="digite o preço">
-                            <section class="center-text">
-                                <h2>Pré-visualização do texto:</h2>
-                                <p>R$:999,99 ou <span>6x</span> de <span>R$:166,66</span></p>
-                            </section>
-                        </section>
-
-
-
-                        <section class="mini-imgs">
-                            <section class="mini-pics-product">
-                                <a href=""><i class="bi bi-plus-circle"></i></a>
-                            </section>
-                        </section>
-
 
                         <section class="tamanhos">
                             <h2 class="tam-inf"><span>Tamanho</span></h2>
@@ -207,7 +179,36 @@
                             </section>
                         </section>
 
-                        <section class="descricao">
+                        <section class="caminho_prod">
+                            <label for="link_prod">Adicionar link do produto:</label><br>
+                            <input class="name" type="text" id="link_prod" name="link_prod" placeholder="Digite o link">
+                        </section>
+
+                        <section class="descricao_produto">
+                            <label for="descricao_prod">Editar descrição do produto:</label><br>
+                            <input type="text" id="descricao_prod" name="descricao_prod" placeholder="digite o preço">
+                            <!-- <section class="center-text">
+                                <h2>Pré-visualização do texto:</h2>
+                                <p>Preço Produto<span>R$166,66</span></p>
+                            </section> -->
+                        </section>
+
+                        <section class="backNext">
+                            <button class="backButton">
+                                Voltar
+                            </button>
+                            <button class="nextButton">
+                                Proximo
+                            </button>
+                        </section>
+
+                        <button type="submit">Adicionar Agora!</button>
+
+
+
+                        
+
+                        <!-- <section class="descricao">
                             <h2>Descrição do produto:</h2>
                             <p>ESTILO AF1 LENDÁRIO.</p>
                             <br>
@@ -231,45 +232,11 @@
                                     tênis estará com você nos subúrbios, no centro da cidade e em todos os
                                     outros
                                     lugares.
-                                </li>
-                                <li>
-                                    Desenvolvido originalmente para o treino de basquete, o amortecimento Nike
-                                    Air
-                                    proporciona um conforto duradouro, enquanto a boca e a língua almofadadas
-                                    garantem
-                                    uma
-                                    passada suave.
-                                </li>
-                                <li>
-                                    A parte superior viçosa e fácil de limpar proporciona um look ideal fora das
-                                    quadras, enquanto o design de cano médio e o acabamento da forma de sola
-                                    debaixo
-                                    do pé remetem ao DNA do basquete. É história, look e conforto, tudo em um.
-
-                                </li>
-                                <li></li>
-                                <li></li>
-
-                                <p>Detalhes do produto</p>
-
-                                <ul>
-                                    <li>Entressola de espuma</li>
-                                    <li>Sistema de amarração de largura variável</li>
-                                    <li> O fecho aderente permite personalizar o estilo e caimento</li>
-                                    <li> Perfurações na ponta</li>
-                                    <li>Sola de borracha sem marcação para maior tração e durabilidade</li>
-                                </ul>
-
-                                <p>Origens do Air Force 1</p>
-
-                                <p>Estreando em 1982, o AF1 foi o primeiro tênis de basquete a abrigar o Nike Air,
-                                    revolucionando o jogo e ganhando tração rapidamente em todo o mundo. Hoje, o Air
-                                    Force 1
-                                    permanece fiel às suas raízes com o mesmo amortecimento macio e flexível que mudou a
-                                    história dos sneakers.</p>
-                            </section>
-                            <button id="toggleButton" class="btn-vermais">Ver mais</button>
-                            <script>
+                                </li> -->
+                                
+                            <!-- </section> -->
+                            <!-- <button id="toggleButton" class="btn-vermais">Ver mais</button> -->
+                            <!-- <script>
                                 document.addEventListener("DOMContentLoaded", function () {
                                     var content = document.getElementById("moreContent");
                                     var button = document.getElementById("toggleButton");
@@ -291,10 +258,10 @@
                                         button.textContent = "Ver menos";
                                     }
                                 });
-                            </script>
+                            </script> -->
                         </section>
 
-                                <button type="submit">Adicionar Agora!</button>
+                                
                     </section>
                 </form>
             </section>

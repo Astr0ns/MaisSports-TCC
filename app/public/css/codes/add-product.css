@@ -28,6 +28,22 @@ section.product-card{
     height: auto;
 }
 
+button{
+    background-color: #1a3489a8; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 12px 20px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin: 10px 0; 
+    transition: background-color 0.3s; 
+}
+
+button:hover{
+    background-color: #1a348981; 
+}
+
 .product-card i {
     font-size: 28vh;
     display: flex;
@@ -53,19 +69,65 @@ section.product-card{
     background-color: var(--cor-fonte);
     display: block;
     padding: 10px;
-    margin-left: 10px;
-    margin-bottom: 10px;
+    
     border: 1px solid var(--cor-fundo2);
     border-radius: 17px;
 }
 
 .opt_catogorias{
     display: flex;
+    justify-content: space-between;
 }
 
 .opt_catogorias section select{
-    
+    width: 10.5em;
 }
+
+.categoria_prod{
+    display: flex;
+    flex-direction: column;
+}
+
+.categoria_prod select{
+    width: 10.5em;
+}
+
+
+.caminho_prod, .descricao_produto{
+    width: 100%;
+}
+
+.caminho_prod input, .descricao_produto input{
+    width: 100%;
+}
+
+.categoria_prod{
+    margin-top: 15px;
+}
+
+/* preço */
+.price{
+    margin-top: 20px;
+}
+
+/* botão proximo e voltar */
+.backNext{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+input#descricao_prod {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 0px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+    height: 100px;
+}
+
 
 .mini-pics-product i {
     font-size: 100px;
@@ -82,6 +144,16 @@ section .desc-container {
     padding: 35px 35px;
     overflow: hidden;
     margin-left: 10%;
+}
+
+.center-text p{
+    font-size: 20px;
+    margin: 15px 0 16px 0;
+}
+
+span{
+    color: var(--cor-fundo2);
+    font-weight: bold;
 }
 
 section.descricao {
@@ -125,17 +197,8 @@ input#link_prod {
     border-radius: 17px;
 }
 
-input#descricao_prod {
-    background-color: var(--cor-fonte);
-    display: block;
-    padding: 10px;
-    margin-left: 0px;
-    margin-bottom: 10px;
-    border: 1px solid var(--cor-fundo2);
-    border-radius: 17px;
-    width: 200px;
-    height: 100px;
-}
+
+
 
 
 select {
