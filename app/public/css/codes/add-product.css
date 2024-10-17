@@ -24,6 +24,10 @@ form{
     display: flex;
 }
 
+.desativar_container{
+    display: none;
+}
+
 section.product-card{
     height: auto;
 }
