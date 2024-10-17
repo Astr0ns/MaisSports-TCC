@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Garantir que o primeiro plano fique marcado inicialmente
     const firstPlan = document.querySelector('.plan');
-    const corSelected = 
+    
     firstPlan.classList.add('selected');
     firstPlan.querySelector('.bi-circle').style.display = 'none';
     firstPlan.querySelector('.bi-check-circle-fill').style.display = 'inline-block';
@@ -23,7 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedPlanElement.classList.add('selected');
             selectedPlanElement.querySelector('.bi-circle').style.display = 'none';
             selectedPlanElement.querySelector('.bi-check-circle-fill').style.display = 'inline-block';
+            const corSelected = document.querySelector('.corSelected').innerHTML
             selectedPlanElement.style.backgroundColor = corSelected; // Define a cor do plano selecionado
+            console.log("viado")
         });
     });
 });
@@ -46,6 +48,7 @@ function selectBlack() {
     document.querySelector(".plan").style.backgroundColor = "rgb(4, 20, 41)";
 
     const corSelctedBlack = "rgb(17, 53, 100)";
+    document.querySelector('.corSelected').innerHTML = corSelctedBlack
     document.querySelector("#card-black").style.display = "flex";
     document.querySelector("#card-medio").style.display = "none";
     document.querySelector("#card-basico").style.display = "none";
@@ -68,7 +71,8 @@ function selectMedio() {
     document.querySelector(".assinatura-data").style.backgroundColor = "rgb(4, 20, 41)";
     document.querySelector(".plan").style.backgroundColor = "rgb(4, 20, 41)";
 
-    const corSelctedmedio = "#fff";
+    const corSelctedBlack = "rgb(17, 53, 100)";
+    document.querySelector('.corSelected').innerHTML = corSelctedBlack
     document.querySelector("#card-black").style.display = "none";
     document.querySelector("#card-medio").style.display = "flex";
     document.querySelector("#card-basico").style.display = "none";
