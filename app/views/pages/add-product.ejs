@@ -79,9 +79,9 @@
 
                     <section class="assinatura-page">
                         <section class="assinatura_planos">
-                            <button id="p-black" onclick="selectBlcak()"><h3>10 É FAIXA</h3><p>Voecê Que Manda</p></button>
-                            <button id="p-medio" onclick="selectMedio()"><h3>CRAQUE</h3><p>Ocê é Craque</p></button>
-                            <button id="p-normal" onclick="selectNormal()"><h3>PAGUE UMA VEZ</h3><p>Apenas 1 Vez</p></button>
+                            <button type="button" id="p-black" onclick="selectBlack()"><h3>10 É FAIXA</h3><p>Voecê Que Manda</p></button>
+                            <button type="button" id="p-medio" onclick="selectMedio()"><h3>CRAQUE</h3><p>Ocê é Craque</p></button>
+                            <button type="button" id="p-normal" onclick="selectNormal()"><h3>PAGUE UMA VEZ</h3><p>Apenas 1 Vez</p></button>
                         </section>
 
                         <%- include("../partial/assinatura-card") %>
@@ -404,9 +404,6 @@
 
     </script>
 
-    <script>
-        selectBlcak()
-    </script>
 </body>
 
 </html>

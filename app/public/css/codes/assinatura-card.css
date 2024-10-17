@@ -142,3 +142,12 @@ input[type="radio"]:checked {
     height: auto;
     color: #f72ba5;
 }
+
+
+#card-medio{
+    display: none;
+}
+
+#card-basico{
+    display: none;
+}
