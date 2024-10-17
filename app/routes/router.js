@@ -170,7 +170,7 @@ router.get("/profile", verificarAutenticacao, function (req, res) {
 });
 
 
-router.get("/alter-account", function (req, res) {
+router.get("/alter-account", verificarAutenticacao, async function (req, res) {
     email = req.session.email;
     nome = req.session.nome;
     sobrenome = req.session.sobrenome;
@@ -179,7 +179,7 @@ router.get("/alter-account", function (req, res) {
         email: email,
         nome: nome,
         sobrenome: sobrenome,
-        celular: celular
+        celular: celular,
     });
 });
 
@@ -208,7 +208,7 @@ router.get("/register", function (req, res) {
 });
 
 
-router.post("/alterType", async function (req, res) {
+router.post("/alterType", verificarAutenticacao, async function (req, res) {
     const { email, senha, cnpj, cSenha } = req.body;
 
     if (senha != cSenha) {
@@ -257,38 +257,14 @@ router.get("/empresa", verificarAutenticacao, function (req, res) {
     });
 });
 
-router.get("/add-product", function (req, res) {
+router.get("/add-product", verificarAutenticacao, function (req, res) {
     res.render("pages/add-product");
 });
 router.get("/cart", function (req, res) {
 });
 
-router.get('/alter', async (req, res) => {
-    try {
-        const email = req.session.email;
-
-        if (!email) {
-            throw new Error('Usuário não autenticado.');
-        }
-
-        // Query usando o email em vez do userId
-        const [rows] = await connection.query(
-            "SELECT cep, numero FROM usuario_clientes WHERE email = ?",
-            [email]
-        );
-
-        if (rows.length === 0) {
-            throw new Error('Usuário não encontrado.');
-        }
-
-        const { cep, numero } = rows[0]; // Obter os dados retornados
-
-        // Renderizar a página com as informações
-        res.render('pages/alter', { email, cep, numero });
-    } catch (error) {
-        console.error('Erro ao obter dados:', error);
-        res.status(500).send('Erro ao obter dados');
-    }
+router.get('/alter', usuarioController.alterDados, usuarioController.guardarCelular, verificarAutenticacao, async (req, res) => {
+    //
 });
 
 router.post("/fazerRegistro", usuarioController.registrarUsu, async function (req, res) {

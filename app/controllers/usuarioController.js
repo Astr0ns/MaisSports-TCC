@@ -6,6 +6,7 @@ const { removeImg } = require("../util/removeImg");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const https = require('https');
 var connection = require("../../config/pool_conexoes");
+const { error } = require("console");
 
 
 // Regras de validação para o formulário de login
@@ -52,6 +53,7 @@ const logar = async (req, res) => {
 
             // Armazenar informações do usuário na sessão
             req.session.email = account.email;
+            req.session.celular = account.celular;
             req.session.nome = account.nome;
             req.session.userId = account.id;
             req.session.sobrenome = account.sobrenome;
@@ -73,9 +75,6 @@ const logar = async (req, res) => {
         return res.status(500).send('Erro interno do servidor');
     }
 };
-
-
-
 
 // Função Registrar
 
@@ -117,7 +116,7 @@ const registrarUsu = async (req, res) => {
         const hash = await bcrypt.hash(senha, 12);
 
         // Inserir o novo usuário na base de dados
-        await connection.query("INSERT INTO usuario_clientes (nome, sobrenome, email, senha, tipo, cep, numero) VALUES (?, ?, ?, ?, 'usuario', '00000000', '0000')", [nome, sobrenome, email, hash]);
+        await connection.query("INSERT INTO usuario_clientes (nome, sobrenome, email, senha, tipo, cep, numero, celular) VALUES (?, ?, ?, ?, 'usuario', '00000000', '0000', '000000000000')", [nome, sobrenome, email, hash]);
 
         req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para a página de login em breve.');
         res.redirect('/register?success=true');
@@ -130,45 +129,61 @@ const registrarUsu = async (req, res) => {
     }
 }
 
-const comprar = async (req, res) => {
-    const { produto_id, comprador_id, quantidade } = req.body;
+const alterDados = async (req, res) => {
 
+    var celular = req.session.celular;
+    
     try {
-        // Verificar se o produto está disponível
-        const produto = await pool.query('SELECT * FROM produtos WHERE id = $1', [produto_id]);
+        const email = req.session.email;
 
-        if (produto.rows.length === 0) {
-            return res.status(404).json({ error: 'Produto não encontrado' });
+        if (!email) {
+            throw new Error('Usuário não autenticado.');
         }
 
-        const produtoData = produto.rows[0];
+        // Query usando o email em vez do userId
+        const [rows] = await connection.query(
+            "SELECT cep, numero FROM usuario_clientes WHERE email = ?",
+            [email]
+        );
 
-        if (produtoData.quantidade < quantidade) {
-            return res.status(400).json({ error: 'Quantidade insuficiente em estoque' });
+        if (rows.length === 0) {
+            throw new Error('Usuário não encontrado.');
         }
 
-        // Registrar a venda
-        const venda = await pool.query(
-            'INSERT INTO vendas (produto_id, comprador_id, quantidade, vendedor) VALUES ($1, $2, $3, $4) RETURNING *',
-            [produto_id, comprador_id, quantidade, produtoData.marca]
-        );
+        const { cep, numero } = rows[0]; // Obter os dados retornados
 
-        // Atualizar o estoque
-        await pool.query(
-            'UPDATE produtos SET quantidade = quantidade - $1 WHERE id = $2',
-            [quantidade, produto_id]
-        );
-
-        res.status(201).json(venda.rows[0]);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Erro ao realizar compra' });
+        // Renderizar a página com as informações
+        res.render('pages/alter', { email, cep, numero, celular });
+    } catch (error) {
+        console.error('Erro ao obter dados:', error);
+        res.status(500).send('Erro ao obter dados');
     }
-};
+}
+
+const guardarCelular = async (req, res) => {
+    try{
+        const userId = req.session.userId;
+
+        if(!userId) {
+            throw new error('Usuario não autenticado');
+        }
+
+        const [rows] = await connection.query(
+            "SELECT celular FROM usuario_clientes WHERE id = ?", [userId]
+        );
+
+        const { celular } = rows[0];
+
+    }catch{
+        console.error('Erro ao obter dados:', error);
+        res.status(500).send('Erro ao obter dados');
+    }
+}
 
 module.exports = {
     regrasValidacaoFormLogin,
     logar,
     registrarUsu,
-    comprar
+    alterDados,
+    guardarCelular
 };
