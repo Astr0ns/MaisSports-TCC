@@ -78,7 +78,7 @@
                 <form action="/adicionarProd" method="POST" enctype="multipart/form-data">
 
                     <section class="assinatura-page">
-                        <section class="assinatura_planos">
+                        <section class="assinatura_planos desativar_container">
                             <button type="button" id="p-black" onclick="selectBlack()"><h3>10 É FAIXA</h3><p>Voecê Que Manda</p></button>
                             <button type="button" id="p-medio" onclick="selectMedio()"><h3>CRAQUE</h3><p>Ocê é Craque</p></button>
                             <button type="button" id="p-normal" onclick="selectNormal()"><h3>PAGUE UMA VEZ</h3><p>Apenas 1 Vez</p></button>
@@ -90,7 +90,7 @@
 
                     
                     <!-- <section class="product-card  desativar_container"> -->
-                    <section class="desativar_container">
+                    <section class="desativar_container" id="product-card-stl">
                         
                         <section class="MainIgm" data-index="0">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
@@ -124,7 +124,7 @@
                         
                     </section>
                     
-                    <section class="product-info desativar_container">
+                    <section class="product-info desativar_container" id="product-info-stl">
 
                         <section class="title-prod">
                             <label for="name">Editar nome do produto:</label><br>

@@ -20,6 +20,25 @@ body, .card, .assinatura-info, .assinatura-data, .plan {
     transition: background-color 0.5s ease, color 0.5s ease;
 }
 
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.product-card{
+    animation: slideIn 0.5s forwards;
+}
+
+.product-info{
+    animation: slideIn 0.5s forwards;
+}
+
 
 .card {
     display: flex;

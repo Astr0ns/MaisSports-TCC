@@ -58,6 +58,8 @@ function selectBlack() {
     if (selectedPlan) {
         selectPlan(selectedPlan);
     }
+
+    saberPreco(3.5)
 }
 
 function selectMedio() {
@@ -87,6 +89,8 @@ function selectMedio() {
     if (selectedPlan) {
         selectPlan(selectedPlan);
     }
+
+    saberPreco(2.5)
 }
 
 function selectNormal() {
@@ -116,7 +120,47 @@ function selectNormal() {
     if (selectedPlan) {
         selectPlan(selectedPlan);
     }
+
+    saberPreco(1.5);
+
+
 }
+
+
+function saberPreco(valorDia) {
+    const dias = [30, 90, 120];
+    const desconto = [0.9, 0.85];
+
+    const precoLista = [
+        dias[0] * valorDia,
+        dias[1] * valorDia * desconto[0],
+        dias[2] * valorDia * desconto[1]
+    ];
+    const prices = document.querySelectorAll(".price");
+
+    prices.forEach((priceElement, index) => {
+        priceElement.textContent = `R$${precoLista[index].toFixed(2)}`;
+    });
+}
+
+function NextAddProduct() {
+    // Esconder a seção atual
+    document.querySelector('.assinatura-page').classList.add('desativar_container');
+    document.querySelector('.assinatura-page').classList.remove('assinatura-page');
+
+    document.querySelector('#product-card-stl').classList.add('product-card');
+    document.querySelector('#product-card-stl').classList.remove('desativar_container');
+    
+    document.querySelector('#product-info-stl').classList.add('product-info');
+    document.querySelector('#product-info-stl').classList.remove('desativar_container');
+
+    document.body.style.backgroundColor = "#fff";
+    
+    // Mudar o background da seção assinatura-data
+    document.querySelector(".card").style.backgroundColor = "#f5f5f5";
+
+}
+
 
 
 document.addEventListener("DOMContentLoaded", function() {
