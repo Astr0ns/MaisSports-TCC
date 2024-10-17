@@ -79,39 +79,40 @@
 
                     <section class="assinatura-page">
                         <section class="assinatura_planos">
-                            <button id="p-black"></button>
-                            <button id="p-medio"></button>
-                            <button id="p-barato"></button>
+                            <button id="p-black" onclick="selectBlcak()"><h3>10 É FAIXA</h3><p>Voecê Que Manda</p></button>
+                            <button id="p-medio" onclick="selectMedio()"><h3>CRAQUE</h3><p>Ocê é Craque</p></button>
+                            <button id="p-normal" onclick="selectNormal()"><h3>PAGUE UMA VEZ</h3><p>Apenas 1 Vez</p></button>
                         </section>
 
                         <%- include("../partial/assinatura-card") %>
                     </section>
 
                     
-                    <section class="product-card ">
+                    <!-- <section class="product-card  desativar_container"> -->
+                    <section class="desativar_container">
                         
-                        <section class="MainIgm desativar_container" data-index="0">
+                        <section class="MainIgm" data-index="0">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
                             <div class="image-preview" id="preview-0">
                               <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>
                             </div>
                           </section>
                         
-                          <section class="MainIgm desativar_container" data-index="1">
+                          <section class="MainIgm" data-index="1">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
                             <div class="image-preview" id="preview-1">
                               <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
                             </div>
                           </section>
                         
-                          <section class="MainIgm desativar_container" data-index="2">
+                          <section class="MainIgm" data-index="2">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
                             <div class="image-preview" id="preview-2">
                               <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
                             </div>
                           </section>
                         
-                          <section class="MainIgm desativar_container" data-index="3">
+                          <section class="MainIgm" data-index="3">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
                             <div class="image-preview" id="preview-3">
                               <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
@@ -360,7 +361,7 @@
         const email = "<%= email %>";
     </script>
         
-
+    <!-- Pegar imagem pelo icons de adiconar -->
     <script>
         document.querySelectorAll('.upload-link').forEach((link, index) => {
             link.addEventListener('click', (event) => {
@@ -401,6 +402,10 @@
             });
         });
 
+    </script>
+
+    <script>
+        selectBlcak()
     </script>
 </body>
 

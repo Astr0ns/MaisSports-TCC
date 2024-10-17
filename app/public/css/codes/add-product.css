@@ -7,13 +7,20 @@
     --cor-fundo2: #d12089;
     --cor-fundo3: rgb(79, 79, 79);
     --cor-fundo4: #1a348967;
+
+    --cor-bar-dark: #010c1aa9;
+    --cor-bar-dark-mob: #010c1a;
+}
+
+body{
+    background-color: #010c1aa9;
 }
 
 .card {
     display: flex;
     position: relative;
     height: auto;
-    background-color: #f5f5f5;
+    background-color: #010c1a8e;
     border-radius: 10px;
     padding: 35px 35px;
     overflow: hidden;
@@ -46,6 +53,62 @@ button{
 
 button:hover{
     background-color: #1a348981; 
+}
+
+.assinatura-page{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+}
+
+.assinatura_planos{
+    display: flex;
+    justify-content: space-around;
+}
+
+.assinatura_planos h3{
+    font-size: 1.4em;
+    font-weight: bolder;
+}
+
+.assinatura_planos p{
+    font-size: 0.9em;
+}
+
+#p-black{
+    background-color: var(--cor-bar-dark-mob);
+}
+#p-black h3{
+    color: #f72ba5;
+}
+
+#p-medio{
+    background-color: #2763b1;
+}
+
+#p-medio h3{
+    color: #f72ba5;
+}
+
+#p-normal{
+    background-color: #fff;
+
+}
+
+#p-normal h3{
+    color: #f72ba5;
+}
+
+#p-normal p{
+    color: var(--cor-fonte2);
+}
+
+.assinatura_planos button{
+    display: flex;
+    width: 30%;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .product-card i {

@@ -8,58 +8,86 @@
     <section class="assinatura-text">
         <h2>+SPORT 10 É FAIXA</h2>
         <p>Esta assinatura prioriza suas postagens da melhor forma possível em nosso site, aparecendo inclusive na área dos locais esportivos. </p>
+        <h3><i class="bi bi-badge-ad"></i>Banner Proprio do Produto</h3>
+        <h3><i class="bi bi-graph-up-arrow"></i>Destaque Maximo na Pagina</h3>
+        <h3><i class="bi bi-geo-alt"></i>Recomendaçõe em Busca de Locais</h3>
+        <p class="cancel-text">A assinatura pode ser cancelada em até 24 Horas (Terá uma pequena taxa). Consulte os termos da MaisSport para saber mais detalhes sobre como cancelar.</p>
     </section>
+
+
     <section class="assinatura-data">
         <h3>Escolha um plano de assinatura</h3>
 
         <label for="input-1">
             <div class="plan">
                 <input type="radio" name="plan" id="input-1" value="1">
-                Assinatura de 1 meses
-                <p>Pague a cada mês. A assinatura continuará ativa até ser cancelada.</p>
-                <div class="price">R$34,90</div>
+                <i class="bi bi-circle"></i>
+                <i class="bi bi-check-circle-fill radiodesativo"></i>
+                <div>
+                    Assinatura de 1 meses
+                    <p>Pague a cada mês. A assinatura continuará ativa até ser cancelada.</p>
+                    <div class="price">R$34,90</div>
+                </div>
             </div>
         </label>
       
         <label for="input-2">
             <div class="plan">
                 <input type="radio" name="plan" id="input-2" value="3">
-                Assinatura de 3 meses
-                <p>Pague a cada 3 meses. A assinatura continuará ativa até ser cancelada.</p>
-                <div class="price">R$99,90</div>
+                <i class="bi bi-circle"></i>
+                <i class="bi bi-check-circle-fill radiodesativo"></i>
+                <div>
+                    Assinatura de 3 meses
+                    <p>Pague a cada 3 meses. A assinatura continuará ativa até ser cancelada.</p>
+                    <div class="price">R$99,90</div>
+                </div>
             </div>
         </label>
       
         <label for="input-3">
             <div class="plan">
                 <input type="radio" name="plan" id="input-3" value="6">
-                Assinatura de 6 meses
-                <p>Pague a cada 6 meses. A assinatura continuará ativa até ser cancelada.</p>
-                <div class="price">R$199,90</div>
+                <i class="bi bi-circle"></i>
+                <i class="bi bi-check-circle-fill radiodesativo"></i>
+                <div>
+                    Assinatura de 6 meses
+                    <p>Pague a cada 6 meses. A assinatura continuará ativa até ser cancelada.</p>
+                    <div class="price">R$199,90</div>
+                </div>
             </div>
         </div>
+        <section class="backNext">
+            <button class="nextButton">
+                Proximo
+            </button>
+        </section>
     </section>
-    <section class="backNext">
-        <button class="nextButton">
-            Proximo
-        </button>
-    </section>
+    
 </section>
 
 <script>
     // Select all radio buttons and listen for changes
-const plans = document.querySelectorAll('input[type="radio"]');
+    const plans = document.querySelectorAll('input[type="radio"]');
 
-plans.forEach(plan => {
-    plan.addEventListener('change', function() {
-        // Remove 'selected' class from all plans
-        document.querySelectorAll('.plan').forEach(p => p.classList.remove('selected'));
+    plans.forEach(plan => {
+        plan.addEventListener('change', function() {
+            // Remove 'selected' class from all plans and reset icons
+            document.querySelectorAll('.plan').forEach(p => {
+                p.classList.remove('selected');
+                // Reset icons
+                p.querySelector('.bi-circle').style.display = 'inline-block';
+                p.querySelector('.bi-check-circle-fill').style.display = 'none';
+            });
 
-        // Add 'selected' class to the parent div of the checked input
-        if (this.checked) {
-            this.parentElement.classList.add('selected');
-        }
+            // Add 'selected' class to the parent div of the checked input
+            if (this.checked) {
+                this.parentElement.classList.add('selected');
+                // Change icons
+                this.parentElement.querySelector('.bi-circle').style.display = 'none';
+                this.parentElement.querySelector('.bi-check-circle-fill').style.display = 'inline-block';
+            }
+        });
     });
-});
+
 
 </script>
