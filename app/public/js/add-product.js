@@ -62,7 +62,7 @@ function selectMedio() {
     document.querySelector(".card").style.backgroundColor = "#010c1a8e";
 
     // assinatura informações
-    document.querySelector(".assinatura-info").style.backgroundColor = "#010c1a";
+    document.querySelector(".assinatura-info").style.backgroundColor = "#2763b1";
     document.querySelector(".assinatura-info").style.color = "#fff";
     document.querySelector(".assinatura-info h2").style.color = "#f72ba5";
 
@@ -79,8 +79,27 @@ function selectMedio() {
 }
 
 function selectNormal() {
-    document.body.style.backgroundColor = "#3A4A5A";
-    document.getElementById("assinaturaData").style.backgroundColor = "#2C3A4A";
+    // Mudar o background do body
+    document.body.style.backgroundColor = "#010c1aa9";
+    
+    // Mudar o background da seção assinatura-data
+    document.querySelector(".card").style.backgroundColor = "#010c1a8e";
+
+    // assinatura informações
+    document.querySelector(".assinatura-info").style.backgroundColor = "#010c1a";
+    document.querySelector(".assinatura-info").style.color = "#fff";
+    document.querySelector(".assinatura-info h2").style.color = "#f72ba5";
+
+    document.querySelector(".assinatura-info h3 i").style.color = "#f72ba5";
+
+    document.querySelector(".assinatura-data").style.backgroundColor = "rgb(4, 20, 41)";
+    document.querySelector(".plan").style.backgroundColor = "rgb(4, 20, 41)";
+
+    const corSelctedBlack = "rgb(17, 53, 100)";
+    document.querySelector('.corSelected').innerHTML = corSelctedBlack
+    document.querySelector("#card-black").style.display = "none";
+    document.querySelector("#card-medio").style.display = "none";
+    document.querySelector("#card-basico").style.display = "flex";
 }
 
 
