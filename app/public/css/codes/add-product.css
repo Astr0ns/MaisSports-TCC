@@ -162,6 +162,34 @@ button:hover{
 }
 
 
+
+.image-preview{
+    display: inline-block;
+    width: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-preview img{
+    width: 90%;
+    display: block;
+    max-width: 100%; /* Garante que a imagem não ultrapasse o contêiner */
+    height: auto; /* Mantém a proporção da imagem */
+    border: none;
+    
+}
+
+.remove-image {
+    position: absolute;
+    bottom: 10px; /* Distância do fundo */
+    left: 10px; /* Distância da esquerda */
+    background-color: rgba(255, 255, 255, 0.7); /* Fundo semi-transparente */
+    border: 1px solid #ccc; /* Borda opcional */
+    padding: 5px 10px; /* Espaçamento interno */
+    cursor: pointer; /* Cursor de pointer para indicar que é clicável */
+    z-index: 10; /* Garante que o botão esteja acima da imagem */
+}
+
 .title-prod .name {
     background-color: var(--cor-fonte);
     display: block;

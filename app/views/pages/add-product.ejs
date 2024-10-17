@@ -380,8 +380,8 @@
                 reader.onload = function (e) {
                 const previewDiv = document.getElementById(`preview-${index}`);
                 previewDiv.innerHTML = `
-                    <img src="${e.target.result}" alt="Imagem do Produto" style="width: 100px; height: 100px;">
-                    <button type="button" class="remove-image">Remover Imagem</button>
+                    <img src="${e.target.result}">
+                    <button type="button" class="remove-image">Remover</button>
                 `;
 
                 // Adicionar funcionalidade de remover imagem
