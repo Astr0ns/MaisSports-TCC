@@ -78,6 +78,10 @@ h2 {
     background-color: #f72ba5;
 }
 
+.assinatura-data button:hover{
+    background-color: #fa6dc2;
+}
+
 
 
 .plan {
@@ -106,6 +110,7 @@ h2 {
 
 .plan .price {
     font-weight: bold;
+    color: #FFF;
 }
 
 
@@ -128,11 +133,11 @@ input[type="radio"]:checked {
     border-color: #80bdff;
 }
 
-.backNext{
+.assinatura-info .backNext{
     justify-content: flex-end;
 }
 
-.backNext .nextButton{
+.assinatura-info .backNext .nextButton{
     width: 100%;
 }
 

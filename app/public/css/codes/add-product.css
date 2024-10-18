@@ -183,11 +183,15 @@ button:hover{
     position: absolute;
     bottom: 10px; /* Distância do fundo */
     left: 10px; /* Distância da esquerda */
-    background-color: rgba(255, 255, 255, 0.7); /* Fundo semi-transparente */
+    background-color: #f72ba5; /* Fundo semi-transparente */
     border: 1px solid #ccc; /* Borda opcional */
     padding: 5px 10px; /* Espaçamento interno */
     cursor: pointer; /* Cursor de pointer para indicar que é clicável */
     z-index: 10; /* Garante que o botão esteja acima da imagem */
+}
+
+.remove-image:hover{
+    background-color: #fa6dc2;
 }
 
 .title-prod .name {
@@ -253,6 +257,21 @@ input#descricao_prod {
     height: 100px;
 }
 
+.tam-inf{
+    display: none;
+}
+
+.tam-calcado, .tam-roupa{
+    display: none;
+    
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    grid-template-columns: repeat(5, auto);
+    margin: 15px 0 15px;
+}
 
 .mini-pics-product i {
     font-size: 100px;
@@ -344,5 +363,9 @@ form{
 }
 
 .hidden-input{
+    display: none;
+}
+
+.finalizar-add-product{
     display: none;
 }
