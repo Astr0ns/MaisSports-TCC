@@ -156,6 +156,22 @@ function saberPreco(valorDia) {
 }
 
 function NextAddProduct(num_page) {
+    if (num_page === 2) {
+        // Validação dos campos
+        const tituloProd = document.getElementById('titulo_prod').value.trim();
+        const categoriaProd = document.querySelector('select[name="categoria_prod"]').value;
+        const tipoProd = document.querySelector('select[name="tipo_prod"]').value;
+        const valorProd = document.getElementById('valor_prod').value.trim();
+        const linkProd = document.getElementById('link_prod').value.trim();
+        const descricaoProd = document.getElementById('descricao_prod').value.trim();
+
+        // Verifica se todos os campos obrigatórios estão preenchidos
+        if (!tituloProd || !categoriaProd || !tipoProd || !valorProd || !linkProd || !descricaoProd) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return; // Impede a transição para a próxima página
+        }
+    }
+
     // Esconder a seção atual
     if(num_page == 1){
         document.querySelector('.assinatura-page').classList.add('desativar_container');

@@ -198,7 +198,7 @@ button:hover{
     background-color: var(--cor-fonte);
     display: block;
     padding: 10px;
-    
+    width: 100%;
     border: 1px solid var(--cor-fundo2);
     border-radius: 17px;
 }
@@ -246,16 +246,21 @@ button:hover{
     margin-top: 20px;
 }
 
-input#descricao_prod {
+
+textarea#descricao_prod {
     background-color: var(--cor-fonte);
     display: block;
     padding: 10px;
-    margin-left: 0px;
+    margin-left: 0;
     margin-bottom: 10px;
     border: 1px solid var(--cor-fundo2);
     border-radius: 17px;
-    height: 100px;
+    height: 200px;
+    box-sizing: border-box; /* Garante que o padding seja incluído na altura total */
+    resize: none; /* Para impedir o redimensionamento */
+    width: 100%;
 }
+
 
 .tam-inf{
     display: none;
