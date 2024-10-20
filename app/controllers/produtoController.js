@@ -1,7 +1,13 @@
 const path = require('path');
 var connection = require("../../config/pool_conexoes");
 const multer = require('multer');
+const { MercadoPagoConfig, Preference } = require('mercadopago'); // Import Preference
 
+// Inicialize o cliente Mercado Pago
+const client = new MercadoPagoConfig({
+    accessToken: 'TEST-5246075068010463-102011-23539c46def1acb4b061770a6d174e1e-428968371',
+    options: { timeout: 5000, idempotencyKey: 'abc' }
+});
 
 // Configuração do armazenamento
 const storage = multer.diskStorage({
@@ -29,95 +35,110 @@ const adicionarProd = async (req, res) => {
     const email = req.session.email;
     console.log(req.files);
 
+    console.log('Título:', titulo_prod);
+    const externalReference = JSON.stringify({
+        titulo_prod,
+        descricao_prod,
+        valor_prod,
+        categoria_prod,
+        tipo_prod,
+        roupa_prod,
+        link_prod
+    });
+
     try {
-        
+        // Inicialize o objeto de pagamento
+        const preference = new Preference(client);
 
-        // Verifica se existem arquivos enviados (imagens)
-        if (req.files && req.files.length > 0) {
-            const imagens = req.files.map(file => file.filename); // Obtem os nomes dos arquivos de imagem
-        }
-
-        req.session.produtoTemp = {
-            titulo_prod,
-            descricao_prod,
-            valor_prod,
-            categoria_prod,
-            tipo_prod,
-            roupa_prod,
-            link_prod,
-            imagens
+        // Crie o corpo da requisição de pagamento com dados vindos do cliente (ex: frontend)
+        const body = {
+            items: [
+                {
+                    id: '1234',
+                    title: 'Dummy Title',
+                    description: 'Dummy description',
+                    picture_url: 'http://www.myapp.com/myimage.jpg',
+                    category_id: 'car_electronics',
+                    quantity: 1,
+                    currency_id: 'BRL',
+                    unit_price: 10,
+                }
+                
+            ],
+            back_urls: {
+                success: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/produto-confirmado`, // URL para sucesso
+                failure: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-falha`, // URL para falha
+                pending: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-pendente`, // URL para pendente
+            },
+            external_reference: externalReference // Armazena os dados aqui
         };
 
+        // Faça a requisição de pagamento
+        const response = await preference.create({ body });
+        // Retorne a resposta para o frontend
         
-        req.flash('success_msg', 'Produto adicionado com sucesso!');
-        res.redirect('/add-product');
+        res.redirect(response.init_point);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Payment processing failed' });
+    }
+};
 
+const adicionarProdutoConfirmado = async (req, res) => {
+    const paymentId = req.query.payment_id; // ID do pagamento
+    const payment_status = req.query.status; // Status do pagamento
+    const externalReference = req.query.external_reference;
+
+    const produto = JSON.parse(externalReference);
+    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod } = produto;
+
+    try {
+        // Obtém o ID da empresa
+        // const [user] = await connection.query(
+        //     `SELECT id FROM empresas WHERE email = ?`,
+        //     [email]
+        // );
+
+        // const fk_id_emp = user[0].id; // Atribuindo fk_id_emp
+
+        // Insira o novo produto na tabela
+        const [addL] = await connection.query(
+            `INSERT INTO produtos_das_empresas (titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod) VALUES (?, ?, ?, ?, ?, ?)`,
+            [titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod]
+        );
+
+        const ProdId = addL.insertId; // Obtém o ID do produto recém-adicionado
+        const dataHoje = new Date().toISOString().split('T')[0];
+
+        // Insere o valor do produto na tabela de preços
+        await connection.query(
+            `INSERT INTO preco_prod (fk_id_prod, valor_prod, ini_vig) VALUES (?, ?, ?)`,
+            [ProdId, valor_prod, dataHoje]
+        );
+
+        // Linka o produto com a empresa
+        await connection.query(
+            `INSERT INTO empresas_produtos (fk_id_emp, fk_id_prod) VALUES (?, ?)`,
+            [fk_id_emp, ProdId]
+        );
+
+        // Se houver imagens, insira-as
+        if (req.session.imagens) {
+            for (let imagem of req.session.imagens) {
+                await connection.query(
+                    `INSERT INTO imagens (fk_id_prod, nome_imagem) VALUES (?, ?)`,
+                    [ProdId, imagem]
+                );
+            }
+        }
+
+        req.flash('success_msg', 'Produto adicionado com sucesso!');
+        res.redirect('/produto-confirmado');
     } catch (error) {
         req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
         console.log(error);
         res.redirect('/add-product');
     }
-};
-
-const adicionarProdutoConfirmado = async (req, res) => {
-    const paymentId = req.query.payment_id; // Exemplo: ID do pagamento, se disponível
-    const payment_status = req.query.status; // Exemplo: status do pagamento, se disponível
-
-
-    
-        const produtoTemp = req.session.produtoTemp;
-        const email = req.session.email;
-
-        try {
-            // Insira o novo produto na tabela
-            const [addL] = await connection.query(
-                `INSERT INTO produtos_das_empresas (titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod) VALUES (?, ?, ?, ?, ?, ?)`,
-                [produtoTemp.titulo_prod, produtoTemp.descricao_prod, produtoTemp.categoria_prod, produtoTemp.tipo_prod, produtoTemp.roupa_prod, produtoTemp.link_prod]
-            );
-
-            const [user] = await connection.query(
-                `SELECT id FROM empresas WHERE email = ?`,
-                [email]
-            );
-
-            const fk_id_emp = user[0].id;
-            const ProdId = addL.insertId; // Obtém o ID do produto recém-adicionado
-
-            // Pega a data atual no formato YYYY-MM-DD
-            const dataHoje = new Date().toISOString().split('T')[0];
-
-            // Insere o valor do produto na tabela de preços
-            await connection.query(
-                `INSERT INTO preco_prod (fk_id_prod, valor_prod, ini_vig) VALUES (?, ?, ?)`,
-                [ProdId, produtoTemp.valor_prod, dataHoje]
-            );
-
-            // Linka o produto com a empresa
-            await connection.query(
-                `INSERT INTO empresas_produtos (fk_id_emp, fk_id_prod) VALUES (?, ?)`,
-                [fk_id_emp, ProdId]
-            );
-
-            // Se houver imagens, insira-as
-            if (req.session.imagens) {
-                for (let imagem of req.session.imagens) {
-                    await connection.query(
-                        `INSERT INTO imagens (fk_id_prod, nome_imagem) VALUES (?, ?)`,
-                        [ProdId, imagem]
-                    );
-                }
-            }
-
-            req.flash('success_msg', 'Produto adicionado com sucesso!');
-            // Limpa os dados da sessão
-            delete req.session.produtoTemp;
-            res.redirect('/add-product');
-        } catch (error) {
-            req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
-            console.log(error);
-            res.redirect('/add-product');
-        }
-    
 };
 
 

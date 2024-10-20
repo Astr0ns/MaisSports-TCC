@@ -13,7 +13,7 @@ const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 const locaisController = require('../controllers/locaisController');
 const produtoController = require('../controllers/produtoController');
-const paymentController = require('../controllers/paymentController');
+
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
@@ -47,14 +47,6 @@ const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
 
 
 
-router.post("/create-payment", upload, paymentController.createPayment, async function (req, res) {
-    //
-});
-
-router.post("/adicionar-produto-confirmado", produtoController.adicionarProdutoConfirmado, async function (req, res) {
-    //
-});
-
 
 
 router.get("/", async function (req, res) {
@@ -77,9 +69,9 @@ router.get("/add-locais", function (req, res) {
     res.render("pages/add-locais", { email: email });
 });
 
-// Rota para adicionar locais com upload de imagens
 
 
+router.get("/produto-confirmado", produtoController.adicionarProdutoConfirmado);
 
 router.post("/adicionarLocais", upload, locaisController.adicionarLocais, async function (req, res) {
     //
