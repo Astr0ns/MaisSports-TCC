@@ -5,6 +5,7 @@ const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 const flash = require("connect-flash");
 const productRouter = require('./app/routes/productRouter');
+const paymentRoutes = require('./app/routes/router');
 
 //configurações do app
 app.use(express.static("app/public"));
@@ -23,6 +24,10 @@ app.use(session({
   saveUninitialized:'true',
   cookie: {secure:false}
 }))
+
+// Rota de pagamento
+app.use('/api/payments', paymentRoutes);
+
 
 //flash
 

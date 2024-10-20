@@ -13,6 +13,7 @@ const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 const locaisController = require('../controllers/locaisController');
 const produtoController = require('../controllers/produtoController');
+const paymentController = require('../controllers/paymentController');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
@@ -42,6 +43,13 @@ const { verificarAutenticacao, verificarAutorizacaoTipo } = require('../models/m
 const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
 // const uploadFile = require("../util/uploader")();
 
+
+
+
+
+router.post("/create-payment", paymentController.createPayment, async function (req, res) {
+    //
+});
 
 
 
