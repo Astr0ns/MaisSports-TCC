@@ -11,6 +11,23 @@ const client = new MercadoPagoConfig({
 const createPayment = async (req, res) => {
     const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod } = req.body;
     const email = req.session.email;
+    console.log(req.files);
+
+    // Verifica se existem arquivos enviados (imagens)
+    if (req.files && req.files.length > 0) {
+        const imagens = req.files.map(file => file.filename); // Obtem os nomes dos arquivos de imagem
+    }
+
+    req.session.produtoTemp = {
+        titulo_prod,
+        descricao_prod,
+        valor_prod,
+        categoria_prod,
+        tipo_prod,
+        roupa_prod,
+        link_prod,
+        imagens
+    };
 
     try {
         // Inicialize o objeto de pagamento
@@ -28,22 +45,13 @@ const createPayment = async (req, res) => {
                     quantity: 1,
                     currency_id: 'BRL',
                     unit_price: 10,
-                },
-                {
-                    id: '1243',
-                    title: 'Dummy Title',
-                    description: 'Dummy description',
-                    picture_url: 'http://www.myapp.com/myimage.jpg',
-                    category_id: 'car_electronics',
-                    quantity: 1,
-                    currency_id: 'BRL',
-                    unit_price: 25,  
                 }
+                
             ],
             back_urls: {
-                success: 'http://test.com/success',
-                failure: 'http://test.com/failure',
-                pending: 'http://test.com/pending',
+                success: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-confirmado`, // URL para sucesso
+                failure: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-falha`, // URL para falha
+                pending: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-pendente`, // URL para pendente
             },
         };
 

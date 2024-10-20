@@ -30,49 +30,25 @@ const adicionarProd = async (req, res) => {
     console.log(req.files);
 
     try {
-        // Insere o novo produto
-        const [addL] = await connection.query(
-            `INSERT INTO produtos_das_empresas (titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod) VALUES (?, ?, ?, ?, ?, ?)`,
-            [titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod]
-        );
-
-        const [user] = await connection.query(
-            `SELECT id FROM empresas WHERE email = ?`,
-            [email]
-        );
-
-        const fk_id_emp = user[0].id;
-
-        const ProdId = addL.insertId; // Obtém o ID do produto recém-adicionado
-
-        // Pega a data atual no formato YYYY-MM-DD
-        const dataHoje = new Date().toISOString().split('T')[0];
-
-        // Insere o valor do produto na tabela de preços
-        await connection.query(
-            `INSERT INTO preco_prod (fk_id_prod, valor_prod, ini_vig) VALUES (?, ?, ?)`,
-            [ProdId, valor_prod, dataHoje]
-        );
-
-        // linka o produto com empresa
-        await connection.query(
-            `INSERT INTO empresas_produtos (fk_id_emp, fk_id_prod) VALUES (?, ?)`,
-            [fk_id_emp, ProdId]
-            
-        );
+        
 
         // Verifica se existem arquivos enviados (imagens)
         if (req.files && req.files.length > 0) {
             const imagens = req.files.map(file => file.filename); // Obtem os nomes dos arquivos de imagem
-            for (let imagem of imagens) {
-                // Insere cada imagem no banco de dados, vinculando ao ID do produto
-                await connection.query(
-                    `INSERT INTO imagens (fk_id_prod, nome_imagem) VALUES (?, ?)`,
-                    [ProdId, imagem]
-                );
-            }
         }
 
+        req.session.produtoTemp = {
+            titulo_prod,
+            descricao_prod,
+            valor_prod,
+            categoria_prod,
+            tipo_prod,
+            roupa_prod,
+            link_prod,
+            imagens
+        };
+
+        
         req.flash('success_msg', 'Produto adicionado com sucesso!');
         res.redirect('/add-product');
 
@@ -83,7 +59,66 @@ const adicionarProd = async (req, res) => {
     }
 };
 
+const adicionarProdutoConfirmado = async (req, res) => {
+    const paymentId = req.query.payment_id; // Exemplo: ID do pagamento, se disponível
+    const payment_status = req.query.status; // Exemplo: status do pagamento, se disponível
 
+
+    
+        const produtoTemp = req.session.produtoTemp;
+        const email = req.session.email;
+
+        try {
+            // Insira o novo produto na tabela
+            const [addL] = await connection.query(
+                `INSERT INTO produtos_das_empresas (titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod) VALUES (?, ?, ?, ?, ?, ?)`,
+                [produtoTemp.titulo_prod, produtoTemp.descricao_prod, produtoTemp.categoria_prod, produtoTemp.tipo_prod, produtoTemp.roupa_prod, produtoTemp.link_prod]
+            );
+
+            const [user] = await connection.query(
+                `SELECT id FROM empresas WHERE email = ?`,
+                [email]
+            );
+
+            const fk_id_emp = user[0].id;
+            const ProdId = addL.insertId; // Obtém o ID do produto recém-adicionado
+
+            // Pega a data atual no formato YYYY-MM-DD
+            const dataHoje = new Date().toISOString().split('T')[0];
+
+            // Insere o valor do produto na tabela de preços
+            await connection.query(
+                `INSERT INTO preco_prod (fk_id_prod, valor_prod, ini_vig) VALUES (?, ?, ?)`,
+                [ProdId, produtoTemp.valor_prod, dataHoje]
+            );
+
+            // Linka o produto com a empresa
+            await connection.query(
+                `INSERT INTO empresas_produtos (fk_id_emp, fk_id_prod) VALUES (?, ?)`,
+                [fk_id_emp, ProdId]
+            );
+
+            // Se houver imagens, insira-as
+            if (req.session.imagens) {
+                for (let imagem of req.session.imagens) {
+                    await connection.query(
+                        `INSERT INTO imagens (fk_id_prod, nome_imagem) VALUES (?, ?)`,
+                        [ProdId, imagem]
+                    );
+                }
+            }
+
+            req.flash('success_msg', 'Produto adicionado com sucesso!');
+            // Limpa os dados da sessão
+            delete req.session.produtoTemp;
+            res.redirect('/add-product');
+        } catch (error) {
+            req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
+            console.log(error);
+            res.redirect('/add-product');
+        }
+    
+};
 
 
 const pegarProdutoBanco = async (req, res) => {
@@ -326,5 +361,5 @@ const favoritarProd = async (req, res) => {
 
 module.exports = {
     exibirFormularioProduto,
-    adicionarProd, pegarProdutoBanco, getProductById, favoritarProd, pegarProdutoEmpresa,
+    adicionarProd, pegarProdutoBanco, getProductById, favoritarProd, pegarProdutoEmpresa, adicionarProdutoConfirmado,
 };

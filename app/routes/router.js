@@ -47,7 +47,11 @@ const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
 
 
 
-router.post("/create-payment", paymentController.createPayment, async function (req, res) {
+router.post("/create-payment", upload, paymentController.createPayment, async function (req, res) {
+    //
+});
+
+router.post("/adicionar-produto-confirmado", produtoController.adicionarProdutoConfirmado, async function (req, res) {
     //
 });
 
