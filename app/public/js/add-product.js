@@ -33,6 +33,7 @@ function selectPlan(selectedPlanElement) {
     selectedPlanElement.style.backgroundColor = corSelected; // Define a cor do plano selecionado
     // Aqui, busque o input de rádio associado
     const selectedInput = selectedPlanElement.querySelector('input[type="radio"]');
+    
    
     if (selectedInput.value >= 30) {
         document.getElementById("duracao_plano").innerHTML = `Plano de ${selectedInput.value / 30} Meses`;
@@ -72,6 +73,8 @@ function selectBlack() {
     document.querySelector("#card-black").style.display = "flex";
     document.querySelector("#card-medio").style.display = "none";
     document.querySelector("#card-basico").style.display = "none";
+
+    document.querySelector('.confirmarPagamento .assinatura-data h2').innerHTML = "10 É FAIXA";
 
     const selectedPlan = document.querySelector('.selected');
     if (selectedPlan) {
@@ -115,6 +118,8 @@ function selectMedio() {
     document.querySelector("#card-medio").style.display = "flex";
     document.querySelector("#card-basico").style.display = "none";
 
+    document.querySelector('.confirmarPagamento .assinatura-data h2').innerHTML = "CRAQUE";
+
     const selectedPlan = document.querySelector('.selected');
     if (selectedPlan) {
         selectPlan(selectedPlan);
@@ -156,6 +161,8 @@ function selectNormal() {
     document.querySelector("#card-black").style.display = "none";
     document.querySelector("#card-medio").style.display = "none";
     document.querySelector("#card-basico").style.display = "flex";
+
+    document.querySelector('.confirmarPagamento .assinatura-data h2').innerHTML = "BASICO";
 
     const selectedPlan = document.querySelector('.selected');
     if (selectedPlan) {

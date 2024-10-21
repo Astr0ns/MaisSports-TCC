@@ -64,7 +64,7 @@ section.product-card{
 }
 
 button{
-    background-color: #1a3489a8; 
+    background-color: #f72ba5; 
     color: white; 
     border: none; 
     border-radius: 5px; 
@@ -76,7 +76,7 @@ button{
 }
 
 button:hover{
-    background-color: #1a348981; 
+    background-color: #fa6dc2; 
 }
 
 .assinatura-page{
@@ -375,10 +375,29 @@ form{
     display: none;
 }
 
-.confirmarPagamento .assinatura-data {
-    width: 35%;
-    padding: 20px;
+.confirmarPagamento{
+    
+    width: 60%;
     border-radius: 20px;
     display: flex;
-    flex-direction: column;  
+    flex-direction: column;
+    background-color: #fff;
+    
+}
+
+.confirmarPagamento .assinatura-data {
+    width: 100%;
+    padding: 20px;
+    margin: 30px 0;
+    display: flex;
+    flex-direction: column; 
+    border: none;
+    border-radius: 0; 
+}
+
+.confirmarPagamento  .assinatura-data h2{
+    color: #f72ba5;
+    font-size: 1.5em;
+    margin: 0;
+    
 }
