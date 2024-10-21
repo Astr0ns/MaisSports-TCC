@@ -310,11 +310,11 @@ const pegarProdutoEmpresa = async (req, res) => {
 const pegarProdutoCurtido = async (req, res) => {
 
     const email = req.session.email;
-    console.log(email)
+
+    // Log para verificar se o email e o prodId estão corretos
+    console.error("Email:", email);
 
     try {
-        
-
         // 1. Busca o ID do cliente (usuário) baseado no email
         const [user] = await connection.query(
             `SELECT id FROM usuario_clientes WHERE email = ?`,
@@ -335,7 +335,7 @@ const pegarProdutoCurtido = async (req, res) => {
 
         // Verifica se o usuário foi encontrado
         if (prod.length === 0) {
-            return res.status(404).json({ message: 'Usuário não encontrado.' });
+            return res.status(404).json({ message: 'Produto não encontrado.' });
         }
 
         const fk_id_prod = prod[0].fk_id_prod;
@@ -472,17 +472,10 @@ const favoritarProd = async (req, res) => {
 
         console.log("Favorito existente:", existingFavorite);
 
-        // Se o produto já foi favoritado, você pode optar por removê-lo ou retornar uma mensagem de erro
+        // Se o produto já foi favoritado, retorna uma mensagem de erro
         if (existingFavorite.length > 0) {
             console.log("Produto já foi favoritado");
-
-            // Aqui, removemos o produto dos favoritos
-            await connection.query(
-                `DELETE FROM favorito_produto WHERE fk_id_cliente = ? AND fk_id_prod = ?`,
-                [fk_id_cliente, prodId]
-            );
-
-            return res.status(200).json({ message: 'Produto removido dos favoritos.' });
+            return res.status(400).json({ message: 'Produto já foi favoritado.' });
         }
 
         // 4. Insere o novo produto favoritado
