@@ -94,37 +94,31 @@
 
 
 
-        <section class="login">
-            <h1>LOGIN</h1>
+        <section class="login"><h1>LOGIN</h1>
             <form action="/loginEmpr" method="post" class="login_form">
-
+            
                 <section class="form-group">
                     <h3 class="lr">E-mail</h3>
-                    <label for="email"></label>
-                    <input id="email" type="text" name="email" placeholder="Digite seu E-mail" required>
+                    <label for="email">E-mail:</label>
+                    <input id="email" type="email" name="email" placeholder="Digite seu E-mail" required>
                 </section>
-
+            
                 <section class="form-group">
                     <h3 class="lr">Senha</h3>
-                    <label for="password"></label>
+                    <label for="password">Senha:</label>
                     <input id="password" type="password" name="senha" placeholder="Digite sua senha" required
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
-                        title="Adicione no Minímo uma letra maiúscula, uma caracter especial e um número">
+                        title="Adicione no mínimo uma letra maiúscula, uma letra minúscula, um número e deve ter entre 8 a 20 caracteres.">
                 </section>
-
-                <section id="valid"></section>
-
+            
                 <section class="text-center">
                     <button type="submit" class="btn btn-primary" id="save-btn">Entrar</button>
                 </section>
-
-                <section id="valid-sucess"></section>
-
+            
+                <p class="butun">Ainda não tem uma <span>empresa</span> cadastrada? <a href="/regs-empr">Cadastre-se</a>.</p>
+            
             </form>
-
-            <p class="butun">Ainda não tem uma <span>empresa</span> cadastrada?<a href="/regs-empr">Cadastre-se</a>.</p>
-
-        </section>
+             </section>
     </section>
 
     <%- include("../partial/footer") %>
