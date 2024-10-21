@@ -158,6 +158,9 @@ router.get("/getLocalFromId", locaisController.getLocalFromId, async function (r
 });
 
 router.get("/product-page/:id", produtoController.getProductById, async function (req, res){
+});
+
+router.get("/product-page", function (req, res) {
     var email = req.session.email;
     res.render("pages/product-page", { email: email });
 });

@@ -489,7 +489,7 @@ const favoritarProd = async (req, res) => {
 
     } catch (error) {
         console.error("Erro ao favoritar produto:", error);
-        return res.status(500).json({ message: 'Erro ao favoritar produto: ' + error.message });
+        return res.status(500).json({ message: 'Erro ao favoritar produtos: ' + error.message });
     }
 };
 
