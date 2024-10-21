@@ -41,6 +41,7 @@ function selectPlan(selectedPlanElement) {
    }
 }
 
+
 function selectBlack() {
     // Mudar o background do body
     document.body.style.backgroundColor = "#010c1aa9";
@@ -77,7 +78,11 @@ function selectBlack() {
         selectPlan(selectedPlan);
     }
 
+    const idPlanoSelected = document.getElementById('idPlano');
+    idPlanoSelected.value = 1; // Atualiza o valor no campo oculto
+
     saberPreco(3.5)
+
 }
 
 function selectMedio() {
@@ -114,6 +119,9 @@ function selectMedio() {
     if (selectedPlan) {
         selectPlan(selectedPlan);
     }
+
+    const idPlanoSelected = document.getElementById('idPlano');
+    idPlanoSelected.value = 2; // Atualiza o valor no campo oculto
 
     saberPreco(2.5)
 }
@@ -154,6 +162,9 @@ function selectNormal() {
         selectPlan(selectedPlan);
     }
 
+    const idPlanoSelected = document.getElementById('idPlano');
+    idPlanoSelected.value = 3; // Atualiza o valor no campo oculto
+
     saberPreco(1.5);
 
 
@@ -163,6 +174,7 @@ function selectNormal() {
 function saberPreco(valorDia) {
     const dias = [7, 30, 90];
     const desconto = [0.9, 0.85];
+    
 
     const precoLista = [
         dias[0] * valorDia,
@@ -180,10 +192,12 @@ function saberPreco(valorDia) {
         if(index == 0){
             priceElement.innerHTML = `<span></span>R$${precoLista[index].toFixed(2)}`;
         } else {
-            priceElement.innerHTML = `<span>R$${precoListaSemDesc[index]}</span> <br>R$${precoLista[index].toFixed(2)}`;
+            priceElement.innerHTML = `<span>R$${precoListaSemDesc[index].toFixed(2)}</span> <br>R$${precoLista[index].toFixed(2)}`;
         }
 
     });
+
+    
 
 }
 

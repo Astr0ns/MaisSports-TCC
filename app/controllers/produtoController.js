@@ -32,10 +32,27 @@ const exibirFormularioProduto = (req, res) => {
 
 // Adiciona um novo produto ao banco de dados
 const adicionarProd = async (req, res) => {
-    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod } = req.body;
+    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod, valorPlano,idPlano } = req.body;
     const email = req.session.email;
     console.log(req.files);
     const imagens = req.files.map(file => file.filename); // Obtem os nomes dos arquivos de imagem
+    console.log(valorPlano, idPlano)
+
+    // Converter idPlano e valorPlano para números
+const idPlanoNum = parseInt(idPlano, 10); // 10 é a base numérica
+const valorPlanoNum = parseFloat(valorPlano); // Para números decimais
+
+    let titlePlano;
+
+if (idPlanoNum === 1) {
+    titlePlano = "Black"; // Assign value to titlePlano
+} else if (idPlanoNum === 2) {
+    titlePlano = "Medio"; // Assign value to titlePlano
+} else if (idPlanoNum === 3) {
+    titlePlano = "Basico"; // Assign value to titlePlano
+}
+    console.log(titlePlano)
+
 
     console.log('Título:', titulo_prod);
     const externalReference = JSON.stringify({
@@ -47,7 +64,10 @@ const adicionarProd = async (req, res) => {
         tipo_prod,
         roupa_prod,
         link_prod,
-        imagens
+        imagens,
+        titlePlano,
+        valorPlanoNum,
+        idPlanoNum
     });
 
     try {
@@ -58,14 +78,12 @@ const adicionarProd = async (req, res) => {
         const body = {
             items: [
                 {
-                    id: '1234',
-                    title: 'Dummy Title',
-                    description: 'Dummy description',
-                    picture_url: 'http://www.myapp.com/myimage.jpg',
-                    category_id: 'car_electronics',
+                    id: `plano_${idPlanoNum}`,
+                    title: `Plano ${titlePlano}`,
+                    description: 'Plano +Sport',
                     quantity: 1,
                     currency_id: 'BRL',
-                    unit_price: 10,
+                    unit_price: valorPlanoNum,
                 }
                 
             ],
@@ -90,12 +108,33 @@ const adicionarProd = async (req, res) => {
 };
 
 const adicionarProdutoConfirmado = async (req, res) => {
+    function pegarFimData(idPlanoNum, dataHoje) {
+        const hoje = new Date(dataHoje);
+        let diasParaAdicionar;
+    
+        switch (idPlanoNum) {
+            case 1:
+                diasParaAdicionar = 7;
+                break;
+            case 2:
+                diasParaAdicionar = 30;
+                break;
+            case 3:
+                diasParaAdicionar = 60;
+                break;
+            default:
+                throw new Error('ID do plano inválido');
+        }
+    
+        hoje.setDate(hoje.getDate() + diasParaAdicionar);
+        return hoje.toISOString().split('T')[0]; // Retorna a data no formato YYYY-MM-DD
+    }
     const paymentId = req.query.payment_id; // ID do pagamento
     const payment_status = req.query.status; // Status do pagamento
     const externalReference = req.query.external_reference;
 
     const produto = JSON.parse(externalReference);
-    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod, imagens } = produto;
+    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod, imagens, titlePlano, valorPlanoNum, idPlanoNum} = produto;
 
     try {
         // Obtém o ID da empresa
@@ -114,6 +153,7 @@ const adicionarProdutoConfirmado = async (req, res) => {
 
         const ProdId = addL.insertId; // Obtém o ID do produto recém-adicionado
         const dataHoje = new Date().toISOString().split('T')[0];
+        const dataFinal = pegarFimData(idPlanoNum,dataHoje)
 
         // Insere o valor do produto na tabela de preços
         await connection.query(
@@ -125,6 +165,11 @@ const adicionarProdutoConfirmado = async (req, res) => {
         await connection.query(
             `INSERT INTO empresas_produtos (fk_id_emp, fk_id_prod) VALUES (?, ?)`,
             [fk_id_emp, ProdId]
+        );
+
+        await connection.query(
+            `INSERT INTO Planos (fk_id_emp, fk_id_prod, title_plano, valor_plano, ini_vig, fim_vig) VALUES (?, ?, ?, ?, ?, ?)`,
+            [fk_id_emp, ProdId, titlePlano, valorPlanoNum, dataHoje, dataFinal]
         );
 
         // Se houver imagens, insira-as
