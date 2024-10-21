@@ -307,6 +307,80 @@ const pegarProdutoEmpresa = async (req, res) => {
     }
 };
 
+const pegarProdutoCurtido = async (req, res) => {
+
+    const email = req.session.email;
+    console.log(email)
+
+    try {
+        
+
+        // 1. Busca o ID do cliente (usuário) baseado no email
+        const [user] = await connection.query(
+            `SELECT id FROM usuario_clientes WHERE email = ?`,
+            [email]
+        );
+
+        // Verifica se o usuário foi encontrado
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const fk_id_user = user[0].id;
+
+        const [prod] = await connection.query(
+            `SELECT fk_id_prod FROM favorito_produto WHERE fk_id_cliente = ?`,
+            [fk_id_user]
+        );
+
+        // Verifica se o usuário foi encontrado
+        if (prod.length === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const fk_id_prod = prod[0].fk_id_prod;
+
+        const query = `
+            SELECT p.id_prod, p.titulo_prod, i.nome_imagem, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
+            FROM produtos_das_empresas p 
+            LEFT JOIN imagens i ON p.id_prod = i.fk_id_prod
+            LEFT JOIN avaliacao_prod a ON p.id_prod = a.fk_id_prod  
+            LEFT JOIN preco_prod v ON p.id_prod = v.fk_id_prod  
+            WHERE p.id_prod = ?
+            GROUP BY p.id_prod, i.nome_imagem
+        `;
+        const [results] = await connection.query(query, [fk_id_prod]); // Filtra pelos favoritos
+        
+
+
+        // Formata os resultados para agrupar imagens por local
+        const produtos = results.reduce((acc, row) => {
+            const { id_prod, titulo_prod, valor_prod, nome_imagem, media_avaliacao } = row; // Use os nomes corretos das colunas
+            const produto = acc.find(prod => prod.id_prod === id_prod); // Procura pelo ID único do produto
+            if (produto) {
+                if (nome_imagem) {
+                    produto.imagens.push(nome_imagem); // Adiciona a imagem se já existir o produto
+                }
+            } else {
+                acc.push({
+                    id_prod,
+                    titulo_prod,
+                    valor_prod,
+                    imagens: nome_imagem ? [nome_imagem] : [], // Inicia array de imagens
+                    media_avaliacao
+                });
+            }
+            return acc;
+        }, []);
+        
+
+        res.json(produtos);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
+};
+
 const getProductById = async (req, res) => {
     const prodId = req.params.id; // Pega o ID do produto dos parâmetros da URL
     const email = req.session.email; // Pega o email da sessão, se estiver definido
@@ -432,5 +506,5 @@ const favoritarProd = async (req, res) => {
 
 module.exports = {
     exibirFormularioProduto,
-    adicionarProd, pegarProdutoBanco, getProductById, favoritarProd, pegarProdutoEmpresa, adicionarProdutoConfirmado,
+    adicionarProd, pegarProdutoBanco, getProductById, favoritarProd, pegarProdutoEmpresa, adicionarProdutoConfirmado, pegarProdutoCurtido,
 };
