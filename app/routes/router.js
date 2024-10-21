@@ -21,7 +21,7 @@ const path = require('path');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = 'uploads/';
-        
+
         // Verifica se a pasta existe
         fs.mkdir(uploadPath, { recursive: true }, (err) => {
             if (err) {
@@ -157,7 +157,7 @@ router.get("/getLocalFromId", locaisController.getLocalFromId, async function (r
     //
 });
 
-router.get("/product-page/:id", produtoController.getProductById, async function (req, res){
+router.get("/product-page/:id", produtoController.getProductById, async function (req, res) {
     var email = req.session.email;
     res.render("pages/product-page", { email: email });
 });
@@ -277,6 +277,8 @@ router.get("/add-product", verificarAutenticacao, function (req, res) {
 router.get("/cart", function (req, res) {
 });
 
+//USUARIOS
+
 router.get('/alter', usuarioController.alterDados, usuarioController.guardarCelular, verificarAutenticacao, async (req, res) => {
     //
 });
@@ -288,6 +290,8 @@ router.post("/fazerLogin", usuarioController.logar, async function (req, res) {
     //
 });
 
+
+//EMPRESAS
 
 router.post("/fazerRegisEmpr", empresaController.registrarEmpr, async function (req, res) {
     //
@@ -349,46 +353,6 @@ router.get('/guardarCEP', async (req, res) => {
     }
 });
 
-router.post("/loginEmpr",
-    usuarioController.regrasValidacaoFormLogin,
-    gravarEmprAutenticado,
-    async function (req, res) {
-        const { email, senha } = req.body;
-
-        try {
-            const [accounts] = await connection.query("SELECT * FROM empresas WHERE email = ?", [email]);
-
-            if (accounts.length > 0) {
-                const account = accounts[0];
-
-                // Verificar se a senha corresponde
-                const passwordMatch = bcrypt.compareSync(senha, account.senha);
-
-                if (!passwordMatch) {
-                    req.flash('error_msg', "As senhas não conferem");
-                    return res.redirect('/login');
-                }
-
-                // Armazenar informações do usuário na sessão
-                req.session.email = account.email;
-                req.session.nome = account.nome;
-                req.session.cpnj = account.cpnj;
-                req.session.cep = account.cep;
-                req.session.numero = account.numero;
-
-                req.flash('success_msg', 'Login efetuado com sucesso!');
-                res.redirect('/empresa'); // Redireciona para a página de perfil
-            } else {
-                req.flash('error_msg', "Usuário não encontrado! Email ou senhas incorretos");
-                res.redirect('/login-empr');
-            }
-
-        } catch (err) {
-            console.error("Erro na consulta: ", err);
-            res.status(500).send('Erro interno do servidor');
-        }
-    }
-);
 
 router.post('/delCEP', async function (req, res) {
     const { email } = req.body;
