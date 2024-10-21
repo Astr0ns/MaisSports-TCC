@@ -341,22 +341,22 @@ const pegarProdutoCurtido = async (req, res) => {
         const fk_id_prod = prod[0].fk_id_prod;
 
         const query = `
-            SELECT p.id_prod, p.titulo_prod, i.nome_imagem, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
+            SELECT p.id_prod, p.titulo_prod, i.nome_imagem, i.ordem_img, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
             FROM produtos_das_empresas p 
             LEFT JOIN imagens i ON p.id_prod = i.fk_id_prod
             LEFT JOIN avaliacao_prod a ON p.id_prod = a.fk_id_prod  
             LEFT JOIN preco_prod v ON p.id_prod = v.fk_id_prod  
             WHERE p.id_prod = ?
-            GROUP BY p.id_prod, i.nome_imagem
+            GROUP BY p.id_prod, i.nome_imagem, i.ordem_img
+            ORDER BY i.ordem_img
         `;
         const [results] = await connection.query(query, [fk_id_prod]); // Filtra pelos favoritos
-        
-
 
         // Formata os resultados para agrupar imagens por local
         const produtos = results.reduce((acc, row) => {
-            const { id_prod, titulo_prod, valor_prod, nome_imagem, media_avaliacao } = row; // Use os nomes corretos das colunas
-            const produto = acc.find(prod => prod.id_prod === id_prod); // Procura pelo ID único do produto
+            const { id_prod, titulo_prod, valor_prod, nome_imagem, media_avaliacao } = row;
+            const produto = acc.find(prod => prod.id_prod === id_prod);
+            
             if (produto) {
                 if (nome_imagem) {
                     produto.imagens.push(nome_imagem); // Adiciona a imagem se já existir o produto
@@ -372,6 +372,15 @@ const pegarProdutoCurtido = async (req, res) => {
             }
             return acc;
         }, []);
+
+        // Ordena as imagens de cada produto de acordo com a ordem definida
+        produtos.forEach(produto => {
+            produto.imagens.sort((a, b) => {
+                const ordemA = results.find(row => row.nome_imagem === a).ordem_img;
+                const ordemB = results.find(row => row.nome_imagem === b).ordem_img;
+                return ordemA - ordemB;
+            });
+        });
         
 
         res.json(produtos);
@@ -472,10 +481,18 @@ const favoritarProd = async (req, res) => {
 
         console.log("Favorito existente:", existingFavorite);
 
-        // Se o produto já foi favoritado, retorna uma mensagem de erro
+        
+        // Se o produto já foi favoritado, desfavorita-o
         if (existingFavorite.length > 0) {
-            console.log("Produto já foi favoritado");
-            return res.status(400).json({ message: 'Produto já foi favoritado.' });
+            console.log("Produto já foi favoritado, desfavoritando...");
+            
+            // Remove o produto da lista de favoritos
+            await connection.query(
+                `DELETE FROM favorito_produto WHERE fk_id_cliente = ? AND fk_id_prod = ?`,
+                [fk_id_cliente, prodId]
+            );
+            
+            return res.status(200).json({ message: 'Produto desfavoritado com sucesso.' });
         }
 
         // 4. Insere o novo produto favoritado

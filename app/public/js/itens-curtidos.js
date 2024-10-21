@@ -22,8 +22,12 @@ function renderProducts(products) {
                 <img src="uploads/${imagens[0]}" alt="${titulo_prod}">
             </a>
             <section class="product-text">
-                <h5>NEW</h5>
+                <h5 class="like-button">
+                    <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${product.id_prod});"></i>
+                    <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${product.id_prod});" style="display: none;"></i>
+                </h5>
             </section>
+
             
             <section class="price">
                 <h4>${titulo_prod}</h4>
@@ -33,7 +37,7 @@ function renderProducts(products) {
                         <p>$ ${precoFormatado} no PIX</p>
                         <p>6 x R$${parcelaFormatada}</p>
                     </section>
-                    <p class="desconto">-13%</p>
+                    
                 </section>
                 <section class="desc-outher">
                     <p class="estoque">em estoque</p>
@@ -42,9 +46,6 @@ function renderProducts(products) {
                         <section class="ballwht"></section>
                     </section>
                 </section>
-                <section class="editar_prod_sect">
-                    <button class="editar_prod_bt">Editar</button>
-                </section>
             </section>
         </section>
         
@@ -52,6 +53,57 @@ function renderProducts(products) {
 
         trendingSection.insertAdjacentHTML('beforeend', productHTML); // Adiciona o HTML do produto
     });
+}
+
+function toggleHeart(event) {
+    const alvo = event.currentTarget;
+    const coracaoPreenchido = alvo.parentNode.querySelector('.bi-heart-fill');
+    const coracaoVazio = alvo.parentNode.querySelector('.bx-heart');
+
+    if (coracaoPreenchido.style.display === 'none') {
+        coracaoPreenchido.style.display = 'block';
+        coracaoVazio.style.display = 'none';
+        coracaoPreenchido.classList.add('animate');
+    } else {
+        coracaoPreenchido.style.display = 'none';
+        coracaoVazio.style.display = 'block';
+        coracaoVazio.classList.add('animate');
+    }
+
+    // Remove a classe de animação após a animação ser concluída
+    setTimeout(() => {
+        coracaoPreenchido.classList.remove('animate');
+        coracaoVazio.classList.remove('animate');
+    }, 500); // 500ms é o tempo da animação
+
+    
+}
+
+function favDesFav(id) {
+    try {
+        const response = fetch(`/favoritarProd/${id}`, { // Use 'id' aqui
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        response.then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error(res.statusText);
+            }
+        }).then(data => {
+            if (data.message === "Produto favoritado com sucesso!") {
+                console.log("Produto adicionado aos favoritos:", data);
+            } else {
+                console.error("Erro ao favoritar o produto:", data.message);
+            }
+        });
+    } catch (error) {
+        console.error("Erro na solicitação:", error);
+    }
 }
 
 

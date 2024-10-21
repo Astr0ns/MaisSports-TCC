@@ -30,7 +30,11 @@
                 </section>
             </li>
             <li><a href="/">Inicio</a></li>
-            <li><a href="/">Curtidos</a></li>
+            <% if(email==undefined ) { %>
+                <li><a href="/login">Curtidos</a></li>
+            <% }else{ %>
+                <li><a href="/itens-curtidos">Curtidos</a></li>
+                <% } %>
             <li><a href="/locais-esportivos">Locais Esportivos</a></li>
             <% if(email==undefined ) { %>
                 <li><a class="pc-og" href="/login">Entrar</a></li>

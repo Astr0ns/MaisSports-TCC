@@ -132,7 +132,7 @@ section.title-prod h3 {
 
 section.product-card {
     display: grid;
-    grid-template-columns: repeat(2, 50%);
+    grid-template-columns: repeat(2, 45%);
     grid-template-rows: repeat(4, auto);
     grid-column-gap: 1%;
     grid-row-gap: 1%;
