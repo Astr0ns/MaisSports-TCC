@@ -374,3 +374,11 @@ form{
 .finalizar-add-product{
     display: none;
 }
+
+.confirmarPagamento .assinatura-data {
+    width: 35%;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;  
+}

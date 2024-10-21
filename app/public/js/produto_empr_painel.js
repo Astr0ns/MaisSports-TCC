@@ -27,11 +27,12 @@ function renderProducts(products) {
             <section class="price">
                 <h4>${titulo_prod}</h4>
                 <section class="desc-price">
-                    <p class="desconto">-13%</p>
+                    
                     <section class="preco">
                         <p>$ ${precoFormatado} no PIX</p>
                         <p>6 x R$${parcelaFormatada}</p>
                     </section>
+                    <p class="desconto">-13%</p>
                 </section>
                 <section class="desc-outher">
                     <p class="estoque">em estoque</p>

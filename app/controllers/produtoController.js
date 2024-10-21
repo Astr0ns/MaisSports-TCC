@@ -34,16 +34,19 @@ const adicionarProd = async (req, res) => {
     const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod } = req.body;
     const email = req.session.email;
     console.log(req.files);
+    const imagens = req.files.map(file => file.filename); // Obtem os nomes dos arquivos de imagem
 
     console.log('Título:', titulo_prod);
     const externalReference = JSON.stringify({
+        email,
         titulo_prod,
         descricao_prod,
         valor_prod,
         categoria_prod,
         tipo_prod,
         roupa_prod,
-        link_prod
+        link_prod,
+        imagens
     });
 
     try {
@@ -90,16 +93,16 @@ const adicionarProdutoConfirmado = async (req, res) => {
     const externalReference = req.query.external_reference;
 
     const produto = JSON.parse(externalReference);
-    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod } = produto;
+    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod, imagens } = produto;
 
     try {
         // Obtém o ID da empresa
-        // const [user] = await connection.query(
-        //     `SELECT id FROM empresas WHERE email = ?`,
-        //     [email]
-        // );
+        const [user] = await connection.query(
+            `SELECT id FROM empresas WHERE email = ?`,
+            [email]
+        );
 
-        // const fk_id_emp = user[0].id; // Atribuindo fk_id_emp
+        const fk_id_emp = user[0].id; // Atribuindo fk_id_emp
 
         // Insira o novo produto na tabela
         const [addL] = await connection.query(
@@ -123,14 +126,14 @@ const adicionarProdutoConfirmado = async (req, res) => {
         );
 
         // Se houver imagens, insira-as
-        if (req.session.imagens) {
-            for (let imagem of req.session.imagens) {
-                await connection.query(
-                    `INSERT INTO imagens (fk_id_prod, nome_imagem) VALUES (?, ?)`,
-                    [ProdId, imagem]
-                );
-            }
+        
+        for (let imagem of imagens) {
+            await connection.query(
+                `INSERT INTO imagens (fk_id_prod, nome_imagem) VALUES (?, ?)`,
+                [ProdId, imagem]
+            );
         }
+     
 
         req.flash('success_msg', 'Produto adicionado com sucesso!');
         res.redirect('/produto-confirmado');

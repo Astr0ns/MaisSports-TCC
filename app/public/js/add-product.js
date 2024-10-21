@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', initPlanSelection);
 
 function initPlanSelection() {
@@ -29,6 +31,14 @@ function selectPlan(selectedPlanElement) {
     selectedPlanElement.querySelector('.bi-check-circle-fill').style.display = 'inline-block';
     const corSelected = document.querySelector('.corSelected').innerHTML;
     selectedPlanElement.style.backgroundColor = corSelected; // Define a cor do plano selecionado
+    // Aqui, busque o input de rádio associado
+    const selectedInput = selectedPlanElement.querySelector('input[type="radio"]');
+    console.log(selectedInput.value); // Verifica o valor
+    if (selectedInput.value >= 30) {
+        document.getElementById("duracao_plano").innerHTML = `Plano de ${selectedInput.value / 30} Meses`;
+    } else {
+        document.getElementById("duracao_plano").innerHTML = `Plano de ${selectedInput.value} Dias`;
+   }
 }
 
 function selectBlack() {
@@ -45,7 +55,11 @@ function selectBlack() {
 
     document.querySelector(".assinatura-info h3 i").style.color = "#f72ba5";
 
-    document.querySelector(".assinatura-data").style.backgroundColor = "rgb(4, 20, 41)";
+    const CorFundoAssinaturaData = document.querySelectorAll(".assinatura-data")
+    CorFundoAssinaturaData.forEach(cor => {
+        cor.style.backgroundColor = "rgb(4, 20, 41)";
+    });
+
     document.querySelector(".plan").style.backgroundColor = "rgb(4, 20, 41)";
     const prices = document.querySelectorAll(".plan .price");
     prices.forEach(price => {
@@ -80,7 +94,10 @@ function selectMedio() {
 
     document.querySelector(".assinatura-info h3 i").style.color = "#f72ba5";
 
-    document.querySelector(".assinatura-data").style.backgroundColor = "rgb(4, 20, 41)";
+    const CorFundoAssinaturaData = document.querySelectorAll(".assinatura-data")
+    CorFundoAssinaturaData.forEach(cor => {
+        cor.style.backgroundColor = "rgb(4, 20, 41)";
+    });
     document.querySelector(".plan").style.backgroundColor = "rgb(4, 20, 41)";
     const prices = document.querySelectorAll(".plan .price");
     prices.forEach(price => {
@@ -115,7 +132,11 @@ function selectNormal() {
 
     document.querySelector(".assinatura-info h3 i").style.color = "#f72ba5";
 
-    document.querySelector(".assinatura-data").style.backgroundColor = "#f5f5f5";
+    
+    const CorFundoAssinaturaData = document.querySelectorAll(".assinatura-data")
+    CorFundoAssinaturaData.forEach(cor => {
+        cor.style.backgroundColor = "#f5f5f5";
+    });
     document.querySelector(".plan").style.backgroundColor = "#f5f5f5";
     const prices = document.querySelectorAll(".plan .price");
     prices.forEach(price => {
@@ -140,7 +161,7 @@ function selectNormal() {
 
 
 function saberPreco(valorDia) {
-    const dias = [30, 90, 120];
+    const dias = [7, 30, 90];
     const desconto = [0.9, 0.85];
 
     const precoLista = [
@@ -148,14 +169,27 @@ function saberPreco(valorDia) {
         dias[1] * valorDia * desconto[0],
         dias[2] * valorDia * desconto[1]
     ];
+    const precoListaSemDesc = [
+        dias[0] * valorDia,
+        dias[1] * valorDia,
+        dias[2] * valorDia
+    ];
     const prices = document.querySelectorAll(".price");
 
     prices.forEach((priceElement, index) => {
-        priceElement.textContent = `R$${precoLista[index].toFixed(2)}`;
+        if(index == 0){
+            priceElement.innerHTML = `<span></span>R$${precoLista[index].toFixed(2)}`;
+        } else {
+            priceElement.innerHTML = `<span>R$${precoListaSemDesc[index]}</span> <br>R$${precoLista[index].toFixed(2)}`;
+        }
+
     });
+
 }
 
 function NextAddProduct(num_page) {
+
+    // essa parte so chega se os campo estão preenchidos corretamente
     if (num_page === 2) {
         // Validação dos campos
         const tituloProd = document.getElementById('titulo_prod').value.trim();
@@ -195,10 +229,38 @@ function NextAddProduct(num_page) {
         document.querySelector('#product-info-stl').classList.add('desativar_container');
 
         document.querySelector(".finalizar-add-product").style.display = "flex";
+
+        document.querySelector(".nomeProdForm").innerHTML = document.getElementById("titulo_prod").value;
+        document.querySelector(".preco p").innerHTML = `R$ ${document.getElementById("valor_prod").value} à vista`;
+        
+        const selectedInput = document.querySelector('.selected .price span').innerHTML;
+        const selectedInput2 = document.querySelector('.selected .price').innerHTML;
+
+        const resultado = selectedInput2.replace(selectedInput, '').trim();
+
+        // Exibindo os resultados
+        console.log('Conteúdo do span:', selectedInput);
+        console.log('Conteúdo de price sem o span:', resultado);
+
+        // Função para extrair o número
+        function extrairNumero(s) {
+            // Remove tudo que não é dígito ou ponto
+            return s.replace(/[^0-9.]+/g, '');
+        }
+
+        // Extraindo o número
+        const numeroExtraido = extrairNumero(resultado);
+
+        console.log(numeroExtraido);  // Exibe o número extraído
+        document.querySelector('.confirmarText p span').innerHTML = numeroExtraido;
+
+
+
     }
     
 
 }
+
 
 
 

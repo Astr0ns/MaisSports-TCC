@@ -110,7 +110,15 @@ h2 {
 
 .plan .price {
     font-weight: bold;
-    color: #FFF;
+    color: #fff;
+
+}
+
+.plan .price span{
+    font-weight: bold;
+    color: #f72ba5;
+    text-decoration: line-through;
+    font-size: 0.9em;
 }
 
 
