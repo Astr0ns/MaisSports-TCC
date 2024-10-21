@@ -33,7 +33,7 @@ function selectPlan(selectedPlanElement) {
     selectedPlanElement.style.backgroundColor = corSelected; // Define a cor do plano selecionado
     // Aqui, busque o input de rádio associado
     const selectedInput = selectedPlanElement.querySelector('input[type="radio"]');
-    console.log(selectedInput.value); // Verifica o valor
+   
     if (selectedInput.value >= 30) {
         document.getElementById("duracao_plano").innerHTML = `Plano de ${selectedInput.value / 30} Meses`;
     } else {
@@ -238,9 +238,7 @@ function NextAddProduct(num_page) {
 
         const resultado = selectedInput2.replace(selectedInput, '').trim();
 
-        // Exibindo os resultados
-        console.log('Conteúdo do span:', selectedInput);
-        console.log('Conteúdo de price sem o span:', resultado);
+
 
         // Função para extrair o número
         function extrairNumero(s) {
@@ -251,10 +249,12 @@ function NextAddProduct(num_page) {
         // Extraindo o número
         const numeroExtraido = extrairNumero(resultado);
 
-        console.log(numeroExtraido);  // Exibe o número extraído
+        
         document.querySelector('.confirmarText p span').innerHTML = numeroExtraido;
 
-
+        const valorPlanoSelected = document.getElementById('valorPlano');
+        valorPlanoSelected.value = parseFloat(numeroExtraido); // Atualiza o valor no campo oculto
+        
 
     }
     
@@ -285,14 +285,14 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelector(".tam-calcado").style.display = "grid";
             document.querySelector(".tam-inf").style.display = "block";
             
-            console.log('Você escolheu calçados.');
+        
             // Adicione o código que você tem para calçados aqui
 
         } else if (selectedValue === 'acessorio') {
             document.querySelector(".tam-calcado").style.display = "none";
             document.querySelector(".tam-inf").style.display = "none";
             document.querySelector(".tam-roupa").style.display = "none";
-            console.log('Você escolheu um acessório.');
+       
             return
             // Adicione o código que você tem para acessórios aqui
 
@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelector(".tam-calcado").style.display = "none";
             document.querySelector(".tam-inf").style.display = "block";
             document.querySelector(".tam-roupa").style.display = "grid";
-            console.log('Você escolheu uma peça de roupa diferente.');
+  
             // Adicione o código que você tem para outras peças de roupa aqui
         }
     });
