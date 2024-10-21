@@ -2,6 +2,7 @@ const path = require('path');
 var connection = require("../../config/pool_conexoes");
 const multer = require('multer');
 const { MercadoPagoConfig, Preference } = require('mercadopago'); // Import Preference
+const { all } = require('../routes/productRouter');
 
 // Inicialize o cliente Mercado Pago
 const client = new MercadoPagoConfig({
@@ -73,6 +74,7 @@ const adicionarProd = async (req, res) => {
                 failure: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-falha`, // URL para falha
                 pending: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-pendente`, // URL para pendente
             },
+            auto_return: all,
             external_reference: externalReference // Armazena os dados aqui
         };
 
