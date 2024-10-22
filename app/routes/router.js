@@ -41,7 +41,7 @@ const upload = multer({ storage: storage }).array('imagens', 4);
 const { verificarAutenticacao, verificarAutorizacaoTipo } = require('../models/middleware');
 
 const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
-// const uploadFile = require("../util/uploadegr")();
+// const uploadFile = require("../util/uploader")();
 
 
 

@@ -138,7 +138,6 @@ section.product-card {
     grid-row-gap: 1%;
     width: 70%;
     overflow: hidden;
-    height: 170vh;
 }
 
 .carousel-card {

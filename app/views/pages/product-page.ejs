@@ -57,8 +57,6 @@
                             <% product.imagens.forEach(function(imagem, index) { %>
                                 <img class="MainImg" src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
                             <% }); %>
-                            <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg">
-                            <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A6.jpg">
                             
                         </section>
 
@@ -112,7 +110,7 @@
                             <section class="mini-imgs">
                                 <section class="mini-pics-product">
                                     <img class="select-prod"
-                                        src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="">
+                                        src="/uploads/<%= product.imagens[0] %>" alt="">
                                 </section>
                             </section>
                             <!-- Seleção de tamanhos  -->
