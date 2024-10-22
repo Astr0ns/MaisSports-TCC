@@ -88,6 +88,10 @@ router.get("/add-product", function (req, res) {
     var email = req.session.email;
     res.render("pages/add-product", { email: email });
 });
+router.get("/add-locais2", function (req, res) {
+    var email = req.session.email;
+    res.render("pages/add-locais2", { email: email });
+});
 
 router.post("/adicionarProd", upload, produtoController.adicionarProd, async function (req, res) {
 

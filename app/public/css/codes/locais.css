@@ -255,6 +255,10 @@ button:hover {
     padding: 0 20px;
 }
 
+.endereco_local{
+    margin-top: 10px;
+}
+
 .sidePanelInteracao{
     display: flex;
     width: 100%;
@@ -420,6 +424,25 @@ button:hover {
 
 #selectedCoordinates{
     display: none;
+}
+
+.comentarios_local{
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
+.comentarios_local h3{
+    font-size: 2em;
+}
+.comentarios_local strong{
+    margin-top: 15px;
+}
+
+.comentarios_local ul {
+    list-style-type: none; /* Remove os marcadores */
+    padding: 0; /* Remove o preenchimento padrão */
+    margin:  0 0 0 10px; /* Remove a margem padrão */
 }
 
 

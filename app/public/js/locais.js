@@ -362,9 +362,6 @@ function resetRating() {
 
 
 
-
-
-
 function centerMapOnUser() { 
     map.setCenter(currentLocation); 
     map.setZoom(12); 
@@ -436,7 +433,7 @@ function showSidePanel(placeId) {
                 </div>
                 
                 <section class="sidepanel_info">
-                    <p>${place.vicinity}</p>
+                    <p class="endereco_local">${place.vicinity}</p>
                     <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'} <span>${place.rating ? place.rating.toFixed(1) : ''}</span></p>
 
                     <hr class="separator">
@@ -481,8 +478,20 @@ function showSidePanel(placeId) {
                     </div>
 
                     <hr class="separator">
-
-                    ${place.reviews && place.reviews.length > 0 ? `<h3>Comentários:</h3><ul>${place.reviews.map(review => `<li><strong>${review.author_name}:</strong> ${review.text}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                        <section class="comentarios_local">
+                            ${place.reviews && place.reviews.length > 0 ? `
+                                <h3>Comentários:</h3>
+                                <ul>
+                                    ${place.reviews.map(review => `
+                                        <li>
+                                            <strong>${review.author_name}:</strong> 
+                                            ${review.rating ? getStarRatingHtml(review.rating) : 'Sem nota'}<br>
+                                            ${review.text} <br>
+                                        </li>
+                                    `).join('')}
+                                </ul>` : '<p>Sem comentários disponíveis</p>'}
+                        </section>
+                
                 </section>
             `;
 
@@ -556,7 +565,7 @@ function showSidePanelFromLocal(localId) {
                     </div>
 
                     <section class="sidepanel_info">
-                        <p>${local.endereco || 'Endereço não disponível'}</p>
+                        <p class="endereco_local">${local.endereco || 'Endereço não disponível'}</p>
                         <p><strong>Avaliação:</strong> ${local.media_avaliacao ? getStarRatingHtml(local.media_avaliacao) : 'Não disponível'}<span>${local.media_avaliacao ? Number(local.media_avaliacao).toFixed(1) : ''}</span></p>
 
                         <hr class="separator">
@@ -602,8 +611,13 @@ function showSidePanelFromLocal(localId) {
                         </div>
 
                         <hr class="separator">
-
-                        ${local.comentarios && local.comentarios.length > 0 ? `<h3>Comentários:</h3><ul>${local.comentarios.map(formatComment).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                        <section class="comentarios_local">
+                            ${local.comentarios && local.comentarios.length > 0 ? `
+                                <h3>Comentários:</h3>
+                                <ul>
+                                    ${local.comentarios.map(formatComment).join('')}
+                                    </ul>` : '<p>Sem comentários disponíveis</p>'}
+                            </section>
                     </section>
                 `;
 

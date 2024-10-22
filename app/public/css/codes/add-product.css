@@ -194,7 +194,7 @@ button:hover{
     background-color: #fa6dc2;
 }
 
-.title-prod .name {
+.title-prod .name, .title-local .name {
     background-color: var(--cor-fonte);
     display: block;
     padding: 10px;
@@ -212,12 +212,12 @@ button:hover{
     width: 10.5em;
 }
 
-.categoria_prod{
+.categoria_prod, .local_category{
     display: flex;
     flex-direction: column;
 }
 
-.categoria_prod select{
+.categoria_prod select, .local_category select{
     width: 10.5em;
 }
 
@@ -230,7 +230,7 @@ button:hover{
     width: 100%;
 }
 
-.categoria_prod{
+.categoria_prod, .local_category{
     margin-top: 15px;
 }
 
@@ -247,7 +247,7 @@ button:hover{
 }
 
 
-textarea#descricao_prod {
+textarea#descricao_prod, textarea#desc_local {
     background-color: var(--cor-fonte);
     display: block;
     padding: 10px;

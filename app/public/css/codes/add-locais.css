@@ -8,12 +8,15 @@ label {
 
 /* Definindo o layout da página */
 
-html, body {
+html, body, main {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     color: #333;
+}
+body{
+    background-color: #fff;
 }
 
 /* Estilizando o botão de imagem */
@@ -41,5 +44,8 @@ html, body {
     margin-top: 10px;
 }
 
-
+#info_local{
+    display: flex;
+    flex-direction: column;
+}
 

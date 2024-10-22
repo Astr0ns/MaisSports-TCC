@@ -205,6 +205,7 @@ const getLocalFromId = async (req, res) => {
 
         const [results] = await connection.query(query, [localId]);
 
+
         // Formata os resultados para agrupar imagens e comentários por local
         const formattedResults = results.reduce((acc, row) => {
             const { nome_local, latitude, longitude, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
