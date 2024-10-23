@@ -371,52 +371,55 @@ const pegarProdutoCurtido = async (req, res) => {
     }
 };
 
-const getProductById = async (req, res) => {
-    const prodId = req.params.id;
-    const email = req.session.email; // Pega o email da sessão, se estiver definido
-    try {
-        const query = `
-            SELECT p.id_prod, p.titulo_prod, p.descricao_prod, p.link_prod, i.nome_imagem, i.ordem_img, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
-            FROM produtos_das_empresas p 
-            LEFT JOIN imagens i ON p.id_prod = i.fk_id_prod
-            LEFT JOIN avaliacao_prod a ON p.id_prod = a.fk_id_prod  
-            LEFT JOIN preco_prod v ON p.id_prod = v.fk_id_prod  
-            WHERE p.id_prod = ?
-            GROUP BY p.id_prod, i.nome_imagem, i.ordem_img
-            ORDER BY i.ordem_img
-        `;
-        const [results] = await connection.query(query, [prodId]);
+// Modificando a função getProductById para aceitar o caminho como parâmetro
+const getProductById = (path) => {
+    return async (req, res) => {
+        const prodId = req.params.id;
+        const email = req.session.email; // Pega o email da sessão, se estiver definido
+        try {
+            const query = `
+                SELECT p.id_prod, p.titulo_prod, p.descricao_prod, p.link_prod, i.nome_imagem, i.ordem_img, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
+                FROM produtos_das_empresas p 
+                LEFT JOIN imagens i ON p.id_prod = i.fk_id_prod
+                LEFT JOIN avaliacao_prod a ON p.id_prod = a.fk_id_prod  
+                LEFT JOIN preco_prod v ON p.id_prod = v.fk_id_prod  
+                WHERE p.id_prod = ?
+                GROUP BY p.id_prod, i.nome_imagem, i.ordem_img
+                ORDER BY i.ordem_img
+            `;
+            const [results] = await connection.query(query, [prodId]);
 
-        const produtos = results.reduce((acc, row) => {
-            const { id_prod, titulo_prod, descricao_prod, link_prod, valor_prod, nome_imagem, media_avaliacao } = row;
-            const produto = acc.find(prod => prod.id_prod === id_prod);
-            if (produto) {
-                if (nome_imagem) {
-                    produto.imagens.push(nome_imagem);
+            const produtos = results.reduce((acc, row) => {
+                const { id_prod, titulo_prod, descricao_prod, link_prod, valor_prod, nome_imagem, media_avaliacao } = row;
+                const produto = acc.find(prod => prod.id_prod === id_prod);
+                if (produto) {
+                    if (nome_imagem) {
+                        produto.imagens.push(nome_imagem);
+                    }
+                } else {
+                    acc.push({
+                        id_prod,
+                        titulo_prod,
+                        valor_prod,
+                        descricao_prod,
+                        link_prod,
+                        imagens: nome_imagem ? [nome_imagem] : [],
+                        media_avaliacao
+                    });
                 }
-            } else {
-                acc.push({
-                    id_prod,
-                    titulo_prod,
-                    valor_prod,
-                    descricao_prod,
-                    link_prod,
-                    imagens: nome_imagem ? [nome_imagem] : [],
-                    media_avaliacao
-                });
-            }
-            return acc;
-        }, []);
+                return acc;
+            }, []);
 
-        if (produtos.length > 0) {
-            res.render("pages/product-page", { product: produtos[0], email: email }); // Agora usa produtos[0]
-        } else {
-            res.status(404).send("Produto não encontrado");
+            if (produtos.length > 0) {
+                res.render(path, { product: produtos[0], email: email }); // Usa o caminho passado
+            } else {
+                res.status(404).send("Produto não encontrado");
+            }
+        } catch (error) {
+            console.error("Erro ao buscar o produto no banco de dados:", error);
+            res.status(500).send("Erro ao buscar o produto");
         }
-    } catch (error) {
-        console.error("Erro ao buscar o produto no banco de dados:", error);
-        res.status(500).send("Erro ao buscar o produto");
-    }
+    };
 };
 
 

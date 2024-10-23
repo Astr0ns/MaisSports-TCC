@@ -170,12 +170,12 @@ router.get("/getLocalFromId", locaisController.getLocalFromId, async function (r
     //
 });
 
-router.get("/product-page/:id", produtoController.getProductById, async function (req, res){
+router.get("/product-page/:id", produtoController.getProductById("pages/product-page"), async function (req, res) {
     var email = req.session.email;
     res.render("pages/product-page", { email: email });
 });
 
-router.get("/product-editar/:id", produtoController.getProductById, async function (req, res){
+router.get("/product-editar/:id", produtoController.getProductById("pages/product-editar"), async function (req, res) {
     var email = req.session.email;
     res.render("pages/product-editar", { email: email });
 });
