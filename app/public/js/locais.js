@@ -413,6 +413,7 @@ function showSidePanel(placeId) {
     sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
     let currentImageIndex = 0; // Index para controlar a imagem atual
     let h2Email = document.querySelector('.userEmail');
+    
 
     const request = {
         placeId: placeId,
@@ -440,7 +441,10 @@ function showSidePanel(placeId) {
 
                     <div class="sidePanelInteracao">
                         <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
-                        <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
+                        <p class="like-button">
+                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav('${placeId}');" style="font-size: 2em;display: none;"></i>
+                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav('${placeId}');" style="font-size: 2em;"></i>
+                            <br>favoritar</p>
                         <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
                     </div>
 
@@ -494,6 +498,7 @@ function showSidePanel(placeId) {
                 
                 </section>
             `;
+            checkCurtir(placeId)
 
             // Adiciona eventos para navegação entre as imagens
             if (place.photos && place.photos.length > 1) {
@@ -572,7 +577,10 @@ function showSidePanelFromLocal(localId) {
                         
                         <div class="sidePanelInteracao">
                             <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
-                            <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
+                            <p class="like-button">
+                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${localId});" style="font-size: 2em;display: none;"></i>
+                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${localId});" style="font-size: 2em;"></i>
+                            <br>favoritar</p>
                             <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
                         </div>
                         
@@ -620,6 +628,7 @@ function showSidePanelFromLocal(localId) {
                             </section>
                     </section>
                 `;
+                checkCurtir(localId)
 
                 // Adicionar evento de navegação de imagens se houver mais de uma imagem
                 if (local.imagens && local.imagens.length > 1) {
@@ -652,8 +661,6 @@ function showSidePanelFromLocal(localId) {
 
 
 
-
-
 function toggleSidePanelAvaliacao() {
     const sidePanelAvaliacao = document.getElementById('sidePanelAvaliar');
     const avaliarButton = document.getElementById('avaliarButton');
@@ -667,6 +674,92 @@ function toggleSidePanelAvaliacao() {
     }
 }
 
+function toggleHeart(event) {
+    const alvo = event.currentTarget;
+    const coracaoPreenchido = alvo.parentNode.querySelector('.bi-heart-fill');
+    const coracaoVazio = alvo.parentNode.querySelector('.bx-heart');
+
+    if (coracaoPreenchido.style.display === 'none') {
+        coracaoPreenchido.style.display = 'block';
+        coracaoVazio.style.display = 'none';
+        coracaoPreenchido.classList.add('animate');
+    } else {
+        coracaoPreenchido.style.display = 'none';
+        coracaoVazio.style.display = 'block';
+        coracaoVazio.classList.add('animate');
+    }
+
+    // Remove a classe de animação após a animação ser concluída
+    setTimeout(() => {
+        coracaoPreenchido.classList.remove('animate');
+        coracaoVazio.classList.remove('animate');
+    }, 500); // 500ms é o tempo da animação
+
+    
+}
+
+function checkCurtir(id) {
+    const coracaoPreenchido = document.querySelector('.bi-heart-fill');
+    const coracaoVazio = document.querySelector('.bx-heart');
+
+    fetch(`/checkCurtirLocal/${id}`, { 
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    },
+})
+.then(response => {
+    console.log("Resposta do servidor:", response);
+
+    // Verifica se a resposta foi bem-sucedida
+    if (!response.ok) {
+        throw new Error(`Erro: ${response.status} ${response.statusText}`);
+    }
+
+    return response.json();
+})
+.then(data => {
+    // Manipulação da resposta
+    if (data.favoritado) {
+        coracaoVazio.style.display = 'none';
+        coracaoPreenchido.style.display = 'block'; // Mostra o coração preenchido
+    } else {
+        coracaoPreenchido.style.display = 'none';
+        coracaoVazio.style.display = 'block'; // Mostra o coração vazio
+    }
+})
+.catch(error => {
+    console.error("Erro na solicitação:", error);
+});
+}
+
+function favDesFav(id) {
+    
+    try {
+        const response = fetch(`/favoritarLocal/${id}`, { // Use 'id' aqui
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        response.then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error(res.statusText);
+            }
+        }).then(data => {
+            if (data.message === "Produto favoritado com sucesso!") {
+                console.log("Produto adicionado aos favoritos:", data);
+            } else {
+                console.error("Erro ao favoritar o produto:", data.message);
+            }
+        });
+    } catch (error) {
+        console.error("Erro na solicitação:", error);
+    }
+}
 
 
 

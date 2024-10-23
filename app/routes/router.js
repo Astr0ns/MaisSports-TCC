@@ -114,12 +114,21 @@ router.get("/painel-empresa", function (req, res) {
 router.get("/favoritarProd/:id", produtoController.favoritarProd, async function (req, res){
 });
 
+router.get("/favoritarLocal/:id", locaisController.favoritarLocal, async function (req, res){
+});
+
+router.get("/checkCurtirLocal/:id", locaisController.checkCurtirLocal, async function (req, res){
+});
+
 router.get("/itens-curtidos", function (req, res) {
     var email = req.session.email;
     res.render("pages/itens-curtidos", { email: email });
 });
 
 router.get("/pegarProdutoCurtido", produtoController.pegarProdutoCurtido, async function (req, res) {
+    //
+});
+router.get("/pegarLocaisCurtido", locaisController.pegarLocaisCurtido, async function (req, res) {
     //
 });
 

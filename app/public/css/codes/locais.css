@@ -27,6 +27,22 @@
     align-items: center; /* Centraliza o mapa horizontalmente */ 
     padding: 20px; 
 } 
+.animate {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 
 /* Definindo o layout da página */ 
 
@@ -325,6 +341,7 @@ button:hover {
     padding: 10px; 
     cursor: pointer; 
     margin-bottom: 20px; 
+    display: flex;
 } 
 
 

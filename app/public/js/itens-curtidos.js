@@ -54,6 +54,47 @@ function renderProducts(products) {
         trendingSection.insertAdjacentHTML('beforeend', productHTML); // Adiciona o HTML do produto
     });
 }
+function renderLocais(locais) {
+    const trendingSection = document.querySelector('.products');
+    
+    if (locais.length === 0) {
+        console.log("fudeo")
+    }
+
+    locais.forEach(local => {
+        const { id, nome_local, valor_prod, latitude, longitude, nome_imagem, media_avaliacao } = local;
+
+        
+
+{/* <img src="${imagens.length > 0 ? imagens[0] : 'default-image.jpg'}" alt="${titulo_prod}"></img> */}
+
+        const productHTML = `
+        
+        <section class="row">
+            <a href="/local-page/${id}">
+                <img src="uploads/${nome_imagem[0]}" alt="${nome_local}">
+            </a>
+            <section class="product-text">
+                <h5 class="like-button">
+                    <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFavLocal(${id});"></i>
+                    <i class="bx bx-heart" onclick="toggleHeart(event); favDesFavLocal(${id});" style="display: none;"></i>
+                </h5>
+            </section>
+
+            
+            
+                <h4>${nome_local}</h4>
+                
+                    
+                    
+                
+        </section>
+        
+        `;
+
+        trendingSection.insertAdjacentHTML('beforeend', productHTML); // Adiciona o HTML do produto
+    });
+}
 
 function toggleHeart(event) {
     const alvo = event.currentTarget;
@@ -106,6 +147,33 @@ function favDesFav(id) {
     }
 }
 
+function favDesFavLocal(id) {
+    try {
+        const response = fetch(`/favoritarProd/${id}`, { // Use 'id' aqui
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        response.then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error(res.statusText);
+            }
+        }).then(data => {
+            if (data.message === "Produto favoritado com sucesso!") {
+                console.log("Produto adicionado aos favoritos:", data);
+            } else {
+                console.error("Erro ao favoritar o produto:", data.message);
+            }
+        });
+    } catch (error) {
+        console.error("Erro na solicitação:", error);
+    }
+}
+
 
 // Função para renderizar estrelas de avaliação
 function renderStars(rating) {
@@ -126,6 +194,16 @@ fetch('/pegarProdutoCurtido')
     .then(products => {
         console.log('Produtos recebidos:', products); // Log dos produtos
         renderProducts(products); // Renderiza todos os produtos
+    })
+    .catch(err => {
+        console.error('Erro ao carregar produtos:', err);
+    });
+
+fetch('/pegarLocaisCurtido')
+    .then(responseL => responseL.json())
+    .then(locais => {
+        console.log('Locais recebidos:', locais); // Log dos produtos
+        renderLocais(locais); // Renderiza todos os produtos
     })
     .catch(err => {
         console.error('Erro ao carregar produtos:', err);

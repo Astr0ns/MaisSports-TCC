@@ -6,11 +6,28 @@ body {
     background-color: #fff;
 }
 
+main{
+    display: flex;
+    width: 100vw;
+    padding: 70px 15px 0;
+}
+
+.ad_curtidas{
+    width: 15%;
+    height: auto;
+    margin-top: 70px;
+}
+
+.ad_curtidas img{
+    width: 100%;
+    height: auto;
+}
+
 .curtidos{
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 70px;
+    
 }
 
 .curtidos .trending-products .products{
