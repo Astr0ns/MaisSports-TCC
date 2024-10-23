@@ -42,7 +42,9 @@ function renderProducts(products) {
                     </section>
                 </section>
                 <section class="editar_prod_sect">
-                    <button class="editar_prod_bt">Editar</button>
+                    <a href="/product-editar/${product.id_prod}">
+                        <button class="editar_prod_bt">Editar</button>
+                    </a>
                 </section>
             </section>
         </section>

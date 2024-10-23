@@ -62,11 +62,12 @@ function renderLocais(locais) {
     }
 
     locais.forEach(local => {
-        const { id, nome_local, valor_prod, latitude, longitude, nome_imagem, media_avaliacao } = local;
+        const { id, nome_local, latitude, longitude, nome_imagem, media_avaliacao } = local;
 
         
 
 {/* <img src="${imagens.length > 0 ? imagens[0] : 'default-image.jpg'}" alt="${titulo_prod}"></img> */}
+
 
         const productHTML = `
         
@@ -81,12 +82,7 @@ function renderLocais(locais) {
                 </h5>
             </section>
 
-            
-            
-                <h4>${nome_local}</h4>
-                
-                    
-                    
+            <h4>${nome_local}</h4>       
                 
         </section>
         
