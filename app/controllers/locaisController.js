@@ -18,7 +18,7 @@ const upload = multer({ storage: storage }).array('imagens', 4); // 'imagens' é
 
 
 const adicionarLocais = async (req, res) => {
-    const { nome_local, categoria, descricao, latitude, longitude } = req.body;
+    const { nome_local, local_category, desc_local, latitude, longitude } = req.body;
 
     try {
         // Verifica se o local já existe
@@ -35,7 +35,7 @@ const adicionarLocais = async (req, res) => {
         // Insere o novo local
         const [addL] = await connection.query(
             `INSERT INTO locais (nome_local, categoria, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
-            [nome_local, categoria, descricao, latitude, longitude]
+            [nome_local, local_category, desc_local, latitude, longitude]
         );
 
         const locaisId = addL.insertId;
@@ -252,13 +252,13 @@ const pegarLocaisCurtido = async (req, res) => {
         }, []);
 
         // // Ordena as imagens de cada produto de acordo com a ordem definida
-        // locais.forEach(location => {
-        //     location.imagens.sort((a, b) => {
-        //         const ordemA = results.find(row => row.nome_imagem === a).ordem_img;
-        //         const ordemB = results.find(row => row.nome_imagem === b).ordem_img;
-        //         return ordemA - ordemB;
-        //     });
-        // });
+         locais.forEach(location => {
+             location.imagens.sort((a, b) => {
+                 const ordemA = results.find(row => row.nome_imagem === a).ordem_img;
+                 const ordemB = results.find(row => row.nome_imagem === b).ordem_img;
+                 return ordemA - ordemB;
+             });
+         });
         
 
         res.json(locais);

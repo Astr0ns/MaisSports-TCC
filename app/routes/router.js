@@ -13,6 +13,8 @@ const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 const locaisController = require('../controllers/locaisController');
 const produtoController = require('../controllers/produtoController');
+const locaisPremiumController = require('../controllers/locaisPremiumController');
+const reservaController = require('../controllers/reservaController');
 
 const multer = require('multer');
 const fs = require('fs');
@@ -76,6 +78,11 @@ router.get("/produto-confirmado", produtoController.adicionarProdutoConfirmado);
 router.post("/adicionarLocais", upload, locaisController.adicionarLocais, async function (req, res) {
     //
 });
+
+router.post("/adicionarLocaisPremium", upload, locaisPremiumController.adicionarLocaisPremium, async function (req, res) {
+    //
+});
+
 router.post("/avaliarLocais", verificarAutenticacao, locaisController.avaliarLocais, async function (req, res) {
 
 });

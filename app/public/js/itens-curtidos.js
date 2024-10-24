@@ -54,6 +54,7 @@ function renderProducts(products) {
         trendingSection.insertAdjacentHTML('beforeend', productHTML); // Adiciona o HTML do produto
     });
 }
+
 function renderLocais(locais) {
     const trendingSection = document.querySelector('.products');
     
@@ -61,8 +62,9 @@ function renderLocais(locais) {
         console.log("fudeo")
     }
 
+
     locais.forEach(local => {
-        const { id, nome_local, latitude, longitude, nome_imagem, media_avaliacao } = local;
+        const { id, nome_local, latitude, longitude, imagens, media_avaliacao } = local;
 
         
 
@@ -73,7 +75,12 @@ function renderLocais(locais) {
         
         <section class="row">
             <a href="/local-page/${id}">
-                <img src="uploads/${nome_imagem[0]}" alt="${nome_local}">
+            
+                
+            
+                <img src="uploads/${imagens[0]}}" alt="${nome_local}">
+                
+                
             </a>
             <section class="product-text">
                 <h5 class="like-button">
