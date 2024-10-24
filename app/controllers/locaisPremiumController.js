@@ -30,6 +30,29 @@ const adicionarLocaisPremium = async (req, res) => {
 
         const locaisId = addL.insertId;
 
+        const horarios = {
+            'Quinta': { inicio: '09:00:00', fim: '18:00:00' },
+            'Sexta': { inicio: '09:00:00', fim: '21:00:00' },
+            'Sábado': { inicio: '10:00:00', fim: '18:00:00' },
+            'Domingo': { inicio: '10:00:00', fim: '16:00:00' }
+        };
+        
+        for (const dia_semana in horarios) {
+            const { inicio, fim } = horarios[dia_semana];
+        
+            const [dia_atua] = await connection.query(
+                `INSERT INTO dia_atuacao (fk_id_local_premium, dia_semana, horario_inicio, horario_fim) VALUES (?, ?, ?, ?)`,
+                [locaisId, dia_semana, inicio, fim]
+            );
+        }
+
+        // for (const dia_semana of diasSemana) {
+        //     const [add] = await connection.query(
+        //         `INSERT INTO dia_atuacao (fk_id_local_premium, dia_semana, horario_inicio, horario_fim) VALUES (?, ?, ?, ?)`,
+        //         [locaisId, dia_semana, horarioInicio, horarioFim]
+        //     );
+        // }
+
         // Armazena as imagens no banco de dados
         if (req.files && req.files.length > 0) {
             const imagens = req.files.map(file => file.filename);
