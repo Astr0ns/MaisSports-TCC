@@ -38,6 +38,7 @@
     <!-- css da pagina -->
     <link rel="stylesheet" href="css/codes/add-locais-premium.css">
 
+
      <script src="js/add-product.js"></script> 
 
     <title>+Sports</title>
@@ -49,11 +50,11 @@
     <section class="container-product">
         <section class="container">
             <section class="card">
-                <form action="/adicionarLocaisPremium" method="POST" enctype="multipart/form-data">
+                <form action="/adicionarLocaisPremium" id="adicionarLocalForm" method="POST" enctype="multipart/form-data">
 
 
                     
-                    <section class="product-card" id="product-card-stl" style="display: none;">
+                    <section class="product-card" id="product-card-stl">
                         
                         <section class="MainIgm" data-index="0">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
@@ -87,7 +88,9 @@
                         
                     </section>
                     
-                    <section class="product-info" id="product-info-stl" style="display: none;">
+                    <section class="product-info" id="product-info-stl" style="display: flex;">
+
+                        <h2>Informações Local</h2>
 
                             <section class="title-local">
                                 <label for="nome_local">Digite o Nome do Local:</label><br>
@@ -132,22 +135,28 @@
                             <input type="hidden" name="latitude" id="latitude" value=""></input>
                             <input type="hidden" name="longitude" id="longitude" value=""></input>
                         
-                            <button type="submit">Adicionar Agora!</button>
+                            <div class="addButton">
+                                <button class="proximaPag" onclick="proximaPag()" type="button">Proximo!</button>
+                            </div>
+                            
                                 
                     </section>
-                    <section class="funcionamento">
+
+                    <section class="funcionamento" style="display: none;">
                         <section class="hora_funciona">
-                            <section class="segunda hora_css">
-                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('segunda')">
-                                    <h3>Segunda-feira</h3>
+                            <div onclick="voltarPag()" id="voltarButton"><span ><i class="bi bi-arrow-left-short"></i></span></div>
+                            <h1>Horario de funcionamento</h1>
+                            <section class="Segunda hora_css">
+                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('Segunda')">
+                                    <h3><span>Segunda-feira</span></h3>
                                     <h3 class="h3_hora">10:00 - 19:00</h3>
                                     <p><i class="bi bi-chevron-right"></i></p>
                                 </div>
-                                <div class="overlay" id="overlay"></div>
+                                <div onclick="esconderEscolherHora('Segunda')" class="overlay" id="overlay"></div>
                                 <section class="escolher_hora" id="escolher_hora">
                                     <div class="toggle-container">
-                                        <span onclick="esconderEscolherHora('segunda')"><i class="bi bi-arrow-bar-left"></i></span>
-                                        <button onclick="toggleButtons('segunda')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                        <span onclick="esconderEscolherHora('Segunda')"><i class="bi bi-arrow-bar-left"></i></span>
+                                        <button onclick="toggleButtons('Segunda')" type="button" id="toggleButton" class="toggle-btn active" value="Segunda">ABERTO</button>
                                     </div>
                                     <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
                                         <span>Segunda-feira</span>
@@ -164,17 +173,17 @@
                             </section>
                             <hr>
                             
-                            <section class="Terça hora_css">
-                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('Terça')">
-                                    <h3>Terça-feira</h3>
+                            <section class="Terca hora_css">
+                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('Terca')">
+                                    <h3><span>Terça-feira</span></h3>
                                     <h3 class="h3_hora">10:00 - 19:00</h3>
                                     <p><i class="bi bi-chevron-right"></i></p>
                                 </div>
-                                <div class="overlay" id="overlay"></div>
+                                <div onclick="esconderEscolherHora('Terca')" class="overlay" id="overlay"></div>
                                 <section class="escolher_hora" id="escolher_hora">
                                     <div class="toggle-container">
-                                        <span onclick="esconderEscolherHora('Terça')"><i class="bi bi-arrow-bar-left"></i></span>
-                                        <button onclick="toggleButtons('Terça')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                        <span onclick="esconderEscolherHora('Terca')"><i class="bi bi-arrow-bar-left"></i></span>
+                                        <button onclick="toggleButtons('Terca')" type="button" id="toggleButton" class="toggle-btn active" value="Terca">ABERTO</button>
                                     </div>
                                     <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
                                         <span>Terça-feira</span>
@@ -193,15 +202,15 @@
 
                             <section class="Quarta hora_css">
                                 <div class="hora_css info_dia" onclick="mostrarEscolherHora('Quarta')">
-                                    <h3>Quarta-feira</h3>
+                                    <h3><span>Quarta-feira</span></h3>
                                     <h3 class="h3_hora">10:00 - 19:00</h3>
                                     <p><i class="bi bi-chevron-right"></i></p>
                                 </div>
-                                <div class="overlay" id="overlay"></div>
+                                <div onclick="esconderEscolherHora('Quarta')" class="overlay" id="overlay"></div>
                                 <section class="escolher_hora" id="escolher_hora">
                                     <div class="toggle-container">
                                         <span onclick="esconderEscolherHora('Quarta')"><i class="bi bi-arrow-bar-left"></i></span>
-                                        <button onclick="toggleButtons('Quarta')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                        <button onclick="toggleButtons('Quarta')" type="button" id="toggleButton" class="toggle-btn active" value="Quarta">ABERTO</button>
                                     </div>
                                     <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
                                         <span>Quarta-feira</span>
@@ -220,15 +229,15 @@
 
                             <section class="Quinta hora_css">
                                 <div class="hora_css info_dia" onclick="mostrarEscolherHora('Quinta')">
-                                    <h3>Quinta-feira</h3>
+                                    <h3><span>Quinta-feira</span></h3>
                                     <h3 class="h3_hora">10:00 - 19:00</h3>
                                     <p><i class="bi bi-chevron-right"></i></p>
                                 </div>
-                                <div class="overlay" id="overlay"></div>
+                                <div onclick="esconderEscolherHora('Quinta')" class="overlay" id="overlay"></div>
                                 <section class="escolher_hora" id="escolher_hora">
                                     <div class="toggle-container">
                                         <span onclick="esconderEscolherHora('Quinta')"><i class="bi bi-arrow-bar-left"></i></span>
-                                        <button onclick="toggleButtons('Quinta')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                        <button onclick="toggleButtons('Quinta')" type="button" id="toggleButton" class="toggle-btn active" value="Quinta">ABERTO</button>
                                     </div>
                                     <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
                                         <span>Quinta-feira</span>
@@ -247,15 +256,15 @@
 
                             <section class="Sexta hora_css">
                                 <div class="hora_css info_dia" onclick="mostrarEscolherHora('Sexta')">
-                                    <h3>Sexta-feira</h3>
+                                    <h3><span>Sexta-feira</span></h3>
                                     <h3 class="h3_hora">10:00 - 19:00</h3>
                                     <p><i class="bi bi-chevron-right"></i></p>
                                 </div>
-                                <div class="overlay" id="overlay"></div>
+                                <div onclick="esconderEscolherHora('Sexta')" class="overlay" id="overlay"></div>
                                 <section class="escolher_hora" id="escolher_hora">
                                     <div class="toggle-container">
                                         <span onclick="esconderEscolherHora('Sexta')"><i class="bi bi-arrow-bar-left"></i></span>
-                                        <button onclick="toggleButtons('Sexta')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                        <button onclick="toggleButtons('Sexta')" type="button" id="toggleButton" class="toggle-btn active" value="Sexta">ABERTO</button>
                                     </div>
                                     <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
                                         <span>Sexta-feira</span>
@@ -274,15 +283,15 @@
 
                             <section class="Sabado hora_css">
                                 <div class="hora_css info_dia" onclick="mostrarEscolherHora('Sabado')">
-                                    <h3>Sábado</h3>
+                                    <h3><span>Sábado</span></h3>
                                     <h3 class="h3_hora">10:00 - 19:00</h3>
                                     <p><i class="bi bi-chevron-right"></i></p>
                                 </div>
-                                <div class="overlay" id="overlay"></div>
+                                <div onclick="esconderEscolherHora('Sabado')" class="overlay" id="overlay"></div>
                                 <section class="escolher_hora" id="escolher_hora">
                                     <div class="toggle-container">
                                         <span onclick="esconderEscolherHora('Sabado')"><i class="bi bi-arrow-bar-left"></i></span>
-                                        <button onclick="toggleButtons('Sabado')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                        <button onclick="toggleButtons('Sabado')" type="button" id="toggleButton" class="toggle-btn active" value="Sabado">ABERTO</button>
                                     </div>
                                     <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
                                         <span>Sábado</span>
@@ -301,15 +310,15 @@
 
                             <section class="Domingo hora_css">
                                 <div class="hora_css info_dia" onclick="mostrarEscolherHora('Domingo'); toggleButton(dia)">
-                                    <h3>Domingo</h3>
+                                    <h3><span>Domingo</span></h3>
                                     <h3 class="h3_hora">FECHADO</h3>
                                     <p><i class="bi bi-chevron-right"></i></p>
                                 </div>
-                                <div class="overlay" id="overlay"></div>
+                                <div onclick="esconderEscolherHora('Domingo')" class="overlay" id="overlay"></div>
                                 <section class="escolher_hora" id="escolher_hora">
                                     <div class="toggle-container">
                                         <span onclick="esconderEscolherHora('Domingo')"><i class="bi bi-arrow-bar-left"></i></span>
-                                        <button onclick="toggleButtons('Domingo')" type="button" id="toggleButton" class="toggle-btn">FECHADO</button>
+                                        <button onclick="toggleButtons('Domingo')" type="button" id="toggleButton" class="toggle-btn" value="Domingo">FECHADO</button>
                                     </div>
                                     <div class="desativa_pick" style="display: none;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
                                         <span>Domingo</span>
@@ -326,8 +335,17 @@
                             </section>
                             <hr>
 
+                            <input type="hidden" id="horarios" name="horarios">
+
+                            <div class="addButton">
+                                <button onclick="enviarLocal()" type="button">Adcionar Agora!</button>
+                            </div>
+                            
                         </section>
-                        <section class="mapa"></section>
+                        <section class="mapa">
+                            <h2>Localização Selecionada</h2>
+                            <div id="map" style="height: 100%; width: 100%;"></div> 
+                        </section>
                     </section>
 
                     
@@ -342,6 +360,40 @@
     <script src="js/add-locais-premium.js"></script>
     <script src="js/mini-imgs.js"></script>
         
+    <script>
+        function enviarLocal(){
+            const dias = document.querySelectorAll('.active');
+            let dicionario_horarios = {};
+
+            for (const dia of dias) {
+                const diaSemana = dia.value;
+                const iniHoraElement = document.querySelector(`.${diaSemana} #start-time`);
+                const fimHoraElement = document.querySelector(`.${diaSemana} #end-time`);
+
+                if (iniHoraElement && fimHoraElement) {
+                    const iniHora = iniHoraElement.value;
+                    const fimHora = fimHoraElement.value;
+
+
+                    dicionario_horarios[diaSemana] = {
+                        inicio: iniHora,
+                        fim: fimHora
+                    };
+                } else {
+                    console.warn(`Element(s) for ${diaSemana} not found.`);
+                }
+            }
+
+            document.getElementById('horarios').value = JSON.stringify(dicionario_horarios);
+
+            console.log('Funcionou?')
+            console.log(document.getElementById('horarios').value)
+
+            document.getElementById("adicionarLocalForm").submit();
+        }
+    </script>
+
+
     <!-- Pegar imagem pelo icons de adiconar -->
     <script>
         document.querySelectorAll('.upload-link').forEach((link, index) => {
@@ -397,15 +449,6 @@
     </script>
 
     <script>
-        window.onload = function () {
-            const lat = localStorage.getItem('latitude');
-            const lng = localStorage.getItem('longitude');
-
-            if (lat && lng) {
-                document.getElementById('latitude').value = lat;
-                document.getElementById('longitude').value = lng;
-            }
-        };
         const email = "<%= email %>";
     </script>
 
@@ -416,7 +459,7 @@
         noCalendar: true,
         dateFormat: "H:i",
         time_24hr: true,
-        defaultDate: "09:00" // Defina o horário padrão para o início
+        defaultDate: "10:00" // Defina o horário padrão para o início
     });
 
     // Instância para o campo de fim
@@ -425,10 +468,12 @@
         noCalendar: true,
         dateFormat: "H:i",
         time_24hr: true,
-        defaultDate: "17:00" // Defina o horário padrão para o fim
+        defaultDate: "19:00" // Defina o horário padrão para o fim
     });
     </script>
 
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places"></script>
 </body>
 
 </html>

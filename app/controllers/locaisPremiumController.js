@@ -2,8 +2,30 @@ var connection = require("../../config/pool_conexoes");
 const express = require('express');
 
 const adicionarLocaisPremium = async (req, res) => {
-    const { nome_local, local_category, desc_local, latitude, longitude } = req.body;
+    const { nome_local, local_category, preco_hora,  desc_local, latitude, longitude, horarios } = req.body;
     const email = req.session.email;
+
+    const parsedHorarios = JSON.parse(horarios);
+
+    console.log("Horários recebidos (como objeto):", parsedHorarios);
+    
+
+    console.log(nome_local)
+    console.log(local_category)
+    console.log(preco_hora)
+    console.log(desc_local)
+    // console.log("Horários recebidos:", horarios);
+
+    for (let chave in parsedHorarios) {
+        console.log(chave);
+        console.log(chave + ": " + parsedHorarios[chave].inicio);
+        console.log(chave + ": " + parsedHorarios[chave].fim);
+    }
+      
+
+    return
+
+    
 
     try {
          // Obtém o ID da empresa
@@ -33,28 +55,15 @@ const adicionarLocaisPremium = async (req, res) => {
 
         const locaisId = addL.insertId;
 
-        const horarios = {
-            'Quinta': { inicio: '09:00:00', fim: '18:00:00' },
-            'Sexta': { inicio: '09:00:00', fim: '21:00:00' },
-            'Sábado': { inicio: '10:00:00', fim: '18:00:00' },
-            'Domingo': { inicio: '10:00:00', fim: '16:00:00' }
-        };
-        
-        for (const dia_semana in horarios) {
-            const { inicio, fim } = horarios[dia_semana];
-        
-            const [dia_atua] = await connection.query(
-                `INSERT INTO dia_atuacao (fk_id_local_premium, dia_semana, horario_inicio, horario_fim) VALUES (?, ?, ?, ?)`,
-                [locaisId, dia_semana, inicio, fim]
+        // Adicionar dia de atuação
+        for (let chave in parsedHorarios) {
+            const [addAtua] = await connection.query(
+                `INSERT INTO DiaAtuacao (fk_id_local_premium, dia_semana, horario_inicio, horario_fim) VALUES (?, ?, ?, ?)`,
+                [locaisId, chave, parsedHorarios[chave].inicio, parsedHorarios[chave].fim]
             );
         }
-
-        // for (const dia_semana of diasSemana) {
-        //     const [add] = await connection.query(
-        //         `INSERT INTO dia_atuacao (fk_id_local_premium, dia_semana, horario_inicio, horario_fim) VALUES (?, ?, ?, ?)`,
-        //         [locaisId, dia_semana, horarioInicio, horarioFim]
-        //     );
-        // }
+        
+        
 
         // Armazena as imagens no banco de dados
         if (req.files && req.files.length > 0) {

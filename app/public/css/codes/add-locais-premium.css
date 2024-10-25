@@ -12,6 +12,46 @@
     --cor-bar-dark-mob: #010c1a;
 }
 
+/* mapa design */
+.gm-style-mtc-bbw, .gm-control-active, .gmnoprint, .gmnoprint, .gmnoscreen, .gm-style-cc, .gm-control-active, .gm-control-active{
+    display: none;
+}
+
+@keyframes slideOff {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.product-card{
+    animation: slideOff 0.65s forwards;
+}
+
+.product-info{
+    animation: slideOff 0.5s forwards;
+}
+
+.preco_hora , .descricao_produto, .proximaPag{
+    margin-top: 20px;
+}
+
+.product-info{
+    display: flex;
+    flex-direction: column;
+}
+
+.product-info h2{
+    margin-bottom: 20px;
+    color: #f72ba5;
+}
+
+
+
 .preco_hora .name{
     background-color: var(--cor-fonte);
     display: block;
@@ -38,6 +78,29 @@
 
 .hora_funciona{
     width: 45%;
+}
+
+.hora_funciona #voltarButton span{
+    font-size: 2.1em;
+    width: 47px;
+    height: 47px;
+    border-radius: 50%;
+}
+
+#voltarButton{
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+#voltarButton:hover{
+    cursor: pointer;
+    color: #fa6dc2;
+    transform: scale(1.03);
+    
+}
+
+.hora_funciona h1{
+    font-size: 2em;
+    margin-bottom: 40px;
 }
 
 .hora_css h3{
@@ -72,7 +135,20 @@
 .mapa{
     width: 45%;
     height: 500px;
-    background-color: brown;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.mapa h2{
+    position: absolute;
+    z-index: 100;
+    background-color: #fff;
+    color: #d12089;
+    font-size: 1.9em;
+    padding: 10px;
+    margin-top: -35px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 body {
@@ -88,6 +164,10 @@ body {
     background-color: rgba(0, 0, 0, 0.5); /* cor de fundo escura com opacidade */
     display: none; /* escondido por padrão */
     z-index: 1; /* abaixo do conteúdo da escolha de hora */
+}
+
+.overlay:hover{
+    cursor: pointer;
 }
 
 .escolher_hora {
@@ -110,6 +190,7 @@ body {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    flex-direction: row-reverse;
 }
 
 .toggle-container span{
@@ -122,7 +203,7 @@ body {
     border-radius: 50%;
     justify-content: center;
     align-items: center;
-    margin-right: 200px;
+    
 }
 
 .toggle-container span:hover{
@@ -140,6 +221,7 @@ body {
     font-size: 15px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-right: 200px;
 }
 
 .toggle-btn.active {
@@ -163,4 +245,10 @@ body {
     border-radius: 17px;
     text-align: center;
     font-size: 15px;
+}
+
+.addButton {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
 }

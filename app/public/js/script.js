@@ -64,25 +64,4 @@ const mobileNavbar = new MobileNavbar(
 );
 mobileNavbar.init();
 
-import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css"; // Importa o CSS
-
-     document.addEventListener("DOMContentLoaded", function() {
-    flatpickr("#start-time", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
-        time_24hr: true,
-        defaultDate: "09:00" // Defina o horário padrão para o início
-    });
-
-    flatpickr("#end-time", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
-        time_24hr: true,
-        defaultDate: "17:00" // Defina o horário padrão para o fim
-    });
-});
-
 
