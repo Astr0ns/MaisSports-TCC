@@ -27,10 +27,6 @@
     align-items: center;
     flex-direction: row;
     width: 100%;
-    /* display: grid;
-    grid-template-columns: repeat(3, 33.333%);
-    justify-content: center;
-    align-items: center; */
 }
 
 .funcionamento{
@@ -100,30 +96,71 @@ body {
     left: 50%;
     transform: translate(-50%, -50%); /* centraliza o elemento */
     background: white; /* fundo branco para o elemento */
-    padding: 20px;
+    padding: 5px 20px 5px 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     z-index: 2; /* acima do overlay */
     display: none; /* escondido por padrão */
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .toggle-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.toggle-container span{
+    display: flex;
+    font-size: 23px;
+    width: 42px;
+    height: 42px;
+    font-weight: bold;
+    background-color: #ddd;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    margin-right: 200px;
+}
+
+.toggle-container span:hover{
+    background-color: #e4e4e4;
+    cursor: pointer;
 }
 
 .toggle-btn {
     width: 100px;
-    height: 50px;
+    padding: 5px;
     border: none;
     border-radius: 25px;
     background-color: #ccc;
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .toggle-btn.active {
     background-color: #f72ba5;
+}
+
+.toggle-btn.active:hover{
+    background-color: #fa6dc2;
+}
+
+.flatpickr-calendar.open {
+    border: 2px solid #f72ba5;
+    border-radius: 15px;
+}
+
+.time-picker{
+    background-color: var(--cor-fonte);
+    
+    padding: 5px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+    text-align: center;
+    font-size: 15px;
 }

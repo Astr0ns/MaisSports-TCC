@@ -26,12 +26,17 @@
     <link rel="stylesheet" href="css/codes/tendencia.css">
     
     <link rel="stylesheet" href="css/codes/product-page.css">
-    <link rel="stylesheet" href="css/codes/add-locais-premium.css">
+    
 
     <!-- Others Links -->
 
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- css da pagina -->
+    <link rel="stylesheet" href="css/codes/add-locais-premium.css">
 
      <script src="js/add-product.js"></script> 
 
@@ -141,15 +146,186 @@
                                 <div class="overlay" id="overlay"></div>
                                 <section class="escolher_hora" id="escolher_hora">
                                     <div class="toggle-container">
-                                        <button type="button" id="toggleButton" class="toggle-btn">OFF</button>
+                                        <span onclick="esconderEscolherHora('segunda')"><i class="bi bi-arrow-bar-left"></i></span>
+                                        <button onclick="toggleButtons('segunda')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
                                     </div>
-                                    <span>Segunda-feira</span>
-                                    <input type="time" class="time-picker" value="10:00">
-                                    <span> - </span>
-                                    <input type="time" class="time-picker" value="19:00">
+                                    <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
+                                        <span>Segunda-feira</span>
+
+                                        <div style="margin-top: 15px;">
+                                        <input name="" id="start-time" class="time-picker" type="text">
+                                    
+                                        <span> - </span>
+
+                                        <input name="" id="end-time" class="time-picker" type="text">
+                                        </div>
+                                    </div>
                                 </section>
                             </section>
                             <hr>
+                            
+                            <section class="Terça hora_css">
+                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('Terça')">
+                                    <h3>Terça-feira</h3>
+                                    <h3 class="h3_hora">10:00 - 19:00</h3>
+                                    <p><i class="bi bi-chevron-right"></i></p>
+                                </div>
+                                <div class="overlay" id="overlay"></div>
+                                <section class="escolher_hora" id="escolher_hora">
+                                    <div class="toggle-container">
+                                        <span onclick="esconderEscolherHora('Terça')"><i class="bi bi-arrow-bar-left"></i></span>
+                                        <button onclick="toggleButtons('Terça')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                    </div>
+                                    <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
+                                        <span>Terça-feira</span>
+
+                                        <div style="margin-top: 15px;">
+                                        <input name="" id="start-time" class="time-picker" type="text">
+                                    
+                                        <span> - </span>
+
+                                        <input name="" id="end-time" class="time-picker" type="text">
+                                        </div>
+                                    </div>
+                                </section>
+                            </section>
+                            <hr>
+
+                            <section class="Quarta hora_css">
+                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('Quarta')">
+                                    <h3>Quarta-feira</h3>
+                                    <h3 class="h3_hora">10:00 - 19:00</h3>
+                                    <p><i class="bi bi-chevron-right"></i></p>
+                                </div>
+                                <div class="overlay" id="overlay"></div>
+                                <section class="escolher_hora" id="escolher_hora">
+                                    <div class="toggle-container">
+                                        <span onclick="esconderEscolherHora('Quarta')"><i class="bi bi-arrow-bar-left"></i></span>
+                                        <button onclick="toggleButtons('Quarta')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                    </div>
+                                    <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
+                                        <span>Quarta-feira</span>
+
+                                        <div style="margin-top: 15px;">
+                                        <input name="" id="start-time" class="time-picker" type="text">
+                                    
+                                        <span> - </span>
+
+                                        <input name="" id="end-time" class="time-picker" type="text">
+                                        </div>
+                                    </div>
+                                </section>
+                            </section>
+                            <hr>
+
+                            <section class="Quinta hora_css">
+                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('Quinta')">
+                                    <h3>Quinta-feira</h3>
+                                    <h3 class="h3_hora">10:00 - 19:00</h3>
+                                    <p><i class="bi bi-chevron-right"></i></p>
+                                </div>
+                                <div class="overlay" id="overlay"></div>
+                                <section class="escolher_hora" id="escolher_hora">
+                                    <div class="toggle-container">
+                                        <span onclick="esconderEscolherHora('Quinta')"><i class="bi bi-arrow-bar-left"></i></span>
+                                        <button onclick="toggleButtons('Quinta')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                    </div>
+                                    <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
+                                        <span>Quinta-feira</span>
+
+                                        <div style="margin-top: 15px;">
+                                        <input name="" id="start-time" class="time-picker" type="text">
+                                    
+                                        <span> - </span>
+
+                                        <input name="" id="end-time" class="time-picker" type="text">
+                                        </div>
+                                    </div>
+                                </section>
+                            </section>
+                            <hr>
+
+                            <section class="Sexta hora_css">
+                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('Sexta')">
+                                    <h3>Sexta-feira</h3>
+                                    <h3 class="h3_hora">10:00 - 19:00</h3>
+                                    <p><i class="bi bi-chevron-right"></i></p>
+                                </div>
+                                <div class="overlay" id="overlay"></div>
+                                <section class="escolher_hora" id="escolher_hora">
+                                    <div class="toggle-container">
+                                        <span onclick="esconderEscolherHora('Sexta')"><i class="bi bi-arrow-bar-left"></i></span>
+                                        <button onclick="toggleButtons('Sexta')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                    </div>
+                                    <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
+                                        <span>Sexta-feira</span>
+
+                                        <div style="margin-top: 15px;">
+                                        <input name="" id="start-time" class="time-picker" type="text">
+                                    
+                                        <span> - </span>
+
+                                        <input name="" id="end-time" class="time-picker" type="text">
+                                        </div>
+                                    </div>
+                                </section>
+                            </section>
+                            <hr>
+
+                            <section class="Sabado hora_css">
+                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('Sabado')">
+                                    <h3>Sábado</h3>
+                                    <h3 class="h3_hora">10:00 - 19:00</h3>
+                                    <p><i class="bi bi-chevron-right"></i></p>
+                                </div>
+                                <div class="overlay" id="overlay"></div>
+                                <section class="escolher_hora" id="escolher_hora">
+                                    <div class="toggle-container">
+                                        <span onclick="esconderEscolherHora('Sabado')"><i class="bi bi-arrow-bar-left"></i></span>
+                                        <button onclick="toggleButtons('Sabado')" type="button" id="toggleButton" class="toggle-btn active">ABERTO</button>
+                                    </div>
+                                    <div class="desativa_pick" style="display: flex;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
+                                        <span>Sábado</span>
+
+                                        <div style="margin-top: 15px;">
+                                        <input name="" id="start-time" class="time-picker" type="text">
+                                    
+                                        <span> - </span>
+
+                                        <input name="" id="end-time" class="time-picker" type="text">
+                                        </div>
+                                    </div>
+                                </section>
+                            </section>
+                            <hr>
+
+                            <section class="Domingo hora_css">
+                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('Domingo'); toggleButton(dia)">
+                                    <h3>Domingo</h3>
+                                    <h3 class="h3_hora">FECHADO</h3>
+                                    <p><i class="bi bi-chevron-right"></i></p>
+                                </div>
+                                <div class="overlay" id="overlay"></div>
+                                <section class="escolher_hora" id="escolher_hora">
+                                    <div class="toggle-container">
+                                        <span onclick="esconderEscolherHora('Domingo')"><i class="bi bi-arrow-bar-left"></i></span>
+                                        <button onclick="toggleButtons('Domingo')" type="button" id="toggleButton" class="toggle-btn">FECHADO</button>
+                                    </div>
+                                    <div class="desativa_pick" style="display: none;width: 100%;flex-direction: column;align-items: center; margin-bottom: 15px;">
+                                        <span>Domingo</span>
+
+                                        <div style="margin-top: 15px;">
+                                        <input name="" id="start-time" class="time-picker" type="text">
+                                    
+                                        <span> - </span>
+
+                                        <input name="" id="end-time" class="time-picker" type="text">
+                                        </div>
+                                    </div>
+                                </section>
+                            </section>
+                            <hr>
+
                         </section>
                         <section class="mapa"></section>
                     </section>
@@ -163,12 +339,8 @@
             
 
     <script src="js/script.js"></script>
+    <script src="js/add-locais-premium.js"></script>
     <script src="js/mini-imgs.js"></script>
-
-    <script>
-        // Definindo a variável email no JavaScript com o valor vindo do backend
-        const email = "<%= email %>";
-    </script>
         
     <!-- Pegar imagem pelo icons de adiconar -->
     <script>
@@ -218,23 +390,12 @@
             });
         });
 
-        // Função para mostrar o modal
-        function mostrarEscolherHora(dia) {
-            
-            document.querySelector(`.${dia} .overlay`).style.display = 'block';
-            document.querySelector(`.${dia} .escolher_hora`).style.display = 'block';
-            
-        }
-
-        // Função para esconder o modal
-        function esconderEscolherHora() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('escolher_hora').style.display = 'none';
-        }
+        
 
         
 
     </script>
+
     <script>
         window.onload = function () {
             const lat = localStorage.getItem('latitude');
@@ -245,19 +406,28 @@
                 document.getElementById('longitude').value = lng;
             }
         };
+        const email = "<%= email %>";
     </script>
-     
-     <script>      const toggleButton = document.getElementById('toggleButton');
 
-        toggleButton.addEventListener('click', function() {
-            toggleButton.classList.toggle('active');
-            
-            if (toggleButton.classList.contains('active')) {
-                toggleButton.textContent = 'ON';
-            } else {
-                toggleButton.textContent = 'OFF';
-            }
-        });</script>
+    <script> 
+        // Instância para o campo de início
+    flatpickr("#start-time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        defaultDate: "09:00" // Defina o horário padrão para o início
+    });
+
+    // Instância para o campo de fim
+    flatpickr("#end-time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        defaultDate: "17:00" // Defina o horário padrão para o fim
+    });
+    </script>
 
 </body>
 
