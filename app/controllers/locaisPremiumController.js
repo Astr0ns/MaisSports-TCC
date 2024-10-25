@@ -14,6 +14,8 @@ const adicionarLocaisPremium = async (req, res) => {
     console.log(local_category)
     console.log(preco_hora)
     console.log(desc_local)
+    console.log(latitude)
+    console.log(longitude)
     // console.log("Horários recebidos:", horarios);
 
     for (let chave in parsedHorarios) {
@@ -77,7 +79,6 @@ const adicionarLocaisPremium = async (req, res) => {
         }
 
         req.flash('success_msg', 'Local adicionado com sucesso!');
-        req.session.nome = nome;
 
         // Redireciona após sucesso
         res.redirect('/locais-esportivos');

@@ -71,6 +71,11 @@ router.get("/add-locais", function (req, res) {
     res.render("pages/add-locais", { email: email });
 });
 
+router.get("/add-locais-premium", function (req, res) {
+    var email = req.session.email;
+    res.render("pages/add-locais-premium", { email: email });
+});
+
 
 
 router.get("/produto-confirmado", produtoController.adicionarProdutoConfirmado);
@@ -95,10 +100,7 @@ router.get("/add-product", function (req, res) {
     var email = req.session.email;
     res.render("pages/add-product", { email: email });
 });
-router.get("/add-locais-premium", function (req, res) {
-    var email = req.session.email;
-    res.render("pages/add-locais-premium", { email: email });
-});
+
 
 router.post("/adicionarProd", upload, produtoController.adicionarProd, async function (req, res) {
 
