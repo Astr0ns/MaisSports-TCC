@@ -20,3 +20,110 @@
     border: 1px solid var(--cor-fundo2);
     border-radius: 17px;
 }
+
+.hora_css{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    /* display: grid;
+    grid-template-columns: repeat(3, 33.333%);
+    justify-content: center;
+    align-items: center; */
+}
+
+.funcionamento{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.hora_funciona{
+    width: 45%;
+}
+
+.hora_css h3{
+    justify-self: flex-start;
+    font-size: 1em;
+    width: 100%;
+    text-align: start;
+}
+
+.hora_css .h3_hora{
+    justify-self: center;
+    width: 100%;
+    text-align: center;
+}
+
+.hora_css p {
+    justify-self: flex-end;
+    font-size: 1.3em;
+    width: 100%;
+    text-align: end;
+}
+
+.info_dia{
+    cursor: pointer;
+    padding: 10px;
+}
+
+.info_dia:hover{
+    background-color: #eee;
+}
+
+.mapa{
+    width: 45%;
+    height: 500px;
+    background-color: brown;
+}
+
+body {
+    position: relative;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* cor de fundo escura com opacidade */
+    display: none; /* escondido por padrão */
+    z-index: 1; /* abaixo do conteúdo da escolha de hora */
+}
+
+.escolher_hora {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* centraliza o elemento */
+    background: white; /* fundo branco para o elemento */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 2; /* acima do overlay */
+    display: none; /* escondido por padrão */
+}
+
+.toggle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggle-btn {
+    width: 100px;
+    height: 50px;
+    border: none;
+    border-radius: 25px;
+    background-color: #ccc;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-btn.active {
+    background-color: #f72ba5;
+}

@@ -18,12 +18,14 @@
     <!-- Link CSS's of Mains, Sections, etc. -->
 
     <link rel="stylesheet" href="css/codes/buttons.css">
-    <link rel="stylesheet" href="css/codes/product-page.css">
+    
     <link rel="stylesheet" href="css/codes/tamanhos-prod.css">
     <link rel="stylesheet" href="css/codes/nav-bar.css">
     <link rel="stylesheet" href="css/codes/footer.css">
     <link rel="stylesheet" href="css/codes/add-product.css">
     <link rel="stylesheet" href="css/codes/tendencia.css">
+    
+    <link rel="stylesheet" href="css/codes/product-page.css">
     <link rel="stylesheet" href="css/codes/add-locais-premium.css">
 
     <!-- Others Links -->
@@ -46,7 +48,7 @@
 
 
                     
-                    <section class="product-card" id="product-card-stl">
+                    <section class="product-card" id="product-card-stl" style="display: none;">
                         
                         <section class="MainIgm" data-index="0">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
@@ -80,7 +82,7 @@
                         
                     </section>
                     
-                    <section class="product-info" id="product-info-stl">
+                    <section class="product-info" id="product-info-stl" style="display: none;">
 
                             <section class="title-local">
                                 <label for="nome_local">Digite o Nome do Local:</label><br>
@@ -112,6 +114,8 @@
                                     placeholder="Digite o preço da hora">
                             </section>
 
+                            
+
                             <section class="descricao_produto">
                                 <label for="desc_local">Editar descrição do Local:</label><br>
                                 <textarea id="desc_local" name="desc_local" placeholder="digite o descrição"></textarea>
@@ -125,6 +129,29 @@
                         
                             <button type="submit">Adicionar Agora!</button>
                                 
+                    </section>
+                    <section class="funcionamento">
+                        <section class="hora_funciona">
+                            <section class="segunda hora_css">
+                                <div class="hora_css info_dia" onclick="mostrarEscolherHora('segunda')">
+                                    <h3>Segunda-feira</h3>
+                                    <h3 class="h3_hora">10:00 - 19:00</h3>
+                                    <p><i class="bi bi-chevron-right"></i></p>
+                                </div>
+                                <div class="overlay" id="overlay"></div>
+                                <section class="escolher_hora" id="escolher_hora">
+                                    <div class="toggle-container">
+                                        <button type="button" id="toggleButton" class="toggle-btn">OFF</button>
+                                    </div>
+                                    <span>Segunda-feira</span>
+                                    <input type="time" class="time-picker" value="10:00">
+                                    <span> - </span>
+                                    <input type="time" class="time-picker" value="19:00">
+                                </section>
+                            </section>
+                            <hr>
+                        </section>
+                        <section class="mapa"></section>
                     </section>
 
                     
@@ -191,6 +218,22 @@
             });
         });
 
+        // Função para mostrar o modal
+        function mostrarEscolherHora(dia) {
+            
+            document.querySelector(`.${dia} .overlay`).style.display = 'block';
+            document.querySelector(`.${dia} .escolher_hora`).style.display = 'block';
+            
+        }
+
+        // Função para esconder o modal
+        function esconderEscolherHora() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('escolher_hora').style.display = 'none';
+        }
+
+        
+
     </script>
     <script>
         window.onload = function () {
@@ -204,6 +247,17 @@
         };
     </script>
      
+     <script>      const toggleButton = document.getElementById('toggleButton');
+
+        toggleButton.addEventListener('click', function() {
+            toggleButton.classList.toggle('active');
+            
+            if (toggleButton.classList.contains('active')) {
+                toggleButton.textContent = 'ON';
+            } else {
+                toggleButton.textContent = 'OFF';
+            }
+        });</script>
 
 </body>
 

@@ -1,3 +1,6 @@
+var connection = require("../../config/pool_conexoes");
+const express = require('express');
+
 const adicionarLocaisPremium = async (req, res) => {
     const { nome_local, local_category, desc_local, latitude, longitude } = req.body;
     const email = req.session.email;
