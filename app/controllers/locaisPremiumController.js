@@ -25,23 +25,24 @@ const adicionarLocaisPremium = async (req, res) => {
     }
       
 
-    return
+
 
     
 
     try {
          // Obtém o ID da empresa
-         const [user] = await connection.query(
-            `SELECT id FROM empresas WHERE email = ?`,
-            [email]
-        );
+        //  const [user] = await connection.query(
+        //     `SELECT id FROM empresas WHERE email = ?`,
+        //     [email]
+        // );
 
-        if (endExist.length === 0) {
-            req.flash('error_msg', 'Empresa não encontrada');
-            return res.redirect('/locais-esportivos');
-        }
+        // if (endExist.length === 0) {
+        //     req.flash('error_msg', 'Empresa não encontrada');
+        //     return res.redirect('/locais-esportivos');
+        // }
 
-        const fk_id_emp = user[0].id; // Atribuindo fk_id_emp
+        //const fk_id_emp = user[0].id; // Atribuindo fk_id_emp
+        const fk_id_emp = 25;
 
         // Verifica se o local já existe
         const [endExist] = await connection.query(
@@ -57,7 +58,7 @@ const adicionarLocaisPremium = async (req, res) => {
         // Insere o novo local
         const [addL] = await connection.query(
             `INSERT INTO local_premium (fk_id_empresa, nome_local_premium, categoria, latitude, longitude, descricao, preco_hora) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [fk_id_emp, nome_local, local_category, latitude, longitude, desc_local]
+            [fk_id_emp, nome_local, local_category, latitude, longitude, desc_local, preco_hora]
         );
 
         const locaisId = addL.insertId;
@@ -65,7 +66,7 @@ const adicionarLocaisPremium = async (req, res) => {
         // Adicionar dia de atuação
         for (let chave in parsedHorarios) {
             const [addAtua] = await connection.query(
-                `INSERT INTO DiaAtuacao (fk_id_local_premium, dia_semana, horario_inicio, horario_fim) VALUES (?, ?, ?, ?)`,
+                `INSERT INTO dia_atuacao (fk_id_local_premium, dia_semana, horario_inicio, horario_fim) VALUES (?, ?, ?, ?)`,
                 [locaisId, chave, parsedHorarios[chave].inicio, parsedHorarios[chave].fim]
             );
         }
@@ -77,7 +78,7 @@ const adicionarLocaisPremium = async (req, res) => {
             const imagens = req.files.map(file => file.filename);
             for (let imagem of imagens) {
                 await connection.query(
-                    `INSERT INTO imagens (fk_local_id, nome_imagem) VALUES (?, ?)`,
+                    `INSERT INTO imagens (fk_local_premium_id, nome_imagem) VALUES (?, ?)`,
                     [locaisId, imagem]
                 );
             }
