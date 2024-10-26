@@ -233,7 +233,7 @@ button:hover {
     display: none; /* Inicialmente escondido */ 
     overflow-y: auto; 
     transition: width 0.3s ease, opacity 0.3s ease; /* Animação para largura e opacidade */ 
-    transition: height 0.3s ease, opacity 0.3s ease; /* Animação para largura e opacidade */ 
+    
     opacity: 0; /* Começa com opacidade 0 */
     z-index: 10; 
 
@@ -313,6 +313,35 @@ button:hover {
 
 .sidePanelAvaliar{
     display: none;
+    width: 100%;
+}
+
+.sidePanelAvaliar form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.rating{
+    margin-left: 6%; 
+}
+
+#addComentario{
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+    width: 90%;
+    height: 100px;
+    margin-left: 5%; 
+}
+
+.sidePanelAvaliar h3{
+    margin: 0 0 5px 10px;
 }
 
 
@@ -322,6 +351,62 @@ button:hover {
     transition: color 0.2s; /* Transição suave ao mudar a cor */
 }
 
+.group-button{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+#sidePanel button { 
+    background-color: #CF1684; 
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    text-align: center;
+} 
+
+.info_logar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.info_logar a{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#sidePanel .info_logar p{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#sidePanel .sidePanelAvaliar button{
+    width: 25%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+
+
+#sidePanel .cancelarAvaliar {
+    background-color: #fff;
+    border: 2.5px solid #CF1684;
+    color: #CF1684;
+    margin-right: 15px;
+    font-weight: 800;
+}
+
+#sidePanel .cancelarAvaliar:hover{
+    background-color: #eee;
+}
 
 
 
@@ -337,13 +422,7 @@ button:hover {
 
 
 
-#sidePanel button { 
-    background-color: #CF1684; 
-    width: 30px;
-    height: 30px;
-    align-items: center;
-    text-align: center;
-} 
+
 
 #sidePanel button:hover { 
     background-color: #a8126c; 
@@ -607,9 +686,6 @@ button:hover {
     #sidePanel{
         width: 100vw;
         z-index: 999;
-        animation: aparecerBaixo 1ms;
-        animation-timeline: view();
-        animation-range: cover 0% cover 50%;
     }
 
     footer{

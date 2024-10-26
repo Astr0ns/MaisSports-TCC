@@ -91,8 +91,8 @@ function initMap(lat, lng) {
         position: location,
         map: map,
         icon: {
-            url: 'imagem/LocalizacaoYOU-PNG.png',
-            scaledSize: new google.maps.Size(30, 30)
+            url: 'imagem/pincrown9.png',
+            scaledSize: new google.maps.Size(45, 45)
         }
     });
 }

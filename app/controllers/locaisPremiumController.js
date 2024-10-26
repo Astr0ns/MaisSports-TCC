@@ -31,18 +31,18 @@ const adicionarLocaisPremium = async (req, res) => {
 
     try {
          // Obtém o ID da empresa
-        //  const [user] = await connection.query(
-        //     `SELECT id FROM empresas WHERE email = ?`,
-        //     [email]
-        // );
+        const [user] = await connection.query(
+            `SELECT id FROM empresas WHERE email = ?`,
+            [email]
+        );
 
-        // if (endExist.length === 0) {
-        //     req.flash('error_msg', 'Empresa não encontrada');
-        //     return res.redirect('/locais-esportivos');
-        // }
+        if (user.length === 0) {
+            req.flash('error_msg', 'Empresa não encontrada');
+            return res.redirect('/locais-esportivos');
+        }
 
-        //const fk_id_emp = user[0].id; // Atribuindo fk_id_emp
-        const fk_id_emp = 25;
+        const fk_id_emp = user[0].id; // Atribuindo fk_id_emp
+        
 
         // Verifica se o local já existe
         const [endExist] = await connection.query(
@@ -96,6 +96,118 @@ const adicionarLocaisPremium = async (req, res) => {
     }
 };
 
+const locaisBancoPremium = async (req, res) => {
+    const { categoria } = req.query; // Pega a categoria da query string
+
+    try {
+        const query = `
+            SELECT l.id_local_premium, l.nome_local_premium, l.latitude, l.longitude, i.nome_imagem, AVG(a.avaliacao_estrela_locais) AS media_avaliacao
+            FROM local_premium l 
+            LEFT JOIN imagens i ON l.id_local_premium = i.fk_local_premium_id
+            LEFT JOIN avaliacao_local a ON l.id_local_premium = a.fk_id_local_premium  
+            WHERE l.categoria = ?
+            GROUP BY l.id_local_premium, i.nome_imagem
+        `;
+        const [results] = await connection.query(query, [categoria]); // Filtra pela categoria
+
+        // Formata os resultados para agrupar imagens por local
+        const formattedResults = results.reduce((acc, row) => {
+            const { id_local_premium, nome_local_premium, latitude, longitude, nome_imagem, media_avaliacao } = row;
+            const local = acc.find(loc => loc.id_local_premium === id_local_premium); // Procura pelo ID único
+            if (local) {
+                if (nome_imagem) {
+                    local.imagens.push(nome_imagem);
+                }
+            } else {
+                acc.push({
+                    id_local_premium,
+                    nome_local_premium,
+                    latitude,
+                    longitude,
+                    imagens: nome_imagem ? [nome_imagem] : [], // Inicia array de imagens
+                    media_avaliacao
+                });
+            }
+            return acc;
+        }, []);
+
+        res.json(formattedResults);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
+};
+
+const getLocalPremiumFromId = async (req, res) => {
+    const localId = req.query.id;
+
+    try {
+        const query = `
+            SELECT l.id_local_premium, l.nome_local_premium, l.latitude, l.longitude, l.descricao, 
+                   i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais,
+                   u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente,
+                   AVG(a.avaliacao_estrela_locais) AS media_avaliacao  -- Calcula a média das avaliações
+            FROM local_premium l
+            LEFT JOIN imagens i ON l.id_local_premium = i.fk_local_premium_id
+            LEFT JOIN avaliacao_local a ON l.id_local_premium = a.fk_id_local_premium 
+            LEFT JOIN usuario_clientes u ON a.fk_id_cliente = u.id  
+            WHERE l.id_local_premium = ?
+            GROUP BY l.id_local_premium, i.nome_imagem, a.comentario_local, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
+        `;
+
+        const [results] = await connection.query(query, [localId]);
+
+
+        // Formata os resultados para agrupar imagens e comentários por local
+        const formattedResults = results.reduce((acc, row) => {
+            const { nome_local_premium, latitude, longitude, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
+            const local = acc.find(loc => loc.nome_local_premium === nome_local_premium);
+            
+            if (local) {
+                // Adiciona as imagens, sem duplicar
+                if (nome_imagem && !local.imagens.includes(nome_imagem)) {
+                    local.imagens.push(nome_imagem);
+                }
+                
+                // Adiciona os comentários, sem duplicar
+                const comentarioExistente = local.comentarios.find(com => 
+                    com.comentario_local === comentario_local &&
+                    com.cliente === `${nome_cliente} ${sobrenome_cliente}`
+                );
+                
+                if (!comentarioExistente) {
+                    local.comentarios.push({
+                        comentario_local,
+                        avaliacao_estrela_locais,
+                        cliente: `${nome_cliente} ${sobrenome_cliente}`
+                    });
+                }
+            } else {
+                acc.push({
+                    nome_local_premium,
+                    latitude,
+                    longitude,
+                    media_avaliacao, // Inclui a média de avaliação
+                    imagens: nome_imagem ? [nome_imagem] : [],
+                    comentarios: comentario_local ? [{
+                        comentario_local,
+                        avaliacao_estrela_locais,
+                        cliente: `${nome_cliente} ${sobrenome_cliente}`
+                    }] : []
+                });
+            }
+
+            return acc;
+        }, []);
+
+        res.json(formattedResults);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
+};
+
+
 module.exports ={ 
-    adicionarLocaisPremium,
+    adicionarLocaisPremium, locaisBancoPremium, getLocalPremiumFromId,
 }
