@@ -604,6 +604,10 @@ button:hover {
         animation-range: cover 0% cover 50%;
     }
 
+    footer{
+        display: none;
+    }
+
 }
 
    
