@@ -31,6 +31,18 @@
     animation: pulse 0.5s ease;
 }
 
+@keyframes aparecerBaixo {
+    from {
+        opacity: 0;
+        translate: 0 100vh;
+    }
+
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
 @keyframes pulse {
     0% {
         transform: scale(1);
@@ -69,9 +81,10 @@ h1{
 
 /* Estilos para o filtro e entrada de endereço */ 
 
-.filters_mobile{
+.filters_mobile, .search-box{
     display: none;
 }
+
 
 
 #filter{
@@ -216,6 +229,7 @@ button:hover {
     display: none; /* Inicialmente escondido */ 
     overflow-y: auto; 
     transition: width 0.3s ease, opacity 0.3s ease; /* Animação para largura e opacidade */ 
+    transition: height 0.3s ease, opacity 0.3s ease; /* Animação para largura e opacidade */ 
     opacity: 0; /* Começa com opacidade 0 */
     z-index: 10; 
 
@@ -477,10 +491,24 @@ button:hover {
 /* Consulta de mídia para telas com largura máxima de 600px */
 @media screen and (min-width: 320px) and (max-width: 600px) {
 
+    .gm-style-mtc-bbw, .gm-control-active, .gmnoprint, .gmnoprint, .gmnoscreen, .gm-style-cc, .gm-control-active, .gm-control-active{
+        display: none;
+    }
+
+    header:has(nav) {
+        position: fixed;
+        z-index: 10;
+        width: 100%;
+    }
+
+    .search-box{
+        display: block;
+    }
 
     #map {
         height: 100vh; /* altura da tela inteira */
         width: 100vw;  /* largura da tela inteira */
+        
     }
 
     .desativar_mobile{
@@ -496,12 +524,18 @@ button:hover {
         background: none;
         box-shadow: none;
         width: 100%;
+        padding: 0;
+        margin: 0;
     }
 
     #addressSearch input{
         border-radius: 25px;
         height: 25px;
-
+        border-radius: 0;
+        width: 100%;
+        padding: 25px 0;
+        margin-top: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
 
     /* Ajusta outros elementos, se necessário */
@@ -528,7 +562,7 @@ button:hover {
         white-space: nowrap;
         top: 20%;
         width: 100vw;
-        transform: translate(0%, -50%); /* Centraliza a janela */ 
+        transform: translate(0%, -65%); /* Centraliza a janela */ 
         border-radius: 8px;
         padding: 20px;
         z-index: 11;
@@ -555,7 +589,19 @@ button:hover {
     
 
     .userButtonMobile{
+        display: block;
+        position: fixed;
+        top: 90%;
+        left: 90%;
+        transform: translate(-50%, -50%); /* Centraliza a janela */
+    }
 
+    #sidePanel{
+        width: 100vw;
+        z-index: 999;
+        animation: aparecerBaixo 1ms;
+        animation-timeline: view();
+        animation-range: cover 0% cover 50%;
     }
 
 }

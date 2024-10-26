@@ -36,6 +36,11 @@ const adicionarLocaisPremium = async (req, res) => {
             [email]
         );
 
+        if (endExist.length === 0) {
+            req.flash('error_msg', 'Empresa não encontrada');
+            return res.redirect('/locais-esportivos');
+        }
+
         const fk_id_emp = user[0].id; // Atribuindo fk_id_emp
 
         // Verifica se o local já existe

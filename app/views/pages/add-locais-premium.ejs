@@ -46,6 +46,7 @@
 
 <body style="background-color: #fff;">
     
+    <%- include("../partial/header-home", { email: email }) %>
 
     <section class="container-product">
         <section class="container">
@@ -59,7 +60,7 @@
                         <section class="MainIgm" data-index="0">
                             <input type="file" name="imagens" class="hidden-input" accept="image/*">
                             <div class="image-preview" id="preview-0">
-                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>
+                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
                             </div>
                           </section>
                         
@@ -354,6 +355,7 @@
         </section>
     </section>
 
+    <%- include("../partial/footer") %>
             
 
     <script src="js/script.js"></script>

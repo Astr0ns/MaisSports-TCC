@@ -517,13 +517,23 @@ function showSidePanel(placeId) {
             sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
         }
 
-        sidePanel.style.display = 'block'; 
-        // Aplicar animação de abertura 
-        setTimeout(() => { 
-            sidePanel.style.width = '500px'; // Largura desejada da aba lateral 
-            sidePanel.style.opacity = 1; 
-        }, 10); // Um pequeno delay para garantir que a transição seja visível 
+
+        if (window.innerWidth > 768) { // Verifique se a largura da tela é maior que 768px (ou o valor que preferir)
+            sidePanel.style.display = 'block';
+            // Aplicar animação de abertura
+            setTimeout(() => {
+                sidePanel.style.width = '500px'; // Largura desejada da aba lateral
+                sidePanel.style.opacity = 1;
+            }, 10); // Um pequeno delay para garantir que a transição seja visível
+        } else {
+            sidePanel.style.display = 'block';
+            sidePanel.style.opacity = 1;
+        }
+
+        
     });
+
+    
 }
 
 
@@ -651,12 +661,18 @@ function showSidePanelFromLocal(localId) {
             sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
         });
 
-    sidePanel.style.display = 'block'; 
-    // Aplicar animação de abertura 
-    setTimeout(() => { 
-        sidePanel.style.width = '500px'; // Largura desejada da aba lateral 
-        sidePanel.style.opacity = 1; 
-    }, 10); // Um pequeno delay para garantir que a transição seja visível 
+    
+        if (window.innerWidth > 768) { // Verifique se a largura da tela é maior que 768px (ou o valor que preferir)
+            sidePanel.style.display = 'block';
+            // Aplicar animação de abertura
+            setTimeout(() => {
+                sidePanel.style.width = '500px'; // Largura desejada da aba lateral
+                sidePanel.style.opacity = 1;
+            }, 10); // Um pequeno delay para garantir que a transição seja visível
+        } else {
+            sidePanel.style.display = 'block';
+            sidePanel.style.opacity = 1;
+        } 
 }
 
 
@@ -766,11 +782,20 @@ function favDesFav(id) {
 // esconde painel
 function hideSidePanel() { 
     const sidePanel = document.getElementById('sidePanel'); 
-    sidePanel.style.width = '0'; // Reduz a largura para 0 
-    sidePanel.style.opacity = 0; 
-    setTimeout(() => {
-        sidePanel.style.display = 'none'; // Esconde a aba lateral após a animação 
-    }, 300); // O tempo deve coincidir com a duração da transição 
+    if (window.innerWidth > 768) { // Verifica se a largura da tela é maior que 768px
+        sidePanel.style.width = '0'; // Reduz a largura para 0
+        sidePanel.style.opacity = 0;
+        setTimeout(() => {
+            sidePanel.style.display = 'none'; // Esconde a aba lateral após a animação
+        }, 300); // O tempo deve coincidir com a duração da transição
+    } else {
+        sidePanel.style.opacity = 0;
+        sidePanel.style.height = '0'; // Reduz a largura para 0
+        setTimeout(() => {
+            sidePanel.style.display = 'none'; // Esconde a aba lateral após a animação
+        }, 300); // O tempo deve coincidir com a duração da transição
+    }
+    
 
 } 
 

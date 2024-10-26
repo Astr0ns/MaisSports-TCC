@@ -252,3 +252,7 @@ body {
     justify-content: flex-end;
     margin-top: 20px;
 }
+
+.MainIgm i{
+    color: #1a348967;
+}

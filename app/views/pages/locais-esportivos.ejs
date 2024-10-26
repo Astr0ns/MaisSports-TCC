@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Mapa com Filtragem de Pontos de Interesse Esportivos</title> 
 
-    <link rel="stylesheet" href="css/codes/locais.css">
+    
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places"></script> 
 
@@ -33,13 +33,14 @@
 
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/codes/locais.css">
 
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2310003761562398"
      crossorigin="anonymous"></script>
 </head> 
 <body> 
-    <%- include("../partial/header-home", { email: email }) %>
+    <%- include("../partial/header-home-local", { email: email }) %>
     <h1 id="jsonData"></h1>
     <h1 class="desativar_mobile">LOCALIZAR LOCAIS</h1>
     <h2 class="userEmail"></h2>
@@ -107,7 +108,7 @@
 
 
 
-    <section id="sidePanel"> 
+    <section id="sidePanel" style="display: none;"> 
         <!-- Conteúdo da aba lateral será adicionado dinamicamente pelo JavaScript --> 
     </section> 
 
@@ -139,6 +140,7 @@
 
     <%- include("../partial/footer") %>
 </body> 
+<script src="js/script.js" defer></script>
 <script>
     // Definindo a variável email no JavaScript com o valor vindo do backend
     const email = "<%= email %>";
