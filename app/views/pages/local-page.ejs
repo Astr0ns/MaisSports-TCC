@@ -39,15 +39,20 @@
         </div>
 
         
-        <section class="gallery">
-            <section class="main-image">
-            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Cabin Main Image">
-            </section>
-            <section class="thumbnail-images">
-            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Thumbnail 1">
-            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Thumbnail 2">
-            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Thumbnail 3">
-            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Thumbnail 4">
+        <section class="gallery" >
+
+            <% local.imagens.forEach(function(imagem, index) { 
+                if(index==0){ %>
+                    <section class="main-image" >
+                        <img src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
+                        
+                    </section>
+                    <section class="thumbnail-images">
+                <% } else { %>
+                    <img src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
+                <% } %>
+                
+            <% }); %>
             </section>
         </section>
 
@@ -59,6 +64,7 @@
                     <h2>Descriçao:</h2>
                     <p style="margin-top: 10px;"><%- local.descricao %></p>
                 </section>
+                <h2 style="color: #d12089; margin-top: 35px;">LOCALIZAÇÃO MAPA</h2>
                 <section class="mapa">
                     <div id="map" style="height: 100%; width: 100%;"></div> 
                 </section>
@@ -76,6 +82,7 @@
                 <input type="hidden" id="preco_total" name="preco_total" value=""></input>
                 <input type="hidden" id="id_local_premium" name="id_local_premium" value=""></input>
                 <input type="hidden" id="nome_local_premium" name="nome_local_premium" value=""></input>
+
                 <section class="reservarInfo">
                     <h2>R$<%- local.preco_hora %><span>/Hora</span></h2>
 
