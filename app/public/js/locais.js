@@ -364,7 +364,7 @@ function generateContentFromLocalPremium(local) {
             }
 
             // Chama a função showSidePanelFromLocal passando o ID do local do banco
-            content += `<button class="saiba_mais" onclick="showSidePanelFromLocal('${local.id}')">Conheça Mais!</button></div>`;
+            content += `<a href="/local-page/${local.id_local_premium}"><button class="saiba_mais">Conheça Mais!</button></a></div>`;
 
             // Atualiza a infowindow com o conteúdo gerado
             infowindow.setContent(content);
