@@ -411,7 +411,8 @@ const getProductById = (path) => {
             }, []);
 
             if (produtos.length > 0) {
-                res.render(path, { product: produtos[0], email: email }); // Usa o caminho passado
+                console.log(produtos[0])
+                res.render("pages/product-page", { product: produtos[0], email: email }); // Usa o caminho passado
             } else {
                 res.status(404).send("Produto não encontrado");
             }

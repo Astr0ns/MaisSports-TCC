@@ -191,6 +191,16 @@ router.get("/product-page/:id", produtoController.getProductById("pages/product-
     res.render("pages/product-page", { email: email });
 });
 
+ router.get("/local-page/:id", reservaController.getLocalReservaById("pages/local-page"), async function (req, res) {
+    var email = req.session.email;
+    res.render("pages/local-page", { email: email });
+});
+
+// router.get("/local-page", async function (req, res) {
+//     var email = req.session.email;
+//     res.render("pages/local-page", { email: email });
+// });
+
 router.get("/product-editar/:id", produtoController.getProductById("pages/product-editar"), async function (req, res) {
     var email = req.session.email;
     res.render("pages/product-editar", { email: email });

@@ -54,7 +54,7 @@
                 <section class="container">
                     <section class="card">
                         <section class="product-card">
-                            <% product.imagens.forEach(function(imagem, index) { %>
+                            <% cforEach(function(imagem, index) { %>
                                 <img class="MainImg" src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
                             <% }); %>
                             

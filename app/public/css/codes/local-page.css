@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #ffffff;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgb(79, 79, 79);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+  }
+  
+main {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.title h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.gallery {
+    display: flex;
+    gap: 10px;
+}
+
+.main-image{
+    width: 50%;
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.thumbnail-images {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: repeat(4, auto);
+    width: 50%;
+    gap: 5px;
+    align-content: center;
+    justify-content: center;
+}
+
+.thumbnail-images img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.thumbnail-images button {
+    width: 100%;
+    padding: 5px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/* informações do local e reserva */
+.reservarInfo{
+    margin-top: 20px;
+    padding: 25px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    max-width: 500px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.reservarInfo h2{
+    font-size: 1.8em;
+}
+
+.reservarInfo span{
+    color: #ccc;
+    font-size: 0.7em;
+    margin-left: 5px;
+}
+
+.time-picker{
+    background-color: var(--cor-fonte);
+    width: 60%;
+    
+    padding: 5px;
+    border: 1px solid var(--cor-fundo2);
+    
+    text-align: center;
+    font-size: 15px;
+}
+  

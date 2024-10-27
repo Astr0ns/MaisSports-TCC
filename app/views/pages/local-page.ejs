@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>+Sports</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <link rel="stylesheet" href="/css/codes/local-page.css">
+</head>
+<body>
+    <main>
+        
+        <div class="title">
+            <h1>Cabana do Sossego Refugio na Serra da Mantiqueira</h1>
+        </div>
+
+        
+        <section class="gallery">
+            <section class="main-image">
+            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Cabin Main Image">
+            </section>
+            <section class="thumbnail-images">
+            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Thumbnail 1">
+            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Thumbnail 2">
+            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Thumbnail 3">
+            <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Thumbnail 4">
+            </section>
+        </section>
+
+        <section class="">
+
+            <section class="reservarInfo">
+                <h2>R$140<span>/Hora</span></h2>
+
+                <div style="margin-top: 15px; display: flex;">
+                    <input name="" id="start-time" class="time-picker" type="text">
+                    <input name="" id="end-time" class="time-picker" type="text">
+                </div>
+                <input name="" id="calendar" class="time-picker" type="text">
+            </section>
+            <button type="button" onclick="pegarDiasSemFunc()">teste</button>
+                
+        </section>
+        
+    </main>
+
+ <script>
+    
+function teste(){
+    const local = <%- JSON.stringify(local) %>;
+    const email = '<%= email %>';
+    console.log(local.dias[0].dia_semana); // Aqui você pode usar os dados no JavaScript
+    console.log(local.dias[0].horario_inicio); // Aqui você pode usar os dados no JavaScript
+}
+    
+ </script>
+ 
+    <script> 
+        function pegarDiasSemFunc()  {
+            const diaSemana = [];
+            const diaSemanaTotal = ["Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado"];
+            let result = []
+            const local = <%- JSON.stringify(local) %>;
+            local.dias.forEach(function(dia, index) {
+                diaSemana.push(
+                    local.dias[index].dia_semana
+                );
+                
+            });
+
+            diaSemanaTotal.forEach((dia, index) => {
+                if (!diaSemana.includes(dia)) {
+                    // result += `date.getDay() === ${index} || `; // Adiciona o índice e o dia ao resultado
+                    result.push(
+                        index
+                    );
+                }
+            });
+
+
+            return result
+            
+
+        }      
+        // Instância para o campo de início
+        flatpickr("#start-time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            defaultDate: "10:00" // Defina o horário padrão para o início
+        });
+
+        // Instância para o campo de fim
+        flatpickr("#end-time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            defaultDate: "19:00" // Defina o horário padrão para o fim
+        });
+
+        flatpickr("#calendar", {
+        enableTime: false, // Desativar a seleção de hora
+        dateFormat: "Y-m-d", // Formato de data
+        defaultDate: new Date(), // Data padrão é a data atual
+        minDate: "today",
+        "disable": [
+            function(date) {
+                const dias = pegarDiasSemFunc()
+                console.log(dias)
+                return (date.getDay() === dias[0] || date.getDay() === dias[1] || date.getDay() === dias[2] || date.getDay() === dias[3] || date.getDay() === dias[4] || date.getDay() === dias[5] || date.getDay() === dias[6]);
+
+            }
+        ],
+        "locale": {
+            "firstDayOfWeek": 1 // start week on Monday
+        }
+        
+    });
+
+        
+    </script>
+</body>
+</html>

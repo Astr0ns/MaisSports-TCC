@@ -6,7 +6,7 @@ exports.verificarDisponibilidade = async (req, res) => {
 
     try {
         // Conversão do dia da semana para português
-        const diasSemana = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+        const diasSemana = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
         const diaSemana = diasSemana[new Date(data_reserva).getDay()];
 
         // Busca os dias de atuação do local
@@ -89,4 +89,96 @@ exports.criarReserva = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: 'Erro ao criar reserva.', error });
     }
+};
+
+exports.getLocalReservaById = (path) => {
+    return async (req, res) => {
+        const localId = req.params.id;
+        const email = req.session.email; // Pega o email da sessão, se estiver definido
+        try {
+            const query = `
+                SELECT l.id_local_premium, l.nome_local_premium, l.latitude, l.longitude, l.descricao, l.preco_hora,
+                    d.dia_semana, d.horario_inicio, d.horario_fim,
+                    i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais,
+                    u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente,
+                    AVG(a.avaliacao_estrela_locais) AS media_avaliacao  -- Calcula a média das avaliações
+                FROM local_premium l
+                LEFT JOIN imagens i ON l.id_local_premium = i.fk_local_premium_id
+                LEFT JOIN avaliacao_local a ON l.id_local_premium = a.fk_id_local_premium 
+                LEFT JOIN usuario_clientes u ON a.fk_id_cliente = u.id 
+                LEFT JOIN dia_atuacao d on l.id_local_premium = d.fk_id_local_premium 
+                WHERE l.id_local_premium = ?
+                GROUP BY l.id_local_premium, i.nome_imagem, d.dia_semana, a.comentario_local, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
+            `;
+            const [results] = await connection.query(query, [localId]);
+
+            const formattedResults = results.reduce((acc, row) => {
+                const { nome_local_premium, latitude, longitude, preco_hora, dia_semana, horario_inicio, horario_fim, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
+                const local = acc.find(loc => loc.nome_local_premium === nome_local_premium);
+                
+                if (local) {
+                    // Adiciona as imagens, sem duplicar
+                    if (nome_imagem && !local.imagens.includes(nome_imagem)) {
+                        local.imagens.push(nome_imagem);
+                    }
+
+                    if (dia_semana) {
+                        local.dias.push({
+                            dia_semana,
+                            horario_inicio,
+                            horario_fim
+                        });
+                    }
+                    
+                    // Adiciona os comentários, sem duplicar
+                    const comentarioExistente = local.comentarios.find(com => 
+                        com.comentario_local === comentario_local &&
+                        com.cliente === `${nome_cliente} ${sobrenome_cliente}`
+                    );
+                    
+                    if (!comentarioExistente) {
+                        local.comentarios.push({
+                            comentario_local,
+                            avaliacao_estrela_locais,
+                            cliente: `${nome_cliente} ${sobrenome_cliente}`
+                        });
+                    }
+                } else {
+                    acc.push({
+                        nome_local_premium,
+                        latitude,
+                        longitude,
+                        preco_hora,
+                        media_avaliacao, // Inclui a média de avaliação
+                        imagens: nome_imagem ? [nome_imagem] : [],
+                        dias: dia_semana ? [{
+                            dia_semana,
+                            horario_inicio,
+                            horario_fim
+                        }] : [],
+                        comentarios: comentario_local ? [{
+                            comentario_local,
+                            avaliacao_estrela_locais,
+                            cliente: `${nome_cliente} ${sobrenome_cliente}`
+                        }] : []
+                    });
+                }
+    
+                return acc;
+            }, []);
+
+            if (formattedResults.length > 0) {
+                
+                // res.json(formattedResults);
+                res.render(path, { local: formattedResults[0], email: email }) ; // Usa o caminho passado
+            } else {
+                res.status(404).send("Produto não encontrado");
+            }
+    
+            
+        } catch (error) {
+            console.error("Erro ao buscar o produto no banco de dados:", error);
+            res.status(500).send("Erro ao buscar o produto");
+        }
+    };
 };
