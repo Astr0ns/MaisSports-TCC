@@ -1,7 +1,16 @@
+const path = require('path');
 var connection = require("../../config/pool_conexoes");
-const express = require('express');
+const multer = require('multer');
+const { MercadoPagoConfig, Preference } = require('mercadopago'); // Import Preference
+const { all } = require('../routes/productRouter');
 
-exports.verificarDisponibilidade = async (req, res) => {
+// Inicialize o cliente Mercado Pago
+const client = new MercadoPagoConfig({
+    accessToken: 'TEST-5246075068010463-102011-23539c46def1acb4b061770a6d174e1e-428968371',
+    options: { timeout: 5000, idempotencyKey: 'abc' }
+});
+
+const verificarDisponibilidade = async (req, res) => {
     const { id_local, data_reserva } = req.body;
 
     try {
@@ -46,7 +55,7 @@ exports.verificarDisponibilidade = async (req, res) => {
 };
 
 // Faz uma nova reserva
-exports.criarReserva = async (req, res) => {
+const criarReserva = async (req, res) => {
     const { id_usuario, id_local, data_reserva, horario_inicio, horario_fim } = req.body;
 
     try {
@@ -91,7 +100,7 @@ exports.criarReserva = async (req, res) => {
     }
 };
 
-exports.getLocalReservaById = (path) => {
+const getLocalReservaById = (path) => {
     return async (req, res) => {
         const localId = req.params.id;
         const email = req.session.email; // Pega o email da sessão, se estiver definido
@@ -113,7 +122,7 @@ exports.getLocalReservaById = (path) => {
             const [results] = await connection.query(query, [localId]);
 
             const formattedResults = results.reduce((acc, row) => {
-                const { nome_local_premium, latitude, longitude, descricao, preco_hora, dia_semana, horario_inicio, horario_fim, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
+                const { id_local_premium,nome_local_premium, latitude, longitude, descricao, preco_hora, dia_semana, horario_inicio, horario_fim, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
                 const local = acc.find(loc => loc.nome_local_premium === nome_local_premium);
                 
                 if (local) {
@@ -145,6 +154,7 @@ exports.getLocalReservaById = (path) => {
                     }
                 } else {
                     acc.push({
+                        id_local_premium,
                         nome_local_premium,
                         latitude,
                         longitude,
@@ -182,4 +192,98 @@ exports.getLocalReservaById = (path) => {
             res.status(500).send("Erro ao buscar o produto");
         }
     };
+};
+
+// adicionarProd
+
+const fazerReserva = async (req, res) => {
+    console.log(req.body); // Veja os dados que estão chegando
+    const { data_reserva, horario_inicio, horario_fim, preco_total, id_local_premium } = req.body;
+    const email = req.session.email;
+    console.log(email)
+return
+    const externalReference = JSON.stringify({
+        email,
+        data_reserva, 
+        horario_inicio, 
+        horario_fim, 
+        preco_total, 
+        id_local_premium
+    });
+
+    try {
+        const preference = new Preference(client);
+
+        // Crie o corpo da requisição de pagamento com dados vindos do cliente (ex: frontend)
+        const body = {
+            items: [
+                {
+                    id: `plano_${idPlanoNum}`,
+                    title: `Reservando o local ${nome_local_premium}`,
+                    description: `Reservar direto pela +Sport \n Reserva Horario: ${horario_inicio} - ${horario_fim}`,
+                    quantity: 1,
+                    currency_id: 'BRL',
+                    unit_price: preco_total,
+                }
+                
+            ],
+            back_urls: {
+                success: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/reservaConfirmada`, // URL para sucesso
+                failure: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-falha`, // URL para falha
+                pending: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-pendente`, // URL para pendente
+            },
+            auto_return: all,
+            external_reference: externalReference // Armazena os dados aqui
+        };
+
+        // Faça a requisição de pagamento
+        const response = await preference.create({ body });
+        // Retorne a resposta para o frontend
+        
+        res.redirect(response.init_point);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Payment processing failed' });
+    }
+};
+
+const reservaConfirmada = async (req, res) => {
+    
+    
+    const externalReference = req.query.external_reference;
+
+    const produto = JSON.parse(externalReference);
+    const { email, data_reserva, horario_inicio, horario_fim, preco_total, id_local_premium} = produto;
+    const precoTotalFloat = parseFloat(preco_total);
+
+
+    try {
+        // 1. Busca o ID do cliente (usuário) baseado no email
+        const [user] = await connection.query(
+            `SELECT id FROM usuario_clientes WHERE email = ?`,
+            [email]
+        );
+
+        const fk_id_cliente = user[0].id;
+
+        // Insira o novo produto na tabela
+        const [addL] = await connection.query(
+            `INSERT INTO Reserva (fk_id_cliente, fk_id_local_premium, data_reserva, horario_inicio, horario_fim, preco_total) VALUES (?, ?, ?, ?, ?, ?)`,
+            [fk_id_cliente, id_local_premium, data_reserva, horario_inicio, horario_fim, precoTotalFloat]
+        );
+
+        
+     
+
+        req.flash('success_msg', 'Reserva feita com sucesso!');
+        res.redirect('/produto-confirmado');
+    } catch (error) {
+        req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
+        console.log(error);
+        res.redirect('/add-product');
+    }
+};
+
+module.exports = {
+    getLocalReservaById, fazerReserva, reservaConfirmada,
 };

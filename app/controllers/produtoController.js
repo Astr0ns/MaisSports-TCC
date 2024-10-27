@@ -183,7 +183,7 @@ const adicionarProdutoConfirmado = async (req, res) => {
      
 
         req.flash('success_msg', 'Produto adicionado com sucesso!');
-        res.redirect('/produto-confirmado');
+        res.redirect(`product-page/${ProdId}`);
     } catch (error) {
         req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
         console.log(error);

@@ -76,6 +76,10 @@ router.get("/add-locais-premium", function (req, res) {
     res.render("pages/add-locais-premium", { email: email });
 });
 
+router.post("/adicionarProd", upload, produtoController.adicionarProd, async function (req, res) {
+
+});
+
 
 
 router.get("/produto-confirmado", produtoController.adicionarProdutoConfirmado);
@@ -87,6 +91,12 @@ router.post("/adicionarLocais", upload, locaisController.adicionarLocais, async 
 router.post("/adicionarLocaisPremium", upload, locaisPremiumController.adicionarLocaisPremium, async function (req, res) {
     //
 });
+
+router.post("/fazerReserva/", reservaController.fazerReserva, async function (req, res) {
+});
+
+router.get("/reservaConfirmada", reservaController.reservaConfirmada);
+
 
 router.post("/avaliarLocais", verificarAutenticacao, locaisController.avaliarLocais, async function (req, res) {
 
@@ -196,10 +206,8 @@ router.get("/product-page/:id", produtoController.getProductById("pages/product-
     res.render("pages/local-page", { email: email });
 });
 
-// router.get("/local-page", async function (req, res) {
-//     var email = req.session.email;
-//     res.render("pages/local-page", { email: email });
-// });
+
+
 
 router.get("/product-editar/:id", produtoController.getProductById("pages/product-editar"), async function (req, res) {
     var email = req.session.email;

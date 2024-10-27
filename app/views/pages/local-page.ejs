@@ -10,6 +10,13 @@
     <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="/css/small.css">
     <link rel="stylesheet" media="screen and (max-width: 534px)" href="/css/verysmall.css">
     <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)" href="/css/medium.css">
+
+    
+    <link rel="stylesheet" href="/css/codes/interface.css">
+    <link rel="stylesheet" href="/css/codes/nav-bar.css">
+    <link rel="stylesheet" href="/css/codes/footer.css">
+    <link rel="stylesheet" href="/css/codes/cart.css">
+
     <!-- End Responsives CSS's-->
 
 
@@ -22,6 +29,7 @@
     <link rel="stylesheet" href="/css/codes/local-page.css">
 </head>
 <body>
+    <%- include("../partial/header-home", {email: email }) %>
     <main>
         
         <div class="title">
@@ -61,25 +69,33 @@
                 </section>
             </section>
 
-            <form action="/fazerReserva" method="POST" enctype="multipart/form-data">
+            <form action="/fazerReserva" method="POST" enctype="/multipart/form-data">
+                <input type="hidden" id="data_reserva" name="data_reserva" value=""></input>
+                <input type="hidden" id="horario_inicio" name="horario_inicio" value=""></input>
+                <input type="hidden" id="horario_fim" name="horario_fim" value=""></input>
+                <input type="hidden" id="preco_total" name="preco_total" value=""></input>
+                <input type="hidden" id="id_local_premium" name="id_local_premium" value=""></input>
+                <input type="hidden" id="nome_local_premium" name="nome_local_premium" value=""></input>
                 <section class="reservarInfo">
                     <h2>R$<%- local.preco_hora %><span>/Hora</span></h2>
 
                     <div style="position: relative; display: flex; justify-content: center; margin-top: 20px;">
-                        <input name="" id="calendar" oninput="handleInput(event)" class="time-picker" type="text">
+                        <input id="calendar" oninput="handleInput(event)" class="time-picker" type="text"></input>
                         <h2 id="placeholderDate">DATA:</h2>
                     </div>
                     <div style="margin-top: 55px; display: flex;">
                         <div style="position: relative; width: 50%;">
                             
-                            <input name="" id="start-time" oninput="calcularPreco()" class="time-picker" type="text" style="border-radius: 10px 0 0 10px;">
+                            <input id="start-time" oninput="calcularPreco()" class="time-picker" type="text" style="border-radius: 10px 0 0 10px;"></input>
                             <label for="start-time" class="timeLabel" style="border-radius: 10px 0 0 10px; left: 50%;"><h2>CHECK-IN</h2></lebel>
                         </div>
                         <div style="position: relative; width: 50%;">
-                            <input name="" id="end-time" oninput="calcularPreco()" class="time-picker" type="text" style="border-radius: 0 10px 10px 0;">
+                            <input id="end-time" oninput="calcularPreco()" class="time-picker" type="text" style="border-radius: 0 10px 10px 0;"></input>
                             <label for="end-time" class="timeLabel" style="border-radius: 0 10px 10px 0; left: 50%;"><h2>CHECK-OUT</h2></lebel>
                         </div>
                     </div>
+                    
+                    
 
                     <section class="infoPreco" style="display: none; opacity: 0;">
                         <p></p>
@@ -89,18 +105,27 @@
                     <hr>
                     <h2 id="warningHora">Faça a Reserva de no minimo de 1 Hora</h2>
                 </section>
+
+                
+
             </form>
 
         </section>
         
     </main>
 
+    <%- include("../partial/footer") %>
+
 
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places"></script>
+    <script src="/js/script.js"></script>
+    <script src="/js/mini-imgs.js"></script>
+
     
     <script>
         const localMap = <%- JSON.stringify(local) %>;
         console.log(localMap);
+        
     
         window.onload = function () {
             const lat = localMap.latitude;
@@ -219,10 +244,16 @@
                 
             });
             console.log(local)
+            
+            document.getElementById("id_local_premium").value = local.id_local_premium
+            document.getElementById("nome_local_premium").value = local.nome_local_premium
 
         function calcularPreco() {
             const iniCheck = document.getElementById("start-time").value; // Ex: "16:30"
             const fimCheck = document.getElementById("end-time").value; // Ex: "00:30"
+
+            document.getElementById("horario_inicio").value = iniCheck
+            document.getElementById("horario_fim").value = fimCheck
 
             function timeToMinutes(time) {
                 const [hours, minutes] = time.split(':').map(Number);
@@ -245,6 +276,7 @@
             const totalHours = Math.floor(totalMinutes / 60);
             const totalRemainingMinutes = totalMinutes % 60;
 
+
             // Exibir o resultado
             console.log(`Total: ${totalHours} horas e ${totalRemainingMinutes} minutos`);
 
@@ -255,6 +287,8 @@
                     const subTotal = totalHours * precoHora; // Cálculo do subtotal
                     document.querySelector(".infoPreco p").innerHTML = `R$${precoHora.toFixed(2)} x ${totalHours} Horas`;
                     document.querySelector(".infoPreco h3").innerHTML = `subTotal: R$${subTotal.toFixed(2)}`;
+
+                    document.getElementById("preco_total").value = subTotal
 
                     document.querySelector(".infoPreco").style.display = "block"
                     document.querySelector(".reservarInfo hr").style.display = "none"
@@ -304,6 +338,8 @@
         
         function handleInput(event) {
             const value = event.target.value;
+
+            document.getElementById("data_reserva").value = value
 
 
             // Dividir a data em dia, mês e ano
