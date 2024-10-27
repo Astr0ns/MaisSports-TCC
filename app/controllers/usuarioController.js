@@ -39,12 +39,13 @@ const logar = async (req, res) => {
     const { email, senha } = req.body;
 
     try {
-        const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ?", [email]);
-
+        const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email_cliente = ? LIMIT 1", [email]);
+        
         if (accounts.length > 0) {
             const account = accounts[0];
-            const passwordMatch = await bcrypt.compare(senha, account.senha);
 
+            const passwordMatch = await bcrypt.compareSync(senha, account.senha_cliente);
+            console.log(passwordMatch)
 
             if (!passwordMatch) {
                 req.flash('msg', "As senhas não conferem");
@@ -52,15 +53,13 @@ const logar = async (req, res) => {
             }
 
             // Armazenar informações do usuário na sessão
-            req.session.email = account.email;
-            req.session.celular = account.celular;
-            req.session.nome = account.nome;
-            req.session.userId = account.id;
-            req.session.sobrenome = account.sobrenome;
-            req.session.userTipo = account.tipo;
+            req.session.email = account.email_cliente;
+            req.session.celular = account.celular_cliente;
+            req.session.nome = account.nome_cliente;
+            req.session.userId = account.id_cliente;
+            req.session.sobrenome = account.sobrenome_cliente;
+            req.session.userTipo = account.tipo_cliente;
             req.session.logado = true; // Atualizando a sessão
-
-            console.log(account.tipo);
 
             req.flash('msg', "Logado com sucesso");
             return res.redirect('/profile'); // Redireciona após o login
@@ -95,32 +94,39 @@ const registrarUsu = async (req, res) => {
         });
     }
 
-    const { nome, sobrenome, email, senha, cSenha } = req.body;
-
-    // Verificar se as senhas conferem
-    if (senha !== cSenha) {
+    const { nome, email, senha } = req.body;
+    console.log(req.body.cSenha)
+    console.log(senha)
+    // Validação de senha
+    if (senha !== req.body.cSenha) {
         req.flash('error_msg', 'As senhas não conferem.');
-        return res.redirect('/register'); // Redireciona para o formulário de registro
+        return res.redirect('/register');
     }
 
     try {
         // Verificar se o email já existe
-        const [emailExist] = await connection.query("SELECT id FROM usuario_clientes WHERE email = ?", [email]);
+        const [emailExist] = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE email_cliente = ?", [email]);
 
         if (emailExist.length > 0) {
             req.flash('error_msg', 'Email já está em uso.');
-            return res.redirect('/register'); // Redireciona para o formulário de registro
+            return res.redirect('/register');
         }
 
         // Criptografar a senha
-        const hash = await bcrypt.hash(senha, 12);
+        const salt = bcrypt.genSaltSync(12);
+        const hash = bcrypt.hashSync(senha, salt);
+
+        console.log(`senha: ${senha}`);
+        console.log(`hash: ${hash}`);
 
         // Inserir o novo usuário na base de dados
-        await connection.query("INSERT INTO usuario_clientes (nome, sobrenome, email, senha, tipo, cep, numero, celular) VALUES (?, ?, ?, ?, 'usuario', '00000000', '0000', '000000000000')", [nome, sobrenome, email, hash]);
+        await connection.query(
+            "INSERT INTO usuario_clientes (nome_cliente, email_cliente, senha_cliente, celular_cliente, logradouro_cliente, bairro_cliente, cidade_cliente, cep_cliente) VALUES (?, ?, ?, ?, 'Rua Exemplo', 'Bairro Exemplo', 'Cidade Exemplo', '00000000')",
+            [nome, email, hash, '00000000000']
+        );
 
         req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para a página de login em breve.');
         res.redirect('/register?success=true');
-        // Redireciona para a página de registro, indicando sucesso
 
     } catch (error) {
         console.error(error);
