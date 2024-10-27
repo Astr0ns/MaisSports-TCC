@@ -113,7 +113,7 @@ exports.getLocalReservaById = (path) => {
             const [results] = await connection.query(query, [localId]);
 
             const formattedResults = results.reduce((acc, row) => {
-                const { nome_local_premium, latitude, longitude, preco_hora, dia_semana, horario_inicio, horario_fim, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
+                const { nome_local_premium, latitude, longitude, descricao, preco_hora, dia_semana, horario_inicio, horario_fim, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
                 const local = acc.find(loc => loc.nome_local_premium === nome_local_premium);
                 
                 if (local) {
@@ -148,6 +148,7 @@ exports.getLocalReservaById = (path) => {
                         nome_local_premium,
                         latitude,
                         longitude,
+                        descricao,
                         preco_hora,
                         media_avaliacao, // Inclui a média de avaliação
                         imagens: nome_imagem ? [nome_imagem] : [],
