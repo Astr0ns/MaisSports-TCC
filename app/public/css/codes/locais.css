@@ -204,6 +204,11 @@ button:hover {
     margin-right: 150px; 
 } 
 
+.break{
+    font-size: 0.75em;
+    margin: 10px 0;
+}
+
 /* Estilos para o filtro */ 
 
 .filters { 

@@ -124,7 +124,6 @@ function updateMap() {
             return response.json();
         })
         .then(locaisBanco => {
-            document.getElementById('jsonData').innerText = JSON.stringify(locaisBanco, null, 2);
 
             locaisBanco.forEach(local => {
                 const marker = new google.maps.Marker({
@@ -147,7 +146,6 @@ function updateMap() {
         })
         .catch(error => {
             console.error('Erro ao buscar locais do banco:', error);
-            document.getElementById('jsonData').innerText = 'Erro ao buscar locais do banco.';
         });
 
     // Adiciona os locais do banco de dados, filtrando pela categoria selecionada
@@ -159,7 +157,7 @@ function updateMap() {
             return response.json();
         })
         .then(locaisBancoPremium => {
-            document.getElementById('jsonData').innerText = JSON.stringify(locaisBancoPremium, null, 2);
+            
 
             locaisBancoPremium.forEach(local => {
                 const marker = new google.maps.Marker({
@@ -182,7 +180,6 @@ function updateMap() {
         })
         .catch(error => {
             console.error('Erro ao buscar locais do banco:', error);
-            document.getElementById('jsonData').innerText = 'Erro ao buscar locais do banco.';
         });
 
     // Busca os locais do Google Maps
@@ -294,55 +291,92 @@ function generateContent(place) {
 
 // informações que vem do bancos estilo
 function generateContentFromLocal(local) {
-    let content = `<div class="card_local"><strong>${local.nome_local}</strong>`;
-    content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
+    // Adiciona latitude e longitude como parâmetros
+    const { latitude, longitude } = local;
+    
+    // Cria o objeto Geocoder
+    const geocoder = new google.maps.Geocoder();
 
-    if (local.imagens && local.imagens.length > 0) {
-        content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
-    } else {
-        content += `<p>Imagem não disponível</p>`;
-    }
+    // Geocodifica a localização
+    geocoder.geocode({ location: { lat: parseFloat(latitude), lng: parseFloat(longitude) } }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+            let content = `<div class="card_local"><strong>${local.nome_local}</strong>`;
+            content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
 
-    if (local.endereco) {
-        content += `<p class="break">${local.endereco}</p>`;
-    }
+            if (local.imagens && local.imagens.length > 0) {
+                content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
+            } else {
+                content += `<p>Imagem não disponível</p>`;
+            }
 
-    if (local.media_avaliacao) {
-        content += `<p>Avaliação: ${getStarRatingHtml(local.media_avaliacao)}</p>`;
-    } else {
-        content += `<p>Avaliação não disponível</p>`;
-    }
+            // Usa o primeiro resultado como endereço
+            const endereco = results[0] ? results[0].formatted_address : 'Endereço não disponível';
+            content += `<p class="break">${endereco}</p>`;
 
-    // Chama a função showSidePanelFromLocal passando o ID do local do banco
-    content += `<button class="saiba_mais" onclick="showSidePanelFromLocal('${local.id}')">Saiba Mais</button></div>`;
-    return content;
+            if (local.media_avaliacao) {
+                content += `<p>Avaliação: ${getStarRatingHtml(local.media_avaliacao)}</p>`;
+            } else {
+                content += `<p>Avaliação não disponível</p>`;
+            }
+
+            // Chama a função showSidePanelFromLocal passando o ID do local do banco
+            content += `<button class="saiba_mais" onclick="showSidePanelFromLocal('${local.id}')">Saiba Mais</button></div>`;
+
+            // Atualiza a infowindow com o conteúdo gerado
+            infowindow.setContent(content);
+            infowindow.open(map, marker); // Presuma que 'marker' esteja acessível aqui
+        } else {
+            console.error('Geocoding falhou devido a: ' + status);
+            infowindow.setContent('<p>Erro ao obter o endereço.</p>');
+            infowindow.open(map, marker); // Presuma que 'marker' esteja acessível aqui
+        }
+    });
 }
 
 // informações que vem do bancos estilo
 function generateContentFromLocalPremium(local) {
-    let content = `<div class="card_local"><strong>${local.nome_local_premium}</strong>`;
-    content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
+    // Adiciona latitude e longitude como parâmetros
+    const { latitude, longitude } = local;
+    
+    // Cria o objeto Geocoder
+    const geocoder = new google.maps.Geocoder();
 
-    if (local.imagens && local.imagens.length > 0) {
-        content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
-    } else {
-        content += `<p>Imagem não disponível</p>`;
-    }
+    // Geocodifica a localização
+    geocoder.geocode({ location: { lat: parseFloat(latitude), lng: parseFloat(longitude) } }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+            let content = `<div class="card_local"><strong>${local.nome_local_premium}</strong>`;
+            content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
 
-    if (local.endereco) {
-        content += `<p class="break">${local.endereco}</p>`;
-    }
+            if (local.imagens && local.imagens.length > 0) {
+                content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
+            } else {
+                content += `<p>Imagem não disponível</p>`;
+            }
 
-    if (local.media_avaliacao) {
-        content += `<p>Avaliação: ${getStarRatingHtml(local.media_avaliacao)}</p>`;
-    } else {
-        content += `<p>Avaliação não disponível</p>`;
-    }
+            // Usa o primeiro resultado como endereço
+            const endereco = results[0] ? results[0].formatted_address : 'Endereço não disponível';
+            content += `<p class="break">${endereco}</p>`;
 
-    // Chama a função showSidePanelFromLocal passando o ID do local do banco
-    content += `<button class="saiba_mais" onclick="showSidePanelFromLocalPremium('${local.id_local_premium}')">Saiba Mais</button></div>`;
-    return content;
+            if (local.media_avaliacao) {
+                content += `<p>Avaliação: ${getStarRatingHtml(local.media_avaliacao)}</p>`;
+            } else {
+                content += `<p>Avaliação não disponível</p>`;
+            }
+
+            // Chama a função showSidePanelFromLocal passando o ID do local do banco
+            content += `<button class="saiba_mais" onclick="showSidePanelFromLocal('${local.id}')">Conheça Mais!</button></div>`;
+
+            // Atualiza a infowindow com o conteúdo gerado
+            infowindow.setContent(content);
+            infowindow.open(map, marker); // Presuma que 'marker' esteja acessível aqui
+        } else {
+            console.error('Geocoding falhou devido a: ' + status);
+            infowindow.setContent('<p>Erro ao obter o endereço.</p>');
+            infowindow.open(map, marker); // Presuma que 'marker' esteja acessível aqui
+        }
+    });
 }
+
 
 
 
@@ -668,173 +702,6 @@ function showSidePanelFromLocal(localId) {
                         ${local.imagens && local.imagens.length > 0 ? `<img id="localImage" src="uploads/${local.imagens[0]}" alt="Foto do local" style="width:100%; height: auto;">` : ''}
                         <div class="overlay"></div>
                         <h2>${local.nome_local}</h2>
-                        ${local.imagens && local.imagens.length > 1 ? `
-                            <span id="prevImage" class="image-nav left-arrow" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10094;</span>
-                            <span id="nextImage" class="image-nav right-arrow" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10095;</span>
-                        ` : ''}
-                    </div>
-
-                    <section class="sidepanel_info">
-                        <p class="endereco_local">${local.endereco || 'Endereço não disponível'}</p>
-                        <p><strong>Avaliação:</strong> ${local.media_avaliacao ? getStarRatingHtml(local.media_avaliacao) : 'Não disponível'}<span>${local.media_avaliacao ? Number(local.media_avaliacao).toFixed(1) : ''}</span></p>
-
-                        <hr class="separator">
-                        
-                        <div class="sidePanelInteracao">
-                            <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
-                            <p class="like-button">
-                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${localId});" style="font-size: 2em;display: none;"></i>
-                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${localId});" style="font-size: 2em;"></i>
-                            <br>favoritar</p>
-                            <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
-                        </div>
-
-                        `;
-                        if( email.length === 0){
-                            sidePanel.innerHTML += `
-                            <div class="sidePanelAvaliar" id="sidePanelAvaliar">
-                                <hr class="separator"> 
-                                <div class="info_logar">
-                                    <p>você não esta logado!</p> 
-                                    <a href="/login">
-                                        <button type="submit">LOGAR</button>
-                                    </a>
-                                </div>
-                            </div> `;
-                        } else {
-                            sidePanel.innerHTML += `
-                            <div class="sidePanelAvaliar" id="sidePanelAvaliar">
-                        
-                            <form action="/avaliarLocaisBanco" method="post" enctype="application/x-www-form-urlencoded">
-
-                                <input type="hidden" name="placeId" id="placeId" value="${localId}">
-
-                                <!-- Campo oculto para armazenar o email do usuário -->
-                                <input type="hidden" name="email" id="email" value="${email}"> <!-- Substituir por email dinâmico -->
-                                <h3><span> ${nome}</span></h3>
-
-                                <div class="rating" id="rating">
-                                    <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
-                                    <span class="star" data-value="2" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
-                                    <span class="star" data-value="3" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
-                                    <span class="star" data-value="4" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
-                                    <span class="star" data-value="5" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
-                                </div>
-
-                                <!-- Campo oculto para armazenar o valor da avaliação -->
-                                <input type="hidden" name="rating" id="ratingSelect" value="">
-
-                                <!-- Campo oculto para armazenar o valor da avaliação -->
-                                <input type="hidden" name="localId" value="${localId}">
-
-                                <section class="grp-form">
-                                    <input type="text" name="comentario" id="addComentario" placeholder="Comentario" required>
-                                </section>
-
-                                <div class="group-button">
-                                    <button class="cancelarAvaliar" onclick="toggleSidePanelAvaliacao()" type="button">Cancelar</button>
-                                    <button type="submit">Avaliar</button>
-                                </div>
-                            </form>
-                        </div>
-                            `;
-                        }
-
-                        
-                        sidePanel.innerHTML += `
-                        
-                        
-
-                        <hr class="separator">
-                        <section class="comentarios_local">
-                            ${local.comentarios && local.comentarios.length > 0 ? `
-                                <h3>Comentários:</h3>
-                                <ul>
-                                    ${local.comentarios.map(formatComment).join('')}
-                                    </ul>` : '<p>Sem comentários disponíveis</p>'}
-                            </section>
-                    </section>
-                `;
-                checkCurtir(localId)
-
-                // Adicionar evento de navegação de imagens se houver mais de uma imagem
-                if (local.imagens && local.imagens.length > 1) {
-                    document.getElementById('prevImage').addEventListener('click', () => {
-                        currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : local.imagens.length - 1;
-                        updateImageDisplay(local);
-                    });
-
-                    document.getElementById('nextImage').addEventListener('click', () => {
-                        currentImageIndex = (currentImageIndex < local.imagens.length - 1) ? currentImageIndex + 1 : 0;
-                        updateImageDisplay(local);
-                    });
-                }
-            } else {
-                sidePanel.innerHTML += '<p>Local não encontrado.</p>';
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao buscar os detalhes do local:', error);
-            sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
-        });
-
-    
-        if (window.innerWidth > 768) { // Verifique se a largura da tela é maior que 768px (ou o valor que preferir)
-            sidePanel.style.display = 'block';
-            // Aplicar animação de abertura
-            setTimeout(() => {
-                sidePanel.style.width = '500px'; // Largura desejada da aba lateral
-                sidePanel.style.opacity = 1;
-            }, 10); // Um pequeno delay para garantir que a transição seja visível
-        } else {
-            sidePanel.style.display = 'block';
-            setTimeout(() => {
-                sidePanel.style.width = '100%';
-                sidePanel.style.opacity = 1;
-            }, 10);
-        } 
-}
-
-
-function showSidePanelFromLocalPremium(localId) {
-    const sidePanel = document.getElementById('sidePanel');
-    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
-    let currentImageIndex = 0;
-    let nome = document.querySelector('.userNome').innerHTML;
-    let email = document.querySelector('.userEmail').innerHTML;
-
-    // Função para atualizar a exibição da imagem
-    function updateImageDisplay(local) {
-        const imageContainer = document.getElementById('localImage');
-        if (local.imagens && local.imagens.length > 0) {
-            imageContainer.src = `uploads/${local.imagens[currentImageIndex]}`;
-        }
-    }
-
-    // Função para formatar os comentários
-    function formatComment(comment) {
-        const { cliente, avaliacao_estrela_locais, comentario_local } = comment;
-        const nomeCliente = cliente || "Anônimo";
-        const avaliacao = avaliacao_estrela_locais ? `${getStarRatingHtml(avaliacao_estrela_locais)}` : "Sem avaliação";
-        const comentario = comentario_local ? comentario_local : "Sem comentário";
-        
-
-        return `<li><strong>${nomeCliente}:</strong> Avaliação: ${avaliacao} <br> Comentário: ${comentario}</li>`;
-    }
-
-    // Faz uma requisição para buscar as informações detalhadas do local
-    fetch(`/getLocalPremiumFromId?id=${localId}`)
-        .then(response => response.json())
-        .then(localArray => {
-            const local = localArray[0];  // Acessa o primeiro local do array
-            document.getElementById('jsonData').innerText = JSON.stringify(localArray, null, 2);
-
-            if (local) {
-                sidePanel.innerHTML += `
-                    <div class="sidepanel_card" style="position: relative;">
-                        ${local.imagens && local.imagens.length > 0 ? `<img id="localImage" src="uploads/${local.imagens[0]}" alt="Foto do local" style="width:100%; height: auto;">` : ''}
-                        <div class="overlay"></div>
-                        <h2>${local.nome_local_premium}</h2>
                         ${local.imagens && local.imagens.length > 1 ? `
                             <span id="prevImage" class="image-nav left-arrow" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10094;</span>
                             <span id="nextImage" class="image-nav right-arrow" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 2em; cursor: pointer;">&#10095;</span>
