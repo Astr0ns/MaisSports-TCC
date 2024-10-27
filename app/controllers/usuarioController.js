@@ -39,12 +39,12 @@ const logar = async (req, res) => {
     const { email, senha } = req.body;
 
     try {
-        const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email_cliente = ? LIMIT 1", [email]);
+        const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ? LIMIT 1", [email]);
         
         if (accounts.length > 0) {
             const account = accounts[0];
 
-            const passwordMatch = await bcrypt.compareSync(senha, account.senha_cliente);
+            const passwordMatch = await bcrypt.compareSync(senha, account.senha);
             console.log(passwordMatch)
 
             if (!passwordMatch) {
@@ -53,12 +53,12 @@ const logar = async (req, res) => {
             }
 
             // Armazenar informações do usuário na sessão
-            req.session.email = account.email_cliente;
-            req.session.celular = account.celular_cliente;
-            req.session.nome = account.nome_cliente;
-            req.session.userId = account.id_cliente;
-            req.session.sobrenome = account.sobrenome_cliente;
-            req.session.userTipo = account.tipo_cliente;
+            req.session.email = account.email;
+            req.session.celular = account.celular;
+            req.session.nome = account.nome;
+            req.session.userId = account.id;
+            req.session.sobrenome = account.sobrenome;
+            req.session.userTipo = account.tipo;
             req.session.logado = true; // Atualizando a sessão
 
             req.flash('msg', "Logado com sucesso");
@@ -105,7 +105,7 @@ const registrarUsu = async (req, res) => {
 
     try {
         // Verificar se o email já existe
-        const [emailExist] = await connection.query("SELECT id_cliente FROM usuario_clientes WHERE email_cliente = ?", [email]);
+        const [emailExist] = await connection.query("SELECT id FROM usuario_clientes WHERE email = ?", [email]);
 
         if (emailExist.length > 0) {
             req.flash('error_msg', 'Email já está em uso.');
@@ -121,7 +121,7 @@ const registrarUsu = async (req, res) => {
 
         // Inserir o novo usuário na base de dados
         await connection.query(
-            "INSERT INTO usuario_clientes (nome_cliente, email_cliente, senha_cliente, celular_cliente, logradouro_cliente, bairro_cliente, cidade_cliente, cep_cliente) VALUES (?, ?, ?, ?, 'Rua Exemplo', 'Bairro Exemplo', 'Cidade Exemplo', '00000000')",
+            "INSERT INTO usuario_clientes (nome, email, senha, celular, logradouro, bairro, cidade, cep) VALUES (?, ?, ?, ?, 'Rua Exemplo', 'Bairro Exemplo', 'Cidade Exemplo', '00000000')",
             [nome, email, hash, '00000000000']
         );
 
