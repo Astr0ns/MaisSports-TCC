@@ -338,6 +338,7 @@ function generateContentFromLocalPremium(local) {
     // Adiciona latitude e longitude como parâmetros
     const { latitude, longitude } = local;
     
+    
     // Cria o objeto Geocoder
     const geocoder = new google.maps.Geocoder();
 
