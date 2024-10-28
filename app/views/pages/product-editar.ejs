@@ -37,161 +37,277 @@
 
     <%- include("../partial/header-home", {email: email }) %>
 
-    <main>
-        <section class="container-product">
-            <section class="container">
-                <form action="/adicionarLocais" method="POST" enctype="multipart/form-data">
-                    <section class="card">
-                        <section class="product-card">
-                            <% product.imagens.forEach(function(imagem, index) { %>
-                                <img class="MainImg" src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
-                            <% }); %>
+        <main>
+            <section class="container-product">
+                <section class="container">
+                    <form action="/adicionarLocais" method="POST" enctype="multipart/form-data">
+                        <section class="card">
+                            <section class="product-card">
+                                <% product.imagens.forEach(function(imagem, index) { %>
+                                    <img class="MainImg" src="/uploads/<%= imagem %>"
+                                        alt="Imagem <%= index + 1 %> do produto">
+                                    <% }); %>
+                            </section>
+
+                            <section class="product-info">
+                                <section class="title-prod">
+                                    <h3>
+                                        <%= product.titulo_prod %>
+                                    </h3>
+                                    <p>Casual</p>
+                                    <h5 onclick="aparecerInput('.edit-title-prod')">
+                                        <i class="bi bi-pencil-square"></i>
+                                        editar
+                                    </h5>
+                                </section>
+                                <section class="title-prod edit-title-prod" style="display: none;">
+                                    <label for="name">Editar nome do produto:</label><br>
+                                    <input class="name" type="text" id="titulo_prod" name="titulo_prod"
+                                        placeholder="Digite o nome">
+                                </section>
+
+                                <section class="price">
+                                    <p>R$ <%= product.valor_prod %> no Pix <br>ou <span>6x</span> de
+                                            <span>R$:119,98</span></p>
+                                    <h5 onclick="aparecerInput('.edit-price')">
+                                        <i class="bi bi-pencil-square"></i>
+                                        editar
+                                    </h5>
+                                </section>
+                                <section class="price edit-price" style="display: none;">
+                                    <label for="valor_prod">Editar preço do produto:</label><br>
+                                    <input class="name" type="text" id="valor_prod" name="valor_prod"
+                                        placeholder="Digite o preço">
+                                </section>
+
+                                <!-- Fotos das outras colorways/variantes do produto -->
+                                <section class="mini-imgs">
+                                    <section class="mini-pics-product">
+                                        <img class="select-prod" src="/uploads/<%= product.imagens[0] %>" alt="">
+                                    </section>
+                                </section>
+
+                                <!-- Seleção de tamanhos  -->
+                                <h2 class="tam-inf"><span>Tamanho</span></h2>
+                                <section class="tamanhos">
+                                    <section class="tam">
+                                        <section class="num-tam">
+                                            <p>36</p>
+                                        </section>
+                                        <section class="num-tam">
+                                            <p>37</p>
+                                        </section>
+                                        <section class="num-tam">
+                                            <p>38</p>
+                                        </section>
+                                        <section class="num-tam">
+                                            <p>39</p>
+                                        </section>
+                                        <section class="num-tam">
+                                            <p>41</p>
+                                        </section>
+                                        <section class="num-tam">
+                                            <p>40</p>
+                                        </section>
+                                        <section class="num-tam">
+                                            <p>42</p>
+                                        </section>
+                                        <section class="num-tam">
+                                            <p>43</p>
+                                        </section>
+                                        <section class="num-tam">
+                                            <p>44</p>
+                                        </section>
+                                        <section class="num-tam">
+                                            <p>45</p>
+                                        </section>
+                                    </section>
+                                </section>
+
+                                <section class="caminho_prod">
+                                    <a href="<%= product.link_prod %>" target="_blank">
+                                        <h3>
+                                            <%= product.link_prod %>
+                                        </h3>
+                                    </a>
+                                    <h5 onclick="aparecerInput('.edit-caminho_prod')">
+                                        <i class="bi bi-pencil-square"></i>
+                                        editar
+                                    </h5>
+                                </section>
+                                <section class="caminho_prod edit-caminho_prod" style="display: none;">
+                                    <label for="link_prod">Editar link do produto:</label><br>
+                                    <input class="name" type="text" id="link_prod" name="link_prod"
+                                        placeholder="Digite o link">
+                                </section>
+
+                                <!-- Descrição -->
+                                <section class="descricao">
+                                    <h5 onclick="aparecerInput('.edit-descricao')">
+                                        <i class="bi bi-pencil-square"></i>
+                                        editar
+                                    </h5>
+                                    <h2>Colocar uma Nova Descrição</h2>
+                                </section>
+                                <section class="descricao edit-descricao" style="display: none;">
+                                    <textarea name="descricao_prod" id="descricao_prod" cols="30" rows="10"></textarea>
+                                </section>
+
+                                <!-- Botão para comprar/adicionar no carrinho -->
+                                <a href="<%= product.link_prod %>" target="_blank">
+                                    <section class="button">
+                                        <section class="button-wrapper">
+                                            <section class="text">Compre agora!</section>
+                                            <span class="icon">
+                                                <svg viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor"
+                                                    height="16" width="16" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                        </section>
+                                    </section>
+                                </a>
+
+                                <section class="button-fav">
+                                    <button data-id="<%= product.id_prod %>" class="favoritar-button desativo">Remover
+                                        favorito <i class="bi bi-heart"></i></button>
+                                    <button data-id="<%= product.id_prod %>" class="favoritar-button ">Adicionar aos
+                                        favoritos <i class="bi bi-heart-fill"></i></button>
+                                </section>
+
+                            </section>
+                        </section>
+                    </form>
+                </section>
+
+                <!-- <section class="alter-product">
+                    <section class="title-prod">
+                        <label for="name">Editar nome do produto:</label><br>
+                        <input class="name" type="text" id="titulo_prod" name="titulo_prod" placeholder="Digite o nome">
+
+                    </section>
+
+                    <section class="opt_catogorias">
+                        <section class="categoria_prod">
+                            <label for="categoria_prod">Categoria:</label>
+                            <select name="categoria_prod">
+                                <option value="" selected>Selecione</option>
+                                <option value="basquete">Basquete</option>
+                                <option value="futebol">Futebol</option>
+                                <option value="volei">Vôlei</option>
+                                <option value="treino">Treino</option>
+                            </select>
                         </section>
 
-                        <section class="product-info">
-                            <section class="title-prod">
-                                <h3><%= product.titulo_prod %></h3>
-                                <p>Casual</p>
-                                <h5 onclick="aparecerInput('.edit-title-prod')">
-                                    <i class="bi bi-pencil-square"></i>
-                                    editar
-                                </h5>
-                            </section>
-                            <section class="title-prod edit-title-prod" style="display: none;">
-                                <label for="name">Editar nome do produto:</label><br>
-                                <input class="name" type="text" id="titulo_prod" name="titulo_prod" placeholder="Digite o nome">
-                            </section>
+                        <section class="categoria_prod">
+                            <label for="tipo_prod">Tipo:</label>
+                            <select class="tipo_prod" name="tipo_prod">
+                                <option value="" selected>Selecione</option>
+                                <option value="roupa">Roupa</option>
+                                <option value="equipamento">Equipamento</option>
+                            </select>
+                        </section>
 
-                            <section class="price">
-                                <p>R$ <%= product.valor_prod %> no Pix <br>ou <span>6x</span> de <span>R$:119,98</span></p>
-                                <h5 onclick="aparecerInput('.edit-price')">
-                                    <i class="bi bi-pencil-square"></i>
-                                    editar
-                                </h5>
-                            </section>
-                            <section class="price edit-price" style="display: none;">
-                                <label for="valor_prod">Editar preço do produto:</label><br>
-                                <input class="name" type="text" id="valor_prod" name="valor_prod" placeholder="Digite o preço">
-                            </section>
+                    </section>
 
-                            <!-- Fotos das outras colorways/variantes do produto -->
-                            <section class="mini-imgs">
-                                <section class="mini-pics-product">
-                                    <img class="select-prod" src="/uploads/<%= product.imagens[0] %>" alt="">
-                                </section>
-                            </section>
+                    <section class="categoria_prod" id="roupa_prod">
+                        <label for="roupa_prod">Peça:</label>
+                        <select name="roupa_prod">
+                            <option value="" selected>Selecione</option>
+                            <option value="camiseta">Camiseta</option>
+                            <option value="blusa">Blusa</option>
+                            <option value="calca">Calça</option>
+                            <option value="shorts">Shorts</option>
+                            <option value="acessorio">Acessório</option>
+                            <option value="calcados">Calçados</option>
+                        </select>
+                    </section>
 
-                            <!-- Seleção de tamanhos  -->
-                            <h2 class="tam-inf"><span>Tamanho</span></h2>
-                            <section class="tamanhos">
-                                <section class="tam">
-                                    <section class="num-tam">
-                                        <p>36</p>
-                                    </section>
-                                    <section class="num-tam">
-                                        <p>37</p>
-                                    </section>
-                                    <section class="num-tam">
-                                        <p>38</p>
-                                    </section>
-                                    <section class="num-tam">
-                                        <p>39</p>
-                                    </section>
-                                    <section class="num-tam">
-                                        <p>41</p>
-                                    </section>
-                                    <section class="num-tam">
-                                        <p>40</p>
-                                    </section>
-                                    <section class="num-tam">
-                                        <p>42</p>
-                                    </section>
-                                    <section class="num-tam">
-                                        <p>43</p>
-                                    </section>
-                                    <section class="num-tam">
-                                        <p>44</p>
-                                    </section>
-                                    <section class="num-tam">
-                                        <p>45</p>
-                                    </section>
-                                </section>
-                            </section>
 
-                            <section class="caminho_prod">
-                                <a href="<%= product.link_prod %>" target="_blank">
-                                    <h3><%= product.link_prod %></h3>
-                                </a>
-                                <h5 onclick="aparecerInput('.edit-caminho_prod')">
-                                    <i class="bi bi-pencil-square"></i>
-                                    editar
-                                </h5>
-                            </section>
-                            <section class="caminho_prod edit-caminho_prod" style="display: none;">
-                                <label for="link_prod">Editar link do produto:</label><br>
-                                <input class="name" type="text" id="link_prod" name="link_prod" placeholder="Digite o link">
-                            </section>
 
-                            <!-- Descrição -->
-                            <section class="descricao">
-                                <h5 onclick="aparecerInput('.edit-descricao')">
-                                    <i class="bi bi-pencil-square"></i>
-                                    editar
-                                </h5>
-                                <h2>Colocar uma Nova Descrição</h2>
-                            </section>
-                            <section class="descricao edit-descricao" style="display: none;">
-                                <textarea name="descricao_prod" id="descricao_prod" cols="30" rows="10"></textarea>
-                            </section>
+                    <section class="price">
+                        <label for="valor_prod">Editar preço do produto:</label><br>
+                        <input class="name" type="text" id="valor_prod" name="valor_prod" placeholder="Digite o preço">
+                    </section>
 
-                            <!-- Botão para comprar/adicionar no carrinho -->
-                            <a href="<%= product.link_prod %>" target="_blank">
-                                <section class="button">
-                                    <section class="button-wrapper">
-                                        <section class="text">Compre agora!</section>
-                                        <span class="icon">
-                                            <svg viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" height="16" width="16" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path>
-                                            </svg>
-                                        </span>
-                                    </section>
-                                </section>
-                            </a>
-
-                            <section class="button-fav">
-                                <button data-id="<%= product.id_prod %>" class="favoritar-button desativo">Remover favorito <i class="bi bi-heart"></i></button>
-                                <button data-id="<%= product.id_prod %>" class="favoritar-button ">Adicionar aos favoritos <i class="bi bi-heart-fill"></i></button>
-                            </section>
-
+                    <section class="tamanhos">
+                        <h2 class="tam-inf"><span>Tamanho</span></h2>
+                        <section class="tam-calcado">
+                            <section class="num-tam">36</section>
+                            <section class="num-tam">37</section>
+                            <section class="num-tam">38</section>
+                            <section class="num-tam">39</section>
+                            <section class="num-tam">40</section>
+                            <section class="num-tam">41</section>
+                            <section class="num-tam">42</section>
+                            <section class="num-tam">43</section>
+                            <section class="num-tam">44</section>
+                            <section class="num-tam">45</section>
+                        </section>
+                        <section class="tam-roupa">
+                            <section class="num-tam">PP</section>
+                            <section class="num-tam">P</section>
+                            <section class="num-tam">M</section>
+                            <section class="num-tam">G</section>
+                            <section class="num-tam">GG</section>
+                            <section class="num-tam">G1</section>
+                            <section class="num-tam">G2</section>
+                            <section class="num-tam">G3</section>
                         </section>
                     </section>
-                </form>
-            </section>
-        </section>
-    </main>
 
-    <%- include("../partial/footer") %>
+                    <section class="caminho_prod">
+                        <label for="link_prod">Adicionar link do produto:</label><br>
+                        <input class="name" type="text" id="link_prod" name="link_prod" placeholder="Digite o link">
+                    </section>
 
-    <script src="/js/script.js"></script>
-    <script src="/js/mini-imgs.js"></script>
-    <script src="/js/mobile-carousel.js"></script>
+                    <section class="descricao_produto">
+                        <label for="descricao_prod">Editar descrição do produto:</label><br>
+                        <!-- <section class="center-text">
+                        <h2>Pré-visualização do texto:</h2>
+                        <p>Preço Produto<span>R$166,66</span></p>
+                    </section>
+                        <textarea id="descricao_prod" name="descricao_prod" placeholder="digite o descrição"></textarea>
 
-    <script>
-        function aparecerInput(selector) {
-            // Seleciona o elemento com base no seletor fornecido
-            var element = document.querySelector(selector);
-            
-            // Se o elemento existe, alternar o display entre 'none' e 'block'
-            if (element) {
-                if (element.style.display === 'block') {
-                    element.style.display = 'none';
-                } else {
-                    element.style.display = 'block';
+                    </section>
+
+                    <section class="backNext">
+                        <button type="button" class="backButton">
+                            Voltar
+                        </button>
+                        <button type="button" class="nextButton" onclick="NextAddProduct(2)">
+                            Proximo
+                        </button>
+                    </section>
+
+                </section> -->
+        </main>
+
+        <%- include("../partial/footer") %>
+
+            <script src="/js/script.js"></script>
+            <script src="/js/mini-imgs.js"></script>
+            <script src="/js/mobile-carousel.js"></script>
+
+            <script>
+                function aparecerInput(selector) {
+                    // Seleciona o elemento com base no seletor fornecido
+                    var element = document.querySelector(selector);
+
+                    // Se o elemento existe, alternar o display entre 'none' e 'block'
+                    if (element) {
+                        if (element.style.display === 'block') {
+                            element.style.display = 'none';
+                        } else {
+                            element.style.display = 'block';
+                        }
+                    }
                 }
-            }
-        }
-    </script>
-    
+            </script>
+
 
 </body>
+
 </html>
