@@ -151,6 +151,9 @@ router.get("/pegarProdutoCurtido", produtoController.pegarProdutoCurtido, async 
 router.get("/pegarReservas", reservaController.pegarReservas, async function (req, res) {
     //
 });
+router.get("/pegarReservasEmpresa", reservaController.pegarReservasEmpresa, async function (req, res) {
+    //
+});
 
 router.get("/login", function (req, res) {
     res.render("pages/login", {

@@ -58,61 +58,33 @@
 
 <%- include("../partial/header-home", { email: email }) %>
 
+
 <main>
-  <section class="container">
-    <aside>
-      <section class="sidebar">
-        <a href="#" class="active">
-          <span class="material-symbols-sharp">receipt_long</span>
-          <h3>Produtos</h3>
-        </a>
-        <a href="mensagens.html">
-          <span class="material-symbols-sharp">mail_outline</span>
-          <h3>Mensagens</h3>
-          <span class="msg_count">14</span>
-        </a>
-        <a href="configuracoes.html">
-          <span class="material-symbols-sharp">settings</span>
-          <h3>Configurações</h3>
-        </a>
-        <a href="#">
-          <span class="material-symbols-sharp">add</span>
-          <h3>Adicionar produto</h3>
-        </a>
-        <a href="https://maissports-tcc.onrender.com/">
-          <span class="material-symbols-sharp">logout</span>
-          <h3>Sair</h3>
-        </a>
-      </section>
-    </aside>
-
-    <main>
-      <h1>Painel</h1>
-      <section class="insights">
-        <section class="sales">
-          <section class="middle">
-            <section class="left">
-              <h3>Total de Produtos</h3>
-              <h1>453</h1>
-            </section>
-            <section class="progress">
-              
-              <section class="number"></section>
-            </section>
-          </section>
-        </section>
-      </section>
-
       
-      <h2>Produtos Adicionados</h2>
-      <section class="trending-products" id="trending">
-        
-        <section class="products">
-            
-        </section>
+  <section class="painel">
+    <h2><i class="bi bi-border-all"></i> Painel</h2>
+    <hr>
+    <p class="active">Produtos Cadastrados <i class="bi bi-chevron-right"></i></p>
+    <p>Locais Cadastrados <i class="bi bi-chevron-right"></i></p>
+    <p>Reservas / Valor à Receber <i class="bi bi-chevron-right"></i></p>
+    <p>Minhas Informações <i class="bi bi-chevron-right"></i></p>
+
+
+
+  </section>
+
+  <section class="trending-products" id="trending">
+
+    <section class="products" style="display: none;">
+      
     </section>
+
+    <section class="reservas" >
+                    
+    </section>
+    
     <h2 id="teste">Locais Esportivos</h2>
-    </main>
+
   </section>
 </main>
 <%- include("../partial/footer") %>
