@@ -1,0 +1,148 @@
+<!DOCTYPE html> 
+
+<html lang="pt-BR"> 
+
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Mapa com Filtragem de Pontos de Interesse Esportivos</title> 
+
+    
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places"></script> 
+
+    <script src="js/locais.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+
+    <!-- Link Responsives CSS's-->
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="css/small.css">
+    <link rel="stylesheet" media="screen and (max-width: 534px)" href="css/verysmall.css">
+    <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)"
+        href="../../public/css/medium.css">
+    <!-- End Responsives CSS's-->
+
+    <!-- Link CSS's of Mains, Sections, etc. -->
+
+    
+
+    <link rel="stylesheet" href="css/codes/nav-bar.css">
+    <link rel="stylesheet" href="css/codes/footer.css">
+    <link rel="stylesheet" href="css/codes/cart.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/codes/locais.css">
+
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2310003761562398"
+     crossorigin="anonymous"></script>
+</head> 
+<body> 
+    <%- include("../partial/header-home-local", { email: email }) %>
+    <h1 id="jsonData"></h1>
+    <h1 class="desativar_mobile">LOCALIZAR LOCAIS</h1>
+    <h2 class="userNome" style="display: none;"><%-  nome  %></h2>
+    <h2 class="userEmail" style="display: none;"><%-  email  %></h2>
+    
+
+    <div id="addressSearch"> 
+        <label for="address" class="desativar_mobile">Digite o endereço (rua, bairro, cidade):</label> 
+        <input type="text" id="address" placeholder="Nome da rua, bairro, cidade"> 
+    </div> 
+
+    <section class="filters_mobile">
+        <button class="filter-button" value="football">Futebol</button>
+        <button class="filter-button" value="skatepark">Skate</button>
+        <button class="filter-button" value="basketball">Basquete</button>
+        <button class="filter-button" value="gym">Academia</button>
+        <button class="filter-button" value="volleyball">Vôlei</button>
+        <button class="filter-button" value="swimming">Natação</button>
+        <button class="filter-button" value="park">Parque</button>
+        <button class="filter-button" value="tennis">Tênis</button>
+        <button class="filter-button" value="bicycle">Bicicleta</button>
+    </section>
+    
+
+  
+    <section class="map_zone"> 
+        <section class="filters" > 
+            <div class="container"> 
+                <h2 class="h2_filtros">Filtros</h2> 
+                <div id="filter" class="checkbox-group"> 
+                    <h2>Esportes</h2> 
+                    <label><input type="checkbox" value="gym"> Academia</label> 
+                    <label><input type="checkbox" value="football"> Futebol</label> 
+                    <label><input type="checkbox" value="skatepark"> Pista de Skate</label> 
+                    <label><input type="checkbox" value="bicycle"> Pista de Bicicleta</label> 
+  
+                    <!-- Checkboxes adicionais escondidos inicialmente --> 
+                    <div class="more-checkboxes"> 
+                        <label><input type="checkbox" value="tennis"> Quadra de Tênis</label> 
+                        <label><input type="checkbox" value="basketball"> Quadra de Basquete</label> 
+                        <label><input type="checkbox" value="park"> Parque</label> 
+                        <label><input type="checkbox" value="volleyball"> Quadra de Vôlei</label> 
+                        <label><input type="checkbox" value="swimming"> Natação</label> 
+                    </div>                  
+                    <button id="toggleFiltersButton">Ver Mais</button>   
+                </div>
+                
+                <div id="raio">
+
+                </div>
+                <button id="centerButton" class="centerButton">Centralizar localização</button> 
+                <button id="addNewLocalButton" class="addNewLocalButton" onclick="showAddNewLocalWindow()">Adicionar Novo Local</button>
+                
+            </div> 
+        </section>  
+
+        <div id="map"></div> 
+
+        <div class="userButtonMobile">
+            <button id="centerButton"><i class="fa-solid fa-bullseye"></i></button> 
+            <button id="addNewLocalButton" onclick="showAddNewLocalWindow()"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
+    </section> 
+
+
+
+    <section id="sidePanel" style="display: none;"> 
+        <!-- Conteúdo da aba lateral será adicionado dinamicamente pelo JavaScript --> 
+    </section> 
+
+    <section id="addNewLocalWindow">
+        <div>
+            <button class="fechar_newLocal" onclick="hideAddNewLocalWindow()"><i class="fas fa-times"></i></button>
+            <h2>Adicionar Novo Local</h2>
+        </div>
+        
+        <div class="add-local-buttons">
+            
+            <button onclick="getCurrentLocation()">Pegar localização atual</button>
+            <button onclick="showselectLocalConfirm()">Escolher no mapa</button>
+            <p id="selectedCoordinates"></p> <!-- Exibe coordenadas selecionadas -->
+            <p id="selectedCoordinatesUser"></p> <!-- Exibe coordenadas selecionadas -->
+            <button id="seguinte" onclick="saveCoordinates()">Seguinte</button>
+        </div>
+        
+    </section>
+
+    <section id="selectLocalConfirm">
+        <section>
+            <h1>teste</h1>
+        </section>
+        <div>
+
+        </div>
+    </section>
+
+    <%- include("../partial/footer") %>
+</body> 
+<script src="js/script.js" defer></script>
+<script>
+    // Definindo a variável email no JavaScript com o valor vindo do backend
+    const email = "<%= email %>";
+</script>
+</html> 

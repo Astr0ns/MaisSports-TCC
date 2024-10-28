@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="imagem/png" href="/imagem/icon-msports.jpg">
+    <title>+Sports</title>
+
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="/css/small.css">
+    <link rel="stylesheet" media="screen and (max-width: 534px)" href="/css/verysmall.css">
+    <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)" href="/css/medium.css">
+
+    
+    <link rel="stylesheet" href="/css/codes/interface.css">
+    <link rel="stylesheet" href="/css/codes/nav-bar.css">
+    <link rel="stylesheet" href="/css/codes/footer.css">
+    <link rel="stylesheet" href="/css/codes/cart.css">
+
+    <!-- End Responsives CSS's-->
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+
+    
+
+    <link rel="stylesheet" href="/css/codes/local-page.css">
+</head>
+<body>
+    <%- include("../partial/header-home", {email: email }) %>
+    <main>
+        
+        <div class="title">
+            <h1>
+                <%- local.nome_local_premium %>
+            </h1>
+        </div>
+
+        
+        <section class="gallery" >
+
+            <% local.imagens.forEach(function(imagem, index) { 
+                if(index==0){ %>
+                    <section class="main-image" >
+                        <img src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
+                        
+                    </section>
+                    <section class="thumbnail-images">
+                <% } else { %>
+                    <img src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
+                <% } %>
+                
+            <% }); %>
+            </section>
+        </section>
+
+
+        <section class="cardLocal">
+            <section class="localInfo">
+                <h1 id="endereco" style="margin-top: 25px;"></h1>
+                <section class="descLocal" style="margin-top: 30px;">
+                    <h2>Descriçao:</h2>
+                    <p style="margin-top: 10px;"><%- local.descricao %></p>
+                </section>
+                <h2 style="color: #d12089; margin-top: 35px;">LOCALIZAÇÃO MAPA</h2>
+                <section class="mapa">
+                    <div id="map" style="height: 100%; width: 100%;"></div> 
+                </section>
+
+                <section class="comentariosLocal">
+                    <h2 style="margin-top: 25px;">Comentários:</h2>
+                    <ul style="margin-top: 10px;" id="comentariosList"></ul>
+                </section>
+            </section>
+
+            <form action="/fazerReserva" method="POST" enctype="/multipart/form-data">
+                <input type="hidden" id="data_reserva" name="data_reserva" value=""></input>
+                <input type="hidden" id="horario_inicio" name="horario_inicio" value=""></input>
+                <input type="hidden" id="horario_fim" name="horario_fim" value=""></input>
+                <input type="hidden" id="preco_total" name="preco_total" value=""></input>
+                <input type="hidden" id="id_local_premium" name="id_local_premium" value=""></input>
+                <input type="hidden" id="nome_local_premium" name="nome_local_premium" value=""></input>
+
+                <section class="reservarInfo">
+                    <h2>R$<%- local.preco_hora %><span>/Hora</span></h2>
+
+                    <div style="position: relative; display: flex; justify-content: center; margin-top: 20px;">
+                        <input id="calendar" oninput="handleInput(event)" class="time-picker" type="text"></input>
+                        <h2 id="placeholderDate">DATA:</h2>
+                    </div>
+                    <div style="margin-top: 55px; display: flex;">
+                        <div style="position: relative; width: 50%;">
+                            
+                            <input id="start-time" oninput="calcularPreco()" class="time-picker" type="text" style="border-radius: 10px 0 0 10px;"></input>
+                            <label for="start-time" class="timeLabel" style="border-radius: 10px 0 0 10px; left: 50%;"><h2>CHECK-IN</h2></lebel>
+                        </div>
+                        <div style="position: relative; width: 50%;">
+                            <input id="end-time" oninput="calcularPreco()" class="time-picker" type="text" style="border-radius: 0 10px 10px 0;"></input>
+                            <label for="end-time" class="timeLabel" style="border-radius: 0 10px 10px 0; left: 50%;"><h2>CHECK-OUT</h2></lebel>
+                        </div>
+                    </div>
+                    
+                    
+
+                    <section class="infoPreco" style="display: none; opacity: 0;">
+                        <p></p>
+                        <h3></h3>
+                        <button type="submit">Reservar</button>
+                    </section>
+                    <hr>
+                    <h2 id="warningHora">Faça a Reserva de no minimo de 1 Hora</h2>
+                </section>
+
+                
+
+            </form>
+
+        </section>
+        
+    </main>
+
+    <%- include("../partial/footer") %>
+
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfDlc_NGIZuHjF9y_F1KDRWM1FB_PhFgE&libraries=places"></script>
+    <script src="/js/script.js"></script>
+    <script src="/js/mini-imgs.js"></script>
+
+    
+    <script>
+        const localMap = <%- JSON.stringify(local) %>;
+        console.log(localMap);
+        
+    
+        window.onload = function () {
+            const lat = localMap.latitude;
+            const lng = localMap.longitude;
+    
+    
+            if (lat && lng) {
+                initMap(parseFloat(lat), parseFloat(lng));
+            }
+        };
+    
+        function initMap(lat, lng) {
+            const location = { lat: lat, lng: lng };
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: location
+            });
+    
+            var styles = {
+                default: null,
+                hide: [
+                    {
+                        featureType: 'poi.business',
+                        stylers: [{visibility: 'off'}]
+                    },
+                    {
+                        featureType: 'transit',
+                        elementType: 'labels.icon',
+                        stylers: [{visibility: 'off'}]
+                    }
+                ]
+            };
+    
+            map.setOptions({styles: styles['hide']});
+    
+            // Adiciona o marcador na localização especificada
+            new google.maps.Marker({
+                position: location,
+                map: map,
+                icon: {
+                    url: '/imagem/pincrown9.png',
+                    scaledSize: new google.maps.Size(45, 45)
+                }
+            });
+    
+            // Usando Geocoder para obter o endereço
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ location: location }, (results, status) => {
+                if (status === 'OK') {
+                    if (results[0]) {
+                        document.getElementById('endereco').innerText = results[0].formatted_address;
+                    } else {
+                        document.getElementById('endereco').innerText = 'Nenhum endereço encontrado';
+                    }
+                } else {
+                    console.error('Geocoder falhou devido ao seguinte: ' + status);
+                }
+            });
+            renderComentarios(localMap.comentarios);
+        }
+
+        function renderComentarios(comentarios) {
+            const comentariosList = document.getElementById('comentariosList');
+            comentariosList.innerHTML = ""; // Limpa a lista antes de adicionar
+
+            comentarios.forEach(comment => {
+                const comentarioHtml = formatComment(comment);
+                if(comentarioHtml == undefined){
+                    comentariosList.innerHTML = "Local Sem Comentarios";
+                    return
+                }
+                comentariosList.innerHTML += comentarioHtml; // Adiciona o comentário formatado à lista
+            });
+        }
+
+        function formatComment(comment) {
+            const { cliente, avaliacao_estrela_locais, comentario_local } = comment;
+            if ( avaliacao_estrela_locais == null){
+                return
+            }
+            const nomeCliente = cliente || "Anônimo";
+            const avaliacao = avaliacao_estrela_locais ? `${getStarRatingHtml(avaliacao_estrela_locais)}` : "Sem avaliação";
+            
+            const comentario = comentario_local ? comentario_local : "Sem comentário";
+            
+
+            return `<li><strong>${nomeCliente}:</strong> Avaliação: ${avaliacao} <br> Comentário: ${comentario}</li>`;
+        }
+
+        function getStarRatingHtml(rating) {
+            const maxStars = 5;
+            let starsHtml = '';
+
+            for (let i = 1; i <= maxStars; i++) {
+                if (i <= rating) {
+                    starsHtml += '<i class="fas fa-star" style="color: #d12089;"></i>'; // Estrela preenchida
+                } else {
+                    starsHtml += '<i class="far fa-star" style="color: #d12089;"></i>'; // Estrela vazia
+                }
+            }
+
+            return starsHtml;
+        }
+
+        // Chame a função para renderizar os comentários
+        
+    </script>
+    
+    <script> 
+        const diaSemana = [];
+        const local = <%- JSON.stringify(local) %>;
+            local.dias.forEach(function(dia, index) {
+                diaSemana.push(
+                    local.dias[index].dia_semana
+                );
+                
+            });
+            console.log(local)
+            
+            document.getElementById("id_local_premium").value = local.id_local_premium
+            document.getElementById("nome_local_premium").value = local.nome_local_premium
+
+        function calcularPreco() {
+            const iniCheck = document.getElementById("start-time").value; // Ex: "16:30"
+            const fimCheck = document.getElementById("end-time").value; // Ex: "00:30"
+
+            document.getElementById("horario_inicio").value = iniCheck
+            document.getElementById("horario_fim").value = fimCheck
+
+            function timeToMinutes(time) {
+                const [hours, minutes] = time.split(':').map(Number);
+                return hours * 60 + minutes;
+            }
+
+            // Converter os horários em minutos
+            const iniMinutes = timeToMinutes(iniCheck);
+            let fimMinutes = timeToMinutes(fimCheck);
+
+            // Se o horário final é menor que o inicial, adicionamos 24 horas (1440 minutos)
+            if (fimMinutes < iniMinutes) {
+                fimMinutes += 1440; // 24 horas em minutos
+            }
+
+            // Calcular a diferença em minutos
+            const totalMinutes = fimMinutes - iniMinutes;
+
+            // Converter a diferença de minutos em horas
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalRemainingMinutes = totalMinutes % 60;
+
+
+            // Exibir o resultado
+            console.log(`Total: ${totalHours} horas e ${totalRemainingMinutes} minutos`);
+
+            if (totalHours > 0) {
+                // Certifique-se de que local.preco_hora é um número
+                const precoHora = parseFloat(local.preco_hora); // Converte para número
+                if (!isNaN(precoHora)) {
+                    const subTotal = totalHours * precoHora; // Cálculo do subtotal
+                    document.querySelector(".infoPreco p").innerHTML = `R$${precoHora.toFixed(2)} x ${totalHours} Horas`;
+                    document.querySelector(".infoPreco h3").innerHTML = `subTotal: R$${subTotal.toFixed(2)}`;
+
+                    document.getElementById("preco_total").value = subTotal
+
+                    document.querySelector(".infoPreco").style.display = "block"
+                    document.querySelector(".reservarInfo hr").style.display = "none"
+                    document.querySelector("#warningHora").style.display = "none"
+
+                    document.querySelector(".infoPreco").style.opacity = "1"
+                    document.querySelector(".reservarInfo hr").style.display = "0"
+                    document.querySelector("#warningHora").style.display = "0"
+                    
+                } else {
+                    console.error("O preço por hora não é um número válido.");
+                }
+            } else {
+
+                
+                document.querySelector(".infoPreco").style.display = "none"
+                document.querySelector(".reservarInfo hr").style.display = "block"
+                document.querySelector("#warningHora").style.display = "block"
+
+                document.querySelector(".infoPreco").style.opacity = "0"
+                document.querySelector(".reservarInfo hr").style.display = "1"
+                document.querySelector("#warningHora").style.display = "1"
+            }
+        }
+
+
+        
+        function pegarDiasSemFunc()  {
+            
+            const diaSemanaTotal = ["Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado"];
+            let result = []
+
+            
+
+            diaSemanaTotal.forEach((dia, index) => {
+                if (!diaSemana.includes(dia)) {
+                    // result += `date.getDay() === ${index} || `; // Adiciona o índice e o dia ao resultado
+                    result.push(
+                        index
+                    );
+                }
+            });
+            return result
+            
+
+        }      
+        
+        function handleInput(event) {
+            const value = event.target.value;
+
+            document.getElementById("data_reserva").value = value
+
+
+            // Dividir a data em dia, mês e ano
+            const [day, month, year] = value.split('/').map(Number);
+
+            // Criar um objeto Date (lembre-se que os meses em JavaScript são 0-indexados)
+            const date = new Date(year, month - 1, day);
+
+            // Obter o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado)
+            const dayOfWeek = date.getDay();
+
+            // Mapeando os valores para os dias da semana
+            const days = ["Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado"];
+            const dayName = days[dayOfWeek];
+
+            let iniHora = "";
+            let fimHora = "";
+            
+
+            diaSemana.forEach((dia, index) => {
+                if (dayName.includes(dia)) {
+                    iniHora = local.dias[index].horario_inicio
+                    fimHora = local.dias[index].horario_fim
+                    return
+                }
+            });
+            
+
+            // Instância para o campo de início
+        flatpickr("#start-time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            minTime: iniHora,
+            maxTime: fimHora,
+            time_24hr: true,
+            locale: "pt",
+            defaultDate: iniHora // Defina o horário padrão para o início
+        });
+
+        // Instância para o campo de fim
+        flatpickr("#end-time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            minTime: iniHora,
+            maxTime: fimHora,
+            time_24hr: true,
+            locale: "pt",
+            defaultDate: fimHora // Defina o horário padrão para o fim
+        });
+            
+        calcularPreco()
+        }
+
+        flatpickr("#calendar", {
+            enableTime: false, // Desativar a seleção de hora
+            dateFormat: "d/m/Y", // Formato de data
+            defaultDate: new Date(), // Data padrão é a data atual
+            minDate: "today",
+            maxDate: new Date().fp_incr(90), // 90 days from now
+            disable: ["2025-01-30", "2025-02-21", "2025-03-08", new Date(2025, 4, 9) ],
+            "disable": [
+                function(date) {
+                    const dias = pegarDiasSemFunc()
+                    return (date.getDay() === dias[0] || date.getDay() === dias[1] || date.getDay() === dias[2] || date.getDay() === dias[3] || date.getDay() === dias[4] || date.getDay() === dias[5] || date.getDay() === dias[6]);
+
+                }
+            ],
+            locale: "pt", // Define o idioma como português
+            firstDayOfWeek: 1 // Define segunda-feira como o primeiro dia da semana
+            
+            
+        });
+        
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="imagem/png" href="imagem/icon-msports.jpg">
+
+    <!-- Link Responsives CSS's-->
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" media="screen and (min-width: 535px) and (max-width: 768px)" href="css/small.css">
+    <link rel="stylesheet" media="screen and (max-width: 534px)" href="css/verysmall.css">
+    <link rel="stylesheet" media="screen and (min-width: 769px) and (max-width: 1024px)" href="css/medium.css">
+    <!-- End Responsives CSS's-->
+
+    <!-- Link CSS's of Mains, Sections, etc. -->
+
+    <link rel="stylesheet" href="css/codes/buttons.css">
+    <link rel="stylesheet" href="css/codes/product-page.css">
+    <link rel="stylesheet" href="css/codes/tamanhos-prod.css">
+    <link rel="stylesheet" href="css/codes/nav-bar.css">
+    <link rel="stylesheet" href="css/codes/footer.css">
+    <link rel="stylesheet" href="css/codes/add-product.css">
+    <link rel="stylesheet" href="css/codes/tendencia.css">
+
+    <!-- Others Links -->
+
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+     <script src="js/add-product.js"></script> 
+
+    <title>+Sports</title>
+</head>
+
+<body style="background-color: #fff;">
+    
+
+    <section class="container-product">
+        <section class="container">
+            <section class="card">
+                <form action="/adicionarLocais" method="POST" enctype="multipart/form-data">
+
+
+                    
+                    <section class="product-card" id="product-card-stl">
+                        
+                        <section class="MainIgm" data-index="0">
+                            <input type="file" name="imagens" class="hidden-input" accept="image/*">
+                            <div class="image-preview" id="preview-0">
+                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>
+                            </div>
+                          </section>
+                        
+                          <section class="MainIgm" data-index="1">
+                            <input type="file" name="imagens" class="hidden-input" accept="image/*">
+                            <div class="image-preview" id="preview-1">
+                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
+                            </div>
+                          </section>
+                        
+                          <section class="MainIgm" data-index="2">
+                            <input type="file" name="imagens" class="hidden-input" accept="image/*">
+                            <div class="image-preview" id="preview-2">
+                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
+                            </div>
+                          </section>
+                        
+                          <section class="MainIgm" data-index="3">
+                            <input type="file" name="imagens" class="hidden-input" accept="image/*">
+                            <div class="image-preview" id="preview-3">
+                              <a href="#" class="upload-link"><i class="bi bi-plus-circle"></i></a>
+                            </div>
+                          </section>
+                    
+                        
+                        
+                    </section>
+                    
+                    <section class="product-info" id="product-info-stl">
+
+                            <section class="title-local">
+                                <label for="nome_local">Digite o Nome do Local:</label><br>
+                                <input class="name" type="text" id="nome_local" name="nome_local"
+                                    placeholder="Digite o nome">
+                                
+                            </section>
+
+                        
+                            <section class="local_category">
+                                <label for="local_category">Categoria:</label>
+                                <select name="local_category">
+                                    <option value="" selected>Selecione</option>
+                                    <option value="basketball">Basquete</option>
+                                    <option value="football">Futebol</option>
+                                    <option value="skatepark">Skate</option>
+                                    <option value="gym">Academia</option>
+                                    <option value="bicycle">Bicicleta</option>
+                                    <option value="park">Parque</option>
+                                    <option value="tennis">Tênis</option>
+                                    <option value="volleyball">Vôlei</option>
+                                    <option value="swimming">Natação</option>
+                                </select>
+                            </section>
+
+                            <section class="descricao_produto">
+                                <label for="desc_local">Editar descrição do produto:</label><br>
+                                <textarea id="desc_local" name="desc_local" placeholder="digite o descrição"></textarea>
+                            </section>
+
+                        
+                            
+
+                            <input type="hidden" name="latitude" id="latitude" value=""></input>
+                            <input type="hidden" name="longitude" id="longitude" value=""></input>
+                        
+                            <button type="submit">Adicionar Agora!</button>
+                                
+                    </section>
+
+                    
+                </form>
+            </section>
+        </section>
+    </section>
+
+            
+
+    <script src="js/script.js"></script>
+    <script src="js/mini-imgs.js"></script>
+
+    <script>
+        // Definindo a variável email no JavaScript com o valor vindo do backend
+        const email = "<%= email %>";
+    </script>
+        
+    <!-- Pegar imagem pelo icons de adiconar -->
+    <script>
+        document.querySelectorAll('.upload-link').forEach((link, index) => {
+            link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const input = link.closest('.MainIgm').querySelector('.hidden-input');
+            input.click();
+            });
+        });
+
+        document.querySelectorAll('.hidden-input').forEach((input, index) => {
+            input.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                const previewDiv = document.getElementById(`preview-${index}`);
+                previewDiv.innerHTML = `
+                    <img src="${e.target.result}">
+                    <button type="button" class="remove-image">Remover</button>
+                `;
+
+                if(index==0){
+                    const previwImgInfo = document.querySelector('.img_product_previw');
+                    previwImgInfo.innerHTML = `
+                    <img src="${e.target.result}">
+                `;
+                
+                }
+
+                // Adicionar funcionalidade de remover imagem
+                const removeBtn = previewDiv.querySelector('.remove-image');
+                removeBtn.addEventListener('click', () => {
+                          previewDiv.innerHTML = `<a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>`;
+                    
+                    // Reativar a funcionalidade de clicar para adicionar imagem
+                    const newLink = previewDiv.querySelector('.upload-link');
+                    newLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    input.click();
+                    });
+                });
+                };
+                reader.readAsDataURL(file);
+            }
+            });
+        });
+
+    </script>
+    <script>
+        window.onload = function () {
+            const lat = localStorage.getItem('latitude');
+            const lng = localStorage.getItem('longitude');
+
+            if (lat && lng) {
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+            }
+        };
+    </script>
+     
+
+</body>
+
+</html>
