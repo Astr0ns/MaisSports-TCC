@@ -199,9 +199,11 @@ const getLocalReservaById = (path) => {
 
 const fazerReserva = async (req, res) => {
     console.log(req.body); // Veja os dados que estão chegando
-    const { data_reserva, horario_inicio, horario_fim, preco_total, id_local_premium } = req.body;
+    const { data_reserva, horario_inicio, horario_fim, preco_total, id_local_premium, nome_local_premium } = req.body;
     const email = req.session.email;
-    console.log(email)
+    const preco_totalFloat = parseFloat(preco_total);
+    console.log(`Reservando o local ${nome_local_premium}`,
+        `Reservar direto pela +Sport \n Reserva Horario: ${horario_inicio} - ${horario_fim}`)
     
     const externalReference = JSON.stringify({
         email,
@@ -219,12 +221,12 @@ const fazerReserva = async (req, res) => {
         const body = {
             items: [
                 {
-                    id: `plano_${idPlanoNum}`,
+                    id: `10`,
                     title: `Reservando o local ${nome_local_premium}`,
                     description: `Reservar direto pela +Sport \n Reserva Horario: ${horario_inicio} - ${horario_fim}`,
                     quantity: 1,
                     currency_id: 'BRL',
-                    unit_price: preco_total,
+                    unit_price: preco_totalFloat,
                 }
                 
             ],

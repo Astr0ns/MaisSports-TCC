@@ -1,6 +1,6 @@
 function renderProducts(products) {
     const trendingSection = document.querySelector('.products');
-    trendingSection.innerHTML = ''; // Limpa a seção antes de renderizar
+    trendingSection.innerHTML = ''; 
 
 
     products.forEach(product => {
@@ -17,7 +17,7 @@ function renderProducts(products) {
         
         <section class="row">
             <a href="/product-page/${product.id_prod}">
-                <img src="uploads/${imagens[0]}" alt="${titulo_prod}">
+                <img src="/uploads/${imagens[0]}" alt="${titulo_prod}">
             </a>
             <section class="product-text">
                 <h5>NEW</h5>

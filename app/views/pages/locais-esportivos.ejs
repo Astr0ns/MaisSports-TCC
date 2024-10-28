@@ -67,7 +67,7 @@
   
     <section class="map_zone"> 
         <section class="filters" > 
-            <div class="container"> 
+            <div class="container" > 
                 <h2 class="h2_filtros">Filtros</h2> 
                 <div id="filter" class="checkbox-group"> 
                     <h2>Esportes</h2> 
@@ -90,8 +90,18 @@
                 <div id="raio">
 
                 </div>
+                <% if(userTipo === 'empresa' ) { %>
+                    <div style="position: relative;">
+                        <button style="background-color: gold;" id="addNewLocalButton" class="addNewLocalButton" onclick="showAddNewLocalPremiumWindow()">Adicionar Local Premium</button>
+                        
+                    </div>
+                <% } %>
                 <button id="centerButton" class="centerButton">Centralizar localização</button> 
                 <button id="addNewLocalButton" class="addNewLocalButton" onclick="showAddNewLocalWindow()">Adicionar Novo Local</button>
+
+                
+                
+                
                 
             </div> 
         </section>  
@@ -111,7 +121,7 @@
         <!-- Conteúdo da aba lateral será adicionado dinamicamente pelo JavaScript --> 
     </section> 
 
-    <section id="addNewLocalWindow">
+    <section id="addNewLocalWindow" class="userN">
         <div>
             <button class="fechar_newLocal" onclick="hideAddNewLocalWindow()"><i class="fas fa-times"></i></button>
             <h2>Adicionar Novo Local</h2>
@@ -123,7 +133,23 @@
             <button onclick="showselectLocalConfirm()">Escolher no mapa</button>
             <p id="selectedCoordinates"></p> <!-- Exibe coordenadas selecionadas -->
             <p id="selectedCoordinatesUser"></p> <!-- Exibe coordenadas selecionadas -->
-            <button id="seguinte" onclick="saveCoordinates()">Seguinte</button>
+            <button id="seguinte" onclick="saveCoordinates(1)">Seguinte</button>
+        </div>
+        
+    </section>
+
+    <section id="addNewLocalWindow" class="premium">
+        <div>
+            <button class="fechar_newLocal" onclick="hideAddNewLocalWindow()"><i class="fas fa-times"></i></button>
+            <h2>Adicionar Novo Local</h2>
+        </div>
+        
+        <div class="add-local-buttons">
+            
+            <button onclick="getCurrentLocation()">Pegar localização atual</button>
+            <button onclick="showselectLocalConfirm()">Escolher no mapa</button>
+            <p id="selectedCoordinatesUserP"></p> <!-- Exibe coordenadas selecionadas -->
+            <button id="seguinte" onclick="saveCoordinates(2)">Seguinte</button>
         </div>
         
     </section>
