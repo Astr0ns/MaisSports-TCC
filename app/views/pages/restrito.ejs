@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área Restrita</title>
+</head>
+<body>
+
+    <% if(autenticado.autenticado != null){
+          let arquivo={"imagem":"imagem/img-perfil.png"} ;
+       if(img_perfil_pasta !=null){ 
+            arquivo.imagem = img_perfil_pasta;
+       }else if(img_perfil_banco !=null){ 
+            const imgBuffer = Buffer.from(img_perfil_banco);
+            const imgBase64 = imgBuffer.toString('base64');
+            const dataURL = `data:image/jpeg;base64,${imgBase64}`;
+            arquivo.imagem= dataURL;
+       } 
+   %>
+    <span>Olá <%= autenticado %>!</span><br>
+    <span><a href="/perfil"><img class="icone-perfil" src="<%= arquivo.imagem %>" </a></span>
+    <p><a href="/sair">sair</a></p>
+
+    <% }else{ %>
+        <span>Olá visitante!</span>
+    <% } %>
+
+
+        <h1>Acesso restrito</h1>
+        <h3>Você não possui permissão de acesso a esta página!</h3>
+</body>
+</html>
