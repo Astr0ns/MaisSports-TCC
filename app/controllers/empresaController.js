@@ -20,7 +20,6 @@ const regrasValidacaoFormLogin = [
         .isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres')
 ];
 
-// Função de login
 
 const registrarEmpr = async (req, res) => {
     const errors = validationResult(req);
@@ -79,7 +78,7 @@ const registrarEmpr = async (req, res) => {
 const logarEmpr = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.render('pages/login-empr', {
+        return res.render('pages/login', {
             userId: req.session.userId,
             listaErros: errors.array(),
             dadosNotificacao: null,
@@ -94,42 +93,36 @@ const logarEmpr = async (req, res) => {
 
     const { email, senha } = req.body;
 
-    // Remove espaços em branco
-    const senhaTrimmed = senha.trim();
-
     try {
-        // Buscar empresa com base no email
-        const [accounts] = await connection.query("SELECT * FROM empresas WHERE email = ?", [email]);
+        const [accounts] = await connection.query("SELECT * FROM empresas WHERE email = ? LIMIT 1", [email]);
+        
+        if (accounts.length > 0) {
+            const account = accounts[0];
 
-        if (accounts.length === 0) {
-            req.flash('error_msg', "Usuário não encontrado");
-            return res.redirect('/login-empr');
+            const passwordMatch = await bcrypt.compareSync(senha, account.senha);
+            console.log(passwordMatch)
+
+            if (!passwordMatch) {
+                req.flash('error_msg', "As senhas não conferem");
+                return res.redirect('/login-empr');
+            }
+
+            // Armazenar informações do usuário na sessão
+            req.session.email = account.email;
+            req.session.celular = account.celular;
+            req.session.nome = account.nome;
+            req.session.userId = account.id;
+            req.session.sobrenome = account.cnpj;
+            req.session.userTipo = account.tipo;
+            req.session.logado = true; // Atualizando a sessão
+
+            req.flash('sucess_msg', "Logado com sucesso");
+            return res.redirect('/painel-empresa'); // Redireciona após o login
+
+        } else {
+            req.flash('msg', "Usuário não encontrado");
+            return res.redirect('/login');
         }
-
-        const account = accounts[0];
-
-        // Comparar a senha fornecida com o hash armazenado
-        const passwordMatch = await bcrypt.compare(hash, account.senha);
-
-        console.log("Senha fornecida:", senhaTrimmed);
-        console.log("Hash armazenado:", account.senha);
-        console.log("Senha corresponde?", passwordMatch);
-
-        if (!passwordMatch) {
-            req.flash('error_msg', "Senha incorreta");
-            return res.redirect('/login-empr');
-        }
-
-        // Armazenar informações do usuário na sessão
-        req.session.email = account.email;
-        req.session.nome = account.nome;
-        req.session.userTipo = account.tipo;
-        req.session.cnpj = account.cnpj;
-        req.session.userId = account.id;
-        req.session.logado = true;
-
-        req.flash('success_msg', "Logado com sucesso");
-        return res.redirect('/empresa'); // Redireciona após o login
 
     } catch (err) {
         console.error("Erro na consulta: ", err);
