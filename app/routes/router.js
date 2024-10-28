@@ -41,7 +41,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).array('imagens', 4);
 
 
-const { verificarAutenticacao, verificarAutorizacaoTipo } = require('../models/middleware');
+const { verificarAutenticacao, verificarAutorizacao } = require('../models/middleware');
 
 const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
 // const uploadFile = require("../util/uploader")();
@@ -107,10 +107,6 @@ router.post("/avaliarLocaisBanco", upload, verificarAutenticacao, locaisControll
 
 });
 
-router.get("/add-product", function (req, res) {
-    var email = req.session.email;
-    res.render("pages/add-product", { email: email });
-});
 
 
 router.post("/adicionarProd", upload, produtoController.adicionarProd, async function (req, res) {
@@ -126,9 +122,10 @@ router.get("/pegarProdutoEmpresa", produtoController.pegarProdutoEmpresa, async 
 });
 
 
-router.get("/painel-empresa", function (req, res) {
+router.get("/painel-empresa", verificarAutenticacao, verificarAutorizacao, async function (req, res) {
     var email = req.session.email;
-    res.render("pages/painel-empresa", { email: email });
+    var userId = req.session.userId;
+    res.render("pages/painel-empresa", { email: email, userId: userId });
 });
 
 router.get("/favoritarProd/:id", produtoController.favoritarProd, async function (req, res){
@@ -324,7 +321,8 @@ router.get("/empresa", verificarAutenticacao, function (req, res) {
 });
 
 router.get("/add-product", verificarAutenticacao, function (req, res) {
-    res.render("pages/add-product");
+    var email = req.session.email;
+    res.render("pages/add-product", {email: email});
 });
 router.get("/cart", function (req, res) {
 });
