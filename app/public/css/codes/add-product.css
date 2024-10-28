@@ -1,0 +1,403 @@
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #ffffff;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgb(79, 79, 79);
+    --cor-fundo4: #1a348967;
+
+    --cor-bar-dark: #010c1aa9;
+    --cor-bar-dark-mob: #010c1a;
+}
+
+body{
+    background-color: #010c1aa9;
+}
+
+body, .card, .assinatura-info, .assinatura-data, .plan {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+@keyframes slideOn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.product-card{
+    animation: slideOn 0.5s forwards;
+}
+
+.product-info{
+    animation: slideOn 0.5s forwards;
+}
+
+
+.card {
+    display: flex;
+    position: relative;
+    height: auto;
+    background-color: #010c1a8e;
+    border-radius: 10px;
+    padding: 35px 35px;
+    overflow: hidden;
+    margin-left: 5%;
+}
+
+form{
+    display: flex;
+}
+
+.desativar_container{
+    display: none;
+}
+
+section.product-card{
+    height: auto;
+}
+
+button{
+    background-color: #f72ba5; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 12px 20px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin: 10px 0; 
+    transition: background-color 0.3s; 
+}
+
+button:hover{
+    background-color: #fa6dc2; 
+}
+
+.assinatura-page{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+}
+
+.assinatura_planos{
+    display: flex;
+    justify-content: space-around;
+}
+
+.assinatura_planos h3{
+    font-size: 1.4em;
+    font-weight: bolder;
+}
+
+.assinatura_planos p{
+    font-size: 0.9em;
+}
+
+#p-black{
+    background-color: var(--cor-bar-dark-mob);
+}
+#p-black h3{
+    color: #f72ba5;
+}
+
+#p-medio{
+    background-color: #2763b1;
+}
+
+#p-medio h3{
+    color: #f72ba5;
+}
+
+#p-normal{
+    background-color: #fff;
+
+}
+
+#p-normal h3{
+    color: #f72ba5;
+}
+
+#p-normal p{
+    color: var(--cor-fonte2);
+}
+
+.assinatura_planos button{
+    display: flex;
+    width: 30%;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s; /* Transição suave */
+}
+
+.assinatura_planos button:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra mais intensa ao passar o mouse */
+}
+
+.product-card i {
+    font-size: 28vh;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    padding: 12%;
+    text-decoration: none;
+    color: var(--cor-fundo4);
+}
+
+.categorias select {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}
+
+
+
+.image-preview{
+    display: inline-block;
+    width: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-preview img{
+    width: 90%;
+    display: block;
+    max-width: 100%; /* Garante que a imagem não ultrapasse o contêiner */
+    height: auto; /* Mantém a proporção da imagem */
+    border: none;
+    
+}
+
+.remove-image {
+    position: absolute;
+    bottom: 10px; /* Distância do fundo */
+    left: 10px; /* Distância da esquerda */
+    background-color: #f72ba5; /* Fundo semi-transparente */
+    border: 1px solid #ccc; /* Borda opcional */
+    padding: 5px 10px; /* Espaçamento interno */
+    cursor: pointer; /* Cursor de pointer para indicar que é clicável */
+    z-index: 10; /* Garante que o botão esteja acima da imagem */
+}
+
+.remove-image:hover{
+    background-color: #fa6dc2;
+}
+
+.title-prod .name, .title-local .name {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}
+
+.opt_catogorias{
+    display: flex;
+    justify-content: space-between;
+}
+
+.opt_catogorias section select{
+    width: 10.5em;
+}
+
+.categoria_prod, .local_category{
+    display: flex;
+    flex-direction: column;
+}
+
+.categoria_prod select, .local_category select{
+    width: 10.5em;
+}
+
+
+.caminho_prod, .descricao_produto{
+    width: 100%;
+}
+
+.caminho_prod input, .descricao_produto input{
+    width: 100%;
+}
+
+.categoria_prod, .local_category{
+    margin-top: 15px;
+}
+
+/* preço */
+.price{
+    margin-top: 20px;
+}
+
+/* botão proximo e voltar */
+.backNext{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+
+textarea#descricao_prod, textarea#desc_local {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 0;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+    height: 200px;
+    box-sizing: border-box; /* Garante que o padding seja incluído na altura total */
+    resize: none; /* Para impedir o redimensionamento */
+    width: 100%;
+}
+
+
+.tam-inf{
+    display: none;
+}
+
+.tam-calcado, .tam-roupa{
+    display: none;
+    
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    grid-template-columns: repeat(5, auto);
+    margin: 15px 0 15px;
+}
+
+.mini-pics-product i {
+    font-size: 100px;
+    color: var(--cor-fundo4);
+}
+
+section .desc-container {
+    display: flex;
+    position: relative;
+    width: 80%;
+    height: auto;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 35px 35px;
+    overflow: hidden;
+    margin-left: 10%;
+}
+
+.center-text p{
+    font-size: 20px;
+    margin: 15px 0 16px 0;
+}
+
+span{
+    color: var(--cor-fundo2);
+    font-weight: bold;
+}
+
+section.descricao {
+    display: flex;
+    margin-top: 10%;
+    height: auto;
+    overflow: hidden;
+    transition: height 300ms ease-in;
+    position: relative;
+    margin-bottom: 8rem;
+    line-height: 1.5;
+    flex-direction: column;
+}
+
+.desc-input {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}
+
+input#valor_prod {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 0px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}
+input#link_prod {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 0px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}
+
+
+
+
+
+select {
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 0px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+}
+
+#roupa_prod{
+    display: none;
+}
+
+form{
+    width: 100%;
+}
+
+.hidden-input{
+    display: none;
+}
+
+.finalizar-add-product{
+    display: none;
+}
+
+.confirmarPagamento{
+    
+    width: 60%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    
+}
+
+.confirmarPagamento .assinatura-data {
+    width: 100%;
+    padding: 20px;
+    margin: 30px 0;
+    display: flex;
+    flex-direction: column; 
+    border: none;
+    border-radius: 0; 
+}
+
+.confirmarPagamento  .assinatura-data h2{
+    color: #f72ba5;
+    font-size: 1.5em;
+    margin: 0;
+    
+}
