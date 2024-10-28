@@ -78,7 +78,7 @@ const registrarEmpr = async (req, res) => {
 const logarEmpr = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.render('pages/login', {
+        return res.render('pages/login-empr', {
             userId: req.session.userId,
             listaErros: errors.array(),
             dadosNotificacao: null,
@@ -120,8 +120,8 @@ const logarEmpr = async (req, res) => {
             return res.redirect('/painel-empresa'); // Redireciona após o login
 
         } else {
-            req.flash('msg', "Usuário não encontrado");
-            return res.redirect('/login');
+            req.flash('error_msg', "Usuário não encontrado");
+            return res.redirect('/login-empr');
         }
 
     } catch (err) {

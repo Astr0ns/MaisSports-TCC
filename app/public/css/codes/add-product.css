@@ -372,13 +372,18 @@ form{
     display: none;
 }
 
-.finalizar-add-product{
+section.finalizar-add-product {
     display: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
 }
 
 .confirmarPagamento{
     
     width: 60%;
+    padding: 15px;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
