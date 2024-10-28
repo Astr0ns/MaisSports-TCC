@@ -37,37 +37,8 @@
 </head>
 
 <body onload="saberPreco(3.5)">
-    <header>
-        <nav>
-            <a class="logo" href="/"><img src="imagem/LOGO.png"></a>
-            <section class="box">
-                <input type="checkbox" id="check">
-                <section class="search-box">
-                    <input type="text" placeholder="Pesquise aqui...">
-                    <label for="check" class="icon">
-                        <i class='bx bx-search'></i>
-                    </label>
-                </section>
-            </section>
-
-            <section class="mobile-menu">
-                <section class="line1"></section>
-                <section class="line2"></section>
-                <section class="line3"></section>
-            </section>
-
-            <ul class="nav-list">
-                <li><a class="mob-og" href="login.html"><button><i class="bi bi-person">Entrar</i></button></a></li>
-                <li><a class="pc-og" href="login.html">Entrar</a></li>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="/">Carrinho</a></li>
-                <li><a href="locais-esportivos.html">Locais Esportivos</a></li>
-            </ul>
-        </nav>
-        </label>
-        </section>
-        </section>
-    </header>
+    
+    <%- include("../partial/header-home", { email: email }) %>
 
     <!--  -->
 
@@ -486,7 +457,7 @@
             });
         });
 
-    </script>         input.value = ''; // Limpa o campo de input
+    </script>         
      
 
 </body>

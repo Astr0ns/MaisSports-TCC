@@ -14,20 +14,23 @@ const verificarAutenticacao = (req, res, next) => {
         res.redirect('/login'); // Redireciona se não estiver autenticado
     }
 };
-
 // Middleware para verificar autorização
 const verificarAutorizacao = (req, res, next) => {
-    const userTipo = req.session.userTipo; // Supondo que o tipo de usuário é armazenado na sessão
+    const userTipo = req.session.userTipo; 
 
-    // Verifica a rota acessada
-    if (req.path === '/empresas' && userTipo === 'usuario') {
+    // Verificar a rota acessada
+    if (req.path === 'pages/empresa-painel' && userTipo === 'usuario') {
         req.flash('error_msg', 'Usuários não têm permissão para acessar a página de empresas.');
-        return res.redirect('/login'); // Redireciona para a página inicial ou outra de sua escolha
+        return res.redirect('/profile'); // Redireciona para a página inicial ou outra de sua escolha
+    }
+    if (req.path === 'pages/add-product' && userTipo === 'usuario') {
+        req.flash('error_msg', 'Usuários não têm permissão para acessar a página de empresas.');
+        return res.redirect('/profile'); // Redireciona para a página inicial ou outra de sua escolha
     }
 
-    if (req.path === '/profile' && userTipo === 'empresa') {
+    if (req.path === 'pages/profile' && userTipo === 'empresa') {
         req.flash('error_msg', 'Empresas não têm permissão para acessar a página de perfil.');
-        return res.redirect('/empresas'); // Redireciona para a página de empresas
+        return res.redirect('/painel-empresa'); // Redireciona para a página de empresas
     }
 
     next(); // Usuário autorizado, continue
