@@ -16,6 +16,7 @@ const produtoController = require('../controllers/produtoController');
 const locaisPremiumController = require('../controllers/locaisPremiumController');
 const reservaController = require('../controllers/reservaController');
 
+
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');

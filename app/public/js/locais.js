@@ -289,6 +289,7 @@ function generateContent(place) {
     return content;
 }
 
+
 // informações que vem do bancos estilo
 function generateContentFromLocal(local) {
     // Adiciona latitude e longitude como parâmetros

@@ -20,6 +20,7 @@ const storage = multer.diskStorage({
     }
 });
 
+
 // Configuração do multer
 const upload = multer({ storage: storage }).array('imagens', 4); // 'imagens' é o nome do campo no formulário, 4 é o limite
 
