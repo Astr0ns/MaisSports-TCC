@@ -250,8 +250,8 @@
                             </a>
                             
                             <section class="button-fav">
-                                <button data-id="<%= product.id_prod %>" class="favoritar-button desativo">Remover favorito <i class="bi bi-heart"></i></button>
-                                <button data-id="<%= product.id_prod %>" class="favoritar-button ">Adicionar aos favoritos <i class="bi bi-heart-fill"></i> </button>
+                                <button onclick="mudarfav(this)" data-id="<%= product.id_prod %>" class="favoritar-button ">Remover favorito <i class="bi bi-heart"></i></button>
+                                <button onclick="mudarfav(this)" data-id="<%= product.id_prod %>" class="favoritar-button desativo">Adicionar aos favoritos <i class="bi bi-heart-fill"></i> </button>
                             </section>
                             
                         </section>
@@ -267,190 +267,7 @@
 
             <section class="trending-products" id="trending">
                 <section class="products">
-                    <section class="row">
-                        <a href="/product-page"><img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt=""
-                                srcset=""></a>
-                        <section class="product-text">
-                            <h5>NEW</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4>Nike Air Force 1 Mid "07</h4>
-                            <section class="desc-price">
-                                <p class="desconto">-13%</p>
-                                <section class="preco">
-                                    <p>$ 854,99 no PIX</p>
-                                    <p>6 x R$119,98</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque">em estoque</p>
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballwht"></section>
-                                </section>
-                            </section>
-
-                        </section>
-                    </section>
-
-                    <section class="row">
-                        <img src="https://imgnike-a.akamaihd.net/768x768/0287397TA8.jpg" alt="" srcset="">
-                        <section class="product-text">
-                            <h5>NEW</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4> Nike Court Vision Next Nature Essential</h4>
-                            <section class="desc-price">
-                                <p class="desconto">37% off</p>
-                                <section class="preco">
-                                    <p>R$ 408,49 no Pix</p>
-                                    <p>6 x R$ 68.08</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque">em estoque</p>
-
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballwht"></section>
-                                </section>
-                            </section>
-                        </section>
-                    </section>
-
-                    <section class="row">
-                        <img src="https://imgnike-a.akamaihd.net/768x768/02769151A8.jpg" alt="" srcset="">
-                        <section class="product-text">
-                            <h5>NEw</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4>Tênis Nike SB Ishod 2</h4>
-                            <section class="desc-price">
-                                <p class="desconto">35% off</p>
-                                <section class="preco">
-                                    <p>R$588,99 no Pix</p>
-                                    <p>6 x R$98.16</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque">em estoque</p>
-
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballr"></section>
-                                    <section class="ballwht"></section>
-                                </section>
-                            </section>
-                        </section>
-                    </section>
-
-                    <section class="row">
-                        <img src="https://imgnike-a.akamaihd.net/768x768/029411IDA8.jpg" alt="" srcset="">
-                        <section class="product-text">
-                            <h5>NEW</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4>TÊNIS NIKE KYRIE 8</h4>
-                            <section class="desc-price">
-                                <p class="desconto">-13%</p>
-                                <section class="preco">
-                                    <p>R$719,90</p>
-                                    <p>10 x 71,99</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque"> em estoque</p>
-
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballr"></section>
-                                    <section class="ballg"></section>
-                                    <section class="ballb"></section>
-                                    <section class="balla"></section>
-                                    <section class="ballp"></section>
-                                </section>
-                            </section>
-                        </section>
-                    </section>
-
-                    <section class="row">
-                        <img src="https://artwalk.vteximg.com.br/arquivos/ids/245877-1000-1000/Tenis-Nike-Kyrie-Infinity-Masculino-Preto.jpg?v=637868345156730000"
-                            alt="" srcset="">
-                        <section class="product-text">
-                            <h5>NEW</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4>TÊNIS NIKE KYRIE 8</h4>
-                            <section class="desc-price">
-                                <p class="desconto">-13%</p>
-                                <section class="preco">
-                                    <p>R$719,90</p>
-                                    <p>10 x 71,99</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque"> em estoque</p>
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballr"></section>
-                                    <section class="ballg"></section>
-                                    <section class="ballb"></section>
-                                    <section class="balla"></section>
-                                    <section class="ballp"></section>
-                                </section>
-                            </section>
-                        </section>
-                    </section>
+                    
                 </section>
             </section>
 
@@ -462,12 +279,33 @@
         <script src="/js/script.js"></script>
         <script src="/js/mini-imgs.js"></script>
         <script src="/js/mobile-carousel.js"></script>
+        <script src="/js/produto_index.js" defer></script>
 
         <script>
+            
+        function mudarfav(element){
+
+            const activeElement = document.querySelector('.desativo');
+
+            activeElement.classList.remove('desativo');
+
+            // Adiciona a classe 'active' ao elemento clicado
+            element.classList.add('desativo');
+
+            activeElement.classList.add('animate');
+
+            setTimeout(() => {
+                activeElement.classList.remove('animate');
+                
+            }, 500); // 500ms é o tempo da animação
+        }
+
+            
             
 
             document.addEventListener("DOMContentLoaded", function() {
             const buttons = document.querySelectorAll(".favoritar-button");
+            
 
             buttons.forEach(button => {
                 button.addEventListener("click", async function() {

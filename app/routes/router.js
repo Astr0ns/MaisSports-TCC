@@ -17,6 +17,16 @@ const locaisPremiumController = require('../controllers/locaisPremiumController'
 const reservaController = require('../controllers/reservaController');
 
 
+router.post('/webhook', (req, res) => {
+    const paymentInfo = req.body;
+
+    if (paymentInfo.status === 'approved') {
+        transferAmount(paymentInfo.payer.email, paymentInfo.transaction_amount);
+    }
+
+    res.sendStatus(200);
+});
+
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
@@ -71,15 +81,17 @@ router.get("/add-locais", function (req, res) {
     var email = req.session.email;
     res.render("pages/add-locais", { email: email });
 });
+router.get("/add-locais", function (req, res) {
+    var email = req.session.email;
+    res.render("pages/add-locais", { email: email });
+});
 
 router.get("/add-locais-premium", function (req, res) {
     var email = req.session.email;
     res.render("pages/add-locais-premium", { email: email });
 });
 
-router.post("/adicionarProd", upload, produtoController.adicionarProd, async function (req, res) {
 
-});
 
 
 
@@ -176,10 +188,10 @@ router.get("/verSeEmpresa", empresaController.verSeEmpresa, async function (req,
 router.get("/locais-esportivos", async function (req, res) {
     var email = req.session.email;
     var nome = req.session.nome;
+    var userTipo = req.session.userTipo
 
 
-
-    res.render("pages/locais-esportivos", { nome: nome, email: email });
+    res.render("pages/locais-esportivos", { nome: nome, email: email, userTipo: userTipo });
 })
 
 router.get("/locaisBanco", locaisController.locaisBanco, async function (req, res) {
@@ -327,6 +339,16 @@ router.get("/add-product", verificarAutenticacao, function (req, res) {
     var email = req.session.email;
     res.render("pages/add-product", {email: email});
 });
+
+router.get("/add-productSegredos", verificarAutenticacao, function (req, res) {
+    var email = req.session.email;
+    res.render("pages/add-productSegredos", {email: email});
+});
+
+router.post("/adicionarProdSegredos", upload, produtoController.adicionarProdSegredos, async function (req, res) {
+
+});
+
 router.get("/cart", function (req, res) {
 });
 

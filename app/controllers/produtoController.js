@@ -32,6 +32,68 @@ const exibirFormularioProduto = (req, res) => {
 };
 
 // Adiciona um novo produto ao banco de dados
+const adicionarProdSegredos = async (req, res) => {
+    const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod, valorPlano,idPlano } = req.body;
+    const email = req.session.email;
+    console.log(req.files);
+    const imagens = req.files.map(file => file.filename); // Obtem os nomes dos arquivos de imagem
+    console.log(valorPlano, idPlano)
+    try {
+        // Obtém o ID da empresa
+        const [user] = await connection.query(
+            `SELECT id FROM empresas WHERE email = ?`,
+            [email]
+        );
+
+        const fk_id_emp = user[0].id; // Atribuindo fk_id_emp
+
+        // Insira o novo produto na tabela
+        const [addL] = await connection.query(
+            `INSERT INTO produtos_das_empresas (titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod) VALUES (?, ?, ?, ?, ?, ?)`,
+            [titulo_prod, descricao_prod, categoria_prod, tipo_prod, roupa_prod, link_prod]
+        );
+
+        const ProdId = addL.insertId; // Obtém o ID do produto recém-adicionado
+        const dataHoje = new Date().toISOString().split('T')[0];
+
+        // Insere o valor do produto na tabela de preços
+        await connection.query(
+            `INSERT INTO preco_prod (fk_id_prod, valor_prod, ini_vig) VALUES (?, ?, ?)`,
+            [ProdId, valor_prod, dataHoje]
+        );
+
+        // Linka o produto com a empresa
+        await connection.query(
+            `INSERT INTO empresas_produtos (fk_id_emp, fk_id_prod) VALUES (?, ?)`,
+            [fk_id_emp, ProdId]
+        );
+
+        for (let imagem of imagens) {
+            await connection.query(
+                `INSERT INTO imagens (fk_id_prod, nome_imagem) VALUES (?, ?)`,
+                [ProdId, imagem]
+            );
+        }
+
+        await connection.query(
+            `INSERT INTO planos (fk_id_emp, fk_id_prod, title_plano) VALUES (?, ?, ?)`,
+            [fk_id_emp, ProdId, "Basico"]
+        );
+
+        // Se houver imagens, insira-as
+        
+        
+     
+
+        req.flash('success_msg', 'Produto adicionado com sucesso!');
+        res.redirect(`product-page/${ProdId}`);
+    } catch (error) {
+        req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
+        console.log(error);
+        res.redirect('/add-product');
+    }
+};
+
 const adicionarProd = async (req, res) => {
     const { titulo_prod, descricao_prod, valor_prod, categoria_prod, tipo_prod, roupa_prod, link_prod, valorPlano,idPlano } = req.body;
     const email = req.session.email;
@@ -162,17 +224,6 @@ const adicionarProdutoConfirmado = async (req, res) => {
             [ProdId, valor_prod, dataHoje]
         );
 
-        // Linka o produto com a empresa
-        await connection.query(
-            `INSERT INTO empresas_produtos (fk_id_emp, fk_id_prod) VALUES (?, ?)`,
-            [fk_id_emp, ProdId]
-        );
-
-        await connection.query(
-            `INSERT INTO Planos (fk_id_emp, fk_id_prod, title_plano, valor_plano, ini_vig, fim_vig) VALUES (?, ?, ?, ?, ?, ?)`,
-            [fk_id_emp, ProdId, titlePlano, valorPlanoNum, dataHoje, dataFinal]
-        );
-
         // Se houver imagens, insira-as
         
         for (let imagem of imagens) {
@@ -181,6 +232,19 @@ const adicionarProdutoConfirmado = async (req, res) => {
                 [ProdId, imagem]
             );
         }
+
+        // Linka o produto com a empresa
+        await connection.query(
+            `INSERT INTO empresas_produtos (fk_id_emp, fk_id_prod) VALUES (?, ?)`,
+            [fk_id_emp, ProdId]
+        );
+
+        await connection.query(
+            `INSERT INTO planos (fk_id_emp, fk_id_prod, title_plano, valor_plano, ini_vig, fim_vig) VALUES (?, ?, ?, ?, ?, ?)`,
+            [fk_id_emp, ProdId, titlePlano, valorPlanoNum, dataHoje, dataFinal]
+        );
+
+        
      
 
         req.flash('success_msg', 'Produto adicionado com sucesso!');
@@ -501,6 +565,6 @@ const favoritarProd = async (req, res) => {
 
 
 module.exports = {
-    exibirFormularioProduto,
+    exibirFormularioProduto, adicionarProdSegredos,
     adicionarProd, pegarProdutoBanco, getProductById, favoritarProd, pegarProdutoEmpresa, adicionarProdutoConfirmado, pegarProdutoCurtido,
 };
