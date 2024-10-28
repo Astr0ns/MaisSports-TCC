@@ -14,6 +14,7 @@ function toggleActive(element, num) {
 
 }
 
+
 function mudarPag(num){
     if(num == 2){
         document.querySelector(".products").style.display = "none"

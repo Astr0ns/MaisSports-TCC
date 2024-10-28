@@ -40,7 +40,7 @@
 </head>
 <body>
 
-  <%- include("../partial/header-home", { email: email }) %>
+<%- include("../partial/header-home", { email: email }) %>
 
 <main>
   <section class="container">
@@ -50,12 +50,12 @@
           <span class="material-symbols-sharp">receipt_long</span>
           <h3>Produtos</h3>
         </a>
-        <a href="/mensagens">
+        <a href="mensagens.html">
           <span class="material-symbols-sharp">mail_outline</span>
           <h3>Mensagens</h3>
           <span class="msg_count">14</span>
         </a>
-        <a href="/configuracoes">
+        <a href="configuracoes.html">
           <span class="material-symbols-sharp">settings</span>
           <h3>Configurações</h3>
         </a>
@@ -87,16 +87,18 @@
         </section>
       </section>
 
+  <section class="trending-products" id="trending">
+
+    <section class="products" style="display: none;">
       
-      <h2>Produtos Adicionados</h2>
-      <section class="trending-products" id="trending">
-        
-        <section class="products">
-            
-        </section>
     </section>
+
+    <section class="reservas" >
+                    
+    </section>
+    
     <h2 id="teste">Locais Esportivos</h2>
-    </main>
+
   </section>
 </main>
 <%- include("../partial/footer") %>

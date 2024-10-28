@@ -289,6 +289,7 @@ function generateContent(place) {
     return content;
 }
 
+
 // informações que vem do bancos estilo
 function generateContentFromLocal(local) {
     // Adiciona latitude e longitude como parâmetros
@@ -695,7 +696,7 @@ function showSidePanelFromLocal(localId) {
         .then(response => response.json())
         .then(localArray => {
             const local = localArray[0];  // Acessa o primeiro local do array
-            document.getElementById('jsonData').innerText = JSON.stringify(localArray, null, 2);
+            
 
             if (local) {
                 sidePanel.innerHTML += `

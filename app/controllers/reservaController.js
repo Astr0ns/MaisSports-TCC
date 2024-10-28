@@ -194,6 +194,7 @@ const getLocalReservaById = (path) => {
     };
 };
 
+
 // adicionarProd
 
 const fazerReserva = async (req, res) => {
@@ -365,6 +366,81 @@ const pegarReservas = async (req, res) => {
     }
 };
 
+const pegarReservasEmpresa = async (req, res) => {
+
+    const email = req.session.email;
+
+    console.error("Email:", email);
+    try {
+        // 1. Busca o ID do cliente (usuário) baseado no email
+        const [user] = await connection.query(`SELECT id FROM empresas WHERE email = ?`, [email]);
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const fk_id_emp = user[0].id;
+        
+
+
+        const query = `
+            SELECT l.id_local_premium, l.nome_local_premium, l.preco_hora,
+					r.id_reserva, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total, 
+                   i.nome_imagem,
+                   u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente
+            FROM local_premium l
+            LEFT JOIN Reserva r ON r.fk_id_local_premium = l.id_local_premium
+            LEFT JOIN imagens i ON r.fk_id_local_premium = i.fk_local_premium_id
+            LEFT JOIN usuario_clientes u ON r.fk_id_cliente = u.id
+            
+            WHERE l.fk_id_empresa = ?
+            GROUP BY l.id_local_premium, r.id_reserva, i.nome_imagem, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
+        `;
+        const [results] = await connection.query(query, [fk_id_emp]); // Filtra pelos favoritos
+
+        // Formata os resultados para agrupar imagens por local
+        const locais = results.reduce((acc, row) => {
+            const { id_local_premium, nome_local_premium, preco_hora, id_reserva, data_reserva, horario_inicio, horario_fim, preco_total, nome_imagem, nome_cliente, sobrenome_cliente} = row;
+            const location = acc.find(local => local.id_reserva === id_reserva);
+            
+            if (location) {
+                if (nome_imagem) {
+                    location.imagens.push(nome_imagem); // Adiciona a imagem se já existir o produto
+                }
+            } else {
+                acc.push({
+                    id_local_premium, 
+                    nome_local_premium, 
+                    preco_hora, 
+                    id_reserva, 
+                    data_reserva, 
+                    horario_inicio, 
+                    horario_fim, 
+                    preco_total, 
+                    nome_cliente, 
+                    sobrenome_cliente,
+                    imagens: nome_imagem ? [nome_imagem] : [] // Inicia array de imagens   
+                });
+            }
+            return acc;
+        }, []);
+
+        // // Ordena as imagens de cada produto de acordo com a ordem definida
+         locais.forEach(location => {
+             location.imagens.sort((a, b) => {
+                 const ordemA = results.find(row => row.nome_imagem === a).ordem_img;
+                 const ordemB = results.find(row => row.nome_imagem === b).ordem_img;
+                 return ordemA - ordemB;
+             });
+         });
+        
+
+        res.json(locais);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
+};
+
 module.exports = {
-    getLocalReservaById, fazerReserva, reservaConfirmada, pegarReservas,
+    getLocalReservaById, fazerReserva, reservaConfirmada, pegarReservas, pegarReservasEmpresa,
 };

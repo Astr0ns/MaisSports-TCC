@@ -16,6 +16,7 @@ const produtoController = require('../controllers/produtoController');
 const locaisPremiumController = require('../controllers/locaisPremiumController');
 const reservaController = require('../controllers/reservaController');
 
+
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
@@ -145,6 +146,9 @@ router.get("/pegarProdutoCurtido", produtoController.pegarProdutoCurtido, async 
     //
 });
 router.get("/pegarReservas", reservaController.pegarReservas, async function (req, res) {
+    //
+});
+router.get("/pegarReservasEmpresa", reservaController.pegarReservasEmpresa, async function (req, res) {
     //
 });
 
