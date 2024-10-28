@@ -1,0 +1,104 @@
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #f5f5f5;
+    --cor-bar-dark: #010c1aa9;
+    --cor-bar-dark-mob: #010c1a;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgba(0, 33, 123, 0.562);
+    --cor-fundo4: rgb(235, 235, 235);
+    --cor-fundo5: #12488ded;
+    --cor-fundo-body: #010c1aed;
+}
+
+body {
+    transition: .5s;
+}
+
+.trilho {
+    display: flex;
+    width: 70px;
+    height: 32px;
+    background-color: rgb(201, 201, 201);
+    border-radius: 50px;
+    padding: 4px;
+    position: relative;
+    color: white;
+    cursor: pointer;
+}
+
+.trilho .indicador {
+    width: 25px;
+    height: 25px;
+    padding: 10px;
+    background-color: var(--cor-fonte);
+    border-radius: 50%;
+    transform: scale(.9);
+    position: absolute;
+    left: 2px;
+    transition: .5s;
+}
+
+.trilho.dark .indicador {
+    left: 40px;
+    background-color: var(--cor-fonte2);
+}
+
+.trilho.dark {
+    background-color: var(--cor-fundo5);
+}
+
+body.dark nav {
+    background-color: var(--cor-bar-dark);
+}
+
+body.dark .nav-list a {
+    color: var(--cor-fonte);
+}
+
+body.dark {
+    background-color: var(--cor-fundo-body);
+}
+
+body.dark h2 {
+    color: var(--cor-fonte);
+}
+
+body.dark h4 {
+    color: var(--cor-fonte);
+}
+
+body.dark p {
+    color: var(--cor-fonte);
+}
+
+body.dark .heart-icon {
+    color: var(--cor-fonte);
+}
+
+body.dark .nav-list.active {
+    background-color: #010c1a;
+    opacity: 1;
+
+}
+
+body.dark footer p {
+    color: var(--cor-fonte2);
+}
+
+body.dark .mobile-menu section {
+    width: 32px;
+    height: 2px;
+    background: var(--cor-fonte);
+    margin: 8px;
+    transition: 0.3s;
+}
+
+
+@media screen and (min-width:320px) and (max-width: 1024px) {
+    .nav-list {
+        background-color: #010c1a;
+    }
+}

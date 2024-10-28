@@ -1,0 +1,205 @@
+
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+
+main{
+    display: flex;
+    width: 100vw;
+    padding: 70px 15px 0;
+}
+
+hr{
+    width: 50%;
+}
+
+.pag{
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    gap: 30px;
+    font-size: 1.3em;
+}
+
+.pag p:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+    color: #c70074bd;
+}
+
+.pag .active{
+    color: #f80091bd;
+
+    position: relative; /* Necessário para o pseudo-elemento */
+}
+
+.pag .active:hover{
+    cursor: default;
+    transform: none;
+    color: #f80091bd;
+}
+
+.pag .active::after {
+    content: ''; /* Cria um conteúdo vazio */
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px; /* Ajusta a distância do sublinhado */
+    height: 2px; /* Espessura do sublinhado */
+    background: #f80091bd; /* Cor do sublinhado */
+}
+
+.ad_curtidas{
+    width: 15%;
+    height: auto;
+    margin-top: 70px;
+}
+
+.ad_curtidas img{
+    width: 100%;
+    height: auto;
+}
+
+.curtidos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.curtidos .trending-products .products{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(230px, 332px));
+    grid-template-rows: repeat(4, auto);
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    padding: 45px;
+    gap: 2rem;
+    margin: 0;
+}
+
+.curtidos .row img {
+    width: 100%;
+    height: auto;
+    transition: all .40s;
+}
+
+.curtidos .product-text h5 {
+    position: absolute;
+    top: 13px;
+    /* left: 13px; */
+    color: rgb(255, 0, 0);
+    font-size: 1.2em;
+    font-weight: 500;
+    /* text-transform: uppercase; */
+    background-color: #cccccc7e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.5); /* sombra para baixo e esquerda */
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s; /* transição suave */
+}
+
+.curtidos .product-text h5:hover{
+    cursor: pointer;
+    box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.7); /* sombra mais pronunciada */
+    transform: scale(1.1); /* aumenta o tamanho do elemento */
+    color: rgb(255, 37, 37);
+}
+
+.bi-heart-fill.animate {
+    animation: pulse 0.5s ease;
+}
+
+.reservas{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(230px, 100%));
+    grid-template-rows: repeat(4, auto);
+    justify-content: start;
+    
+    width: 100%;
+    overflow: hidden;
+    padding: 15px;
+    gap: 2rem;
+    margin: 0;
+    
+}
+
+.reservaCardDiv{
+    width: 100%;
+    display: flex; 
+    flex-direction: column;
+    background-color: #ebebeb;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.reservaCardDiv a p:hover{
+    color: #f80091bd;
+    cursor: pointer;
+} 
+
+.reservaCard{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.reservaCard a{
+    width: 35%;
+}
+.reservaCard img{
+    width: 100%;
+}
+
+.infoReserva{
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    padding-left: 20px;
+}
+
+.infoReserva h2{
+    width: 100%;
+    font-size: 2em;
+    text-align: center;
+}
+
+.infoReserva p {
+    width: 100%;
+    text-align: center;
+}
+
+.infoReserva span{
+    color: #f80091bd;
+    font-weight: 700;
+}
+
+.linha {
+    display: block;
+    width: 100%; /* Largura da linha */
+    border-top: 1px solid #000; /* Cor e espessura da linha */
+    margin: 20px 0; /* Espaçamento acima e abaixo da linha */
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
