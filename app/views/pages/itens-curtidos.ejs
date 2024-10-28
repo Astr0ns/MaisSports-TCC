@@ -47,8 +47,17 @@
         <section class="curtidos">
             <h1>Produtos Favoritos</h1>
             <p>Seus itens favoritados ficaram aqui sempre que quiser acessá-los </p>
+            <hr>
+            <div class="pag">
+                <p class="active" onclick="toggleActive(this), mudarPag(1)">Produtos</p>
+                <p onclick="toggleActive(this), mudarPag(2)">Reserva</p>
+            </div>
             <section class="trending-products" id="trending">
                 <section class="products">
+                    
+                </section>
+
+                <section class="reservas" style="display: none;">
                     
                 </section>
             </section>
@@ -61,5 +70,6 @@
 
     </script>
     <script src="js/itens-curtidos.js" defer></script>
+    <script src="js/favoritando.js" defer></script>
 </body>
 </html>

@@ -147,7 +147,7 @@ router.get("/itens-curtidos", function (req, res) {
 router.get("/pegarProdutoCurtido", produtoController.pegarProdutoCurtido, async function (req, res) {
     //
 });
-router.get("/pegarLocaisCurtido", locaisController.pegarLocaisCurtido, async function (req, res) {
+router.get("/pegarReservas", reservaController.pegarReservas, async function (req, res) {
     //
 });
 

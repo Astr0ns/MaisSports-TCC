@@ -1,3 +1,31 @@
+function toggleActive(element, num) {
+    const activeElement = document.querySelector('.active');
+    
+    // Se o elemento clicado já é o ativo, não faz nada
+    if (element.classList.contains('active')) {
+        return;
+    }
+
+    // Remove a classe 'active' do elemento atual
+    activeElement.classList.remove('active');
+
+    // Adiciona a classe 'active' ao elemento clicado
+    element.classList.add('active');
+
+}
+
+function mudarPag(num){
+    if(num == 2){
+        document.querySelector(".products").style.display = "none"
+        document.querySelector(".reservas").style.display = "grid"
+    }
+
+    if(num == 1){
+        document.querySelector(".products").style.display = "grid"
+        document.querySelector(".reservas").style.display = "none"
+    }
+}
+
 function renderProducts(products) {
     const trendingSection = document.querySelector('.products');
     
@@ -56,7 +84,7 @@ function renderProducts(products) {
 }
 
 function renderLocais(locais) {
-    const trendingSection = document.querySelector('.products');
+    const trendingSection = document.querySelector('.reservas');
     
     if (locais.length === 0) {
         console.log("fudeo")
@@ -64,7 +92,7 @@ function renderLocais(locais) {
 
 
     locais.forEach(local => {
-        const { id, nome_local, latitude, longitude, imagens, media_avaliacao } = local;
+        const { id_reserva, data_reserva, horario_inicio, horario_fim, preco_total, id_local_premium, nome_local_premium, nome_cliente, sobrenome_cliente, imagens} = local;
 
         
 
@@ -72,26 +100,31 @@ function renderLocais(locais) {
 
 
         const productHTML = `
-        
-        <section class="row">
-            <a href="/local-page/${id}">
-            
-                
-            
-                <img src="uploads/${imagens[0]}}" alt="${nome_local}">
-                
-                
-            </a>
-            <section class="product-text">
-                <h5 class="like-button">
-                    <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFavLocal(${id});"></i>
-                    <i class="bx bx-heart" onclick="toggleHeart(event); favDesFavLocal(${id});" style="display: none;"></i>
-                </h5>
-            </section>
 
-            <h4>${nome_local}</h4>       
-                
-        </section>
+        <div  class="reservaCardDiv">
+            <section class="reservaCard">
+                <a href="/local-page/${id_local_premium}">
+                    <img src="uploads/mostrarQuadra5.jpg" alt="${nome_local_premium}">   
+                </a>
+                <section class="infoReserva">
+
+                    <div style="display: flex; flex-direction: row;">
+                        <span class="linha"></span>
+                        <h2>${nome_local_premium}</h2> 
+                        <span class="linha"></span>
+                    </div>
+                    
+                    <p style="margin-top: 10px;">reservado por: <span>${nome_cliente}  ${sobrenome_cliente}</span></p>
+                    <p style="font-size: 1.1em;">valor: R$${preco_total}</p>
+                    <p style="margin-top: 10px;">inicio <span>${horario_inicio}</span>  -  fim <span>${horario_fim}</span></p>
+                    <p style="font-size: 1.1em; margin-bottom: 5px;">${data_reserva}</p>
+                    <span class="linha"></span>
+                </section>     
+            </section>
+            <a href="/local-page/${id_local_premium}">
+                <p>Clique Aqui para entrar na pagina do local</p>
+            </a>
+        </div>
         
         `;
 
@@ -202,12 +235,12 @@ fetch('/pegarProdutoCurtido')
         console.error('Erro ao carregar produtos:', err);
     });
 
-fetch('/pegarLocaisCurtido')
+fetch('/pegarReservas')
     .then(responseL => responseL.json())
     .then(locais => {
         console.log('Locais recebidos:', locais); // Log dos produtos
         renderLocais(locais); // Renderiza todos os produtos
     })
     .catch(err => {
-        console.error('Erro ao carregar produtos:', err);
+        console.error('Erro ao carregar locais:', err);
     });

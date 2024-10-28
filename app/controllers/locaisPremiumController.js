@@ -208,6 +208,8 @@ const getLocalPremiumFromId = async (req, res) => {
 };
 
 
+
+
 module.exports ={ 
     adicionarLocaisPremium, locaisBancoPremium, getLocalPremiumFromId,
 }

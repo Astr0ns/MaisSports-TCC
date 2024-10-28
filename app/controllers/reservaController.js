@@ -6,7 +6,7 @@ const { all } = require('../routes/productRouter');
 
 // Inicialize o cliente Mercado Pago
 const client = new MercadoPagoConfig({
-    accessToken: 'TEST-5246075068010463-102011-23539c46def1acb4b061770a6d174e1e-428968371',
+    accessToken: 'APP_USR-5246075068010463-102011-9f4c949634a04fdbbf0193af72dd4988-428968371',
     options: { timeout: 5000, idempotencyKey: 'abc' }
 });
 
@@ -201,7 +201,7 @@ const fazerReserva = async (req, res) => {
     const { data_reserva, horario_inicio, horario_fim, preco_total, id_local_premium } = req.body;
     const email = req.session.email;
     console.log(email)
-return
+    
     const externalReference = JSON.stringify({
         email,
         data_reserva, 
@@ -284,6 +284,87 @@ const reservaConfirmada = async (req, res) => {
     }
 };
 
+const pegarReservas = async (req, res) => {
+
+    const email = req.session.email;
+
+    console.error("Email:", email);
+    try {
+        // 1. Busca o ID do cliente (usuário) baseado no email
+        const [user] = await connection.query(
+            `SELECT id FROM usuario_clientes WHERE email = ?`,
+            [email]
+        );
+
+        console.log(user.length)
+
+        // Verifica se o usuário foi encontrado
+        if (user.length === 0) {
+            console.log("por alguma porra de motivo não ta pegando o user")
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const fk_id_user = user[0].id;
+        console.log(fk_id_user)
+
+
+        const query = `
+            SELECT r.id_reserva, r.fk_id_local_premium, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total, 
+                   i.nome_imagem,
+                   l.nome_local_premium, l.id_local_premium,
+                   u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente
+            FROM Reserva r
+            LEFT JOIN imagens i ON r.fk_id_local_premium = i.fk_local_premium_id
+            LEFT JOIN usuario_clientes u ON r.fk_id_cliente = u.id
+            LEFT JOIN local_premium l ON r.fk_id_local_premium = l.id_local_premium
+            WHERE r.fk_id_cliente = ?
+            GROUP BY r.id_reserva, i.nome_imagem, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
+        `;
+        const [results] = await connection.query(query, [fk_id_user]); // Filtra pelos favoritos
+
+        // Formata os resultados para agrupar imagens por local
+        const locais = results.reduce((acc, row) => {
+            const { id_reserva, data_reserva, horario_inicio, horario_fim, nome_imagem, preco_total, id_local_premium, nome_local_premium, nome_cliente, sobrenome_cliente} = row;
+            const location = acc.find(local => local.id_reserva === id_reserva);
+            
+            if (location) {
+                if (nome_imagem) {
+                    location.imagens.push(nome_imagem); // Adiciona a imagem se já existir o produto
+                }
+            } else {
+                acc.push({
+                    id_reserva, 
+                    data_reserva, 
+                    horario_inicio,
+                    horario_fim,
+                    preco_total, 
+                    id_local_premium, 
+                    nome_local_premium, 
+                    nome_cliente, 
+                    sobrenome_cliente,
+                    imagens: nome_imagem ? [nome_imagem] : [] // Inicia array de imagens   
+                });
+            }
+            return acc;
+        }, []);
+
+        // // Ordena as imagens de cada produto de acordo com a ordem definida
+         locais.forEach(location => {
+             location.imagens.sort((a, b) => {
+                 const ordemA = results.find(row => row.nome_imagem === a).ordem_img;
+                 const ordemB = results.find(row => row.nome_imagem === b).ordem_img;
+                 return ordemA - ordemB;
+             });
+         });
+        
+
+        res.json(locais);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
+    }
+};
+
 module.exports = {
-    getLocalReservaById, fazerReserva, reservaConfirmada,
+    getLocalReservaById, fazerReserva, reservaConfirmada, pegarReservas,
 };

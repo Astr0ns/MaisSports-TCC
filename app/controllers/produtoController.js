@@ -6,7 +6,7 @@ const { all } = require('../routes/productRouter');
 
 // Inicialize o cliente Mercado Pago
 const client = new MercadoPagoConfig({
-    accessToken: 'TEST-5246075068010463-102011-23539c46def1acb4b061770a6d174e1e-428968371',
+    accessToken: 'APP_USR-5246075068010463-102011-9f4c949634a04fdbbf0193af72dd4988-428968371',
     options: { timeout: 5000, idempotencyKey: 'abc' }
 });
 
