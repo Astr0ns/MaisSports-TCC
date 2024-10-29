@@ -21,6 +21,7 @@
     color: var(--cor-fonte2);
     text-decoration: none;
     transition: 0.3s;
+    font-size: 14px;
 }
 
 .nav-list a:hover {

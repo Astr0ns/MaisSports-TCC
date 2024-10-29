@@ -62,24 +62,13 @@
 
                         <section class="carousel-container">
                             <section class="carousel">
-                                <section class="item active">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Image 1" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A6.jpg" alt="Image 2" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A2.jpg" alt="Image 3" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A3.jpg" alt="Image 2" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A7.jpg" alt="Image 3" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A8.jpg" alt="Image 2" />
-                                </section>
+                                <% product.imagens.forEach(function(imagem, index) { %>
+                                    <section class="item active">
+                                        <img class="MainImg" src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
+                                    </section>
+                                    
+                                <% }); %>
+                                
                             </section>
                             <button class="btn prev"><i class="bi bi-caret-left"></i></button>
                             <button class="btn next"><i class="bi bi-caret-right"></i></button>
@@ -151,62 +140,13 @@
                             </section>
                             <!-- descrição -->
                             <section class="descricao">
-                                <h2>ESTILO AF1 LENDÁRIO.</h2>
-                                <br>
-                                <p>
-                                    <%= product.descricao_prod %></p>
-                                    
-                                <br>
-                                <section id="moreContent" class="content">
-
-                                    <p>Benefícios</p>
-
-                                    <br>
-
-                                    <li>Há mais de 35 anos, o conforto e a durabilidade estão prontos para serem
-                                        usados.
-                                        Apresentando sobreposições costuradas e duráveis, couro viçoso e um design
-                                        prático,
-                                        esse
-                                        tênis estará com você nos subúrbios, no centro da cidade e em todos os
-                                        outros
-                                        lugares.
-                                    </li>
-                                    <li>
-                                        Desenvolvido originalmente para o treino de basquete, o amortecimento Nike
-                                        Air
-                                        proporciona um conforto duradouro, enquanto a boca e a língua almofadadas
-                                        garantem
-                                        uma
-                                        passada suave.
-                                    </li>
-                                    <li>
-                                        A parte superior viçosa e fácil de limpar proporciona um look ideal fora das
-                                        quadras, enquanto o design de cano médio e o acabamento da forma de sola
-                                        debaixo
-                                        do pé remetem ao DNA do basquete. É história, look e conforto, tudo em um.
-
-                                    </li>
-
-                                    <p>Detalhes do produto</p>
-
-                                    <ul>
-                                        <li>Entressola de espuma</li>
-                                        <li>Sistema de amarração de largura variável</li>
-                                        <li> O fecho aderente permite personalizar o estilo e caimento</li>
-                                        <li> Perfurações na ponta</li>
-                                        <li>Sola de borracha sem marcação para maior tração e durabilidade</li>
-                                    </ul>
-
-                                    <p>Origens do Air Force 1</p>
-
-                                    <p>Estreando em 1982, o AF1 foi o primeiro tênis de basquete a abrigar o Nike Air,
-                                        revolucionando o jogo e ganhando tração rapidamente em todo o mundo. Hoje, o Air
-                                        Force 1
-                                        permanece fiel às suas raízes com o mesmo amortecimento macio e flexível que
-                                        mudou a
-                                        história dos sneakers.</p>
-                                </section>
+                                <h2>Descrição</h2>
+                                
+                                <section id="moreContent" class="content"><br>
+                                    <p>
+                                        <%= product.descricao_prod %></p>
+                                        
+                                    <br></section>
                                 <button id="toggleButton" class="btn-vermais">Ver mais</button>
                                 <script>
                                     document.addEventListener("DOMContentLoaded", function () {
