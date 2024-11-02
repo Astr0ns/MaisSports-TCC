@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" type="imagem/png" href="imagem/icon-msports.jpg">
+        <link rel="shortcut icon" type="imagem/png" href="/imagem/icon-msports.jpg">
 
         <!-- Link Responsives CSS's-->
         <link rel="stylesheet" href="css/style.css" type="text/css">
@@ -41,6 +41,7 @@
     <body>
 
         <%- include("../partial/header-home", { email: email }) %>
+        
 
             <section class="main-home">
 
@@ -101,6 +102,30 @@
             </section>
 
             <section class="center-text">
+                <h2 style="margin: 0;">Locais Esportivos</h2>
+            </section>
+
+            <section class="espt-img">
+
+                <a href="/locais-esportivos">
+                    <img class="inic-espt-pc" src="imagem/locais-page.jpeg" alt="">
+                </a>
+
+                <a href="/locais-esportivos">
+                    <img class="inic-espt-mob" src="imagem/locais-categ.jpeg" alt="">
+                </a>
+            </section>
+
+            <section class="center-text">
+                <h2><span>Mais</span> acessados</h2>
+            </section>
+
+            <section class="trending-products" id="trending">
+                <section class="products">
+                </section>
+            </section>
+
+            <section class="center-text">
                 <h2>Categorias</h2>
             </section>
 
@@ -129,26 +154,9 @@
 
             </section>
 
-            <section class="center-text">
-                <h2><span>Mais</span> acessados</h2>
-            </section>
+            
 
-            <%- include("../partial/top-prdct") %>
-
-                <section class="center-text">
-                    <h2 id="teste">Locais Esportivos</h2>
-                </section>
-
-                <section class="espt-img">
-
-                    <a href="/locais-esportivos">
-                        <img class="inic-espt-pc" src="imagem/locais-page.jpeg" alt="">
-                    </a>
-
-                    <a href="/locais-esportivos">
-                        <img class="inic-espt-mob" src="imagem/locais-categ.jpeg" alt="">
-                    </a>
-                </section>
+                
 
                 <!-- Sessôes dos produtos -->
 
@@ -195,6 +203,9 @@
                         <script src="js/script.js" defer></script>
                         <script src="js/produto_index.js" defer></script>
                         <script src="js/carousel.js"></script>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                       </script>
                         
                         
     </body>

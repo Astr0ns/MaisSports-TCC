@@ -1,8 +1,7 @@
 function renderProducts(products) {
     const trendingSection = document.querySelector('.products');
-    trendingSection.innerHTML = ''; // Limpa a seção antes de renderizar
+    trendingSection.innerHTML = ''; 
 
-    document.getElementById('teste').innerText = JSON.stringify(products, null, 2);
 
     products.forEach(product => {
         const { titulo_prod, valor_prod, imagens, media_avaliacao } = product;
@@ -18,7 +17,7 @@ function renderProducts(products) {
         
         <section class="row">
             <a href="/product-page/${product.id_prod}">
-                <img src="uploads/${imagens[0]}" alt="${titulo_prod}">
+                <img src="/uploads/${imagens[0]}" alt="${titulo_prod}">
             </a>
             <section class="product-text">
                 <h5>NEW</h5>
@@ -32,11 +31,11 @@ function renderProducts(products) {
             <section class="price">
                 <h4>${titulo_prod}</h4>
                 <section class="desc-price">
-                    <p class="desconto">-13%</p>
                     <section class="preco">
                         <p>$ ${precoFormatado} no PIX</p>
                         <p>6 x R$${parcelaFormatada}</p>
                     </section>
+                    <p class="desconto">-13%</p>
                 </section>
                 <section class="desc-outher">
                     <p class="estoque">em estoque</p>

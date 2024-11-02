@@ -124,7 +124,6 @@ function updateMap() {
             return response.json();
         })
         .then(locaisBanco => {
-            document.getElementById('jsonData').innerText = JSON.stringify(locaisBanco, null, 2);
 
             locaisBanco.forEach(local => {
                 const marker = new google.maps.Marker({
@@ -147,7 +146,40 @@ function updateMap() {
         })
         .catch(error => {
             console.error('Erro ao buscar locais do banco:', error);
-            document.getElementById('jsonData').innerText = 'Erro ao buscar locais do banco.';
+        });
+
+    // Adiciona os locais do banco de dados, filtrando pela categoria selecionada
+    fetch(`/locaisBancoPremium?categoria=${selectedType}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(locaisBancoPremium => {
+            
+
+            locaisBancoPremium.forEach(local => {
+                const marker = new google.maps.Marker({
+                    position: { lat: parseFloat(local.latitude), lng: parseFloat(local.longitude) },
+                    map: map,
+                    title: local.nome_local,
+                    icon: {
+                        url: 'imagem/pincrown9.png',
+                        scaledSize: new google.maps.Size(45, 45)
+                    }
+                });
+
+                google.maps.event.addListener(marker, 'click', () => {
+                    infowindow.setContent(generateContentFromLocalPremium(local)); // Use a nova função para locais do banco
+                    infowindow.open(map, marker);
+                });
+
+                markers.push(marker);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao buscar locais do banco:', error);
         });
 
     // Busca os locais do Google Maps
@@ -257,31 +289,96 @@ function generateContent(place) {
     return content;
 }
 
+
 // informações que vem do bancos estilo
 function generateContentFromLocal(local) {
-    let content = `<div class="card_local"><strong>${local.nome_local}</strong>`;
-    content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
+    // Adiciona latitude e longitude como parâmetros
+    const { latitude, longitude } = local;
+    
+    // Cria o objeto Geocoder
+    const geocoder = new google.maps.Geocoder();
 
-    if (local.imagens && local.imagens.length > 0) {
-        content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
-    } else {
-        content += `<p>Imagem não disponível</p>`;
-    }
+    // Geocodifica a localização
+    geocoder.geocode({ location: { lat: parseFloat(latitude), lng: parseFloat(longitude) } }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+            let content = `<div class="card_local"><strong>${local.nome_local}</strong>`;
+            content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
 
-    if (local.endereco) {
-        content += `<p class="break">${local.endereco}</p>`;
-    }
+            if (local.imagens && local.imagens.length > 0) {
+                content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
+            } else {
+                content += `<p>Imagem não disponível</p>`;
+            }
 
-    if (local.media_avaliacao) {
-        content += `<p>Avaliação: ${getStarRatingHtml(local.media_avaliacao)}</p>`;
-    } else {
-        content += `<p>Avaliação não disponível</p>`;
-    }
+            // Usa o primeiro resultado como endereço
+            const endereco = results[0] ? results[0].formatted_address : 'Endereço não disponível';
+            content += `<p class="break">${endereco}</p>`;
 
-    // Chama a função showSidePanelFromLocal passando o ID do local do banco
-    content += `<button class="saiba_mais" onclick="showSidePanelFromLocal('${local.id}')">Saiba Mais</button></div>`;
-    return content;
+            if (local.media_avaliacao) {
+                content += `<p>Avaliação: ${getStarRatingHtml(local.media_avaliacao)}</p>`;
+            } else {
+                content += `<p>Avaliação não disponível</p>`;
+            }
+
+            // Chama a função showSidePanelFromLocal passando o ID do local do banco
+            content += `<button class="saiba_mais" onclick="showSidePanelFromLocal('${local.id}')">Saiba Mais</button></div>`;
+
+            // Atualiza a infowindow com o conteúdo gerado
+            infowindow.setContent(content);
+            infowindow.open(map, marker); // Presuma que 'marker' esteja acessível aqui
+        } else {
+            console.error('Geocoding falhou devido a: ' + status);
+            infowindow.setContent('<p>Erro ao obter o endereço.</p>');
+            infowindow.open(map, marker); // Presuma que 'marker' esteja acessível aqui
+        }
+    });
 }
+
+// informações que vem do bancos estilo
+function generateContentFromLocalPremium(local) {
+    // Adiciona latitude e longitude como parâmetros
+    const { latitude, longitude } = local;
+    
+    
+    // Cria o objeto Geocoder
+    const geocoder = new google.maps.Geocoder();
+
+    // Geocodifica a localização
+    geocoder.geocode({ location: { lat: parseFloat(latitude), lng: parseFloat(longitude) } }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+            let content = `<div class="card_local"><strong>${local.nome_local_premium}</strong>`;
+            content += `<p>recomendado por: <span class="google_color">+Sport</span></p>`;
+
+            if (local.imagens && local.imagens.length > 0) {
+                content += `<img src="uploads/${local.imagens[0]}" class="place-photo" style="width:100%;"><br>`;
+            } else {
+                content += `<p>Imagem não disponível</p>`;
+            }
+
+            // Usa o primeiro resultado como endereço
+            const endereco = results[0] ? results[0].formatted_address : 'Endereço não disponível';
+            content += `<p class="break">${endereco}</p>`;
+
+            if (local.media_avaliacao) {
+                content += `<p>Avaliação: ${getStarRatingHtml(local.media_avaliacao)}</p>`;
+            } else {
+                content += `<p>Avaliação não disponível</p>`;
+            }
+
+            // Chama a função showSidePanelFromLocal passando o ID do local do banco
+            content += `<a href="/local-page/${local.id_local_premium}"><button class="saiba_mais">Conheça Mais!</button></a></div>`;
+
+            // Atualiza a infowindow com o conteúdo gerado
+            infowindow.setContent(content);
+            infowindow.open(map, marker); // Presuma que 'marker' esteja acessível aqui
+        } else {
+            console.error('Geocoding falhou devido a: ' + status);
+            infowindow.setContent('<p>Erro ao obter o endereço.</p>');
+            infowindow.open(map, marker); // Presuma que 'marker' esteja acessível aqui
+        }
+    });
+}
+
 
 
 
@@ -362,9 +459,6 @@ function resetRating() {
 
 
 
-
-
-
 function centerMapOnUser() { 
     map.setCenter(currentLocation); 
     map.setZoom(12); 
@@ -415,7 +509,10 @@ function showSidePanel(placeId) {
     const sidePanel = document.getElementById('sidePanel');
     sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
     let currentImageIndex = 0; // Index para controlar a imagem atual
-    let h2Email = document.querySelector('.userEmail');
+    let nome = document.querySelector('.userNome').innerHTML;
+    let email = document.querySelector('.userEmail').innerHTML;
+    
+    
 
     const request = {
         placeId: placeId,
@@ -436,55 +533,96 @@ function showSidePanel(placeId) {
                 </div>
                 
                 <section class="sidepanel_info">
-                    <p>${place.vicinity}</p>
+                    <p class="endereco_local">${place.vicinity}</p>
                     <p><strong>Avaliação:</strong> ${place.rating ? getStarRatingHtml(place.rating) : 'Não disponível'} <span>${place.rating ? place.rating.toFixed(1) : ''}</span></p>
 
                     <hr class="separator">
 
                     <div class="sidePanelInteracao">
                         <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
-                        <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
+                        <p class="like-button">
+                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav('${placeId}');" style="font-size: 2em;display: none;"></i>
+                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav('${placeId}');" style="font-size: 2em;"></i>
+                            <br>favoritar</p>
                         <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
                     </div>
 
-                    <div class="sidePanelAvaliar" id="sidePanelAvaliar">
-                        <form action="/avaliarLocais" method="post" enctype="application/x-www-form-urlencoded">
+                    
 
-                            <input type="hidden" name="placeId" id="placeId" value="${placeId}">
+                        `;
+                        if( email.length === 0){
+                            sidePanel.innerHTML += `
+                            <div class="sidePanelAvaliar" id="sidePanelAvaliar">
+                                <hr class="separator"> 
+                                <div class="info_logar">
+                                    <p>você não esta logado!</p> 
+                                    <a href="/login">
+                                        <button type="submit">LOGAR</button>
+                                    </a>
+                                </div>
+                            </div> `;
+                        } else {
+                            sidePanel.innerHTML += `
+                            <div class="sidePanelAvaliar" id="sidePanelAvaliar">
+                                <hr class="separator">
+                                <form action="/avaliarLocais" method="post" enctype="application/x-www-form-urlencoded">
 
-                            <!-- Campo oculto para armazenar o email do usuário -->
-                            <input type="hidden" name="email" id="email" value="${email}"> <!-- Substituir por email dinâmico -->
-                            <h3>${email}</h3>
-                            <h3>${placeId}</h3>
+                                    <input type="hidden" name="placeId" id="placeId" value="${placeId}">
 
-                            <div class="rating" id="rating">
-                                <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
-                                <span class="star" data-value="2" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
-                                <span class="star" data-value="3" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
-                                <span class="star" data-value="4" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
-                                <span class="star" data-value="5" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                    <!-- Campo oculto para armazenar o email do usuário -->
+                                    <input type="hidden" name="email" id="email" value="${email}"> <!-- Substituir por email dinâmico -->
+                                    <h3><span> ${nome}</span></h3>
+
+                                    <div class="rating" id="rating">
+                                        <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                        <span class="star" data-value="2" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                        <span class="star" data-value="3" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                        <span class="star" data-value="4" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                        <span class="star" data-value="5" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
+                                    </div>
+
+                                    <!-- Campo oculto para armazenar o valor da avaliação -->
+                                    <input type="hidden" name="rating" id="ratingSelect" value="">
+
+                                    <!-- Campo oculto para armazenar o valor da avaliação -->
+                                    <input type="hidden" name="placeId_google" value="${placeId}">
+
+                                    <section class="grp-form">
+                                        <input type="text" name="comentario" id="addComentario" placeholder="Comentario" required>
+                                    </section>
+
+                                    <div class="group-button">
+                                    <button class="cancelarAvaliar" onclick="toggleSidePanelAvaliacao()" type="button">Cancelar</button>
+                                    <button type="submit">Avaliar</button>
+                                    </div>
+                                </form>
                             </div>
+                            `;
+                        }
 
-                            <!-- Campo oculto para armazenar o valor da avaliação -->
-                            <input type="hidden" name="rating" id="ratingSelect" value="">
-
-                            <!-- Campo oculto para armazenar o valor da avaliação -->
-                            <input type="hidden" name="placeId_google" value="${placeId}">
-
-                            <section class="grp-form">
-                                <label for="desc_local">Descrição:</label>
-                                <input type="text" name="comentario" id="addComentario" required>
-                            </section>
-
-                            <button type="submit">Adicionar Local</button>
-                        </form>
-                    </div>
+                        
+                        sidePanel.innerHTML += `
+                        
+                        
 
                     <hr class="separator">
-
-                    ${place.reviews && place.reviews.length > 0 ? `<h3>Comentários:</h3><ul>${place.reviews.map(review => `<li><strong>${review.author_name}:</strong> ${review.text}</li>`).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                        <section class="comentarios_local">
+                            ${place.reviews && place.reviews.length > 0 ? `
+                                <h3>Comentários:</h3>
+                                <ul>
+                                    ${place.reviews.map(review => `
+                                        <li>
+                                            <strong>${review.author_name}:</strong> 
+                                            ${review.rating ? getStarRatingHtml(review.rating) : 'Sem nota'}<br>
+                                            ${review.text} <br>
+                                        </li>
+                                    `).join('')}
+                                </ul>` : '<p>Sem comentários disponíveis</p>'}
+                        </section>
+                
                 </section>
             `;
+            checkCurtir(placeId)
 
             // Adiciona eventos para navegação entre as imagens
             if (place.photos && place.photos.length > 1) {
@@ -503,13 +641,27 @@ function showSidePanel(placeId) {
             sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
         }
 
-        sidePanel.style.display = 'block'; 
-        // Aplicar animação de abertura 
-        setTimeout(() => { 
-            sidePanel.style.width = '500px'; // Largura desejada da aba lateral 
-            sidePanel.style.opacity = 1; 
-        }, 10); // Um pequeno delay para garantir que a transição seja visível 
+
+        if (window.innerWidth > 768) { // Verifique se a largura da tela é maior que 768px (ou o valor que preferir)
+            sidePanel.style.display = 'block';
+            // Aplicar animação de abertura
+            setTimeout(() => {
+                sidePanel.style.width = '500px'; // Largura desejada da aba lateral
+                sidePanel.style.opacity = 1;
+            }, 10); // Um pequeno delay para garantir que a transição seja visível
+        } else {
+            sidePanel.style.display = 'block';
+            // Aplicar animação de abertura
+            setTimeout(() => {
+                sidePanel.style.width = '100%'; // Largura desejada da aba lateral
+                sidePanel.style.opacity = 1;
+            }, 10); // Um pequeno delay para garantir que a transição seja visível
+        }
+
+        
     });
+
+    
 }
 
 
@@ -517,6 +669,8 @@ function showSidePanelFromLocal(localId) {
     const sidePanel = document.getElementById('sidePanel');
     sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
     let currentImageIndex = 0;
+    let nome = document.querySelector('.userNome').innerHTML;
+    let email = document.querySelector('.userEmail').innerHTML;
 
     // Função para atualizar a exibição da imagem
     function updateImageDisplay(local) {
@@ -532,6 +686,7 @@ function showSidePanelFromLocal(localId) {
         const nomeCliente = cliente || "Anônimo";
         const avaliacao = avaliacao_estrela_locais ? `${getStarRatingHtml(avaliacao_estrela_locais)}` : "Sem avaliação";
         const comentario = comentario_local ? comentario_local : "Sem comentário";
+        
 
         return `<li><strong>${nomeCliente}:</strong> Avaliação: ${avaliacao} <br> Comentário: ${comentario}</li>`;
     }
@@ -541,7 +696,7 @@ function showSidePanelFromLocal(localId) {
         .then(response => response.json())
         .then(localArray => {
             const local = localArray[0];  // Acessa o primeiro local do array
-            document.getElementById('jsonData').innerText = JSON.stringify(localArray, null, 2);
+            
 
             if (local) {
                 sidePanel.innerHTML += `
@@ -556,18 +711,35 @@ function showSidePanelFromLocal(localId) {
                     </div>
 
                     <section class="sidepanel_info">
-                        <p>${local.endereco || 'Endereço não disponível'}</p>
+                        <p class="endereco_local">${local.endereco || 'Endereço não disponível'}</p>
                         <p><strong>Avaliação:</strong> ${local.media_avaliacao ? getStarRatingHtml(local.media_avaliacao) : 'Não disponível'}<span>${local.media_avaliacao ? Number(local.media_avaliacao).toFixed(1) : ''}</span></p>
 
                         <hr class="separator">
                         
                         <div class="sidePanelInteracao">
                             <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
-                            <p><i class="far fa-star" style="font-size: 2em;"></i><br>favoritar</p>
+                            <p class="like-button">
+                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${localId});" style="font-size: 2em;display: none;"></i>
+                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${localId});" style="font-size: 2em;"></i>
+                            <br>favoritar</p>
                             <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
                         </div>
-                        
-                        <div class="sidePanelAvaliar" id="sidePanelAvaliar">
+
+                        `;
+                        if( email.length === 0){
+                            sidePanel.innerHTML += `
+                            <div class="sidePanelAvaliar" id="sidePanelAvaliar">
+                                <hr class="separator"> 
+                                <div class="info_logar">
+                                    <p>você não esta logado!</p> 
+                                    <a href="/login">
+                                        <button type="submit">LOGAR</button>
+                                    </a>
+                                </div>
+                            </div> `;
+                        } else {
+                            sidePanel.innerHTML += `
+                            <div class="sidePanelAvaliar" id="sidePanelAvaliar">
                         
                             <form action="/avaliarLocaisBanco" method="post" enctype="application/x-www-form-urlencoded">
 
@@ -575,8 +747,7 @@ function showSidePanelFromLocal(localId) {
 
                                 <!-- Campo oculto para armazenar o email do usuário -->
                                 <input type="hidden" name="email" id="email" value="${email}"> <!-- Substituir por email dinâmico -->
-                                <h3>${email}</h3>
-                                <h3>${localId}</h3>
+                                <h3><span> ${nome}</span></h3>
 
                                 <div class="rating" id="rating">
                                     <span class="star" data-value="1" onclick="selectRating(this)" onmouseover="hoverRating(this)" onmouseout="resetRating()"><i class="far fa-star"></i></span>
@@ -593,19 +764,34 @@ function showSidePanelFromLocal(localId) {
                                 <input type="hidden" name="localId" value="${localId}">
 
                                 <section class="grp-form">
-                                    <label for="desc_local">Descrição:</label>
-                                    <input type="text" name="comentario" id="addComentario" required>
+                                    <input type="text" name="comentario" id="addComentario" placeholder="Comentario" required>
                                 </section>
 
-                                <button type="submit">Adicionar Local</button>
+                                <div class="group-button">
+                                    <button class="cancelarAvaliar" onclick="toggleSidePanelAvaliacao()" type="button">Cancelar</button>
+                                    <button type="submit">Avaliar</button>
+                                </div>
                             </form>
                         </div>
+                            `;
+                        }
+
+                        
+                        sidePanel.innerHTML += `
+                        
+                        
 
                         <hr class="separator">
-
-                        ${local.comentarios && local.comentarios.length > 0 ? `<h3>Comentários:</h3><ul>${local.comentarios.map(formatComment).join('')}</ul>` : '<p>Sem comentários disponíveis</p>'}
+                        <section class="comentarios_local">
+                            ${local.comentarios && local.comentarios.length > 0 ? `
+                                <h3>Comentários:</h3>
+                                <ul>
+                                    ${local.comentarios.map(formatComment).join('')}
+                                    </ul>` : '<p>Sem comentários disponíveis</p>'}
+                            </section>
                     </section>
                 `;
+                checkCurtir(localId)
 
                 // Adicionar evento de navegação de imagens se houver mais de uma imagem
                 if (local.imagens && local.imagens.length > 1) {
@@ -628,15 +814,22 @@ function showSidePanelFromLocal(localId) {
             sidePanel.innerHTML += '<p>Não foi possível carregar informações detalhadas.</p>';
         });
 
-    sidePanel.style.display = 'block'; 
-    // Aplicar animação de abertura 
-    setTimeout(() => { 
-        sidePanel.style.width = '500px'; // Largura desejada da aba lateral 
-        sidePanel.style.opacity = 1; 
-    }, 10); // Um pequeno delay para garantir que a transição seja visível 
+    
+        if (window.innerWidth > 768) { // Verifique se a largura da tela é maior que 768px (ou o valor que preferir)
+            sidePanel.style.display = 'block';
+            // Aplicar animação de abertura
+            setTimeout(() => {
+                sidePanel.style.width = '500px'; // Largura desejada da aba lateral
+                sidePanel.style.opacity = 1;
+            }, 10); // Um pequeno delay para garantir que a transição seja visível
+        } else {
+            sidePanel.style.display = 'block';
+            setTimeout(() => {
+                sidePanel.style.width = '100%';
+                sidePanel.style.opacity = 1;
+            }, 10);
+        } 
 }
-
-
 
 
 
@@ -653,17 +846,112 @@ function toggleSidePanelAvaliacao() {
     }
 }
 
+function toggleHeart(event) {
+    const alvo = event.currentTarget;
+    const coracaoPreenchido = alvo.parentNode.querySelector('.bi-heart-fill');
+    const coracaoVazio = alvo.parentNode.querySelector('.bx-heart');
+
+    if (coracaoPreenchido.style.display === 'none') {
+        coracaoPreenchido.style.display = 'block';
+        coracaoVazio.style.display = 'none';
+        coracaoPreenchido.classList.add('animate');
+    } else {
+        coracaoPreenchido.style.display = 'none';
+        coracaoVazio.style.display = 'block';
+        coracaoVazio.classList.add('animate');
+    }
+
+    // Remove a classe de animação após a animação ser concluída
+    setTimeout(() => {
+        coracaoPreenchido.classList.remove('animate');
+        coracaoVazio.classList.remove('animate');
+    }, 500); // 500ms é o tempo da animação
+
+    
+}
+
+function checkCurtir(id) {
+    const coracaoPreenchido = document.querySelector('.bi-heart-fill');
+    const coracaoVazio = document.querySelector('.bx-heart');
+
+    fetch(`/checkCurtirLocal/${id}`, { 
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    },
+})
+.then(response => {
+    console.log("Resposta do servidor:", response);
+
+    // Verifica se a resposta foi bem-sucedida
+    if (!response.ok) {
+        throw new Error(`Erro: ${response.status} ${response.statusText}`);
+    }
+
+    return response.json();
+})
+.then(data => {
+    // Manipulação da resposta
+    if (data.favoritado) {
+        coracaoVazio.style.display = 'none';
+        coracaoPreenchido.style.display = 'block'; // Mostra o coração preenchido
+    } else {
+        coracaoPreenchido.style.display = 'none';
+        coracaoVazio.style.display = 'block'; // Mostra o coração vazio
+    }
+})
+.catch(error => {
+    console.error("Erro na solicitação:", error);
+});
+}
+
+function favDesFav(id) {
+    
+    try {
+        const response = fetch(`/favoritarLocal/${id}`, { // Use 'id' aqui
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        response.then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error(res.statusText);
+            }
+        }).then(data => {
+            if (data.message === "Produto favoritado com sucesso!") {
+                console.log("Produto adicionado aos favoritos:", data);
+            } else {
+                console.error("Erro ao favoritar o produto:", data.message);
+            }
+        });
+    } catch (error) {
+        console.error("Erro na solicitação:", error);
+    }
+}
 
 
 
 // esconde painel
 function hideSidePanel() { 
     const sidePanel = document.getElementById('sidePanel'); 
-    sidePanel.style.width = '0'; // Reduz a largura para 0 
-    sidePanel.style.opacity = 0; 
-    setTimeout(() => {
-        sidePanel.style.display = 'none'; // Esconde a aba lateral após a animação 
-    }, 300); // O tempo deve coincidir com a duração da transição 
+    if (window.innerWidth > 768) { // Verifica se a largura da tela é maior que 768px
+        sidePanel.style.width = '0'; // Reduz a largura para 0
+        sidePanel.style.opacity = 0;
+        setTimeout(() => {
+            sidePanel.style.display = 'none'; // Esconde a aba lateral após a animação
+        }, 300); // O tempo deve coincidir com a duração da transição
+    } else {
+        sidePanel.style.width = '0'; // Reduz a largura para 0
+        sidePanel.style.opacity = 0;
+        setTimeout(() => {
+            sidePanel.style.display = 'none'; // Esconde a aba lateral após a animação
+        }, 300); // O tempo deve coincidir com a duração da transição
+    }
+    
 
 } 
 
@@ -673,11 +961,20 @@ function showAddNewLocalWindow() {
     const addNewLocalWindow = document.getElementById('addNewLocalWindow');
     addNewLocalWindow.style.display = 'block';
 }
+function showAddNewLocalPremiumWindow() {
+    const addNewLocalWindow = document.querySelector('.premium');
+    addNewLocalWindow.style.display = 'block';
+}
 
 
 
 function hideAddNewLocalWindow() {
-    const addNewLocalWindow = document.getElementById('addNewLocalWindow');
+    const addNewLocalWindow = document.querySelector('.userN');
+    addNewLocalWindow.style.display = 'none';
+}
+
+function hideAddNewLocalWindow() {
+    const addNewLocalWindow = document.querySelector('.premium');
     addNewLocalWindow.style.display = 'none';
 }
 
@@ -733,7 +1030,9 @@ function handleMapClick(event) {
 
     // Exibe as coordenadas selecionadas
     document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`; // Corrige a sintaxe para a string
+    
     document.getElementById('selectedCoordinatesUser').textContent = `localização selecionada salva`; // Corrige a sintaxe para a string
+    document.getElementById('selectedCoordinatesUserP').textContent = `localização selecionada salva`; // Corrige a sintaxe para a string
 
     // Atualiza o método de localização
     locationMethod = 'map'; // Atualiza o método de localização
@@ -749,30 +1048,25 @@ function handleMapClick(event) {
 function enableMapSelection() {
     mapSelectionEnabled = true; // Habilita a seleção
     document.getElementById('selectedCoordinatesUser').textContent = "Clique no mapa para escolher um local.";
+    document.getElementById('selectedCoordinatesUserP').textContent = "Clique no mapa para escolher um local.";
 }
 
 
 // pegar localização atual
 function getCurrentLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            const location = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            document.getElementById('selectedCoordinatesUser').textContent = "Localização salva";
+    document.getElementById('selectedCoordinatesUser').textContent = "Localização salva";
+            document.getElementById('selectedCoordinatesUserP').textContent = "Localização salva";
             map.setCenter(location);
             if (userMarker) userMarker.setPosition(location);
             locationMethod = 'current'; // Atualiza o método de localização
-        });
-    }
+    
 }
 
 
 
 
 // função para pegar localização ao selecionar
-function saveCoordinates() {
+function saveCoordinates(num) {
     let lat, lng;
 
     if (locationMethod === 'current') {
@@ -794,7 +1088,13 @@ function saveCoordinates() {
     localStorage.setItem('latitude', lat);
     localStorage.setItem('longitude', lng);
     console.log(`Coordenadas salvas: Latitude ${lat}, Longitude ${lng}`);
-    window.location.href = '/add-locais';
+
+    if (num === 1){
+        window.location.href = '/add-locais';
+    } else if(num === 2){
+        window.location.href = '/add-locais-premium';
+    }
+
 }
 
 

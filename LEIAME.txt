@@ -8,3 +8,5 @@ npm install express-validator
 npm install dotenv --save
 npm install mysql2
 npm install express-session
+npm i bootstrap-icons
+npm i mercadopago

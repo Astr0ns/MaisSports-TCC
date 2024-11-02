@@ -15,6 +15,10 @@
 
 /* Definindo o tamanho do mapa */
 
+.gm-style-mtc-bbw{
+    display: none;
+}
+
 /* Definindo o tamanho do mapa */ 
 #map { 
     height: 70vh; 
@@ -27,6 +31,22 @@
     align-items: center; /* Centraliza o mapa horizontalmente */ 
     padding: 20px; 
 } 
+.animate {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 
 /* Definindo o layout da página */ 
 
@@ -50,15 +70,13 @@ h1{
     text-align: center;
 }
 
-.userEmail{
-    
-}
 
 /* Estilos para o filtro e entrada de endereço */ 
 
-.filters_mobile{
+.filters_mobile, .search-box{
     display: none;
 }
+
 
 
 #filter{
@@ -174,6 +192,11 @@ button:hover {
     margin-right: 150px; 
 } 
 
+.break{
+    font-size: 0.75em;
+    margin: 10px 0;
+}
+
 /* Estilos para o filtro */ 
 
 .filters { 
@@ -203,6 +226,7 @@ button:hover {
     display: none; /* Inicialmente escondido */ 
     overflow-y: auto; 
     transition: width 0.3s ease, opacity 0.3s ease; /* Animação para largura e opacidade */ 
+    
     opacity: 0; /* Começa com opacidade 0 */
     z-index: 10; 
 
@@ -235,6 +259,7 @@ button:hover {
 }
 
 
+
 .overlay {
     position: absolute;
     top: 0;
@@ -258,6 +283,10 @@ button:hover {
     padding: 0 20px;
 }
 
+.endereco_local{
+    margin-top: 10px;
+}
+
 .sidePanelInteracao{
     display: flex;
     width: 100%;
@@ -278,6 +307,35 @@ button:hover {
 
 .sidePanelAvaliar{
     display: none;
+    width: 100%;
+}
+
+.sidePanelAvaliar form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.rating{
+    margin-left: 6%; 
+}
+
+#addComentario{
+    background-color: var(--cor-fonte);
+    display: block;
+    padding: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--cor-fundo2);
+    border-radius: 17px;
+    width: 90%;
+    height: 100px;
+    margin-left: 5%; 
+}
+
+.sidePanelAvaliar h3{
+    margin: 0 0 5px 10px;
 }
 
 
@@ -287,6 +345,62 @@ button:hover {
     transition: color 0.2s; /* Transição suave ao mudar a cor */
 }
 
+.group-button{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+#sidePanel button { 
+    background-color: #CF1684; 
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    text-align: center;
+} 
+
+.info_logar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.info_logar a{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#sidePanel .info_logar p{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#sidePanel .sidePanelAvaliar button{
+    width: 25%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+
+
+#sidePanel .cancelarAvaliar {
+    background-color: #fff;
+    border: 2.5px solid #CF1684;
+    color: #CF1684;
+    margin-right: 15px;
+    font-weight: 800;
+}
+
+#sidePanel .cancelarAvaliar:hover{
+    background-color: #eee;
+}
 
 
 
@@ -302,13 +416,7 @@ button:hover {
 
 
 
-#sidePanel button { 
-    background-color: #CF1684; 
-    width: 30px;
-    height: 30px;
-    align-items: center;
-    text-align: center;
-} 
+
 
 #sidePanel button:hover { 
     background-color: #a8126c; 
@@ -324,6 +432,7 @@ button:hover {
     padding: 10px; 
     cursor: pointer; 
     margin-bottom: 20px; 
+    display: flex;
 } 
 
 
@@ -425,6 +534,25 @@ button:hover {
     display: none;
 }
 
+.comentarios_local{
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
+.comentarios_local h3{
+    font-size: 2em;
+}
+.comentarios_local strong{
+    margin-top: 15px;
+}
+
+.comentarios_local ul {
+    list-style-type: none; /* Remove os marcadores */
+    padding: 0; /* Remove o preenchimento padrão */
+    margin:  0 0 0 10px; /* Remove a margem padrão */
+}
+
 
 
 /* Estilo padrão para o mapa */
@@ -440,10 +568,28 @@ button:hover {
 /* Consulta de mídia para telas com largura máxima de 600px */
 @media screen and (min-width: 320px) and (max-width: 600px) {
 
+    .gm-style-mtc-bbw, .gm-control-active, .gmnoprint, .gmnoprint, .gmnoscreen, .gm-style-cc, .gm-control-active, .gm-control-active{
+        display: none;
+    }
+    body{
+        max-width: 100vw;
+        max-height: 100vh;
+    }
+
+    header:has(nav) {
+        position: fixed;
+        z-index: 10;
+        width: 100%;
+    }
+
+    .search-box{
+        display: block;
+    }
 
     #map {
         height: 100vh; /* altura da tela inteira */
         width: 100vw;  /* largura da tela inteira */
+        
     }
 
     .desativar_mobile{
@@ -459,12 +605,18 @@ button:hover {
         background: none;
         box-shadow: none;
         width: 100%;
+        padding: 0;
+        margin: 0;
     }
 
     #addressSearch input{
         border-radius: 25px;
         height: 25px;
-
+        border-radius: 0;
+        width: 100%;
+        padding: 25px 0;
+        margin-top: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
 
     /* Ajusta outros elementos, se necessário */
@@ -491,7 +643,7 @@ button:hover {
         white-space: nowrap;
         top: 20%;
         width: 100vw;
-        transform: translate(0%, -50%); /* Centraliza a janela */ 
+        transform: translate(0%, -65%); /* Centraliza a janela */ 
         border-radius: 8px;
         padding: 20px;
         z-index: 11;
@@ -518,7 +670,20 @@ button:hover {
     
 
     .userButtonMobile{
+        display: block;
+        position: fixed;
+        top: 90%;
+        left: 90%;
+        transform: translate(-50%, -50%); /* Centraliza a janela */
+    }
 
+    #sidePanel{
+        width: 100vw;
+        z-index: 999;
+    }
+
+    footer{
+        display: none;
     }
 
 }

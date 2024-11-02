@@ -57,31 +57,18 @@
                             <% product.imagens.forEach(function(imagem, index) { %>
                                 <img class="MainImg" src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
                             <% }); %>
-                            <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg">
-                            <img class="MainImg" src="https://imgnike-a.akamaihd.net/768x768/01113851A6.jpg">
                             
                         </section>
 
                         <section class="carousel-container">
                             <section class="carousel">
-                                <section class="item active">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="Image 1" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A6.jpg" alt="Image 2" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A2.jpg" alt="Image 3" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A3.jpg" alt="Image 2" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A7.jpg" alt="Image 3" />
-                                </section>
-                                <section class="item">
-                                    <img src="https://imgnike-a.akamaihd.net/768x768/01113851A8.jpg" alt="Image 2" />
-                                </section>
+                                <% product.imagens.forEach(function(imagem, index) { %>
+                                    <section class="item active">
+                                        <img class="MainImg" src="/uploads/<%= imagem %>" alt="Imagem <%= index + 1 %> do produto">
+                                    </section>
+                                    
+                                <% }); %>
+                                
                             </section>
                             <button class="btn prev"><i class="bi bi-caret-left"></i></button>
                             <button class="btn next"><i class="bi bi-caret-right"></i></button>
@@ -112,7 +99,7 @@
                             <section class="mini-imgs">
                                 <section class="mini-pics-product">
                                     <img class="select-prod"
-                                        src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt="">
+                                        src="/uploads/<%= product.imagens[0] %>" alt="">
                                 </section>
                             </section>
                             <!-- Seleção de tamanhos  -->
@@ -153,62 +140,13 @@
                             </section>
                             <!-- descrição -->
                             <section class="descricao">
-                                <h2>ESTILO AF1 LENDÁRIO.</h2>
-                                <br>
-                                <p>
-                                    <%= product.descricao_prod %></p>
-                                    
-                                <br>
-                                <section id="moreContent" class="content">
-
-                                    <p>Benefícios</p>
-
-                                    <br>
-
-                                    <li>Há mais de 35 anos, o conforto e a durabilidade estão prontos para serem
-                                        usados.
-                                        Apresentando sobreposições costuradas e duráveis, couro viçoso e um design
-                                        prático,
-                                        esse
-                                        tênis estará com você nos subúrbios, no centro da cidade e em todos os
-                                        outros
-                                        lugares.
-                                    </li>
-                                    <li>
-                                        Desenvolvido originalmente para o treino de basquete, o amortecimento Nike
-                                        Air
-                                        proporciona um conforto duradouro, enquanto a boca e a língua almofadadas
-                                        garantem
-                                        uma
-                                        passada suave.
-                                    </li>
-                                    <li>
-                                        A parte superior viçosa e fácil de limpar proporciona um look ideal fora das
-                                        quadras, enquanto o design de cano médio e o acabamento da forma de sola
-                                        debaixo
-                                        do pé remetem ao DNA do basquete. É história, look e conforto, tudo em um.
-
-                                    </li>
-
-                                    <p>Detalhes do produto</p>
-
-                                    <ul>
-                                        <li>Entressola de espuma</li>
-                                        <li>Sistema de amarração de largura variável</li>
-                                        <li> O fecho aderente permite personalizar o estilo e caimento</li>
-                                        <li> Perfurações na ponta</li>
-                                        <li>Sola de borracha sem marcação para maior tração e durabilidade</li>
-                                    </ul>
-
-                                    <p>Origens do Air Force 1</p>
-
-                                    <p>Estreando em 1982, o AF1 foi o primeiro tênis de basquete a abrigar o Nike Air,
-                                        revolucionando o jogo e ganhando tração rapidamente em todo o mundo. Hoje, o Air
-                                        Force 1
-                                        permanece fiel às suas raízes com o mesmo amortecimento macio e flexível que
-                                        mudou a
-                                        história dos sneakers.</p>
-                                </section>
+                                <h2>Descrição</h2>
+                                
+                                <section id="moreContent" class="content"><br>
+                                    <p>
+                                        <%= product.descricao_prod %></p>
+                                        
+                                    <br></section>
                                 <button id="toggleButton" class="btn-vermais">Ver mais</button>
                                 <script>
                                     document.addEventListener("DOMContentLoaded", function () {
@@ -235,7 +173,7 @@
                                 </script>
                             </section>
                             <!-- Botão para comprar/adicionar no carrinho -->
-                            <a href="<%= product.link_prod %>"> <!-- Adiciona o link aqui -->
+                            <a href="<%= product.link_prod %>" target="_blank"> <!-- Adiciona o link aqui -->
                                 <section class="button">
                                     <section class="button-wrapper">
                                         <section class="text">Compre agora!</section>
@@ -252,8 +190,10 @@
                             </a>
                             
                             <section class="button-fav">
-                                <button>Adicionar aos favoritos <i class="bi bi-heart"></i></button>
+                                <button onclick="mudarfav(this)" data-id="<%= product.id_prod %>" class="favoritar-button ">Remover favorito <i class="bi bi-heart"></i></button>
+                                <button onclick="mudarfav(this)" data-id="<%= product.id_prod %>" class="favoritar-button desativo">Adicionar aos favoritos <i class="bi bi-heart-fill"></i> </button>
                             </section>
+                            
                         </section>
                     </section>
                 </section>
@@ -267,190 +207,7 @@
 
             <section class="trending-products" id="trending">
                 <section class="products">
-                    <section class="row">
-                        <a href="/product-page"><img src="https://imgnike-a.akamaihd.net/768x768/01113851A10.jpg" alt=""
-                                srcset=""></a>
-                        <section class="product-text">
-                            <h5>NEW</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4>Nike Air Force 1 Mid "07</h4>
-                            <section class="desc-price">
-                                <p class="desconto">-13%</p>
-                                <section class="preco">
-                                    <p>$ 854,99 no PIX</p>
-                                    <p>6 x R$119,98</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque">em estoque</p>
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballwht"></section>
-                                </section>
-                            </section>
-
-                        </section>
-                    </section>
-
-                    <section class="row">
-                        <img src="https://imgnike-a.akamaihd.net/768x768/0287397TA8.jpg" alt="" srcset="">
-                        <section class="product-text">
-                            <h5>NEW</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4> Nike Court Vision Next Nature Essential</h4>
-                            <section class="desc-price">
-                                <p class="desconto">37% off</p>
-                                <section class="preco">
-                                    <p>R$ 408,49 no Pix</p>
-                                    <p>6 x R$ 68.08</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque">em estoque</p>
-
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballwht"></section>
-                                </section>
-                            </section>
-                        </section>
-                    </section>
-
-                    <section class="row">
-                        <img src="https://imgnike-a.akamaihd.net/768x768/02769151A8.jpg" alt="" srcset="">
-                        <section class="product-text">
-                            <h5>NEw</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4>Tênis Nike SB Ishod 2</h4>
-                            <section class="desc-price">
-                                <p class="desconto">35% off</p>
-                                <section class="preco">
-                                    <p>R$588,99 no Pix</p>
-                                    <p>6 x R$98.16</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque">em estoque</p>
-
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballr"></section>
-                                    <section class="ballwht"></section>
-                                </section>
-                            </section>
-                        </section>
-                    </section>
-
-                    <section class="row">
-                        <img src="https://imgnike-a.akamaihd.net/768x768/029411IDA8.jpg" alt="" srcset="">
-                        <section class="product-text">
-                            <h5>NEW</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4>TÊNIS NIKE KYRIE 8</h4>
-                            <section class="desc-price">
-                                <p class="desconto">-13%</p>
-                                <section class="preco">
-                                    <p>R$719,90</p>
-                                    <p>10 x 71,99</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque"> em estoque</p>
-
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballr"></section>
-                                    <section class="ballg"></section>
-                                    <section class="ballb"></section>
-                                    <section class="balla"></section>
-                                    <section class="ballp"></section>
-                                </section>
-                            </section>
-                        </section>
-                    </section>
-
-                    <section class="row">
-                        <img src="https://artwalk.vteximg.com.br/arquivos/ids/245877-1000-1000/Tenis-Nike-Kyrie-Infinity-Masculino-Preto.jpg?v=637868345156730000"
-                            alt="" srcset="">
-                        <section class="product-text">
-                            <h5>NEW</h5>
-                        </section>
-                        <section class="heart-icon">
-                            <i class='bx bx-heart'></i>
-                        </section>
-                        <section class="ratting">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </section>
-                        <section class="price">
-                            <h4>TÊNIS NIKE KYRIE 8</h4>
-                            <section class="desc-price">
-                                <p class="desconto">-13%</p>
-                                <section class="preco">
-                                    <p>R$719,90</p>
-                                    <p>10 x 71,99</p>
-                                </section>
-                            </section>
-                            <section class="desc-outher">
-                                <p class="estoque"> em estoque</p>
-                                <section class="prod-colors">
-                                    <p class="cores">cores</p>
-                                    <section class="ballr"></section>
-                                    <section class="ballg"></section>
-                                    <section class="ballb"></section>
-                                    <section class="balla"></section>
-                                    <section class="ballp"></section>
-                                </section>
-                            </section>
-                        </section>
-                    </section>
+                    
                 </section>
             </section>
 
@@ -459,9 +216,71 @@
         </main>
         <%- include("../partial/footer") %>
 
-            <script src="/js/script.js"></script>
-            <script src="/js/mini-imgs.js"></script>
-            <script src="/js/mobile-carousel.js"></script>
+        <script src="/js/script.js"></script>
+        <script src="/js/mini-imgs.js"></script>
+        <script src="/js/mobile-carousel.js"></script>
+        <script src="/js/produto_index.js" defer></script>
+
+        <script>
+            
+        function mudarfav(element){
+
+            const activeElement = document.querySelector('.desativo');
+
+            activeElement.classList.remove('desativo');
+
+            // Adiciona a classe 'active' ao elemento clicado
+            element.classList.add('desativo');
+
+            activeElement.classList.add('animate');
+
+            setTimeout(() => {
+                activeElement.classList.remove('animate');
+                
+            }, 500); // 500ms é o tempo da animação
+        }
+
+            
+            
+
+            document.addEventListener("DOMContentLoaded", function() {
+            const buttons = document.querySelectorAll(".favoritar-button");
+            
+
+            buttons.forEach(button => {
+                button.addEventListener("click", async function() {
+                    const productId = button.getAttribute("data-id");
+                    try {
+                        const response = await fetch(`/favoritarProd/${productId}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+
+                            if (data.message === "Produto favoritado com sucesso!") {
+                                // Produto favoritado com sucesso, altere a cor do ícone
+                                button.classList.add("favoritado"); // Adiciona a classe 'favoritado'
+                                console.log("Produto adicionado aos favoritos:", data);
+                            } else {
+                                console.error("Erro ao favoritar o produto:", data.message);
+                            }
+                        } else {
+                            console.error("Erro ao adicionar aos favoritos:", response.statusText);
+                        }
+                    } catch (error) {
+                        console.error("Erro na solicitação:", error);
+                    }
+                });
+            });
+        });
+
+
+        </script>
+            
 </body>
 
 </html>

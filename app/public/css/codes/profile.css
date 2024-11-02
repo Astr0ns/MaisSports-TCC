@@ -26,8 +26,11 @@
 }
 
 section {
-    padding: 2% 20%;
     transition: all 0.3s ease;
+}
+
+section.historico{
+    padding: 2% 20%;
 }
 
 h2 {
@@ -71,6 +74,7 @@ a:hover {
 .nog {
     display: flex;
     flex-direction: column;
+    margin: 5%;
 }
 
 .desc {
@@ -160,9 +164,12 @@ section .account-alter {
     box-sizing: border-box;
     background: rgb(247, 247, 247);
     padding: 48px;
-    display: grid;
-    /* grid-template-columns: repeat(2, auto); */
+    display: flex;
     width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-group label {

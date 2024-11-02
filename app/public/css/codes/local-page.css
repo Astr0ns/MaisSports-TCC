@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #ffffff;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgb(79, 79, 79);
+}
+
+/* mapa design */
+.gm-style-mtc-bbw, .gm-control-active, .gmnoprint, .gmnoprint, .gmnoscreen, .gm-style-cc, .gm-control-active, .gm-control-active{
+    display: none;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+  }
+  
+main {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+button{
+    background-color: #d12089; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 12px 20px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin: 10px 0; 
+    transition: background-color 0.3s; 
+}
+
+button:hover{
+    background-color: #fa6dc2; 
+}
+
+.title h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.gallery {
+    display: flex;
+    gap: 10px;
+}
+
+.main-image{
+    width: 50%;
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.thumbnail-images {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: repeat(4, auto);
+    width: 50%;
+    gap: 5px;
+    align-content: center;
+    justify-content: center;
+}
+
+.thumbnail-images img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.thumbnail-images button {
+    width: 100%;
+    padding: 5px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Informações do local */
+
+.cardLocal{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+
+.localInfo{
+    width: 65%;
+    padding-right: 10px;
+}
+
+.mapa{
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    
+}
+#map{
+    border: 1px solid #d12089;
+    border-radius: 30px;
+}
+
+body {
+    position: relative;
+}
+
+
+/* informações do local e reserva */
+.reservarInfo{
+    margin-top: 20px;
+    padding: 25px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    max-width: 400px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 20%; /* Define a distância do topo da página */
+}
+
+.reservarInfo h2{
+    font-size: 1.8em;
+}
+
+.reservarInfo span{
+    color: #ccc;
+    font-size: 0.7em;
+    margin-left: 5px;
+}
+
+#calendar{
+    width: 80%;
+    font-size: 17.5px;
+    padding: 7.5px 15px;
+    text-align: end;
+    border-radius: 10px;
+}
+
+.flatpickr-day.flatpickr-disabled {
+    text-decoration: line-through;
+    color: rgba(0, 0, 0, 0.192);
+}
+
+#placeholderDate{
+    position: absolute;
+    top: 52.5%;
+    left: 20.5%;
+    transform: translate(-50%, -50%);
+    font-size: 17.5px;
+    color: #a8a8a8;
+}
+
+.time-picker{
+    background-color: var(--cor-fonte);
+    width: 100%;
+    padding: 15px 10px 10px;
+    border: 1px solid var(--cor-fundo2);
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #a8a8a8;
+}
+
+
+
+.timeLabel{
+    position: absolute;
+    top: -20%;
+    transform: translate(-50%, -50%);
+    background-color: #d12089;
+    width: 99%;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    
+}
+
+.reservarInfo .timeLabel h2{
+    font-size: 15px;
+}
+
+.infoPreco{
+    margin: 20px 0 0 10px;
+    transition: opacity 0.3s ease;
+}
+
+.reservarInfo button{
+    margin-top: 25px;
+    width: 100%;
+}
+
+hr{
+    width: 100%;
+    margin: 50px 0;
+    transition: opacity 0.3s ease;
+}
+
+#warningHora{
+    font-size: 1em;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    transition: opacity 0.3s ease;
+}

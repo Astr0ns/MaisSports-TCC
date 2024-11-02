@@ -1,0 +1,234 @@
+
+
+
+/* variáveis */
+
+
+:root {
+    --clr-primary: #fd0cf1;
+    --clr-danger: #ff7782;
+    --clr-success: #41f1b6;
+    --clr-white: #fff;
+    --clr-info-dark: #7d8da1;
+    --clr-info-light: #dce1eb;
+    --clr-dark: #363949;
+    --clr-warnig: #002fff;
+    --clr-light: rgba(132, 139, 200, 0.18);
+    --clr-primary-variant: #111e88;
+    --clr-dark-variant: #677483;
+    --clr-color-background: #f6f6f9;
+  
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+  
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+    --box-shadow: 0 2rem 3rem var(--clr-light);
+  
+  }
+  
+  /* tema escuro */
+  .dark-theme-variables {
+    --clr-color-background: #181a1e;
+    --clr-white: #202528;
+    --clr-light: rgba(0, 0, 0, 0.4);
+    --clr-dark: #edeffd;
+    --clr-dark-variant: #677483;
+    --box-shadow: 0 2rem 3rem var(--clr-light)
+  }
+  
+  
+  
+  *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 0;
+    text-decoration: none;
+    list-style: none;
+    appearance: none;
+  }
+  
+  body{
+     width: 100vw;
+     font-size: .7rem;
+     user-select: none;
+     min-height: 100vh;
+     overflow-x: hidden;
+     background: var(--clr-color-background);
+     font-family: 'Poppins', sans-serif;
+  }
+  main{
+    width: 100vw;
+    min-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  hr{
+    border: none; /* Remove a borda padrão */
+    height: 1px; /* Define a altura da linha */
+    background-color: #fff; /* Cor da linha */
+    margin: 20px 0; /* Margem acima e abaixo */
+    
+  }
+
+  h1{
+    font-size: 2.7em;
+    margin: 20px 0 30px 100px;
+  }
+  
+  .container  {
+    display: grid;
+    width: 96%;
+    gap: 1.8rem;
+    grid-template-columns: 14rem auto 16rem;
+    margin: 0 auto;
+  }
+
+.editar_prod_sect{
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+.editar_prod_bt{
+  background-color: #CF1684; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 12px 20px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin: 10px 0; 
+    transition: background-color 0.3s; 
+    
+}
+
+.products {
+  grid-template-columns: repeat(3, minmax(230px, 100%));
+  grid-template-rows: repeat(4, auto);
+
+}
+.painel{
+  width: 15%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #202528;
+  color: #fff;
+  padding: 20px 10px;
+  border-radius: 0 0 100px;
+}
+
+.painel h2{
+  font-size: 2.5em;
+  margin-left: 10px;
+}
+.painel p{
+  width: 100%;
+  font-size: 1.5em;
+  margin-bottom: 35px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.painel p:hover{
+  color: #ff5abaee;
+  cursor: pointer;
+  transform: scale(1.025);
+}
+
+.painel .active{
+  color: #f80091f6;
+}
+
+.reservas, .locaisReservas{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(230px, 100%));
+  grid-template-rows: repeat(4, auto);
+  justify-content: start;
+  
+  width: 100%;
+  overflow: hidden;
+  padding: 15px;
+  gap: 2rem;
+  margin: 0;
+  
+}
+
+button{
+  background-color: #f72ba5; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  padding: 12px 20px; 
+  font-size: 16px; 
+  cursor: pointer; 
+  margin: 10px 0; 
+  transition: background-color 0.3s; 
+}
+
+button:hover{
+  background-color: #fa6dc2; 
+}
+
+.reservaCardDiv{
+  width: 100%;
+  display: flex; 
+  flex-direction: column;
+  background-color: #ebebeb;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.reservaCardDiv a p:hover{
+  color: #f80091bd;
+  cursor: pointer;
+} 
+
+.reservaCard{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  
+}
+
+.reservaCard a{
+  width: 35%;
+}
+.reservaCard img{
+  width: 100%;
+}
+
+.infoReserva{
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+  padding-left: 20px;
+}
+
+.infoReserva h2{
+  width: 100%;
+  font-size: 2em;
+  text-align: center;
+}
+
+.infoReserva p {
+  width: 100%;
+  text-align: center;
+}
+
+.infoReserva span{
+  color: #f80091bd;
+  font-weight: 700;
+}
+
+.linha {
+  display: block;
+  width: 100%; /* Largura da linha */
+  border-top: 1px solid #000; /* Cor e espessura da linha */
+  margin: 20px 0; /* Espaçamento acima e abaixo da linha */
+}

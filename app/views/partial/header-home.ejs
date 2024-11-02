@@ -7,7 +7,7 @@
 
 <header>
     <nav>
-        <a class="logo" href="/"><img src="imagem/LOGO.png"></a>
+        <a class="logo" href="/"><img src="/imagem/LOGO.png"></a>
         <section class="box">
             <input type="checkbox" id="check">
             <section class="search-box">
@@ -30,12 +30,16 @@
                 </section>
             </li>
             <li><a href="/">Inicio</a></li>
-            <li><a href="/">Curtidos</a></li>
+            <% if(email==undefined ) { %>
+                <li><a href="/login">Curtidos/Reservas</a></li>
+            <% }else{ %>
+                <li><a href="/itens-curtidos">Curtidos/Reservas</a></li>
+                <% } %>
             <li><a href="/locais-esportivos">Locais Esportivos</a></li>
             <% if(email==undefined ) { %>
                 <li><a class="pc-og" href="/login">Entrar</a></li>
                 <% }else{ %>
-                    <li><a class="prof" href="/profile">Perfil</a></li>
+                    <li><a class="prof" href="/verSeEmpresa">Perfil</a></li>
                     <li><a class="log-out" href="/fazerLogout">Sair</a></li>
                     <% } %>
         </ul>

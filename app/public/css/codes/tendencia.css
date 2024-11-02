@@ -35,11 +35,13 @@
 
 .products {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, auto));
+    grid-template-columns: repeat(auto-fit, minmax(230px, 250px));
     padding: 45px;
     gap: 2rem;
     width: 82%;
     margin-left: 10%;
+    justify-content: center;
+    height:100%;
 }
 
 .row {
@@ -51,7 +53,7 @@
 
 .row img {
     width: 100%;
-    height: auto;
+    height: 228px;
     transition: all .40s;
 }
 
@@ -102,7 +104,7 @@
 
 section.desc-price {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;

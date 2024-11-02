@@ -1,0 +1,32 @@
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #f5f5f5;
+    --cor-bar-dark: #010c1aa9;
+    --cor-bar-dark-mob: #010c1a;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgba(0, 33, 123, 0.562);
+    --cor-fundo4: rgb(235, 235, 235);
+    --cor-fundo5: #12488ded;
+    --cor-fundo-body: #010c1aed;
+}
+
+
+body.dark {
+    .account-alter {
+        background-color: var(--cor-bar-dark);
+    }
+
+    .nog {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 5%;
+    }
+
+    .desc {
+        background-color: #4587;
+    }
+}

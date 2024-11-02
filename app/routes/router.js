@@ -13,14 +13,29 @@ const registrarUsu = require('../models/usuarioModel').registrarUsu;
 const gravarEmprAutenticado = require('../models/empresaModel').gravarEmprAutenticado;
 const locaisController = require('../controllers/locaisController');
 const produtoController = require('../controllers/produtoController');
+const locaisPremiumController = require('../controllers/locaisPremiumController');
+const reservaController = require('../controllers/reservaController');
+
+
+router.post('/webhook', (req, res) => {
+    const paymentInfo = req.body;
+
+    if (paymentInfo.status === 'approved') {
+        transferAmount(paymentInfo.payer.email, paymentInfo.transaction_amount);
+    }
+
+    res.sendStatus(200);
+});
+
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-
 // Configuração do armazenamento
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = 'uploads/';
+
+        // Verifica se a pasta existe
         fs.mkdir(uploadPath, { recursive: true }, (err) => {
             if (err) {
                 return cb(err);
@@ -32,26 +47,25 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname); // Renomeia o arquivo
     }
 });
-
 // Configuração do multer
 const upload = multer({ storage: storage }).array('imagens', 4);
 
-function verificarLogado(req, res, next) {
-    if (req.session.email) {
-        return next(); // O usuário está autenticado, prossiga
-    } else {
-        res.redirect('/login'); // Redirecione para a página de login
-    }
-}
 
-const { verificarAutenticacao, verificarAutorizacaoTipo } = require('../models/middleware');
+const { verificarAutenticacao, verificarAutorizacao } = require('../models/middleware');
 
 const uploadFile = require("../util/uploader")("./app/public/imagem/perfil/");
+// const uploadFile = require("../util/uploader")();
 
-router.get("/", verificarAutenticacao, function (req, res) {
+
+
+
+
+
+
+router.get("/", async function (req, res) {
     var email = req.session.email;
-    
-    res.render("pages/home", {
+
+    res.render("pages/index", {
         email: email,
         userId: req.session.userId,
         listaErros: null,
@@ -67,48 +81,88 @@ router.get("/add-locais", function (req, res) {
     var email = req.session.email;
     res.render("pages/add-locais", { email: email });
 });
-
-// Rota para adicionar locais com upload de imagens
-
-router.get("/pagina-empresa", verificarAutenticacao, verificarAutorizacaoTipo(['empresa', 'adm'], '/login-empr'), (req, res) => {
-    res.render("pagina-empresa", { userId: req.session.userId });
-});
-
-router.get("/pagina-usuario", verificarAutenticacao, verificarAutorizacaoTipo(['usuario', 'adm'], '/login'), (req, res) => {
-    res.render("pagina-usuario", { userId: req.session.userId });
-});
-
-router.post("/adicionarLocais",upload, locaisController.adicionarLocais, async function (req, res) {
-
-});
-
-
-router.post("/avaliarLocais", verificarLogado, locaisController.avaliarLocais, async function (req, res) {
-
-});
-
-router.post("/avaliarLocaisBanco", upload, verificarLogado, locaisController.avaliarLocaisBanco, async function (req, res) {
-
-});
-
-
-router.get("/add-product", function (req, res) {
+router.get("/add-locais", function (req, res) {
     var email = req.session.email;
-    res.render("pages/add-product", { email: email });
+    res.render("pages/add-locais", { email: email });
 });
 
-router.post("/adicionarProd",upload, produtoController.adicionarProd, async function (req, res) {
-
+router.get("/add-locais-premium", function (req, res) {
+    var email = req.session.email;
+    res.render("pages/add-locais-premium", { email: email });
 });
 
 
 
-router.get("/pegarProdutoBanco", produtoController.pegarProdutoBanco, async function (req, res){
+
+
+router.get("/produto-confirmado", produtoController.adicionarProdutoConfirmado);
+
+router.post("/adicionarLocais", upload, locaisController.adicionarLocais, async function (req, res) {
     //
-    });
+});
+
+router.post("/adicionarLocaisPremium", upload, locaisPremiumController.adicionarLocaisPremium, async function (req, res) {
+    //
+});
+
+router.post("/fazerReserva/", reservaController.fazerReserva, async function (req, res) {
+});
+
+router.get("/reservaConfirmada", reservaController.reservaConfirmada);
+
+
+router.post("/avaliarLocais", verificarAutenticacao, locaisController.avaliarLocais, async function (req, res) {
+
+});
+
+router.post("/avaliarLocaisBanco", upload, verificarAutenticacao, locaisController.avaliarLocaisBanco, async function (req, res) {
+
+});
 
 
 
+router.post("/adicionarProd", upload, produtoController.adicionarProd, async function (req, res) {
+
+});
+
+router.get("/pegarProdutoBanco", produtoController.pegarProdutoBanco, async function (req, res) {
+    //
+});
+
+router.get("/pegarProdutoEmpresa", produtoController.pegarProdutoEmpresa, async function (req, res) {
+    //
+});
+
+
+router.get("/painel-empresa", verificarAutenticacao, verificarAutorizacao, async function (req, res) {
+    var email = req.session.email;
+    var userId = req.session.userId;
+    res.render("pages/painel-empresa", { email: email, userId: userId });
+});
+
+router.get("/favoritarProd/:id", produtoController.favoritarProd, async function (req, res){
+});
+
+router.get("/favoritarLocal/:id", locaisController.favoritarLocal, async function (req, res){
+});
+
+router.get("/checkCurtirLocal/:id", locaisController.checkCurtirLocal, async function (req, res){
+});
+
+router.get("/itens-curtidos", function (req, res) {
+    var email = req.session.email;
+    res.render("pages/itens-curtidos", { email: email });
+});
+
+router.get("/pegarProdutoCurtido", produtoController.pegarProdutoCurtido, async function (req, res) {
+    //
+});
+router.get("/pegarReservas", reservaController.pegarReservas, async function (req, res) {
+    //
+});
+router.get("/pegarReservasEmpresa", reservaController.pegarReservasEmpresa, async function (req, res) {
+    //
+});
 
 router.get("/login", function (req, res) {
     res.render("pages/login", {
@@ -125,34 +179,56 @@ router.get("/login-empr", function (req, res) {
     });
 });
 
+router.get("/verSeEmpresa", empresaController.verSeEmpresa, async function (req, res) {
+    //
+});
+
 
 // pagina locais
 router.get("/locais-esportivos", async function (req, res) {
     var email = req.session.email;
     var nome = req.session.nome;
-    
+    var userTipo = req.session.userTipo
 
-    
-    res.render("pages/locais-esportivos", {nome:nome, email: email});
+
+    res.render("pages/locais-esportivos", { nome: nome, email: email, userTipo: userTipo });
 })
 
-router.get("/locaisBanco", locaisController.locaisBanco, async function (req, res){
-//
+router.get("/locaisBanco", locaisController.locaisBanco, async function (req, res) {
+    //
+});
+router.get("/locaisBancoPremium", locaisPremiumController.locaisBancoPremium, async function (req, res) {
+    //
 });
 
-router.get("/getLocalFromId", locaisController.getLocalFromId, async function (req, res){
-//
+router.get("/getLocalFromId", locaisController.getLocalFromId, async function (req, res) {
+    //
 });
 
-router.get("/product-page/:id", produtoController.getProductById, async function (req, res){
+router.get("/getLocalPremiumFromId", locaisPremiumController.getLocalPremiumFromId, async function (req, res) {
+    //
 });
 
-router.get("/product-page", function (req, res) {
+router.get("/product-page/:id", produtoController.getProductById("pages/product-page"), async function (req, res) {
     var email = req.session.email;
     res.render("pages/product-page", { email: email });
 });
 
-router.get("/profile", async function (req, res) {
+ router.get("/local-page/:id", reservaController.getLocalReservaById("pages/local-page"), async function (req, res) {
+    var email = req.session.email;
+    res.render("pages/local-page", { email: email });
+});
+
+
+
+
+router.get("/product-editar/:id", produtoController.getProductById("pages/product-editar"), async function (req, res) {
+    var email = req.session.email;
+    res.render("pages/product-editar", { email: email });
+});
+
+
+router.get("/profile", verificarAutenticacao, function (req, res) {
     var nome = req.session.nome;
     var email = req.session.email;
     var cep = req.session.cep;
@@ -172,7 +248,7 @@ router.get("/profile", async function (req, res) {
 });
 
 
-router.get("/alter-account", function (req, res) {
+router.get("/alter-account", verificarAutenticacao, async function (req, res) {
     email = req.session.email;
     nome = req.session.nome;
     sobrenome = req.session.sobrenome;
@@ -181,7 +257,7 @@ router.get("/alter-account", function (req, res) {
         email: email,
         nome: nome,
         sobrenome: sobrenome,
-        celular: celular
+        celular: celular,
     });
 });
 
@@ -210,7 +286,7 @@ router.get("/register", function (req, res) {
 });
 
 
-router.post("/alterType", async function (req, res) {
+router.post("/alterType", verificarAutenticacao, async function (req, res) {
     const { email, senha, cnpj, cSenha } = req.body;
 
     if (senha != cSenha) {
@@ -234,7 +310,7 @@ router.get("/soccer", function (req, res) {
     res.render("pages/soccer", { email: email });
 });
 
-router.get("/empresa", async function (req, res) {
+router.get("/empresa", verificarAutenticacao, function (req, res) {
 
     var nome = req.session.nome;
     var email = req.session.email;
@@ -259,38 +335,27 @@ router.get("/empresa", async function (req, res) {
     });
 });
 
-router.get("/add-product", function (req, res) {
-    res.render("pages/add-product");
+router.get("/add-product", verificarAutenticacao, function (req, res) {
+    var email = req.session.email;
+    res.render("pages/add-product", {email: email});
 });
+
+router.get("/add-productSegredos", verificarAutenticacao, function (req, res) {
+    var email = req.session.email;
+    res.render("pages/add-productSegredos", {email: email});
+});
+
+router.post("/adicionarProdSegredos", upload, produtoController.adicionarProdSegredos, async function (req, res) {
+
+});
+
 router.get("/cart", function (req, res) {
 });
 
-router.get('/alter', async (req, res) => {
-    try {
-        const email = req.session.email;
+//USUARIOS
 
-        if (!email) {
-            throw new Error('Usuário não autenticado.');
-        }
-
-        // Query usando o email em vez do userId
-        const [rows] = await connection.query(
-            "SELECT cep, numero FROM usuario_clientes WHERE email = ?",
-            [email]
-        );
-
-        if (rows.length === 0) {
-            throw new Error('Usuário não encontrado.');
-        }
-
-        const { cep, numero } = rows[0]; // Obter os dados retornados
-
-        // Renderizar a página com as informações
-        res.render('pages/alter', { email, cep, numero });
-    } catch (error) {
-        console.error('Erro ao obter dados:', error);
-        res.status(500).send('Erro ao obter dados');
-    }
+router.get('/alter', usuarioController.alterDados, usuarioController.guardarCelular, verificarAutenticacao, async (req, res) => {
+    //
 });
 
 router.post("/fazerRegistro", usuarioController.registrarUsu, async function (req, res) {
@@ -301,11 +366,13 @@ router.post("/fazerLogin", usuarioController.logar, async function (req, res) {
 });
 
 
+//EMPRESAS
+
 router.post("/fazerRegisEmpr", empresaController.registrarEmpr, async function (req, res) {
     //
 });
 
-router.post('/loginEmpr', empresaController.logarEmpr, async function(req, res){
+router.post('/loginEmpr', empresaController.logarEmpr, async function (req, res) {
     //
 })
 
@@ -314,6 +381,8 @@ router.get("/fazerLogout", function (req, res) {
         res.redirect('/');
     })
 });
+
+
 
 router.get('/guardarCEP', async (req, res) => {
     const { cep, numero } = req.query;
@@ -359,6 +428,7 @@ router.get('/guardarCEP', async (req, res) => {
     }
 });
 
+
 router.post('/delCEP', async function (req, res) {
     const { email } = req.body;
 
@@ -392,11 +462,16 @@ router.post('/delCEP', async function (req, res) {
     }
 
 })
+
 router.post('/comprar', async (req, res) => {
 
 });
 
-
+router.get("/fazerLogout", function (req, res) {
+    req.session.destroy(function (err) {
+        res.redirect('/');
+    })
+});
 
 
 
