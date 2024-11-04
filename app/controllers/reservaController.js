@@ -6,7 +6,8 @@ const { all } = require('../routes/productRouter');
 
 // Inicialize o cliente Mercado Pago
 const client = new MercadoPagoConfig({
-    accessToken: 'APP_USR-5246075068010463-102011-9f4c949634a04fdbbf0193af72dd4988-428968371',
+    // accessToken: 'APP_USR-5246075068010463-102011-9f4c949634a04fdbbf0193af72dd4988-428968371',
+    accessToken: 'TEST-5246075068010463-102011-23539c46def1acb4b061770a6d174e1e-428968371',
     options: { timeout: 5000, idempotencyKey: 'abc' }
 });
 
@@ -122,7 +123,13 @@ const getLocalReservaById = (path) => {
             const [results] = await connection.query(query, [localId]);
 
             const formattedResults = results.reduce((acc, row) => {
-                const { id_local_premium,nome_local_premium, latitude, longitude, descricao, preco_hora, dia_semana, horario_inicio, horario_fim, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
+                const { id_local_premium,
+                    nome_local_premium,
+                    latitude,
+                    longitude,
+                    descricao,
+                    preco_hora,
+                    dia_semana, horario_inicio, horario_fim, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
                 const local = acc.find(loc => loc.nome_local_premium === nome_local_premium);
                 
                 if (local) {
@@ -279,7 +286,7 @@ const reservaConfirmada = async (req, res) => {
      
 
         req.flash('success_msg', 'Reserva feita com sucesso!');
-        res.redirect('/produto-confirmado');
+        res.redirect('/itens-curtidos');
     } catch (error) {
         req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
         console.log(error);

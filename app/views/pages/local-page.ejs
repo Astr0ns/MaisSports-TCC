@@ -287,11 +287,15 @@
             // Exibir o resultado
             console.log(`Total: ${totalHours} horas e ${totalRemainingMinutes} minutos`);
 
-            if (totalHours > 0) {
+            if (totalRemainingMinutes >= 15) {
                 // Certifique-se de que local.preco_hora é um número
                 const precoHora = parseFloat(local.preco_hora); // Converte para número
+                const precoMin = parseFloat(local.preco_hora)/60; // Converte para número
+
+                console.log(`Preço Hora ${precoHora} Preço Min: ${precoMin}`);
+                
                 if (!isNaN(precoHora)) {
-                    const subTotal = totalHours * precoHora; // Cálculo do subtotal
+                    const subTotal = (totalHours * precoHora) + (totalRemainingMinutes * precoMin); // Cálculo do subtotal
                     document.querySelector(".infoPreco p").innerHTML = `R$${precoHora.toFixed(2)} x ${totalHours} Horas`;
                     document.querySelector(".infoPreco h3").innerHTML = `subTotal: R$${subTotal.toFixed(2)}`;
 

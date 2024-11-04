@@ -120,8 +120,127 @@
                             <section class="preco_hora">
                                 <label for="preco_hora">Digite o Preço da Hora:</label><br>
                                 <input class="name" type="text" id="preco_hora" name="preco_hora"
-                                    placeholder="Digite o preço da hora">
+                                       placeholder=" Digite preço:" oninput="syncPrice()">
                             </section>
+
+                            <label>Escolha a quantidade de espaços:</label>
+                            <section class="escolherTotalEspaco">
+                                
+                                <label class="radioLabel">
+                                    <input type="radio" id="espaco1" name="totalEspaco" value="1" class="radio" checked>
+                                    <span class="custom-radio"></span>
+                                    1 Espaço
+                                </label><br>
+                                
+                                <label class="radioLabel">
+                                    <input type="radio" id="espaco2" name="totalEspaco" value="2" class="radio">
+                                    <span class="custom-radio"></span>
+                                    2 Espaços
+                                </label><br>
+                                
+                                <label class="radioLabel">
+                                    <input type="radio" id="espaco3" name="totalEspaco" value="3" class="radio">
+                                    <span class="custom-radio"></span>
+                                    3 Espaços
+                                </label><br>
+                            </section>
+
+                            <section class="espacoInfo2" style="margin-top: 40px; display: none;">
+                                <hr>
+                                <section class="title-local" style="margin-top: 15px;">
+                                    <label for="nome_local2">Digite o Nome do Local:</label><br>
+                                    <input class="name" type="text" id="nome_local2" name="nome_local2"
+                                        placeholder="Digite o nome">
+                                </section>
+                                <section class="preco_hora">
+                                    <label for="preco_hora2">Digite o Preço da Hora:</label><br>
+                                    <input class="name" type="text" id="preco_hora2" name="preco_hora2"
+                                        placeholder="Digite preço:">
+                                </section>
+
+                                <label>Tem Categoria Diferente?</label><br>
+
+                                <section class="escolherTotalEspaco">
+                                    <label class="radioLabel">
+                                        <input type="radio" class="radio" name="categoriaConfirm2" value="1" checked>
+                                        <span class="custom-radio"></span>
+                                        Não
+                                    </label><br>
+                                    <label class="radioLabel">
+                                        <input type="radio" class="radio" name="categoriaConfirm2" value="2">
+                                        <span class="custom-radio"></span>
+                                        Sim
+                                    </label><br>
+                                    <section class="local_category local_category2">
+                                        <label for="local_category2">Categoria:</label>
+                                        <select name="local_category2">
+                                            <option value="" selected>Selecione</option>
+                                            <option value="basketball">Basquete</option>
+                                            <option value="football">Futebol</option>
+                                            <option value="skatepark">Skate</option>
+                                            <option value="gym">Academia</option>
+                                            <option value="bicycle">Bicicleta</option>
+                                            <option value="park">Parque</option>
+                                            <option value="tennis">Tênis</option>
+                                            <option value="volleyball">Vôlei</option>
+                                            <option value="swimming">Natação</option>
+                                        </select>
+                                    </section>
+                                    
+                                </section>
+
+                                <hr style="margin-top: 20px;">
+                                
+                            </section>
+
+                            <section class="espacoInfo3" style="margin-top: 10px; display: none;">
+                                
+                                <section class="title-local" style="margin-top: 15px;">
+                                    <label for="nome_local3">Digite o Nome do Local:</label><br>
+                                    <input class="name" type="text" id="nome_local3" name="nome_local3"
+                                        placeholder="Digite o nome">
+                                </section>
+                                <section class="preco_hora">
+                                    <label for="preco_hora3">Digite o Preço da Hora:</label><br>
+                                    <input class="name" type="text" id="preco_hora3" name="preco_hora3"
+                                        placeholder="Digite preço:">
+                                </section>
+
+                                <label>Tem Categoria Diferente?</label><br>
+
+                                <section class="escolherTotalEspaco">
+                                    <label class="radioLabel">
+                                        <input type="radio" class="radio" name="categoriaConfirm3" value="1" checked>
+                                        <span class="custom-radio"></span>
+                                        Não
+                                    </label><br>
+                                    <label class="radioLabel">
+                                        <input type="radio" class="radio" name="categoriaConfirm3" value="2">
+                                        <span class="custom-radio"></span>
+                                        Sim
+                                    </label><br>
+                                    <section class="local_category local_category3">
+                                        <label for="local_category3">Categoria:</label>
+                                        <select name="local_category3">
+                                            <option value="" selected>Selecione</option>
+                                            <option value="basketball">Basquete</option>
+                                            <option value="football">Futebol</option>
+                                            <option value="skatepark">Skate</option>
+                                            <option value="gym">Academia</option>
+                                            <option value="bicycle">Bicicleta</option>
+                                            <option value="park">Parque</option>
+                                            <option value="tennis">Tênis</option>
+                                            <option value="volleyball">Vôlei</option>
+                                            <option value="swimming">Natação</option>
+                                        </select>
+                                    </section>
+                                    
+                                </section>
+                                <hr style="margin-top: 20px;">
+                                
+                            </section>
+
+                            
 
                             
 

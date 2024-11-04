@@ -2,7 +2,7 @@ var connection = require("../../config/pool_conexoes");
 const express = require('express');
 
 const adicionarLocaisPremium = async (req, res) => {
-    const { nome_local, local_category, preco_hora,  desc_local, latitude, longitude, horarios } = req.body;
+    const { nome_local, local_category, preco_hora, desc_local, latitude, longitude, horarios, totalEspaco } = req.body;
     const email = req.session.email;
 
     const parsedHorarios = JSON.parse(horarios);
@@ -10,6 +10,7 @@ const adicionarLocaisPremium = async (req, res) => {
     console.log("Horários recebidos (como objeto):", parsedHorarios);
     
 
+    console.log(totalEspaco)
     console.log(nome_local)
     console.log(local_category)
     console.log(preco_hora)
@@ -18,12 +19,8 @@ const adicionarLocaisPremium = async (req, res) => {
     console.log(longitude)
     // console.log("Horários recebidos:", horarios);
 
-    for (let chave in parsedHorarios) {
-        console.log(chave);
-        console.log(chave + ": " + parsedHorarios[chave].inicio);
-        console.log(chave + ": " + parsedHorarios[chave].fim);
-    }
       
+    return
 
 
 
@@ -55,13 +52,100 @@ const adicionarLocaisPremium = async (req, res) => {
             return res.redirect('/locais-esportivos');
         }
 
-        // Insere o novo local
-        const [addL] = await connection.query(
-            `INSERT INTO local_premium (fk_id_empresa, nome_local_premium, categoria, latitude, longitude, descricao, preco_hora) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [fk_id_emp, nome_local, local_category, latitude, longitude, desc_local, preco_hora]
-        );
+        if(totalEspaco == 1){
+            // Insere o novo local
+            console.log("deu grenn")
+            return
 
-        const locaisId = addL.insertId;
+            const [addL] = await connection.query(
+                `INSERT INTO local_premium (fk_id_empresa, nome_local_premium, categoria, latitude, longitude, descricao) VALUES (?, ?, ?, ?, ?, ?)`,
+                [fk_id_emp, nome_local, local_category, latitude, longitude, desc_local]
+            );
+
+            const locaisId = addL.insertId;
+
+            const [addespaco] = await connection.query(
+                `INSERT INTO espaco_local (fk_id_local_premium, nome_espaco, preco_hora) VALUES (?, ?, ?)`,
+                [locaisId, nome_local, preco_hora]
+            );
+
+
+        } else if (totalEspaco == 2){
+
+            const { nome_local2, preco_hora2, categoriaConfirm2, local_category2} = req.body;
+            console.log(nome_local2)
+            console.log(preco_hora2)
+
+            if(categoriaConfirm2 == 2){
+                console.log("sim categoria 2")
+                const [addL] = await connection.query(
+                    `INSERT INTO local_premium (fk_id_empresa, nome_local_premium, categoria, categoria_2, latitude, longitude, descricao) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    [fk_id_emp, nome_local, local_category, local_category2, latitude, longitude, desc_local]
+                );
+            } else {
+                console.log("não categoria 2")
+                const [addL] = await connection.query(
+                    `INSERT INTO local_premium (fk_id_empresa, nome_local_premium, categoria, latitude, longitude, descricao) VALUES (?, ?, ?, ?, ?, ?)`,
+                    [fk_id_emp, nome_local, local_category, latitude, longitude, desc_local]
+                );
+            }
+            return
+
+    
+            const locaisId = addL.insertId;
+    
+            const [addespaco] = await connection.query(
+                `INSERT INTO espaco_local (fk_id_local_premium, nome_espaco, preco_hora) VALUES (?, ?, ?)`,
+                [locaisId, nome_local, preco_hora]
+            );
+
+            const [addespaco2] = await connection.query(
+                `INSERT INTO espaco_local (fk_id_local_premium, nome_espaco, preco_hora) VALUES (?, ?, ?)`,
+                [locaisId, nome_local2, preco_hora2]
+            );
+
+        } else if (totalEspaco == 3) {
+            // não feito ainda
+            const { nome_local2, preco_hora2, categoriaConfirm2, local_category2, nome_local3, preco_hora3, categoriaConfirm3,} = req.body;
+            console.log(nome_local2)
+            console.log(preco_hora2)
+
+            if(categoriaConfirm2 == 2){
+                console.log("sim categoria 2")
+                const [addL] = await connection.query(
+                    `INSERT INTO local_premium (fk_id_empresa, nome_local_premium, categoria, categoria_2, latitude, longitude, descricao) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    [fk_id_emp, nome_local, local_category, local_category2, latitude, longitude, desc_local]
+                );
+            } else {
+                console.log("não categoria 2")
+                const [addL] = await connection.query(
+                    `INSERT INTO local_premium (fk_id_empresa, nome_local_premium, categoria, latitude, longitude, descricao) VALUES (?, ?, ?, ?, ?, ?)`,
+                    [fk_id_emp, nome_local, local_category, latitude, longitude, desc_local]
+                );
+            }
+            return
+
+    
+            const locaisId = addL.insertId;
+    
+            const [addespaco] = await connection.query(
+                `INSERT INTO espaco_local (fk_id_local_premium, nome_espaco, preco_hora) VALUES (?, ?, ?)`,
+                [locaisId, nome_local, preco_hora]
+            );
+
+            const [addespaco2] = await connection.query(
+                `INSERT INTO espaco_local (fk_id_local_premium, nome_espaco, preco_hora) VALUES (?, ?, ?)`,
+                [locaisId, nome_local2, preco_hora2]
+            );
+            
+            const [addespaco3] = await connection.query(
+                `INSERT INTO espaco_local (fk_id_local_premium, nome_espaco, preco_hora) VALUES (?, ?, ?)`,
+                [locaisId, nome_local3, preco_hora3]
+            );
+        }
+
+        
+
 
         // Adicionar dia de atuação
         for (let chave in parsedHorarios) {

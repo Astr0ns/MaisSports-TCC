@@ -50,15 +50,66 @@
     color: #f72ba5;
 }
 
+.radio {
+    display: none; /* Oculta o input original */
+}
+
+.custom-radio {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007BFF;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.custom-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: #007BFF;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.2s ease;
+}
+
+.radio:checked + .custom-radio::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.escolherTotalEspaco{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.radioLabel{
+    display: flex;
+    align-items: center;
+
+}
+
 
 
 .preco_hora .name{
     background-color: var(--cor-fonte);
     display: block;
-    padding: 10px;
-    width: 100%;
+    padding: 5px;
+    width: 75%;
     border: 1px solid var(--cor-fundo2);
     border-radius: 17px;
+    font-size: 17px;
+    text-align: center;
+}
+
+.hora_nova{
+    display: flex;
 }
 
 .hora_css{
