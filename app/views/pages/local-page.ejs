@@ -80,11 +80,11 @@
                 <input type="hidden" id="horario_inicio" name="horario_inicio" value=""></input>
                 <input type="hidden" id="horario_fim" name="horario_fim" value=""></input>
                 <input type="hidden" id="preco_total" name="preco_total" value=""></input>
-                <input type="hidden" id="id_local_premium" name="id_local_premium" value=""></input>
+                <input type="hidden" id="id_local_premium" name="id_espaco_local" value=""></input>
                 <input type="hidden" id="nome_local_premium" name="nome_local_premium" value=""></input>
 
                 <section class="reservarInfo">
-                    <h2>R$<%- local.preco_hora %><span>/Hora</span></h2>
+                    <h2>R$<%- local.precos[0].preco_hora %><span>/Hora</span></h2>
 
                     <div style="position: relative; display: flex; justify-content: center; margin-top: 20px;">
                         <input id="calendar" oninput="handleInput(event)" class="time-picker" type="text"></input>
@@ -93,11 +93,11 @@
                     <div style="margin-top: 55px; display: flex;">
                         <div style="position: relative; width: 50%;">
                             
-                            <input id="start-time" oninput="calcularPreco()" class="time-picker" type="text" style="border-radius: 10px 0 0 10px;"></input>
+                            <input id="start-time" oninput="" class="time-picker" type="text" style="border-radius: 10px 0 0 10px;"></input>
                             <label for="start-time" class="timeLabel" style="border-radius: 10px 0 0 10px; left: 50%;"><h2>CHECK-IN</h2></lebel>
                         </div>
                         <div style="position: relative; width: 50%;">
-                            <input id="end-time" oninput="calcularPreco()" class="time-picker" type="text" style="border-radius: 0 10px 10px 0;"></input>
+                            <input id="end-time" oninput="" class="time-picker" type="text" style="border-radius: 0 10px 10px 0;"></input>
                             <label for="end-time" class="timeLabel" style="border-radius: 0 10px 10px 0; left: 50%;"><h2>CHECK-OUT</h2></lebel>
                         </div>
                     </div>
@@ -110,7 +110,8 @@
                         <button type="submit">Reservar</button>
                     </section>
                     <hr>
-                    <h2 id="warningHora">Faça a Reserva de no minimo de 1 Hora</h2>
+                    <h2 id="warningHora">Faça a Reserva de no minimo de 15 Minutos</h2>
+                    <h2 id="warningReserva"></h2>
                 </section>
 
                 
@@ -242,6 +243,13 @@
     </script>
     
     <script> 
+
+        
+        function separarHoraMinutos(horario) {
+        const [hora, minuto] = horario.split(':'); // Divide em hora, minuto e segundo
+        return { hora, minuto };
+        }
+
         const diaSemana = [];
         const local = <%- JSON.stringify(local) %>;
             local.dias.forEach(function(dia, index) {
@@ -250,9 +258,10 @@
                 );
                 
             });
-            console.log(local)
             
-            document.getElementById("id_local_premium").value = local.id_local_premium
+            console.log(local.precos[0].id_espaco_local)
+            
+            document.getElementById("id_local_premium").value = 1
             document.getElementById("nome_local_premium").value = local.nome_local_premium
 
         function calcularPreco() {
@@ -287,10 +296,10 @@
             // Exibir o resultado
             console.log(`Total: ${totalHours} horas e ${totalRemainingMinutes} minutos`);
 
-            if (totalRemainingMinutes >= 15) {
+            if (totalRemainingMinutes >= 15 || totalHours >=1) {
                 // Certifique-se de que local.preco_hora é um número
-                const precoHora = parseFloat(local.preco_hora); // Converte para número
-                const precoMin = parseFloat(local.preco_hora)/60; // Converte para número
+                const precoHora = parseFloat(local.precos[0].preco_hora); // Converte para número
+                const precoMin = parseFloat(local.precos[0].preco_hora)/60; // Converte para número
 
                 console.log(`Preço Hora ${precoHora} Preço Min: ${precoMin}`);
                 
@@ -351,57 +360,166 @@
             const value = event.target.value;
 
             document.getElementById("data_reserva").value = value
-
-
-            // Dividir a data em dia, mês e ano
-            const [day, month, year] = value.split('/').map(Number);
-
-            // Criar um objeto Date (lembre-se que os meses em JavaScript são 0-indexados)
-            const date = new Date(year, month - 1, day);
-
-            // Obter o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado)
-            const dayOfWeek = date.getDay();
-
-            // Mapeando os valores para os dias da semana
-            const days = ["Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado"];
-            const dayName = days[dayOfWeek];
-
-            let iniHora = "";
-            let fimHora = "";
             
 
-            diaSemana.forEach((dia, index) => {
-                if (dayName.includes(dia)) {
-                    iniHora = local.dias[index].horario_inicio
-                    fimHora = local.dias[index].horario_fim
-                    return
-                }
+
+            fetch(`/pegarReservasFeitas?id=${local.precos[0].id_espaco_local}&date=${value}`)
+            .then(responseL => responseL.json())
+            .then(reservas => {
+                console.log('reservas recebidas:', reservas);
+                reservasFeitas(value, reservas)
+            })
+            .catch(err => {
+                console.error('Erro ao carregar locais:', err);
+                reservasFeitas(value)
             });
-            
 
-            // Instância para o campo de início
-        flatpickr("#start-time", {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",
-            minTime: iniHora,
-            maxTime: fimHora,
-            time_24hr: true,
-            locale: "pt",
-            defaultDate: iniHora // Defina o horário padrão para o início
-        });
 
-        // Instância para o campo de fim
-        flatpickr("#end-time", {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",
-            minTime: iniHora,
-            maxTime: fimHora,
-            time_24hr: true,
-            locale: "pt",
-            defaultDate: fimHora // Defina o horário padrão para o fim
-        });
+            function reservasFeitas ( value ,reservas){
+
+                let horarioFimSeparado = "";
+                let horarioInicioSeparado = "";
+                
+                if(reservas.length == 0){
+                    console.log("caiu certo")
+                } else {
+                    const { id_reserva, horario_inicio, horario_fim } = reservas[0];
+                    console.log(horario_fim, horario_inicio)
+                    horarioFimSeparado = separarHoraMinutos(horario_fim);
+                    horarioInicioSeparado = separarHoraMinutos(horario_inicio);
+                    
+                }
+
+                if(horarioFimSeparado.hora <= 7 && horarioInicioSeparado.hora > 16){
+                    horarioFimSeparado.hora = parseInt(horarioFimSeparado.hora) +24;
+                    console.log(horarioFimSeparado.hora)
+                }
+                
+
+                // Dividir a data em dia, mês e ano
+                const [day, month, year] = value.split('/').map(Number);
+
+                // Criar um objeto Date (lembre-se que os meses em JavaScript são 0-indexados)
+                const date = new Date(year, month - 1, day);
+
+                // Obter o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado)
+                const dayOfWeek = date.getDay();
+
+                // Mapeando os valores para os dias da semana
+                const days = ["Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado"];
+                const dayName = days[dayOfWeek];
+
+                let iniHora = "";
+                let fimHora = "";
+
+                console.log(dayName)
+
+                diaSemana.forEach((dia, index) => {
+                    if (dayName.includes(dia)) {
+                        iniHora = local.dias[index].horario_inicio
+                        fimHora = local.dias[index].horario_fim
+                        return
+                    }
+                });
+
+
+                // Instância para o campo de início
+                flatpickr("#start-time", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                minTime: iniHora,
+                maxTime: fimHora,
+                time_24hr: true,
+                locale: "pt",
+                defaultDate: iniHora, // Define o horário padrão para o início
+                onChange: function(selectedDates, dateStr, instance) {
+                    // Obter a hora selecionada
+                    const selectedDate = selectedDates[0];
+                    const selectedHour = selectedDate.getHours();  // Hora
+                    const selectedMinute = selectedDate.getMinutes();  // Minuto
+                    
+                    
+                    // const iniCheck = document.getElementById("start-time").value; // Ex: "16:30"
+                    
+                    if(reservas.length > 0){
+                        const fimCheck = document.getElementById("end-time").value; // Ex: "00:30"
+                        let checkOutroInput = separarHoraMinutos(fimCheck)
+                        if(checkOutroInput.hora <= 7 && selectedHour > 14){
+                            checkOutroInput.hora = parseInt(checkOutroInput.hora) +24;
+                            console.log(checkOutroInput.hora)
+                        }
+                        
+                        console.log(selectedHour, horarioInicioSeparado.hora, checkOutroInput.hora, horarioInicioSeparado.hora)
+                        
+                        if (selectedHour >= horarioInicioSeparado.hora && selectedHour < horarioFimSeparado.hora || 
+                        checkOutroInput.hora > horarioInicioSeparado.hora && checkOutroInput.hora <= horarioFimSeparado.hora || 
+                        selectedHour <= horarioInicioSeparado.hora && checkOutroInput.hora > horarioInicioSeparado.hora || 
+                        selectedHour == horarioFimSeparado.hora && horarioFimSeparado.minuto > selectedMinute) {
+                            document.getElementById("warningReserva").innerHTML = `já existe uma reserva das ${horarioInicioSeparado.hora}:${horarioInicioSeparado.minuto} até ${horarioFimSeparado.hora}:${horarioFimSeparado.minuto}`
+                            document.querySelector(".infoPreco").style.display = "none"
+                            document.querySelector("#warningHora").style.display = "none"
+                            document.querySelector(".reservarInfo hr").style.display = "block"
+                            document.querySelector("#warningReserva").style.display = "block"
+                            
+                        } else {
+                            calcularPreco()
+                            document.querySelector("#warningReserva").style.display = "none"
+                        }
+                    } else {
+                        calcularPreco()
+                    }
+                    
+                    // Se o horário selecionado for entre 15:00 e 18:00, redefine para um horário válido
+                    
+                }
+                });
+
+
+                // Instância para o campo de fim
+                flatpickr("#end-time", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                minTime: iniHora,
+                maxTime: fimHora,
+                time_24hr: true,
+                locale: "pt",
+                defaultDate: fimHora, // Defina o horário padrão para o fim
+                onChange: function(selectedDates, dateStr, instance) {
+                    // Obter a hora selecionada
+                    const selectedDate = selectedDates[0];
+                    const selectedHour = selectedDate.getHours();  // Hora
+                    const selectedMinute = selectedDate.getMinutes();  // Minuto
+                    
+                    
+                    if(reservas.length > 0){
+                        const iniCheck = document.getElementById("start-time").value; // Ex: "16:30"
+                        let checkOutroInput = separarHoraMinutos(iniCheck)
+                
+                        console.log(selectedHour, horarioInicioSeparado.hora, checkOutroInput.hora, horarioInicioSeparado.hora, selectedMinute, horarioInicioSeparado.minuto)
+                        if (selectedHour > horarioInicioSeparado.hora && selectedHour <= horarioFimSeparado.hora || 
+                        checkOutroInput.hora >= horarioInicioSeparado.hora && checkOutroInput.hora < horarioFimSeparado.hora|| 
+                        selectedHour > horarioInicioSeparado.hora && checkOutroInput.hora < horarioInicioSeparado.hora || 
+                        horarioInicioSeparado.hora == selectedHour && horarioInicioSeparado.minuto > selectedMinute) {
+                            document.getElementById("warningReserva").innerHTML = `já existe uma reserva das ${horarioInicioSeparado.hora}:${horarioInicioSeparado.minuto} até ${horarioFimSeparado.hora}:${horarioFimSeparado.minuto}`
+                            document.querySelector(".infoPreco").style.display = "none"
+                            document.querySelector("#warningHora").style.display = "none"
+                            document.querySelector(".reservarInfo hr").style.display = "block"
+                            document.querySelector("#warningReserva").style.display = "block"
+                            
+                        } else {
+                            calcularPreco()
+                            document.querySelector("#warningReserva").style.display = "none"
+                        }
+                    } else {
+                        calcularPreco()
+                    }
+                    
+                }
+                });
+
+            }
             
         calcularPreco()
         }

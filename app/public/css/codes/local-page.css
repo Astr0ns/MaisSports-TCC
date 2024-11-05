@@ -226,7 +226,7 @@ hr{
     transition: opacity 0.3s ease;
 }
 
-#warningHora{
+#warningHora, #warningReserva{
     font-size: 1em;
     width: 100%;
     text-align: center;

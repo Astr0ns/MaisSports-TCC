@@ -107,7 +107,8 @@ const getLocalReservaById = (path) => {
         const email = req.session.email; // Pega o email da sessão, se estiver definido
         try {
             const query = `
-                SELECT l.id_local_premium, l.nome_local_premium, l.latitude, l.longitude, l.descricao, l.preco_hora,
+                SELECT l.id_local_premium, l.nome_local_premium, l.latitude, l.longitude, l.descricao,
+                e.preco_hora, e.id_espaco_local, e.nome_espaco,
                     d.dia_semana, d.horario_inicio, d.horario_fim,
                     i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais,
                     u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente,
@@ -117,6 +118,7 @@ const getLocalReservaById = (path) => {
                 LEFT JOIN avaliacao_local a ON l.id_local_premium = a.fk_id_local_premium 
                 LEFT JOIN usuario_clientes u ON a.fk_id_cliente = u.id 
                 LEFT JOIN dia_atuacao d on l.id_local_premium = d.fk_id_local_premium 
+                LEFT JOIN espaco_local e on l.id_local_premium = e.fk_id_local_premium
                 WHERE l.id_local_premium = ?
                 GROUP BY l.id_local_premium, i.nome_imagem, d.dia_semana, a.comentario_local, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
             `;
@@ -128,7 +130,7 @@ const getLocalReservaById = (path) => {
                     latitude,
                     longitude,
                     descricao,
-                    preco_hora,
+                    preco_hora, id_espaco_local, nome_espaco,
                     dia_semana, horario_inicio, horario_fim, nome_imagem, comentario_local, avaliacao_estrela_locais, nome_cliente, sobrenome_cliente, media_avaliacao } = row;
                 const local = acc.find(loc => loc.nome_local_premium === nome_local_premium);
                 
@@ -138,11 +140,33 @@ const getLocalReservaById = (path) => {
                         local.imagens.push(nome_imagem);
                     }
 
-                    if (dia_semana) {
+                    const dia_semanaExistente = local.dias.find(com => 
+                        com.dia_semana === dia_semana &&
+                        com.horario_inicio === horario_inicio &&
+
+                        com.horario_fim === horario_fim
+                    );
+
+                    if (!dia_semanaExistente) {
                         local.dias.push({
                             dia_semana,
                             horario_inicio,
                             horario_fim
+                        });
+                    }
+
+                    const id_espaco_localExistente = local.precos.find(com => 
+                        com.id_espaco_local === id_espaco_local &&
+                        com.preco_hora === preco_hora &&
+
+                        com.nome_espaco === nome_espaco
+                    );
+                    
+                    if (!id_espaco_localExistente) {
+                        local.precos.push({
+                            preco_hora, 
+                            id_espaco_local, 
+                            nome_espaco,
                         });
                     }
                     
@@ -166,7 +190,11 @@ const getLocalReservaById = (path) => {
                         latitude,
                         longitude,
                         descricao,
-                        preco_hora,
+                        precos: id_espaco_local ? [{
+                            preco_hora,
+                            id_espaco_local,
+                            nome_espaco
+                        }] : [],
                         media_avaliacao, // Inclui a média de avaliação
                         imagens: nome_imagem ? [nome_imagem] : [],
                         dias: dia_semana ? [{
@@ -206,7 +234,7 @@ const getLocalReservaById = (path) => {
 
 const fazerReserva = async (req, res) => {
     console.log(req.body); // Veja os dados que estão chegando
-    const { data_reserva, horario_inicio, horario_fim, preco_total, id_local_premium, nome_local_premium } = req.body;
+    const { data_reserva, horario_inicio, horario_fim, preco_total, id_espaco_local, nome_local_premium } = req.body;
     const email = req.session.email;
     const preco_totalFloat = parseFloat(preco_total);
     console.log(`Reservando o local ${nome_local_premium}`,
@@ -218,8 +246,9 @@ const fazerReserva = async (req, res) => {
         horario_inicio, 
         horario_fim, 
         preco_total, 
-        id_local_premium
+        id_espaco_local
     });
+
 
     try {
         const preference = new Preference(client);
@@ -238,7 +267,7 @@ const fazerReserva = async (req, res) => {
                 
             ],
             back_urls: {
-                success: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/reservaConfirmada`, // URL para sucesso
+                success: `https://maissports-tcc.onrender.com/reservaConfirmada`, // URL para sucesso
                 failure: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-falha`, // URL para falha
                 pending: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-pendente`, // URL para pendente
             },
@@ -263,7 +292,7 @@ const reservaConfirmada = async (req, res) => {
     const externalReference = req.query.external_reference;
 
     const produto = JSON.parse(externalReference);
-    const { email, data_reserva, horario_inicio, horario_fim, preco_total, id_local_premium} = produto;
+    const { email, data_reserva, horario_inicio, horario_fim, preco_total, id_espaco_local} = produto;
     const precoTotalFloat = parseFloat(preco_total);
 
 
@@ -278,8 +307,8 @@ const reservaConfirmada = async (req, res) => {
 
         // Insira o novo produto na tabela
         const [addL] = await connection.query(
-            `INSERT INTO Reserva (fk_id_cliente, fk_id_local_premium, data_reserva, horario_inicio, horario_fim, preco_total) VALUES (?, ?, ?, ?, ?, ?)`,
-            [fk_id_cliente, id_local_premium, data_reserva, horario_inicio, horario_fim, precoTotalFloat]
+            `INSERT INTO Reservas (fk_id_cliente, fk_id_espaco_local, data_reserva, horario_inicio, horario_fim, preco_total) VALUES (?, ?, ?, ?, ?, ?)`,
+            [fk_id_cliente, id_espaco_local, data_reserva, horario_inicio, horario_fim, precoTotalFloat]
         );
 
         
@@ -291,6 +320,47 @@ const reservaConfirmada = async (req, res) => {
         req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
         console.log(error);
         res.redirect('/add-product');
+    }
+};
+
+const pegarReservasFeitas = async (req, res) => {
+    const localId = req.query.id;
+    const date = req.query.date;
+
+    console.log(date)
+    
+    try {
+
+
+        const query = `
+            SELECT id_reserva, horario_inicio, horario_fim 
+            FROM Reservas 
+            WHERE fk_id_espaco_local = ? AND data_reserva = ?
+            
+        `;
+        const [results] = await connection.query(query, [localId, date]); // Filtra pelos favoritos
+
+        // Formata os resultados para agrupar imagens por local
+        const reservas = results.reduce((acc, row) => {
+            const {id_reserva, horario_inicio, horario_fim} = row;
+            const location = acc.find(local => local.id_reserva === id_reserva);
+            
+            if (location) {
+            } else {
+                acc.push({
+                    id_reserva,
+                    horario_inicio, 
+                    horario_fim   
+                });
+            }
+            return acc;
+        }, []);
+        
+
+        res.json(reservas);
+    } catch (error) {
+        console.error("Erro ao buscar locais do banco de dados:", error);
+        res.status(500).send("Erro ao buscar locais");
     }
 };
 
@@ -319,14 +389,16 @@ const pegarReservas = async (req, res) => {
 
 
         const query = `
-            SELECT r.id_reserva, r.fk_id_local_premium, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total, 
+            SELECT r.id_reserva, r.fk_id_espaco_local, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total,
+                    e.fk_id_local_premium, nome_espaco,
                    i.nome_imagem,
                    l.nome_local_premium, l.id_local_premium,
                    u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente
-            FROM Reserva r
-            LEFT JOIN imagens i ON r.fk_id_local_premium = i.fk_local_premium_id
+            FROM Reservas r
+            LEFT JOIN espaco_local e ON r.fk_id_espaco_local = e.id_espaco_local
+            LEFT JOIN imagens i ON e.fk_id_local_premium = i.fk_local_premium_id
             LEFT JOIN usuario_clientes u ON r.fk_id_cliente = u.id
-            LEFT JOIN local_premium l ON r.fk_id_local_premium = l.id_local_premium
+            LEFT JOIN local_premium l ON e.fk_id_local_premium = l.id_local_premium
             WHERE r.fk_id_cliente = ?
             GROUP BY r.id_reserva, i.nome_imagem, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
         `;
@@ -334,7 +406,7 @@ const pegarReservas = async (req, res) => {
 
         // Formata os resultados para agrupar imagens por local
         const locais = results.reduce((acc, row) => {
-            const { id_reserva, data_reserva, horario_inicio, horario_fim, nome_imagem, preco_total, id_local_premium, nome_local_premium, nome_cliente, sobrenome_cliente} = row;
+            const { id_reserva, data_reserva, horario_inicio, nome_espaco, horario_fim, nome_imagem, preco_total, id_local_premium, nome_local_premium, nome_cliente, sobrenome_cliente} = row;
             const location = acc.find(local => local.id_reserva === id_reserva);
             
             if (location) {
@@ -346,6 +418,7 @@ const pegarReservas = async (req, res) => {
                     id_reserva, 
                     data_reserva, 
                     horario_inicio,
+                    nome_espaco,
                     horario_fim,
                     preco_total, 
                     id_local_premium, 
@@ -451,5 +524,5 @@ const pegarReservasEmpresa = async (req, res) => {
 };
 
 module.exports = {
-    getLocalReservaById, fazerReserva, reservaConfirmada, pegarReservas, pegarReservasEmpresa,
+    getLocalReservaById, fazerReserva, reservaConfirmada, pegarReservas, pegarReservasEmpresa, pegarReservasFeitas,
 };
