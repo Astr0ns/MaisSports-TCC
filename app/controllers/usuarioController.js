@@ -40,7 +40,7 @@ const logar = async (req, res) => {
 
     try {
         const [accounts] = await connection.query("SELECT * FROM usuario_clientes WHERE email = ? LIMIT 1", [email]);
-        
+
         if (accounts.length > 0) {
             const account = accounts[0];
 
@@ -60,7 +60,7 @@ const logar = async (req, res) => {
             req.session.sobrenome = account.sobrenome;
             req.session.userTipo = account.tipo;
             req.session.logado = true;
-            
+
             console.log(req.session.userTipo)
             // Atualizando a sessão
 
@@ -141,7 +141,8 @@ const registrarUsu = async (req, res) => {
 const alterDados = async (req, res) => {
 
     var celular = req.session.celular;
-    
+    var userId = req.session.userId;
+
     try {
         const email = req.session.email;
 
@@ -162,7 +163,7 @@ const alterDados = async (req, res) => {
         const { cep, numero } = rows[0]; // Obter os dados retornados
 
         // Renderizar a página com as informações
-        res.render('pages/alter', { email, cep, numero, celular });
+        res.render('pages/alter', { email, cep, numero, celular, userId });
     } catch (error) {
         console.error('Erro ao obter dados:', error);
         res.status(500).send('Erro ao obter dados');
@@ -170,10 +171,10 @@ const alterDados = async (req, res) => {
 }
 
 const guardarCelular = async (req, res) => {
-    try{
+    try {
         const userId = req.session.userId;
 
-        if(!userId) {
+        if (!userId) {
             throw new error('Usuario não autenticado');
         }
 
@@ -183,10 +184,56 @@ const guardarCelular = async (req, res) => {
 
         const { celular } = rows[0];
 
-    }catch{
+    } catch {
         console.error('Erro ao obter dados:', error);
         res.status(500).send('Erro ao obter dados');
     }
+}
+
+const guardarCEP = async (req, res) => {
+
+    const { cep, numero, bairro, cidade } = req.query;
+    const email = req.session.email;
+
+    console.log('cep:', cep);
+    console.log('numero:', numero);
+    console.log('email:', email);
+
+    if (!email) {
+        console.error('id não definido na sessão.');
+        return res.status(400).send('Erro: Usuário não está logado.');
+    }
+
+    try {
+        const [rows] = await connection.query(
+            "SELECT * FROM usuario_clientes WHERE email = ?",
+            [email]
+        );
+
+        if (rows.length === 0) {
+            throw new Error('email não encontrado na tabela.');
+        }
+
+        const [result] = await connection.query(
+            "UPDATE usuario_clientes SET cep = ?, numero = ?, bairro = ?, cidade = ? WHERE email = ?",
+            [cep, numero, bairro, cidade, email]
+        );
+
+        if (result.affectedRows === 0) {
+            throw new Error('Nenhuma linha foi afetada. Verifique se o email está correto.');
+        }
+
+        req.session.cep = cep;
+
+        console.log("Endereço cadastrado com sucesso!");
+        return res.redirect('/alter');
+    } catch (error) {
+        console.error(error);
+        if (!res.headersSent) {
+            res.status(400).send(error.message);
+        }
+    }
+
 }
 
 module.exports = {
@@ -194,5 +241,6 @@ module.exports = {
     logar,
     registrarUsu,
     alterDados,
-    guardarCelular
+    guardarCelular,
+    guardarCEP,
 };

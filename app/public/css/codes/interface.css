@@ -100,6 +100,11 @@ body.dark .locaisReservas div,  body.dark .reservas div{
     background-color: var(--cor-bar-dark-mob);
 }
 
+body.dark h3.lr{
+    color: white;
+    font-weight: normal;
+}
+
 
 @media screen and (min-width:320px) and (max-width: 1024px) {
     .nav-list {
