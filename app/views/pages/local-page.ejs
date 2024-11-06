@@ -58,6 +58,7 @@
 
 
         <section class="cardLocal">
+        
             <section class="localInfo">
                 <h1 id="endereco" style="margin-top: 25px;"></h1>
                 <section class="descLocal" style="margin-top: 30px;">
@@ -117,6 +118,8 @@
                 
 
             </form>
+
+            <h1 id="enderecoMobile"></h1>
 
         </section>
         
@@ -185,8 +188,10 @@
                 if (status === 'OK') {
                     if (results[0]) {
                         document.getElementById('endereco').innerText = results[0].formatted_address;
+                        document.getElementById('enderecoMobile').innerText = results[0].formatted_address;
                     } else {
                         document.getElementById('endereco').innerText = 'Nenhum endereço encontrado';
+                        document.getElementById('enderecoMobile').innerText = 'Nenhum endereço encontrado';
                     }
                 } else {
                     console.error('Geocoder falhou devido ao seguinte: ' + status);
