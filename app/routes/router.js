@@ -365,6 +365,10 @@ router.get('/alter', usuarioController.alterDados, usuarioController.guardarCelu
     //
 });
 
+router.post('/guardarCelular', usuarioController.guardarCelular, async function (req, res) {
+    //
+});
+
 router.post("/fazerRegistro", usuarioController.registrarUsu, async function (req, res) {
     // 
 });
@@ -391,48 +395,8 @@ router.get("/fazerLogout", function (req, res) {
 
 
 
-router.get('/guardarCEP', async (req, res) => {
-    const { cep, numero } = req.query;
-    const email = req.session.email;
-
-    console.log('cep:', cep);
-    console.log('numero:', numero);
-    console.log('email:', email);
-
-    if (!email) {
-        console.error('id não definido na sessão.');
-        return res.status(400).send('Erro: Usuário não está logado.');
-    }
-
-    try {
-        const [rows] = await connection.query(
-            "SELECT * FROM usuario_clientes WHERE email = ?",
-            [email]
-        );
-
-        if (rows.length === 0) {
-            throw new Error('email não encontrado na tabela.');
-        }
-
-        const [result] = await connection.query(
-            "UPDATE usuario_clientes SET cep = ?, numero = ? WHERE email = ?",
-            [cep, numero, email]
-        );
-
-        if (result.affectedRows === 0) {
-            throw new Error('Nenhuma linha foi afetada. Verifique se o email está correto.');
-        }
-
-        req.session.cep = cep;
-
-        console.log("Endereço cadastrado com sucesso!");
-        return res.redirect('/alter');
-    } catch (error) {
-        console.error(error);
-        if (!res.headersSent) {
-            res.status(400).send(error.message);
-        }
-    }
+router.get('/guardarCEP', usuarioController.guardarCEP, async (req, res) => {
+    //
 });
 
 
