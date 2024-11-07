@@ -208,7 +208,7 @@
 
     section .products {
         padding: 0;
-        grid-template-columns: none;
+        
     }
 
     .categs {
@@ -235,6 +235,7 @@
         transform: translateX(0);
     }
 }
+
 
 
 .mobile-menu.active .line1 {

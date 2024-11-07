@@ -35,15 +35,9 @@ function renderProducts(products) {
                         <p>$ ${precoFormatado} no PIX</p>
                         <p>6 x R$${parcelaFormatada}</p>
                     </section>
-                    <p class="desconto">-13%</p>
+                    
                 </section>
-                <section class="desc-outher">
-                    <p class="estoque">em estoque</p>
-                    <section class="prod-colors">
-                        <p class="cores">cores</p>
-                        <section class="ballwht"></section>
-                    </section>
-                </section>
+                
             </section>
         </section>
         
@@ -53,7 +47,7 @@ function renderProducts(products) {
     });
 }
 
-
+{/* <p class="desconto">-13%</p> */}
 // Função para renderizar estrelas de avaliação
 function renderStars(rating) {
     let starsHTML = '';

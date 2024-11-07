@@ -960,6 +960,7 @@ function hideSidePanel() {
 function showAddNewLocalWindow() {
     const addNewLocalWindow = document.getElementById('addNewLocalWindow');
     addNewLocalWindow.style.display = 'block';
+    document.getElementById('overlay').style.display = "block";
 }
 function showAddNewLocalPremiumWindow() {
     const addNewLocalWindow = document.querySelector('.premium');
@@ -971,27 +972,23 @@ function showAddNewLocalPremiumWindow() {
 function hideAddNewLocalWindow() {
     const addNewLocalWindow = document.querySelector('.userN');
     addNewLocalWindow.style.display = 'none';
+
+    const addNewLocalWindow2 = document.querySelector('.premium');
+    addNewLocalWindow2.style.display = 'none';
+    document.getElementById('overlay').style.display = "none";
 }
 
-function hideAddNewLocalWindow() {
-    const addNewLocalWindow = document.querySelector('.premium');
-    addNewLocalWindow.style.display = 'none';
-}
 
 
 // mostra aba de adiconar novo local opção select
 function showselectLocalConfirm() {
-    const addNewLocalWindow = document.getElementById('selectLocalConfirm');
-    addNewLocalWindow.style.display = 'block';
+    
     enableMapSelection()
 }
 
 
 
-function hideselectLocalConfirm() {
-    const addNewLocalWindow = document.getElementById('selectLocalConfirm');
-    addNewLocalWindow.style.display = 'none';
-}
+
 
 
 
@@ -1012,34 +1009,50 @@ function handleMapClick(event) {
     currentMarker = new google.maps.Marker({
         position: latLng,
         map: map,
-        title: `Latitude: ${lat}, Longitude: ${lng}`, // Corrige a sintaxe para a string
+        title: `Latitude: ${lat}, Longitude: ${lng}`,
         icon: {
-            url: 'imagem/LocalizacaoblueLOCAIS-PNG.png', // URL do ícone
-            scaledSize: new google.maps.Size(35, 35) // Define o tamanho do ícone
-        }
-    });
-
-    // Obtém o endereço mais próximo e atualiza o <h1>
-    getNearestAddress(latLng, (address) => {
-        if (address) {
-            document.querySelector('#selectLocalConfirm h1').textContent = address;
-        } else {
-            document.querySelector('#selectLocalConfirm h1').textContent = 'Endereço não disponível';
+            url: 'imagem/LocalizacaoblueLOCAIS-PNG.png',
+            scaledSize: new google.maps.Size(35, 35)
         }
     });
 
     // Exibe as coordenadas selecionadas
-    document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`; // Corrige a sintaxe para a string
+    document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`;
+    document.getElementById('selectedCoordinatesUser').textContent = `localização selecionada salva`;
+    document.getElementById('selectedCoordinatesUserP').textContent = `localização selecionada salva`;
+
     
-    document.getElementById('selectedCoordinatesUser').textContent = `localização selecionada salva`; // Corrige a sintaxe para a string
-    document.getElementById('selectedCoordinatesUserP').textContent = `localização selecionada salva`; // Corrige a sintaxe para a string
+    locationMethod = 'map';
+    
 
-    // Atualiza o método de localização
-    locationMethod = 'map'; // Atualiza o método de localização
+    // Cria o conteúdo da InfoWindow com o botão de confirmação
+    const infoWindowContent = `
+        <div style="text-align: center;">
+            <button id="confirmLocationBtn" style="padding: 5px 10px; background-color: blue; color: white; border: none; cursor: pointer;">
+                Confirmar
+            </button>
+        </div>
+    `;
+    
 
-    // Desativa a seleção
-    mapSelectionEnabled = false;
+    // Cria a InfoWindow e a exibe sobre o marcador
+    const infoWindow = new google.maps.InfoWindow({
+        content: infoWindowContent
+    });
+
+    infoWindow.open(map, currentMarker);
+
+    // Define um listener para o botão de confirmação
+    google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+        document.getElementById('confirmLocationBtn').addEventListener('click', () => {
+            mapSelectionEnabled = false;
+            document.getElementById('addNewLocalWindow').style.display = "block";
+            document.getElementById('overlay').style.display = "block";
+            infoWindow.close(); // Fecha a InfoWindow após a confirmação
+        });
+    });
 }
+
 
 
 
@@ -1049,6 +1062,8 @@ function enableMapSelection() {
     mapSelectionEnabled = true; // Habilita a seleção
     document.getElementById('selectedCoordinatesUser').textContent = "Clique no mapa para escolher um local.";
     document.getElementById('selectedCoordinatesUserP').textContent = "Clique no mapa para escolher um local.";
+    document.getElementById('addNewLocalWindow').style.display = "none";
+            document.getElementById('overlay').style.display = "none";
 }
 
 
