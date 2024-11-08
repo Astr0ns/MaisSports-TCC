@@ -2,7 +2,7 @@ function renderProducts(products) {
     const trendingSection = document.querySelector('.products');
     trendingSection.innerHTML = ''; // Limpa a seção antes de renderizar
 
-    
+    document.getElementById('teste').innerText = JSON.stringify(products, null, 2);
 
     products.forEach(product => {
         const { titulo_prod, valor_prod, imagens, media_avaliacao } = product;

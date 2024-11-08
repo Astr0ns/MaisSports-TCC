@@ -14,7 +14,6 @@ function toggleActive(element, num) {
 
 }
 
-
 function mudarPag(num){
     if(num == 2){
         document.querySelector(".products").style.display = "none"
@@ -93,7 +92,7 @@ function renderLocais(locais) {
 
 
     locais.forEach(local => {
-        const { id_reserva, data_reserva, nome_espaco, horario_inicio, horario_fim, preco_total, id_local_premium, nome_local_premium, nome_cliente, sobrenome_cliente, imagens} = local;
+        const { id_reserva, data_reserva, horario_inicio, horario_fim, preco_total, id_local_premium, nome_local_premium, nome_cliente, sobrenome_cliente, imagens} = local;
 
         
 
@@ -104,7 +103,7 @@ function renderLocais(locais) {
 
         <div  class="reservaCardDiv">
             <section class="reservaCard">
-                <a href="/local-page/${id_local_premium}" style="margin-top: 10px">
+                <a href="/local-page/${id_local_premium}">
                     <img src="uploads/mostrarQuadra5.jpg" alt="${nome_local_premium}">   
                 </a>
                 <section class="infoReserva">
@@ -119,7 +118,6 @@ function renderLocais(locais) {
                     <p style="font-size: 1.1em;">valor: R$${preco_total}</p>
                     <p style="margin-top: 10px;">inicio <span>${horario_inicio}</span>  -  fim <span>${horario_fim}</span></p>
                     <p style="font-size: 1.1em; margin-bottom: 5px;">${data_reserva}</p>
-                    <p style="font-size: 1.1em; margin-bottom: 5px;">${nome_espaco}</p>
                     <span class="linha"></span>
                 </section>     
             </section>

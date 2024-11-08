@@ -1,35 +1,3 @@
-document.querySelectorAll('input[name="totalEspaco"]').forEach((radio) => {
-    radio.addEventListener('change', function () {
-        if (this.value === "2") {
-            
-            document.querySelector(".espacoInfo2").style.display = "block"
-            document.querySelector(".espacoInfo3").style.display = "none"
-            console.log("Opção 2 selecionada - Executar código específico para 2 espaços");
-            // Seu código específico para 2 espaços aqui
-        } else if (this.value === "3") {
-            
-            document.querySelector(".espacoInfo2").style.display = "block"
-            document.querySelector(".espacoInfo3").style.display = "block"
-            console.log("Opção 3 selecionada - Executar código específico para 3 espaços");
-            // Seu código específico para 3 espaços aqui
-        } else {
-            // Código para quando a opção 1 é selecionada (padrão)
-            console.log("Opção 1 selecionada - Executar código padrão para 1 espaço");
-            document.querySelector(".espacoInfo2").style.display = "none"
-            document.querySelector(".espacoInfo3").style.display = "none"
-        }
-    });
-});
-
-function syncPrice() {
-    const precoHora = document.getElementById('preco_hora').value;
-    const precoHora2 = document.getElementById('preco_hora2');
-    
-    
-    precoHora2.value = precoHora;
-    
-}
-
 function proximaPag(){
     document.querySelector('.product-info').style.display = 'none'
     document.querySelector('.product-card').style.display = 'none'

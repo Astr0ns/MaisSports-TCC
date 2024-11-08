@@ -12,37 +12,22 @@ class MobileNavbar {
     this.navLinks.forEach((link, index) => {
       link.style.animation
         ? (link.style.animation = "")
-        : (link.style.animation = `navLinkFade 0.5s ease forwards ${
-            index / 7 + 0.3
-          }s`);
+        : (link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`);
     });
   }
 
   handleClick() {
+    // Alterna a classe 'active' no navList e no mobileMenu
     this.navList.classList.toggle(this.activeClass);
     this.mobileMenu.classList.toggle(this.activeClass);
     this.animateLinks();
 
+    // Modifica o overflow do body com base no estado do menu
     if (this.navList.classList.contains(this.activeClass)) {
-      this.navList.style.display = "block";
+      document.body.style.overflow = "hidden"; // Desativa o scroll
     } else {
-      this.navList.style.display = "none";
+      document.body.style.overflow = "auto"; // Ativa o scroll
     }
-
-    const pinkElement = document.querySelector(".pink");
-    if (this.navList.classList.contains(this.activeClass)) {
-      this.navList.style.display = "block";
-
-      // Ocultar o overflow da página quando o navList está ativo
-      document.body.style.overflow = "hidden";
-
-    } else {
-      this.navList.style.display = "none";
-
-      // Restaurar o overflow da página quando o navList não está ativo
-      document.body.style.overflow = "auto";
-    }
-
   }
 
   addClickEvent() {
@@ -57,11 +42,10 @@ class MobileNavbar {
   }
 }
 
+// Inicializando a classe MobileNavbar
 const mobileNavbar = new MobileNavbar(
-  ".mobile-menu",
-  ".nav-list",
-  ".nav-list li",
+  ".mobile-menu", // Seletor do botão de menu
+  ".nav-list", // Seletor da lista de navegação
+  ".nav-list li" // Seletor dos links dentro da navbar
 );
 mobileNavbar.init();
-
-

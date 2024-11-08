@@ -1,6 +1,6 @@
 function renderProducts(products) {
     const trendingSection = document.querySelector('.products');
-    trendingSection.innerHTML = ''; 
+    trendingSection.innerHTML = ''; // Limpa a seção antes de renderizar
 
 
     products.forEach(product => {
@@ -17,7 +17,7 @@ function renderProducts(products) {
         
         <section class="row">
             <a href="/product-page/${product.id_prod}">
-                <img src="/uploads/${imagens[0]}" alt="${titulo_prod}">
+                <img src="uploads/${imagens[0]}" alt="${titulo_prod}">
             </a>
             <section class="product-text">
                 <h5>NEW</h5>
@@ -35,9 +35,15 @@ function renderProducts(products) {
                         <p>$ ${precoFormatado} no PIX</p>
                         <p>6 x R$${parcelaFormatada}</p>
                     </section>
-                    
+                    <p class="desconto">-13%</p>
                 </section>
-                
+                <section class="desc-outher">
+                    <p class="estoque">em estoque</p>
+                    <section class="prod-colors">
+                        <p class="cores">cores</p>
+                        <section class="ballwht"></section>
+                    </section>
+                </section>
             </section>
         </section>
         
@@ -47,7 +53,7 @@ function renderProducts(products) {
     });
 }
 
-{/* <p class="desconto">-13%</p> */}
+
 // Função para renderizar estrelas de avaliação
 function renderStars(rating) {
     let starsHTML = '';
