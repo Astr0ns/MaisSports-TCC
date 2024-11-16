@@ -215,13 +215,33 @@ section.desc-outher {
 
 
 
-@media screen and (min-width: 320px) {
+@media screen and (min-width: 320px) and (max-width: 600px) {
     .center-text h2 {
         font-size: 18px;
     }
 
     .prod-center-text h2 {
         font-size: 18px;
+    }
+    .trending-products .products {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(50%, 50%));
+        grid-template-rows: repeat(4, auto);
+        justify-content: center;
+        width: 100%;
+        overflow: hidden;
+        padding: 15px;
+        gap: 0.5rem;
+        margin: 0;
+    }
+
+    
+    section#trending {
+        display: grid;
+        grid-auto-columns: 100vw;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
     }
 
 }

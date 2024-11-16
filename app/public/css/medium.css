@@ -10,6 +10,11 @@
 
 @media screen and (min-width: 769px) and (max-width: 1024px) {
 
+    header:has(nav) {
+        position: fixed;
+        z-index: 10;
+        width: 100%;
+    }
 
     .inic-espt-mob img{
         display: block;

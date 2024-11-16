@@ -20,6 +20,12 @@
         height: 19px;
     }
 
+    header:has(nav) {
+        position: fixed;
+        z-index: 10;
+        width: 100%;
+    }
+
     .heart {
         align-items: center;
         margin-left: 5rem;
@@ -210,6 +216,7 @@
         padding: 0;
         
     }
+    
 
     .categs {
         display: grid;
@@ -235,7 +242,6 @@
         transform: translateX(0);
     }
 }
-
 
 
 .mobile-menu.active .line1 {

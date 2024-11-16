@@ -448,14 +448,13 @@ button:hover {
     display: none; /* Inicialmente escondida */
     position: fixed; /* Fixa a posição na tela */
     top: 50%;
-    left: 50%;
+    left: 30%;
     transform: translate(-50%, -50%); /* Centraliza a janela */
     width: 300px;
     background-color: #fff;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000001;
 }
 #addNewLocalWindow div{
     display: flex;
@@ -563,17 +562,6 @@ button:hover {
 }
 
 
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(122, 14, 185, 0.5); /* cor de fundo escura com opacidade */
-    display: none; /* escondido por padrão */
-    z-index: 1000000; /* abaixo do conteúdo da escolha de hora */
-}
-
 
 /* celular css */
 
@@ -583,7 +571,6 @@ button:hover {
     .gm-style-mtc-bbw, .gm-control-active, .gmnoprint, .gmnoprint, .gmnoscreen, .gm-style-cc, .gm-control-active, .gm-control-active{
         display: none;
     }
-    
     body{
         max-width: 100vw;
         max-height: 100vh;
@@ -697,10 +684,6 @@ button:hover {
 
     footer{
         display: none;
-    }
-
-    #addNewLocalWindow {
-        left: 50%; 
     }
 
 }

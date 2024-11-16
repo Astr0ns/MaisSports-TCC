@@ -289,6 +289,7 @@ function generateContent(place) {
     return content;
 }
 
+
 // informações que vem do bancos estilo
 function generateContentFromLocal(local) {
     // Adiciona latitude e longitude como parâmetros
@@ -695,7 +696,7 @@ function showSidePanelFromLocal(localId) {
         .then(response => response.json())
         .then(localArray => {
             const local = localArray[0];  // Acessa o primeiro local do array
-            document.getElementById('jsonData').innerText = JSON.stringify(localArray, null, 2);
+            
 
             if (local) {
                 sidePanel.innerHTML += `
@@ -960,11 +961,20 @@ function showAddNewLocalWindow() {
     const addNewLocalWindow = document.getElementById('addNewLocalWindow');
     addNewLocalWindow.style.display = 'block';
 }
+function showAddNewLocalPremiumWindow() {
+    const addNewLocalWindow = document.querySelector('.premium');
+    addNewLocalWindow.style.display = 'block';
+}
 
 
 
 function hideAddNewLocalWindow() {
-    const addNewLocalWindow = document.getElementById('addNewLocalWindow');
+    const addNewLocalWindow = document.querySelector('.userN');
+    addNewLocalWindow.style.display = 'none';
+}
+
+function hideAddNewLocalWindow() {
+    const addNewLocalWindow = document.querySelector('.premium');
     addNewLocalWindow.style.display = 'none';
 }
 
@@ -1020,7 +1030,9 @@ function handleMapClick(event) {
 
     // Exibe as coordenadas selecionadas
     document.getElementById('selectedCoordinates').textContent = `Coordenadas selecionadas: Latitude ${lat}, Longitude ${lng}`; // Corrige a sintaxe para a string
+    
     document.getElementById('selectedCoordinatesUser').textContent = `localização selecionada salva`; // Corrige a sintaxe para a string
+    document.getElementById('selectedCoordinatesUserP').textContent = `localização selecionada salva`; // Corrige a sintaxe para a string
 
     // Atualiza o método de localização
     locationMethod = 'map'; // Atualiza o método de localização
@@ -1036,30 +1048,25 @@ function handleMapClick(event) {
 function enableMapSelection() {
     mapSelectionEnabled = true; // Habilita a seleção
     document.getElementById('selectedCoordinatesUser').textContent = "Clique no mapa para escolher um local.";
+    document.getElementById('selectedCoordinatesUserP').textContent = "Clique no mapa para escolher um local.";
 }
 
 
 // pegar localização atual
 function getCurrentLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            const location = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            document.getElementById('selectedCoordinatesUser').textContent = "Localização salva";
+    document.getElementById('selectedCoordinatesUser').textContent = "Localização salva";
+            document.getElementById('selectedCoordinatesUserP').textContent = "Localização salva";
             map.setCenter(location);
             if (userMarker) userMarker.setPosition(location);
             locationMethod = 'current'; // Atualiza o método de localização
-        });
-    }
+    
 }
 
 
 
 
 // função para pegar localização ao selecionar
-function saveCoordinates() {
+function saveCoordinates(num) {
     let lat, lng;
 
     if (locationMethod === 'current') {
@@ -1081,7 +1088,13 @@ function saveCoordinates() {
     localStorage.setItem('latitude', lat);
     localStorage.setItem('longitude', lng);
     console.log(`Coordenadas salvas: Latitude ${lat}, Longitude ${lng}`);
-    window.location.href = '/add-locais';
+
+    if (num === 1){
+        window.location.href = '/add-locais';
+    } else if(num === 2){
+        window.location.href = '/add-locais-premium';
+    }
+
 }
 
 

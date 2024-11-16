@@ -387,16 +387,21 @@ const pegarProdutoCurtido = async (req, res) => {
         const fk_id_prod = prod[0].fk_id_prod;
 
         const query = `
-            SELECT p.id_prod, p.titulo_prod, i.nome_imagem, i.ordem_img, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
-            FROM produtos_das_empresas p 
+       
+
+            SELECT c.fk_id_prod, p.id_prod, p.titulo_prod, i.nome_imagem, i.ordem_img, AVG(a.avaliacao_estrela_prod) AS media_avaliacao, v.valor_prod 
+            FROM favorito_produto c
+            
+            LEFT JOIN produtos_das_empresas p ON c.fk_id_prod = p.id_prod
             LEFT JOIN imagens i ON p.id_prod = i.fk_id_prod
             LEFT JOIN avaliacao_prod a ON p.id_prod = a.fk_id_prod  
             LEFT JOIN preco_prod v ON p.id_prod = v.fk_id_prod  
-            WHERE p.id_prod = ?
+            WHERE c.fk_id_cliente = ?
             GROUP BY p.id_prod, i.nome_imagem, i.ordem_img
             ORDER BY i.ordem_img
+
         `;
-        const [results] = await connection.query(query, [fk_id_prod]); // Filtra pelos favoritos
+        const [results] = await connection.query(query, [fk_id_user]); // Filtra pelos favoritos
 
         // Formata os resultados para agrupar imagens por local
         const produtos = results.reduce((acc, row) => {
@@ -428,6 +433,7 @@ const pegarProdutoCurtido = async (req, res) => {
             });
         });
         
+        console.log(produtos)
 
         res.json(produtos);
     } catch (error) {
