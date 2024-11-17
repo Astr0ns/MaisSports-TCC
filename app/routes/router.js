@@ -147,6 +147,9 @@ router.get("/painel-empresa", verificarAutenticacao, verificarAutorizacao, async
 router.get("/favoritarProd/:id", produtoController.favoritarProd, async function (req, res){
 });
 
+router.get("/verSeProdFav/:id", produtoController.verSeProdFav, async function (req, res){
+});
+
 router.get("/favoritarLocal/:id", locaisController.favoritarLocal, async function (req, res){
 });
 

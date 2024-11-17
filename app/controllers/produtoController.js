@@ -566,11 +566,60 @@ const favoritarProd = async (req, res) => {
     }
 };
 
+const verSeProdFav = async (req, res) => {
+    const email = req.session.email;
+    const prodId = Number(req.params.id); // Converter para número
+
+    
+
+    try {
+        // 1. Busca o ID do cliente (usuário) baseado no email
+        const [user] = await connection.query(
+            `SELECT id FROM usuario_clientes WHERE email = ?`,
+            [email]
+        );
+
+        // Verifica se o usuário foi encontrado
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const fk_id_cliente = user[0].id;
+        console.log("ID do Cliente:", fk_id_cliente);
+
+
+        // 3. Verifica se o produto já foi favoritado por esse usuário
+        const [existingFavorite] = await connection.query(
+            `SELECT * FROM favorito_produto WHERE fk_id_cliente = ? AND fk_id_prod = ?`,
+            [fk_id_cliente, prodId]
+        );
+
+        console.log("Favorito existente:", existingFavorite);
+
+        
+        // Se o produto já foi favoritado, desfavorita-o
+        if (existingFavorite.length > 0) {
+            console.log("Produto já foi favoritado, desfavoritando...");
+            
+            
+            return res.status(200).json({ message: 'Produto desfavoritado com sucesso.' });
+        }
+
+
+        console.log("Produto favoritado com sucesso!");
+        return res.status(200).json({ message: 'Produto favoritado' });
+
+    } catch (error) {
+        console.error("Erro ao favoritar produto:", error);
+        return res.status(500).json({ message: 'Erro ao favoritar produtos: ' + error.message });
+    }
+};
+
 
 
 
 
 module.exports = {
     exibirFormularioProduto, adicionarProdSegredos,
-    adicionarProd, pegarProdutoBanco, getProductById, favoritarProd, pegarProdutoEmpresa, adicionarProdutoConfirmado, pegarProdutoCurtido,
+    adicionarProd, pegarProdutoBanco, getProductById, favoritarProd, pegarProdutoEmpresa, adicionarProdutoConfirmado, pegarProdutoCurtido, verSeProdFav,
 };
