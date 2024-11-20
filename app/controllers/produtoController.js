@@ -357,9 +357,6 @@ const pegarProdutoCurtido = async (req, res) => {
 
     const email = req.session.email;
 
-    // Log para verificar se o email e o prodId estão corretos
-    console.error("Email:", email);
-
     try {
         // 1. Busca o ID do cliente (usuário) baseado no email
         const [user] = await connection.query(

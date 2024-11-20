@@ -408,3 +408,40 @@ section.finalizar-add-product {
     margin: 0;
     
 }
+
+@media screen and (min-width: 320px) and (max-width: 600px) {
+
+    section.product-card {
+        display: grid;
+        grid-template-columns: repeat(2, 50%);
+        grid-template-rows: repeat(4, auto);
+        grid-column-gap: 1%;
+        grid-row-gap: 1%;
+        width: 100%;
+        overflow: hidden;
+        justify-content: center;
+        justify-items: center;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .product-card i {
+        font-size: 14vh;
+        display: flex;
+        flex-wrap: nowrap;
+        padding: 0%;
+        text-decoration: none;
+        color: var(--cor-fundo4);
+        justify-content: center;
+    }
+
+    .product-info {
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+}

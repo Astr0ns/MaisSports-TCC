@@ -67,10 +67,10 @@ function renderProducts(products) {
                     if (response.ok) {
                         const data = await response.json();
                         if (data.message === "Produto favoritado") {
-                            console.log("Produto não favoritado:", data);
+                            
                             favoritado = 1;
                         } else {
-                            console.log("Produto já favoritado", data.message);
+                            
                             favoritado = 2;
                         }
                     } else {
@@ -80,8 +80,7 @@ function renderProducts(products) {
                     console.error("Erro na solicitação:", error);
                 }
 
-                // Este console.log agora será executado após a verificação
-                console.log(favoritado);
+                
                 const productHTML = `
                 
                 <section class="row">
