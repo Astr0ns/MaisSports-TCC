@@ -81,11 +81,25 @@
                 <input type="hidden" id="horario_inicio" name="horario_inicio" value=""></input>
                 <input type="hidden" id="horario_fim" name="horario_fim" value=""></input>
                 <input type="hidden" id="preco_total" name="preco_total" value=""></input>
-                <input type="hidden" id="id_local_premium" name="id_espaco_local" value=""></input>
                 <input type="hidden" id="nome_local_premium" name="nome_local_premium" value=""></input>
+                <input type="hidden" id="selected_espaco" name="selected_espaco" value="1"></input>
 
                 <section class="reservarInfo">
                     <h2>R$<%- local.precos[0].preco_hora %><span>/Hora</span></h2>
+
+                    <section class="espacos">
+                        <button type="button" class="espcSelected" onclick="changeEspaco(1, this)"> <%- local.precos[0].nome_espaco %></button>
+
+                        <% if(local.precos.length > 1){  %>
+                            <button type="button" onclick="changeEspaco(2, this)"> <%- local.precos[1].nome_espaco %></button>
+                            
+                            <% if(local.precos.length > 2){  %>
+                            
+                                <button type="button" onclick="changeEspaco(3, this)"> <%- local.precos[2].nome_espaco %></button>
+                            <% } %>
+
+                        <% } %>
+                    </section>
 
                     <div style="position: relative; display: flex; justify-content: center; margin-top: 20px;">
                         <input id="calendar" oninput="handleInput(event)" class="time-picker" type="text"></input>
@@ -137,6 +151,24 @@
         const localMap = <%- JSON.stringify(local) %>;
         console.log(localMap);
         
+        function changeEspaco(idEspaco, element){
+            const selected = document.querySelector(".espcSelected")
+            selected.classList.remove('espcSelected');
+                element.classList.add('espcSelected');
+            if (element == selected){
+                console.log("mesmo elemento")
+                return
+            }
+            selected.classList.remove('espcSelected');
+            element.classList.add('espcSelected');
+
+            document.getElementById("selected_espaco").value = idEspaco
+            
+            const value = document.getElementById("data_reserva").value
+            if(value != ""){
+                handleInput()
+            }
+        }
     
         window.onload = function () {
             const lat = localMap.latitude;
@@ -264,10 +296,6 @@
                 
             });
             
-            console.log(local.precos[0].id_espaco_local)
-            
-            document.getElementById("id_local_premium").value = 1
-            document.getElementById("nome_local_premium").value = local.nome_local_premium
 
         function calcularPreco() {
             const iniCheck = document.getElementById("start-time").value; // Ex: "16:30"
@@ -362,13 +390,28 @@
         }      
         
         function handleInput(event) {
-            const value = event.target.value;
+            let value = ""
+            console.log("---------------")
+            console.log(event)
+            console.log("---------------")
+            if(event != undefined){
+                value = event.target.value;
+            } else {
+                value = document.getElementById("data_reserva").value
+            }
+            
+
+            console.log("---------------")
+            console.log(value)
+            console.log("---------------")
 
             document.getElementById("data_reserva").value = value
+
+            const localLenght = document.getElementById("selected_espaco").value - 1
             
 
 
-            fetch(`/pegarReservasFeitas?id=${local.precos[0].id_espaco_local}&date=${value}`)
+            fetch(`/pegarReservasFeitas?id=${local.precos[localLenght].id_espaco_local}&date=${value}`)
             .then(responseL => responseL.json())
             .then(reservas => {
                 console.log('reservas recebidas:', reservas);

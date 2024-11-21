@@ -167,6 +167,45 @@ body {
     margin-left: 5px;
 }
 
+.espacos{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(45%, 50%));
+    grid-template-rows: repeat(2, auto);
+    gap: 7.5px;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.reservarInfo .espacos button{
+    font-size: 0.9em;
+    margin-top: 0;
+    background-color: var(--cor-fonte);
+    width: 100%;
+    border: 2px solid var(--cor-fundo2);
+    text-align: center;
+    font-weight: 700;
+    color: #a8a8a8;
+
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background-color 0.3s;
+}
+
+.reservarInfo .espacos .espcSelected{
+    background-color: #d12089;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background-color 0.3s;
+}
+
 #calendar{
     width: 80%;
     font-size: 17.5px;

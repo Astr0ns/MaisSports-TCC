@@ -120,7 +120,7 @@ const getLocalReservaById = (path) => {
                 LEFT JOIN dia_atuacao d on l.id_local_premium = d.fk_id_local_premium 
                 LEFT JOIN espaco_local e on l.id_local_premium = e.fk_id_local_premium
                 WHERE l.id_local_premium = ?
-                GROUP BY l.id_local_premium, i.nome_imagem, d.dia_semana, a.comentario_local, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
+                GROUP BY l.id_local_premium, i.nome_imagem, d.dia_semana, a.comentario_local, e.id_espaco_local, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
             `;
             const [results] = await connection.query(query, [localId]);
 
@@ -234,7 +234,7 @@ const getLocalReservaById = (path) => {
 
 const fazerReserva = async (req, res) => {
     console.log(req.body); // Veja os dados que estão chegando
-    const { data_reserva, horario_inicio, horario_fim, preco_total, id_espaco_local, nome_local_premium } = req.body;
+    const { data_reserva, horario_inicio, horario_fim, preco_total, nome_local_premium, selected_espaco } = req.body;
     const email = req.session.email;
     const preco_totalFloat = parseFloat(preco_total);
     console.log(`Reservando o local ${nome_local_premium}`,
@@ -246,7 +246,7 @@ const fazerReserva = async (req, res) => {
         horario_inicio, 
         horario_fim, 
         preco_total, 
-        id_espaco_local
+        selected_espaco
     });
 
 
@@ -292,7 +292,7 @@ const reservaConfirmada = async (req, res) => {
     const externalReference = req.query.external_reference;
 
     const produto = JSON.parse(externalReference);
-    const { email, data_reserva, horario_inicio, horario_fim, preco_total, id_espaco_local} = produto;
+    const { email, data_reserva, horario_inicio, horario_fim, preco_total, selected_espaco} = produto;
     const precoTotalFloat = parseFloat(preco_total);
 
 
@@ -308,7 +308,7 @@ const reservaConfirmada = async (req, res) => {
         // Insira o novo produto na tabela
         const [addL] = await connection.query(
             `INSERT INTO Reservas (fk_id_cliente, fk_id_espaco_local, data_reserva, horario_inicio, horario_fim, preco_total) VALUES (?, ?, ?, ?, ?, ?)`,
-            [fk_id_cliente, id_espaco_local, data_reserva, horario_inicio, horario_fim, precoTotalFloat]
+            [fk_id_cliente, selected_espaco, data_reserva, horario_inicio, horario_fim, precoTotalFloat]
         );
 
         
