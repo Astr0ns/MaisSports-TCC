@@ -156,7 +156,7 @@ function renderReservas(locais) {
                     
                     <p style="margin-top: 10px;">reservado por: <span>${nome_cliente}  ${sobrenome_cliente}</span></p>
                     <p style="font-size: 1.2em;">valor: R$${preco_total}</p>
-                    <p style="font-size: 1.2em;">valor: R$${nome_espaco}</p>
+                    <p style="font-size: 1.2em;">${nome_espaco}</p>
                     <p style="margin-top: 10px;">inicio <span>${horarioInicioFormatado}</span>  -  fim <span>${horarioFimFormatado}</span></p>
                     <p style="font-size: 1.2em; margin-bottom: 5px;">${data_reserva}</p>
                     <p style="font-size: 1.2em; margin-bottom: 5px;">Local: ${nome_local_premium}</p>
