@@ -961,10 +961,13 @@ function showAddNewLocalWindow() {
     const addNewLocalWindow = document.getElementById('addNewLocalWindow');
     addNewLocalWindow.style.display = 'block';
     document.getElementById('overlay').style.display = "block";
+    addNewLocalWindow.classList.add('localSelected');
 }
 function showAddNewLocalPremiumWindow() {
     const addNewLocalWindow = document.querySelector('.premium');
     addNewLocalWindow.style.display = 'block';
+    document.getElementById('overlay').style.display = "block";
+    addNewLocalWindow.classList.add('localSelected');
 }
 
 
@@ -974,8 +977,10 @@ function hideAddNewLocalWindow() {
     addNewLocalWindow.style.display = 'none';
 
     const addNewLocalWindow2 = document.querySelector('.premium');
+    const localSelected = document.querySelector('.localSelected');
     addNewLocalWindow2.style.display = 'none';
     document.getElementById('overlay').style.display = "none";
+    localSelected.classList.remove('localSelected');
 }
 
 
@@ -1046,7 +1051,7 @@ function handleMapClick(event) {
     google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
         document.getElementById('confirmLocationBtn').addEventListener('click', () => {
             mapSelectionEnabled = false;
-            document.getElementById('addNewLocalWindow').style.display = "block";
+            document.querySelector('.localSelected').style.display = "block";
             document.getElementById('overlay').style.display = "block";
             infoWindow.close(); // Fecha a InfoWindow após a confirmação
         });
@@ -1062,7 +1067,8 @@ function enableMapSelection() {
     mapSelectionEnabled = true; // Habilita a seleção
     document.getElementById('selectedCoordinatesUser').textContent = "Clique no mapa para escolher um local.";
     document.getElementById('selectedCoordinatesUserP').textContent = "Clique no mapa para escolher um local.";
-    document.getElementById('addNewLocalWindow').style.display = "none";
+    
+    document.querySelector('.localSelected').style.display = "none";
             document.getElementById('overlay').style.display = "none";
 }
 

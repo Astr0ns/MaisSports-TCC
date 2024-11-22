@@ -465,23 +465,24 @@ const pegarReservasEmpresa = async (req, res) => {
 
 
         const query = `
-            SELECT l.id_local_premium, l.nome_local_premium, l.preco_hora,
-					r.id_reserva, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total, 
-                   i.nome_imagem,
-                   u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente
+            SELECT l.id_local_premium, l.nome_local_premium, 
+                e.id_espaco_local, e.preco_hora, e.nome_espaco,
+                r.id_reserva, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total, 
+                i.nome_imagem,
+                u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente
             FROM local_premium l
-            LEFT JOIN Reserva r ON r.fk_id_local_premium = l.id_local_premium
-            LEFT JOIN imagens i ON r.fk_id_local_premium = i.fk_local_premium_id
+            LEFT JOIN espaco_local e ON e.fk_id_local_premium = l.id_local_premium
+            LEFT JOIN Reservas r ON r.fk_id_espaco_local = e.id_espaco_local
+            LEFT JOIN imagens i ON i.fk_local_premium_id  = l.id_local_premium
             LEFT JOIN usuario_clientes u ON r.fk_id_cliente = u.id
-            
-            WHERE l.fk_id_empresa = ?
-            GROUP BY l.id_local_premium, r.id_reserva, i.nome_imagem, u.nome, u.sobrenome -- Agrupa os resultados para evitar duplicação
+            WHERE l.fk_id_empresa = ? AND r.id_reserva IS NOT NULL
+            GROUP BY l.id_local_premium, r.id_reserva, i.nome_imagem, u.nome, u.sobrenome
         `;
         const [results] = await connection.query(query, [fk_id_emp]); // Filtra pelos favoritos
 
         // Formata os resultados para agrupar imagens por local
         const locais = results.reduce((acc, row) => {
-            const { id_local_premium, nome_local_premium, preco_hora, id_reserva, data_reserva, horario_inicio, horario_fim, preco_total, nome_imagem, nome_cliente, sobrenome_cliente} = row;
+            const { id_local_premium, nome_local_premium, preco_hora, nome_espaco, id_reserva, data_reserva, horario_inicio, horario_fim, preco_total, nome_imagem, nome_cliente, sobrenome_cliente} = row;
             const location = acc.find(local => local.id_reserva === id_reserva);
             
             if (location) {
@@ -493,6 +494,7 @@ const pegarReservasEmpresa = async (req, res) => {
                     id_local_premium, 
                     nome_local_premium, 
                     preco_hora, 
+                    nome_espaco,
                     id_reserva, 
                     data_reserva, 
                     horario_inicio, 

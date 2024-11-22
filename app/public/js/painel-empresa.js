@@ -1,7 +1,3 @@
-function formatarData(dataString) {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(dataString).toLocaleDateString('pt-BR', options);
-}
 
 // Função para formatar o horário
 function formatarHorario(horarioString) {
@@ -64,6 +60,7 @@ function mudarpag(element, num){
 
 function renderLocais(locais) {
     const trendingSection = document.querySelector('.locaisReservas');
+    let id_local_igual = []
     
     if (locais.length === 0) {
         console.log("fudeo")
@@ -72,45 +69,49 @@ function renderLocais(locais) {
     locais.forEach(local => {
         const { id_local_premium, nome_local_premium, preco_hora, id_reserva, data_reserva, horario_inicio, horario_fim, preco_total, nome_cliente, sobrenome_cliente, imagens} = local;
 
-        const dataFormatada = formatarData(data_reserva);
         const horarioInicioFormatado = formatarHorario(horario_inicio);
         const horarioFimFormatado = formatarHorario(horario_fim);
         
 
 {/* <img src="${imagens.length > 0 ? imagens[0] : 'default-image.jpg'}" alt="${titulo_prod}"></img> */}
 
+        if ( !id_local_igual.includes(id_local_premium)) {
+            const productHTML = `
 
-        const productHTML = `
+            <div  class="reservaCardDiv">
+                <section class="reservaCard">
+                    <a href="/local-page/${id_local_premium}">
+                        <img src="uploads/mostrarQuadra5.jpg" alt="${nome_local_premium}">   
+                    </a>
+                    <section class="infoReserva">
 
-        <div  class="reservaCardDiv">
-            <section class="reservaCard">
+                        <div style="display: flex; flex-direction: row;">
+                            <span class="linha"></span>
+                            <h2>+Sport Reservas</h2> 
+                            <span class="linha"></span>
+                        </div>
+                        
+                        <p style="font-size: 1.2em; margin-bottom: 5px;">Local: ${nome_local_premium}</p>
+                        <p style="font-size: 1.2em;">valor: R$${preco_hora}/ Hora</p>
+
+                        <button class="editar_prod_bt">Editar</button>
+                        
+                        <span class="linha" style="margin:0 0 10px;"></span>
+                    </section>     
+                </section>
                 <a href="/local-page/${id_local_premium}">
-                    <img src="uploads/mostrarQuadra5.jpg" alt="${nome_local_premium}">   
+                    <p>Clique Aqui para entrar na pagina do local</p>
                 </a>
-                <section class="infoReserva">
+            </div>
+            
+            `;
+            id_local_igual =+ id_local_premium
 
-                    <div style="display: flex; flex-direction: row;">
-                        <span class="linha"></span>
-                        <h2>+Sport Reservas</h2> 
-                        <span class="linha"></span>
-                    </div>
-                    
-                    <p style="font-size: 1.2em; margin-bottom: 5px;">Local: ${nome_local_premium}</p>
-                    <p style="font-size: 1.2em;">valor: R$${preco_hora}/ Hora</p>
+            trendingSection.insertAdjacentHTML('beforeend', productHTML); // Adiciona o HTML do produto
+        }
 
-                    <button class="editar_prod_bt">Editar</button>
-                    
-                    <span class="linha" style="margin:0 0 10px;"></span>
-                </section>     
-            </section>
-            <a href="/local-page/${id_local_premium}">
-                <p>Clique Aqui para entrar na pagina do local</p>
-            </a>
-        </div>
+
         
-        `;
-
-        trendingSection.insertAdjacentHTML('beforeend', productHTML); // Adiciona o HTML do produto
     });
 }
 
@@ -128,9 +129,9 @@ function renderReservas(locais) {
 
 
     locais.forEach(local => {
-        const { id_local_premium, nome_local_premium, preco_hora, id_reserva, data_reserva, horario_inicio, horario_fim, preco_total, nome_cliente, sobrenome_cliente, imagens} = local;
+        const { id_local_premium, nome_local_premium, preco_hora, nome_espaco, id_reserva, data_reserva, horario_inicio, horario_fim, preco_total, nome_cliente, sobrenome_cliente, imagens} = local;
 
-        const dataFormatada = formatarData(data_reserva);
+
         const horarioInicioFormatado = formatarHorario(horario_inicio);
         const horarioFimFormatado = formatarHorario(horario_fim);
         
@@ -155,8 +156,9 @@ function renderReservas(locais) {
                     
                     <p style="margin-top: 10px;">reservado por: <span>${nome_cliente}  ${sobrenome_cliente}</span></p>
                     <p style="font-size: 1.2em;">valor: R$${preco_total}</p>
+                    <p style="font-size: 1.2em;">valor: R$${nome_espaco}</p>
                     <p style="margin-top: 10px;">inicio <span>${horarioInicioFormatado}</span>  -  fim <span>${horarioFimFormatado}</span></p>
-                    <p style="font-size: 1.2em; margin-bottom: 5px;">${dataFormatada}</p>
+                    <p style="font-size: 1.2em; margin-bottom: 5px;">${data_reserva}</p>
                     <p style="font-size: 1.2em; margin-bottom: 5px;">Local: ${nome_local_premium}</p>
                     
                     <span class="linha" style="margin:0 0 10px;"></span>

@@ -108,8 +108,16 @@
     
 }
 
+section#trending {
+  display: grid;
+  /* grid-auto-columns: 88%; */
+  justify-content: center;
+  align-items: center;
+}
+
 .products {
-  grid-template-columns: repeat(3, minmax(230px, 100%));
+  grid-template-columns: repeat(3, minmax(33%, 100%));
+
   grid-template-rows: repeat(4, auto);
 
 }
