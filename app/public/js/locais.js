@@ -14,8 +14,6 @@ let locationMethod = ''; // 'current' ou 'map'
 
 
 
-
-
 function initMap() { 
     geocoder = new google.maps.Geocoder(); 
     autocomplete = new google.maps.places.Autocomplete( 
@@ -40,8 +38,6 @@ function initMap() {
         initializeMap(); 
     } 
 } 
-
-
 
 function initializeMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -94,9 +90,6 @@ function handleMobileFilterClick(event) {
     button.classList.toggle('selected');
 }
 
-
-
-
 function handleCheckboxChange(event) { 
     const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]'); 
     checkboxes.forEach(checkbox => { 
@@ -106,8 +99,6 @@ function handleCheckboxChange(event) {
     }); 
     updateMap(); // Atualiza o mapa com base na seleção atual 
 } 
-
-
 
 function updateMap() {
     clearMarkers();
@@ -215,12 +206,6 @@ function updateMap() {
     });
 }
 
-
-
-
-
-
-
 function clearMarkers() { 
     for (let i = 0; i < markers.length; i++) { 
         markers[i].setMap(null); 
@@ -228,13 +213,10 @@ function clearMarkers() {
     markers = []; 
 } 
 
-
-
 function getSelectedType() { 
     const selectedCheckbox = document.querySelector('.checkbox-group input[type="checkbox"]:checked'); 
     return selectedCheckbox ? selectedCheckbox.value : ''; 
 } 
-
 
 function getKeywords(type) { 
     switch (type) { 
@@ -261,8 +243,6 @@ function getKeywords(type) {
     } 
 }
 
-
-
 // card pin google maps
 function generateContent(place) {
     let content = `<div class="card_local"><strong>${place.name}</strong>`;
@@ -288,7 +268,6 @@ function generateContent(place) {
     content += `<button class="saiba_mais" onclick="showSidePanel('${place.place_id}')">Saiba Mais</button></div>`;
     return content;
 }
-
 
 // informações que vem do bancos estilo
 function generateContentFromLocal(local) {
@@ -379,10 +358,6 @@ function generateContentFromLocalPremium(local) {
     });
 }
 
-
-
-
-
 // estrela na avaliação
 function getStarRatingHtml(rating) {
     const maxStars = 5;
@@ -398,7 +373,6 @@ function getStarRatingHtml(rating) {
 
     return starsHtml;
 }
-
 
 // começa avaliação estrela pelo usuario
 function selectRating(selectedStar) {
@@ -455,14 +429,11 @@ function resetRating() {
     });
 }
 
-
-
-
-
 function centerMapOnUser() { 
     map.setCenter(currentLocation); 
     map.setZoom(12); 
 } 
+
 function onPlaceChanged() { 
     const place = autocomplete.getPlace(); 
     if (place.geometry) { 
@@ -489,7 +460,6 @@ function onPlaceChanged() {
     } 
 } 
 
-
 function toggleFilters() { 
     const moreCheckboxes = document.querySelector('.more-checkboxes'); 
     const toggleButton = document.getElementById('toggleFiltersButton'); 
@@ -502,12 +472,10 @@ function toggleFilters() {
     } 
 } 
 
-
-
 //mostrar mais informações do local quando clica em saiba mais
 function showSidePanel(placeId) {
     const sidePanel = document.getElementById('sidePanel');
-    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
+    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 1;position: absolute; top: 10px; right: 10px;">×</button>`;
     let currentImageIndex = 0; // Index para controlar a imagem atual
     let nome = document.querySelector('.userNome').innerHTML;
     let email = document.querySelector('.userEmail').innerHTML;
@@ -666,10 +634,9 @@ function showSidePanel(placeId) {
     
 }
 
-
 function showSidePanelFromLocal(localId) {
     const sidePanel = document.getElementById('sidePanel');
-    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 11;position: absolute; top: 10px; right: 10px;">×</button>`;
+    sidePanel.innerHTML = `<button id="closePanel" onclick="hideSidePanel()" style="z-index: 1;position: absolute; top: 10px; right: 10px;">×</button>`;
     let currentImageIndex = 0;
     let nome = document.querySelector('.userNome').innerHTML;
     let email = document.querySelector('.userEmail').innerHTML;
@@ -830,8 +797,6 @@ function showSidePanelFromLocal(localId) {
         } 
 }
 
-
-
 function toggleSidePanelAvaliacao() {
     const sidePanelAvaliacao = document.getElementById('sidePanelAvaliar');
     const avaliarButton = document.getElementById('avaliarButton');
@@ -932,8 +897,6 @@ function favDesFav(id) {
     }
 }
 
-
-
 // esconde painel
 function hideSidePanel() { 
     const sidePanel = document.getElementById('sidePanel'); 
@@ -954,7 +917,6 @@ function hideSidePanel() {
 
 } 
 
-
 // mostra aba de adiconar novo local
 function showAddNewLocalWindow() {
     const addNewLocalWindow = document.getElementById('addNewLocalWindow');
@@ -962,14 +924,13 @@ function showAddNewLocalWindow() {
     document.getElementById('overlay').style.display = "block";
     addNewLocalWindow.classList.add('localSelected');
 }
+
 function showAddNewLocalPremiumWindow() {
     const addNewLocalWindow = document.querySelector('.premium');
     addNewLocalWindow.style.display = 'block';
     document.getElementById('overlay').style.display = "block";
     addNewLocalWindow.classList.add('localSelected');
 }
-
-
 
 function hideAddNewLocalWindow() {
     const addNewLocalWindow = document.querySelector('.userN');
@@ -982,19 +943,11 @@ function hideAddNewLocalWindow() {
     localSelected.classList.remove('localSelected');
 }
 
-
-
 // mostra aba de adiconar novo local opção select
 function showselectLocalConfirm() {
     
     enableMapSelection()
 }
-
-
-
-
-
-
 
 // colocar o pin no mapa aonde clicou
 function handleMapClick(event) {
@@ -1057,10 +1010,6 @@ function handleMapClick(event) {
     });
 }
 
-
-
-
-
 // habilita o clique no mapa
 function enableMapSelection() {
     mapSelectionEnabled = true; // Habilita a seleção
@@ -1071,7 +1020,6 @@ function enableMapSelection() {
             document.getElementById('overlay').style.display = "none";
 }
 
-
 // pegar localização atual
 function getCurrentLocation() {
     document.getElementById('selectedCoordinatesUser').textContent = "Localização salva";
@@ -1081,9 +1029,6 @@ function getCurrentLocation() {
             locationMethod = 'current'; // Atualiza o método de localização
     
 }
-
-
-
 
 // função para pegar localização ao selecionar
 function saveCoordinates(num) {
@@ -1117,9 +1062,6 @@ function saveCoordinates(num) {
 
 }
 
-
-
-
 // obter o endereço mais próximo do local selecionado
 function getNearestAddress(latLng, callback) {
     geocoder.geocode({ location: latLng }, (results, status) => {
@@ -1132,7 +1074,6 @@ function getNearestAddress(latLng, callback) {
         }
     });
 }
-
 
 function renderStars(media) {
     const maxStars = 5;

@@ -51,7 +51,7 @@ body {
 }
 
 body.dark nav {
-    background-color: var(--cor-bar-dark);
+    background-color: #010c1a;
 }
 
 body.dark .nav-list a {
