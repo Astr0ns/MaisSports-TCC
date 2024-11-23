@@ -85,7 +85,7 @@
                 <input type="hidden" id="selected_espaco" name="selected_espaco" value="1"></input>
 
                 <section class="reservarInfo">
-                    <h2>R$<%- local.precos[0].preco_hora %><span>/Hora</span></h2>
+                    <h2 class="precoEspaco">R$<%- local.precos[0].preco_hora %><span>/Hora</span></h2>
 
                     <section class="espacos">
                         <button type="button" class="espcSelected" onclick="changeEspaco(1, this)"> <%- local.precos[0].nome_espaco %></button>
@@ -163,6 +163,8 @@
             element.classList.add('espcSelected');
 
             document.getElementById("selected_espaco").value = idEspaco
+            document.querySelector(".precoEspaco").innerHTML = `R$${local.precos[idEspaco-1].preco_hora}<span>/Hora</span>`
+
             
             const value = document.getElementById("data_reserva").value
             if(value != ""){
@@ -298,6 +300,7 @@
             
 
         function calcularPreco() {
+            const localLenght = document.getElementById("selected_espaco").value - 1
             const iniCheck = document.getElementById("start-time").value; // Ex: "16:30"
             const fimCheck = document.getElementById("end-time").value; // Ex: "00:30"
 
@@ -331,8 +334,8 @@
 
             if (totalRemainingMinutes >= 15 || totalHours >=1) {
                 // Certifique-se de que local.preco_hora é um número
-                const precoHora = parseFloat(local.precos[0].preco_hora); // Converte para número
-                const precoMin = parseFloat(local.precos[0].preco_hora)/60; // Converte para número
+                const precoHora = parseFloat(local.precos[localLenght].preco_hora); // Converte para número
+                const precoMin = parseFloat(local.precos[localLenght].preco_hora)/60; // Converte para número
 
                 console.log(`Preço Hora ${precoHora} Preço Min: ${precoMin}`);
                 
