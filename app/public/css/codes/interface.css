@@ -50,13 +50,7 @@ body {
     background-color: var(--cor-fundo5);
 }
 
-body.dark nav {
-    background-color: #010c1a;
-}
 
-body.dark .nav-list a {
-    color: var(--cor-fonte);
-}
 
 body.dark {
     background-color: var(--cor-fundo-body);
@@ -78,23 +72,13 @@ body.dark .heart-icon {
     color: var(--cor-fonte);
 }
 
-body.dark .nav-list.active {
-    background-color: #010c1a;
-    opacity: 1;
 
-}
 
 body.dark footer p {
     color: var(--cor-fonte2);
 }
 
-body.dark .mobile-menu section {
-    width: 32px;
-    height: 2px;
-    background: var(--cor-fonte);
-    margin: 8px;
-    transition: 0.3s;
-}
+
 
 body.dark .locaisReservas div,  body.dark .reservas div{
     background-color: var(--cor-bar-dark-mob);

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!DOCTYPE ejs>
+<ejs lang="pt-br">
 
 <head>
 
@@ -23,7 +23,9 @@
     <link rel="stylesheet" href="css/codes/nav-bar.css">
     <link rel="stylesheet" href="css/codes/footer.css">
     <link rel="stylesheet" href="css/codes/add-product.css">
+    <link rel="stylesheet" href="css/codes/add-locais.css">
     <link rel="stylesheet" href="css/codes/tendencia.css">
+    <link rel="stylesheet" href="css/codes/interface.css">
 
     <!-- Others Links -->
 
@@ -37,6 +39,7 @@
 
 <body style="background-color: #fff;">
     
+    <%- include("../partial/header-home-local", { email: email }) %>
 
     <section class="container-product">
         <section class="container">
@@ -153,14 +156,14 @@
                 const reader = new FileReader();
                 reader.onload = function (e) {
                 const previewDiv = document.getElementById(`preview-${index}`);
-                previewDiv.innerHTML = `
+                previewDiv.innerejs = `
                     <img src="${e.target.result}">
                     <button type="button" class="remove-image">Remover</button>
                 `;
 
                 if(index==0){
                     const previwImgInfo = document.querySelector('.img_product_previw');
-                    previwImgInfo.innerHTML = `
+                    previwImgInfo.innerejs = `
                     <img src="${e.target.result}">
                 `;
                 
@@ -169,7 +172,7 @@
                 // Adicionar funcionalidade de remover imagem
                 const removeBtn = previewDiv.querySelector('.remove-image');
                 removeBtn.addEventListener('click', () => {
-                          previewDiv.innerHTML = `<a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>`;
+                          previewDiv.innerejs = `<a href="#" class="upload-link"><i class="bi bi-plus-circle"></i> Adicionar Imagem</a>`;
                     
                     // Reativar a funcionalidade de clicar para adicionar imagem
                     const newLink = previewDiv.querySelector('.upload-link');
@@ -196,8 +199,12 @@
             }
         };
     </script>
-     
+
+<%- include("../partial/footer") %>
 
 </body>
 
-</html>
+<script src="js/mobile-menu.js"></script>
+
+
+</ejs>

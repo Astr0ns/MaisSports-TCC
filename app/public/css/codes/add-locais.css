@@ -1,3 +1,17 @@
+:root {
+    --cor-fonte: #FFFF;
+    --cor-fonte2: #000;
+    --cor-fonte3: #c70074d2;
+    --cor-bar: #f5f5f5;
+    --cor-bar-dark: #010c1aa9;
+    --cor-bar-dark-mob: #010c1a;
+    --cor-fundo: #f80091bd;
+    --cor-fundo2: #d12089;
+    --cor-fundo3: rgba(0, 33, 123, 0.562);
+    --cor-fundo4: rgb(235, 235, 235);
+    --cor-fundo5: #12488ded;
+    --cor-fundo-body: #010c1aed;
+}
 
 label {
     font-weight: bold;
@@ -8,14 +22,17 @@ label {
 
 /* Definindo o layout da página */
 
-html, body, main {
+html,
+body,
+main {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     color: #333;
 }
-body{
+
+body {
     background-color: #fff;
 }
 
@@ -40,12 +57,51 @@ body{
     width: 0%;
 }
 
+.container-product{
+    height: auto;
+}
+
+.card{
+    background-color: var(--cor-bar);
+}
+
+.card i{
+    color: rgb(20, 51, 77);
+}
+
+.card a{    
+    color: var(--cor-fonte2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 #result {
     margin-top: 10px;
 }
 
-#info_local{
+#info_local {
     display: flex;
     flex-direction: column;
 }
 
+body.dark {
+    .card {
+        background-color: var(--cor-bar-dark-mob);
+    }
+
+    .card i {
+        color: var(--cor-fundo5);
+    }
+    .card label {
+        color: var(--cor-fonte);
+    }
+    .card a{    
+        color: var(--cor-fonte);
+    }
+
+    .container-product {
+        background-color: var(--cor-fundo-body);
+    }
+
+}

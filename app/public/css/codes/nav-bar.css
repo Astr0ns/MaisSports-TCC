@@ -84,6 +84,24 @@ a.pc-og {
     display: block;
 }
 
+body.dark nav {
+    background-color: #010c1a;
+}
+
+body.dark .nav-list a {
+    color: var(--cor-fonte);
+}
+
+body.dark .nav-list.active {
+    background-color: #010c1a;
+    opacity: 1;
+
+}
+
+body.dark .mobile-menu section {
+    background: var(--cor-fonte);
+}
+
 @media screen and (max-width: 999px) {
     body {
         overflow-x: hidden;
@@ -94,28 +112,38 @@ a.pc-og {
     }
 
     .nav-list {
-        position: absolute;
-        top: 8vh;
+        position: fixed;
+        /* Fixa no viewport */
+        top: 0;
         right: 0;
         width: 50vw;
-        height: 92vh;
-        background: #f5f5f5f5;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-        transform: translateX(100%);
-        transition: transform 0.3s ease-in;
+        /* Ocupa metade da tela */
+        height: 100vh;
+        /* Ocupa toda a altura da tela */
+        background-color: rgba(0, 0, 0, 0.9);
+        /* Fundo escuro */
         display: none;
+        /* Escondido por padrão */
+        opacity: 0;
+        visibility: hidden;
+        z-index: 1000;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
     }
+
 
     .nav-list a:hover {
         color: #d12089;
+        /* Cor de hover */
     }
 
     .nav-list li {
-        margin-left: 0;
-        opacity: 0;
+        list-style: none;
+        margin: 15px 0;
     }
+
 
     .mob-og button {
         display: inline-flex;
@@ -137,6 +165,13 @@ a.pc-og {
     .pc-og {
         display: none;
     }
+
+    .mobile-menu {
+        display: block;
+        cursor: pointer;
+        z-index: 2000;
+        /* Para estar acima do menu */
+    }
 }
 
 @media screen and (min-width: 320px) and (max-width: 998px) {
@@ -152,9 +187,36 @@ a.pc-og {
     }
 
     .nav-list {
+        position: fixed;
+        /* Fixa no viewport */
+        top: 0;
+        right: 0;
+        width: 50vw;
+        /* Ocupa metade da tela */
+        height: 100vh;
+        /* Ocupa toda a altura da tela */
+        background-color: var(--cor-bar);
+        /* Fundo escuro */
         display: none;
-        top: 7vh;
-        z-index: 2;
+        /* Escondido por padrão */
+        opacity: 0;
+        visibility: hidden;
+        z-index: 1000;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .nav-list.active {
+        display: flex;
+        /* Mostra o menu */
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .pc-og {
+        display: none;
     }
 
     .mob-og button {
@@ -174,16 +236,6 @@ a.pc-og {
         transition: 0.5 ease;
     }
 
-    .pc-og {
-        display: none;
-    }
-
-
-
-    .nav-list.active {
-        transform: translateX(0);
-    }
-
     @keyframes navLinkFade {
         from {
             opacity: 0;
@@ -196,8 +248,18 @@ a.pc-og {
         }
     }
 
+    .mobile-menu .line1,
+    .mobile-menu .line2,
+    .mobile-menu .line3 {
+        width: 30px;
+        height: 3px;
+        background-color: black;
+        margin: 5px;
+        transition: all 0.3s ease;
+    }
+
     .mobile-menu.active .line1 {
-        transform: rotate(-45deg) translate(-8px, 8px);
+        transform: rotate(-45deg) translate(-5px, 6px);
     }
 
     .mobile-menu.active .line2 {
@@ -205,7 +267,7 @@ a.pc-og {
     }
 
     .mobile-menu.active .line3 {
-        transform: rotate(45deg) translate(-5px, -7px);
+        transform: rotate(45deg) translate(-5px, -6px);
     }
 
 }
