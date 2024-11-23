@@ -540,10 +540,7 @@ function showSidePanel(placeId) {
 
                     <div class="sidePanelInteracao">
                         <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
-                        <p class="like-button">
-                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav('${placeId}');" style="font-size: 2em;display: none;"></i>
-                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav('${placeId}');" style="font-size: 2em;"></i>
-                            <br>favoritar</p>
+                       
                         <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
                     </div>
 
@@ -658,6 +655,11 @@ function showSidePanel(placeId) {
             }, 10); // Um pequeno delay para garantir que a transição seja visível
         }
 
+        // <p class="like-button">
+        // <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav('${placeId}');" style="font-size: 2em;display: none;"></i>
+        // <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav('${placeId}');" style="font-size: 2em;"></i>
+        // <br>favoritar</p>
+
         
     });
 
@@ -718,10 +720,7 @@ function showSidePanelFromLocal(localId) {
                         
                         <div class="sidePanelInteracao">
                             <p id="avaliarButton" onclick="toggleSidePanelAvaliacao()"><i class='fas fa-edit' style="font-size: 2em;"></i><br>Avaliar</p>
-                            <p class="like-button">
-                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${localId});" style="font-size: 2em;display: none;"></i>
-                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${localId});" style="font-size: 2em;"></i>
-                            <br>favoritar</p>
+                            
                             <p><i class='fas fa-exclamation-triangle' style="font-size: 2em;"></i><br>Comunicar</p>
                         </div>
 
