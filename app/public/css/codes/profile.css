@@ -192,7 +192,7 @@ body.dark{
 @media screen and (min-width: 320px) and (max-width: 650px) {
 
     section {
-        padding: 15px;
+        padding: 0px;
         transition: all 0.3s ease;
     }
 
