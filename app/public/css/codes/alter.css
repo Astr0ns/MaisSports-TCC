@@ -30,3 +30,23 @@ body.dark {
         background-color: #4587;
     }
 }
+
+section.button-excl-number {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.button-excl-number button{
+    width: auto;
+    border: none;
+    border-radius: 15px;
+    background-color: var(--cor-bar-dark);
+    padding: 15px;
+    color: var(--cor-fonte);
+    cursor: pointer;
+}

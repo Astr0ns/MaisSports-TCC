@@ -2,10 +2,10 @@ $(document).ready(function() {
 
     function limpa_formulário_cep() {
         // Limpa valores do formulário de cep.
-        $("#rua").val("");
+        $("#logradouro").val("");
         $("#bairro").val("");
         $("#cidade").val("");
-        $("#uf").val("");
+        $("#estado").val("");
         $("#ibge").val("");
     }
     
@@ -25,10 +25,10 @@ $(document).ready(function() {
             if(validacep.test(cep)) {
 
                 //Preenche os campos com "..." enquanto consulta webservice.
-                $("#rua").val("...");
+                $("#logradouro").val("...");
                 $("#bairro").val("...");
                 $("#cidade").val("...");
-                $("#uf").val("...");
+                $("#estado").val("...");
                 $("#ibge").val("...");
 
                 //Consulta o webservice viacep.com.br/
@@ -36,10 +36,10 @@ $(document).ready(function() {
 
                     if (!("erro" in dados)) {
                         //Atualiza os campos com os valores da consulta.
-                        $("#rua").val(dados.logradouro);
+                        $("#logradouro").val(dados.logradouro);
                         $("#bairro").val(dados.bairro);
                         $("#cidade").val(dados.localidade);
-                        $("#uf").val(dados.uf);
+                        $("#estado").val(dados.estado);
                         $("#ibge").val(dados.ibge);
                     } //end if.
                     else {
@@ -64,19 +64,19 @@ $(document).ready(function() {
 
 function limpa_formulari_cep(){
     // limpa valores do formulario
-    document.getElementById('rua').value= ("");
+    document.getElementById('logradouro').value= ("");
     document.getElementById('bairro').value= ("");
     document.getElementById('cidade').value= ("");
-    document.getElementById('uf').value= ("");
+    document.getElementById('estado').value= ("");
 }
 
 function meu_callback(conteudo){
     if(!("erro" in conteudo)){
         // Atualiza os campos com os valores
-        document.getElementById('rua').value= (conteudo.logradouro);
+        document.getElementById('logradouro').value= (conteudo.logradouro);
     document.getElementById('bairro').value= (conteudo.bairro);
     document.getElementById('cidade').value= (conteudo.localidade);
-    document.getElementById('uf').value= (conteudo.uf);
+    document.getElementById('estado').value= (conteudo.estado);
     } //end if
     else{
         //CEP não encontrado

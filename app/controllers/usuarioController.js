@@ -124,7 +124,7 @@ const registrarUsu = async (req, res) => {
 
         // Inserir o novo usuário na base de dados
         await connection.query(
-            "INSERT INTO usuario_clientes (nome, email, senha, celular, logradouro, bairro, cidade, cep) VALUES (?, ?, ?, ?, 'Rua Exemplo', 'Bairro Exemplo', 'Cidade Exemplo', '00000000')",
+            "INSERT INTO usuario_clientes (nome, email, senha, celular, logradouro, bairro, cidade, cep) VALUES (?, ?, ?, ?, 'logradouro Exemplo', 'Bairro Exemplo', 'Cidade Exemplo', '00000000')",
             [nome, email, hash, '00000000000']
         );
 
@@ -139,20 +139,17 @@ const registrarUsu = async (req, res) => {
 }
 
 const alterDados = async (req, res) => {
-
-    var celular = req.session.celular;
-    var userId = req.session.userId;
+    const email = req.session.email;
+    const userId = req.session.userId;
 
     try {
-        const email = req.session.email;
-
         if (!email) {
             throw new Error('Usuário não autenticado.');
         }
 
-        // Query usando o email em vez do userId
+        // Consultar informações do usuário
         const [rows] = await connection.query(
-            "SELECT cep, numero FROM usuario_clientes WHERE email = ?",
+            "SELECT cep, numero, logradouro, bairro, cidade, estado, celular FROM usuario_clientes WHERE email = ?",
             [email]
         );
 
@@ -160,81 +157,157 @@ const alterDados = async (req, res) => {
             throw new Error('Usuário não encontrado.');
         }
 
-        const { cep, numero } = rows[0]; // Obter os dados retornados
+        // Extrair dados do usuário
+        const { cep, numero, logradouro, bairro, cidade, estado, celular } = rows[0];
 
-        // Renderizar a página com as informações
-        res.render('pages/alter', { email, cep, numero, celular, userId });
+        // Renderizar a página com os dados
+        res.render('pages/alter', { email, cep, numero, logradouro, bairro, cidade, estado, celular, userId });
     } catch (error) {
         console.error('Erro ao obter dados:', error);
-        res.status(500).send('Erro ao obter dados');
+        res.status(500).send('Erro ao obter dados do usuário.');
     }
-}
+};
+
 
 const guardarCelular = async (req, res) => {
     try {
         const userId = req.session.userId;
+        const novoCelular = req.body.celular;
 
         if (!userId) {
-            throw new error('Usuario não autenticado');
+            throw new Error('Usuário não autenticado.');
         }
 
+        // Query para verificar se o usuário existe
         const [rows] = await connection.query(
-            "SELECT celular FROM usuario_clientes WHERE id = ?", [userId]
+            "SELECT id FROM usuario_clientes WHERE id = ?",
+            [userId]
         );
 
-        const { celular } = rows[0];
+        if (rows.length === 0) {
+            throw new Error('Usuário não encontrado.');
+        }
 
-    } catch {
-        console.error('Erro ao obter dados:', error);
-        res.status(500).send('Erro ao obter dados');
+        // Atualizar o celular na tabela
+        await connection.query(
+            "UPDATE usuario_clientes SET celular = ? WHERE id = ?",
+            [novoCelular, userId]
+        );
+
+        req.flash('success_msg', 'Número de celular salvo com sucesso!');
+        res.redirect('/alter')
+    } catch (error) {
+        console.error('Erro ao atualizar celular:', error);
+        res.status(500).send('Erro ao atualizar celular');
     }
-}
+};
+
+const excluirOuAlterarCelular = async (req, res) => {
+    try {
+        const userId = req.session.userId;
+
+        if (!userId) {
+            throw new Error('Usuário não autenticado.');
+        }
+
+        // Ação escolhida (excluir ou alterar para 0)
+        const { acao } = req.body;
+
+        if (acao === 'excluir') {
+            // Excluir celular (definir como NULL)
+            await connection.query(
+                "UPDATE usuario_clientes SET celular = NULL WHERE id = ?",
+                [userId]
+            );
+        } else {
+            throw new Error('Ação inválida.');
+        }
+
+        req.flash('success_msg', 'Número de celular salvo com sucesso!');
+        res.redirect('/alter')
+    } catch (error) {
+        console.error('Erro ao excluir ou alterar celular:', error);
+        res.status(500).send('Erro ao atualizar celular');
+    }
+};
 
 const guardarCEP = async (req, res) => {
-
-    const { cep, numero, bairro, cidade } = req.query;
+    const { cep, numero, bairro, cidade, logradouro, uf } = req.body;
     const email = req.session.email;
 
-    console.log('cep:', cep);
-    console.log('numero:', numero);
-    console.log('email:', email);
-
     if (!email) {
-        console.error('id não definido na sessão.');
+        console.error('Usuário não autenticado.');
         return res.status(400).send('Erro: Usuário não está logado.');
     }
 
     try {
+        // Verificar se o usuário existe
         const [rows] = await connection.query(
             "SELECT * FROM usuario_clientes WHERE email = ?",
             [email]
         );
 
         if (rows.length === 0) {
-            throw new Error('email não encontrado na tabela.');
+            throw new Error('Usuário não encontrado.');
         }
 
+        // Atualizar ou adicionar endereço
         const [result] = await connection.query(
-            "UPDATE usuario_clientes SET cep = ?, numero = ?, bairro = ?, cidade = ? WHERE email = ?",
-            [cep, numero, bairro, cidade, email]
+            "UPDATE usuario_clientes SET cep = ?, numero = ?, bairro = ?, cidade = ?, logradouro = ?, estado = ? WHERE email = ?",
+            [cep, numero, bairro, cidade, logradouro, uf, email]
         );
 
         if (result.affectedRows === 0) {
-            throw new Error('Nenhuma linha foi afetada. Verifique se o email está correto.');
+            throw new Error('Erro ao salvar o endereço.');
         }
 
-        req.session.cep = cep;
-
-        console.log("Endereço cadastrado com sucesso!");
+        // Mensagem de sucesso
+        req.flash('success_msg', "Endereço atualizado com sucesso!");
         return res.redirect('/alter');
     } catch (error) {
-        console.error(error);
-        if (!res.headersSent) {
-            res.status(400).send(error.message);
-        }
+        console.error('Erro ao salvar endereço:', error);
+        req.flash('error_msg', 'Erro ao salvar o endereço.');
+        return res.redirect('/alter');
+    }
+};
+
+
+const excluirOuRedefinirEndereco = async (req, res) => {
+    const email = req.session.email;
+
+    if (!email) {
+        console.error('Usuário não autenticado.');
+        return res.status(400).send('Erro: Usuário não está logado.');
     }
 
-}
+    const { acao } = req.body;
+
+    try {
+        if (acao === 'excluir') {
+            // Excluir endereço (definir campos como NULL)
+            await connection.query(
+                "UPDATE usuario_clientes SET cep = NULL, numero = NULL, bairro = NULL, cidade = NULL, logradouro = NULL, estado = NULL WHERE email = ?",
+                [email]
+            );
+        } else if (acao === 'redefinir') {
+            // Redefinir endereço (definir valores padrão, ex.: '0' ou strings vazias)
+            await connection.query(
+                "UPDATE usuario_clientes SET cep = '0', numero = '0', bairro = '', cidade = '', logradouro = '', estado = '' WHERE email = ?",
+                [email]
+            );
+        } else {
+            throw new Error('Ação inválida.');
+        }
+
+        console.log("Endereço atualizado com sucesso!");
+        return res.redirect('/alter');
+    } catch (error) {
+        console.error('Erro ao excluir ou redefinir endereço:', error);
+        res.status(500).send('Erro ao excluir ou redefinir endereço.');
+    }
+};
+
+
 
 module.exports = {
     regrasValidacaoFormLogin,
@@ -243,4 +316,6 @@ module.exports = {
     alterDados,
     guardarCelular,
     guardarCEP,
+    excluirOuAlterarCelular,
+    excluirOuRedefinirEndereco,
 };

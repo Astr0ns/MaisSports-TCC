@@ -144,16 +144,16 @@ router.get("/painel-empresa", verificarAutenticacao, verificarAutorizacao, async
     res.render("pages/painel-empresa", { email: email, userId: userId });
 });
 
-router.get("/favoritarProd/:id", produtoController.favoritarProd, async function (req, res){
+router.get("/favoritarProd/:id", produtoController.favoritarProd, async function (req, res) {
 });
 
-router.get("/verSeProdFav/:id", produtoController.verSeProdFav, async function (req, res){
+router.get("/verSeProdFav/:id", produtoController.verSeProdFav, async function (req, res) {
 });
 
-router.get("/favoritarLocal/:id", locaisController.favoritarLocal, async function (req, res){
+router.get("/favoritarLocal/:id", locaisController.favoritarLocal, async function (req, res) {
 });
 
-router.get("/checkCurtirLocal/:id", locaisController.checkCurtirLocal, async function (req, res){
+router.get("/checkCurtirLocal/:id", locaisController.checkCurtirLocal, async function (req, res) {
 });
 
 router.get("/itens-curtidos", function (req, res) {
@@ -181,6 +181,7 @@ router.get("/login", function (req, res) {
         valores: { nome: "", sobrenome: "", email: "" }
     });
 });
+
 router.get("/login-empr", function (req, res) {
     res.render("pages/login-empr", {
         listaErros: null,
@@ -202,7 +203,7 @@ router.get("/locais-esportivos", async function (req, res) {
 
 
     res.render("pages/locais-esportivos", { nome: nome, email: email, userTipo: userTipo });
-})
+});
 
 router.get("/locaisBanco", locaisController.locaisBanco, async function (req, res) {
     //
@@ -224,7 +225,7 @@ router.get("/product-page/:id", produtoController.getProductById("pages/product-
     res.render("pages/product-page", { email: email });
 });
 
- router.get("/local-page/:id", reservaController.getLocalReservaById("pages/local-page"), async function (req, res) {
+router.get("/local-page/:id", reservaController.getLocalReservaById("pages/local-page"), async function (req, res) {
     var email = req.session.email;
     res.render("pages/local-page", { email: email });
 });
@@ -271,6 +272,8 @@ router.get("/alter-account", verificarAutenticacao, async function (req, res) {
     });
 });
 
+
+
 router.get("/regs-empr", function (req, res) {
     res.render("pages/regs-empr", {
         listaErros: null,
@@ -278,8 +281,6 @@ router.get("/regs-empr", function (req, res) {
         valores: { nome: "", sobrenome: "", email: "" }
     });
 });
-
-
 
 
 // router.post("/alterType", async function (req, res){
@@ -347,12 +348,12 @@ router.get("/empresa", verificarAutenticacao, function (req, res) {
 
 router.get("/add-product", verificarAutenticacao, function (req, res) {
     var email = req.session.email;
-    res.render("pages/add-product", {email: email});
+    res.render("pages/add-product", { email: email });
 });
 
 router.get("/add-productSegredos", verificarAutenticacao, function (req, res) {
     var email = req.session.email;
-    res.render("pages/add-productSegredos", {email: email});
+    res.render("pages/add-productSegredos", { email: email });
 });
 
 router.post("/adicionarProdSegredos", upload, produtoController.adicionarProdSegredos, async function (req, res) {
@@ -369,6 +370,10 @@ router.get('/alter', usuarioController.alterDados, usuarioController.guardarCelu
 });
 
 router.post('/guardarCelular', usuarioController.guardarCelular, async function (req, res) {
+    //
+});
+
+router.post('/excluirOuAlterarCelular', usuarioController.excluirOuAlterarCelular, async function (req, res) {
     //
 });
 
@@ -396,11 +401,9 @@ router.get("/fazerLogout", function (req, res) {
     })
 });
 
+router.post("/guardarCEP", usuarioController.guardarCEP);
 
-
-router.get('/guardarCEP', usuarioController.guardarCEP, async (req, res) => {
-    //
-});
+router.post('/excluirOuRedefinirEndereco', usuarioController.excluirOuRedefinirEndereco);
 
 
 router.post('/delCEP', async function (req, res) {

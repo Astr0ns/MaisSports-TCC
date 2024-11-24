@@ -29,7 +29,7 @@ section {
     transition: all 0.3s ease;
 }
 
-section.historico{
+section.historico {
     padding: 2% 20%;
 }
 
@@ -53,6 +53,7 @@ a:hover {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    padding: 35px;
 }
 
 .account {
@@ -82,9 +83,11 @@ a:hover {
     background: rgb(255, 255, 255);
     padding: 16px;
     height: 100%;
+    display: flex;
     box-sizing: border-box;
     list-style-type: none;
-
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .sair-btn button {
@@ -176,17 +179,32 @@ section .account-alter {
     width: 70%;
 }
 
-body.dark{
-    .account{
+body.dark {
+    .account {
         background-color: var(--cor-bar-dark);
     }
 
-    .desc{
+    .desc {
         background-color: grey;
     }
-    .desc a{
+
+    .desc a {
         color: var(--cor-fonte);
     }
+}
+
+@media screen and (min-width: 651px) and (max-width:1200px) {
+    section.account-alter {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+    }
+
+    h2.lr {
+        font-size: 100%;
+    }
+
 }
 
 @media screen and (min-width: 320px) and (max-width: 650px) {
@@ -194,6 +212,44 @@ body.dark{
     section {
         padding: 0px;
         transition: all 0.3s ease;
+    }
+
+    h2.lr {
+        font-size: 100%;
+    }
+    h3.lr {
+        font-size: 100%;
+    }
+
+    .form-group label {
+        width: 100%;
+    }
+    .form-group input {
+        color: red;
+    }
+
+    .input-form{
+        padding: 19px;
+    }
+
+    section.historico {
+        padding: 2% 10%;
+    }
+
+    section.account-alter {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .form-group{
+        padding: 0;
+    }
+
+    section .nog h2 {
+        font-size: 100%;
     }
 
     .account {
