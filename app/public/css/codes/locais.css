@@ -19,6 +19,8 @@
     display: none;
 }
 
+
+
 /* Definindo o tamanho do mapa */
 #map {
     height: 70vh;
@@ -657,6 +659,16 @@ button:hover {
     .gm-control-active {
         display: none;
     }
+    .gm-style .gm-style-iw-c{
+    padding-top: 0px;
+    max-width: 261px !important;
+    max-height: 424px;
+    min-width: 0px;
+}
+
+.gm-style .gm-style-iw-d{
+    max-width: auto;
+}
 
     body {
         max-width: 100vw;
@@ -741,7 +753,7 @@ button:hover {
         /* Fixa a posição na tela */
         overflow-x: auto;
         white-space: nowrap;
-        top: 20%;
+        top: 20.5%;
         width: 100vw;
         transform: translate(0%, -65%);
         /* Centraliza a janela */
