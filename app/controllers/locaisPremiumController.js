@@ -20,7 +20,7 @@ const adicionarLocaisPremium = async (req, res) => {
     // console.log("Horários recebidos:", horarios);
 
       
-    return
+
 
 
 
@@ -55,7 +55,6 @@ const adicionarLocaisPremium = async (req, res) => {
         if(totalEspaco == 1){
             // Insere o novo local
             console.log("deu grenn")
-            return
 
             const [addL] = await connection.query(
                 `INSERT INTO local_premium (fk_id_empresa, nome_local_premium, categoria, latitude, longitude, descricao) VALUES (?, ?, ?, ?, ?, ?)`,
@@ -89,7 +88,6 @@ const adicionarLocaisPremium = async (req, res) => {
                     [fk_id_emp, nome_local, local_category, latitude, longitude, desc_local]
                 );
             }
-            return
 
     
             const locaisId = addL.insertId;
@@ -123,7 +121,6 @@ const adicionarLocaisPremium = async (req, res) => {
                     [fk_id_emp, nome_local, local_category, latitude, longitude, desc_local]
                 );
             }
-            return
 
     
             const locaisId = addL.insertId;
