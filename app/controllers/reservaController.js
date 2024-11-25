@@ -268,8 +268,8 @@ const fazerReserva = async (req, res) => {
             ],
             back_urls: {
                 success: `https://maissports-tcc.onrender.com/reservaConfirmada`, // URL para sucesso
-                failure: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-falha`, // URL para falha
-                pending: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-pendente`, // URL para pendente
+                failure: `https://maissports-tcc.onrender.com/reservaConfirmada`, // URL para falha
+                pending: `https://maissports-tcc.onrender.com/reservaConfirmada`, // URL para pendente
             },
             auto_return: all,
             external_reference: externalReference // Armazena os dados aqui

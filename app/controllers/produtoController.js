@@ -6,7 +6,7 @@ const { all } = require('../routes/productRouter');
 
 // Inicialize o cliente Mercado Pago
 const client = new MercadoPagoConfig({
-    accessToken: 'APP_USR-5246075068010463-102011-9f4c949634a04fdbbf0193af72dd4988-428968371',
+    accessToken: 'TEST-5246075068010463-102011-23539c46def1acb4b061770a6d174e1e-428968371',
     options: { timeout: 5000, idempotencyKey: 'abc' }
 });
 
@@ -151,9 +151,9 @@ if (idPlanoNum === 1) {
                 
             ],
             back_urls: {
-                success: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/produto-confirmado`, // URL para sucesso
-                failure: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-falha`, // URL para falha
-                pending: `https://fuzzy-computing-machine-g47rjr6rr7qxfp6r-3000.app.github.dev/adicionar-produto-pendente`, // URL para pendente
+                success: `https://maissports-tcc.onrender.com/produto-confirmado`, // URL para sucesso
+                failure: `https://maissports-tcc.onrender.com/produto-confirmado`, // URL para falha
+                pending: `https://maissports-tcc.onrender.com/produto-confirmado`, // URL para pendente
             },
             auto_return: all,
             external_reference: externalReference // Armazena os dados aqui
