@@ -5,7 +5,7 @@ npm init -y
 
 npm config set strict-ssl false ( se necessário)
 npm install express-validator
-npm install dotenv --save
+pm install express-validator
 npm install mysql2
 npm install express-session
 npm i bootstrap-icons
