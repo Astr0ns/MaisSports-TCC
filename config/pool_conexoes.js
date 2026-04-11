@@ -1,25 +1,19 @@
-const mysql = require('mysql2');
-const dotenv = require("dotenv");
-dotenv.config();
+require('dotenv').config();
+const { Pool } = require('pg');
 
-const pool = mysql.createPool({
-    host: process.env.DB_HOST, 
-    user: process.env.DB_USER, 
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 });
 
-pool.getConnection((err, conn) => {
-    if (err) 
-        console.error("Erro ao conectar ao SGBD:", err);
-    else {
-        console.log("Conectado ao SGBD!");
-        conn.release();
-    }
+// Testa a conexão ao iniciar
+pool.connect((err, client, release) => {
+  if (err) {
+    console.error('❌ Erro ao conectar ao Supabase:', err.message);
+  } else {
+    console.log('✅ Conectado ao Supabase (PostgreSQL) com sucesso!');
+    release();
+  }
 });
 
-module.exports = pool.promise();
+module.exports = pool;

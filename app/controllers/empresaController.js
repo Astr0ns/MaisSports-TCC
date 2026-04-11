@@ -1,25 +1,8 @@
-const usuario = require("../models/usuarioModel");
-const { body, validationResult } = require("express-validator");
+const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
-var salt = bcrypt.genSaltSync(12);
-const { removeImg } = require("../util/removeImg");
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-const https = require('https');
-const upload = require('../models/upload-middleware');
 const connection = require("../../config/pool_conexoes");
 
-
-
-// Regras de validação para o formulário de login
-
-const regrasValidacaoFormLogin = [
-    body('email')
-        .isEmail().withMessage('Insira um email válido')
-        .normalizeEmail(),
-    body('senha')
-        .isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres')
-];
-
+const regrasValidacaoFormLogin = [];
 
 const registrarEmpr = async (req, res) => {
     const errors = validationResult(req);
@@ -28,44 +11,37 @@ const registrarEmpr = async (req, res) => {
             userId: req.session.userId,
             listaErros: errors.array(),
             dadosNotificacao: null,
-            valores: {
-                nome_usu: "",
-                nomeusu_usu: "",
-                email_usu: req.body.email,
-                senha_usu: ""
-            },
+            valores: { nome_usu: "", nomeusu_usu: "", email_usu: req.body.email, senha_usu: "" },
         });
     }
 
     const { nome, cnpj, email, senha, cSenha } = req.body;
 
-    // Verificar se as senhas conferem
     if (senha !== cSenha) {
         req.flash('error_msg', 'As senhas não conferem.');
         return res.redirect('/regs-empr');
     }
 
     try {
-        // Verificar se o email ou CNPJ já existem
-        const [existingRecords] = await connection.query("SELECT id FROM empresas WHERE email = ? OR cnpj = ?", [email, cnpj]);
+        const existingRecords = await connection.query(
+            "SELECT id FROM empresas WHERE email = $1 OR cnpj = $2",
+            [email, cnpj]
+        );
 
-        if (existingRecords.length > 0) {
-            if (existingRecords[0].email === email) {
-                req.flash('error_msg', 'Email corporativo em uso.');
-            } else {
-                req.flash('error_msg', 'CNPJ corporativo em uso.');
-            }
+        if (existingRecords.rows.length > 0) {
+            req.flash('error_msg', 'Email ou CNPJ já em uso.');
             return res.redirect('/regs-empr');
         }
 
-        // Criptografar a senha
         const hash = await bcrypt.hash(senha, 12);
 
-        // Inserir o novo usuário na base de dados
-        await connection.query("INSERT INTO empresas (nome, cnpj, email, senha, tipo, cep, logradouro) VALUES (?, ?, ?, ?, 'empresa', '00000000', '0000')", [nome, cnpj, email, hash]);
+        await connection.query(
+            "INSERT INTO empresas (nome, cnpj, email, senha, tipo, cep, logradouro) VALUES ($1, $2, $3, $4, 'empresa', '00000000', '0000')",
+            [nome, cnpj, email, hash]
+        );
 
-        req.flash('success_msg', 'Registro bem-sucedido! Você será redirecionado para a página de Login em breve.');
-        return res.redirect('/login-empr'); // Redireciona para a página de login após registro
+        req.flash('success_msg', 'Registro bem-sucedido!');
+        return res.redirect('/login-empr');
 
     } catch (error) {
         console.error(error);
@@ -74,50 +50,34 @@ const registrarEmpr = async (req, res) => {
     }
 };
 
-
 const logarEmpr = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.render('pages/login-empr', {
-            userId: req.session.userId,
-            listaErros: errors.array(),
-            dadosNotificacao: null,
-            valores: {
-                nome_usu: "",
-                nomeusu_usu: "",
-                email_usu: req.body.email,
-                senha_usu: ""
-            },
-        });
-    }
-
     const { email, senha } = req.body;
 
     try {
-        const [accounts] = await connection.query("SELECT * FROM empresas WHERE email = ? LIMIT 1", [email]);
-        
-        if (accounts.length > 0) {
-            const account = accounts[0];
+        const result = await connection.query(
+            "SELECT * FROM empresas WHERE email = $1 LIMIT 1",
+            [email]
+        );
 
-            const passwordMatch = await bcrypt.compareSync(senha, account.senha);
-            console.log(passwordMatch)
+        if (result.rows.length > 0) {
+            const account = result.rows[0];
+            const passwordMatch = await bcrypt.compare(senha, account.senha);
 
             if (!passwordMatch) {
                 req.flash('error_msg', "As senhas não conferem");
                 return res.redirect('/login-empr');
             }
 
-            // Armazenar informações do usuário na sessão
             req.session.email = account.email;
             req.session.celular = account.celular;
             req.session.nome = account.nome;
             req.session.userId = account.id;
             req.session.sobrenome = account.cnpj;
             req.session.userTipo = account.tipo;
-            req.session.logado = true; // Atualizando a sessão
+            req.session.logado = true;
 
-            req.flash('sucess_msg', "Logado com sucesso");
-            return res.redirect('/painel-empresa'); // Redireciona após o login
+            req.flash('success_msg', "Logado com sucesso");
+            return res.redirect('/painel-empresa');
 
         } else {
             req.flash('error_msg', "Usuário não encontrado");
@@ -130,49 +90,29 @@ const logarEmpr = async (req, res) => {
     }
 };
 
-const adicionarProduto = async (req, res) => {
-    const { nome, descricao, preco, quantidade, marca, localizacao } = req.body;
-
-    try {
-        const result = await pool.query(
-            'INSERT INTO produtos (nome, descricao, preco, quantidade, marca, localizacao) VALUES (R$1, R$2, R$3, R$4, R$5, R$6) RETURNING *',
-            [nome, descricao, preco, quantidade, marca, localizacao]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Erro ao adicionar produto' });
-    }
-}
-
-
 const verSeEmpresa = async (req, res) => {
     const email = req.session.email;
     const nome = req.session.nome;
 
     try {
-        // Primeiro, verificamos na tabela usuario_clientes
-        const queryClientes = `SELECT * FROM usuario_clientes WHERE email = ?`;
-        const [resultClientes] = await connection.query(queryClientes, [email]);
+        const resultClientes = await connection.query(
+            "SELECT * FROM usuario_clientes WHERE email = $1",
+            [email]
+        );
 
-        if (resultClientes.length > 0) {
-            // Se o usuário for encontrado na tabela usuario_clientes
-            const usuario = resultClientes[0];
-            // Coloque aqui o código que você já tem para o usuário encontrado
+        if (resultClientes.rows.length > 0) {
+            const usuario = resultClientes.rows[0];
             res.render("pages/profile", { user: usuario, nome: nome, email: email });
         } else {
-            // Se não for encontrado, verificamos na tabela empresas
-            const queryEmpresas = `SELECT * FROM empresas WHERE email = ?`;
-            const [resultEmpresas] = await connection.query(queryEmpresas, [email]);
+            const resultEmpresas = await connection.query(
+                "SELECT * FROM empresas WHERE email = $1",
+                [email]
+            );
 
-            if (resultEmpresas.length > 0) {
-                // Se a empresa for encontrada
-                const empresa = resultEmpresas[0];
-                // Coloque aqui o código que você já tem para a empresa encontrada
+            if (resultEmpresas.rows.length > 0) {
+                const empresa = resultEmpresas.rows[0];
                 res.render("pages/painel-empresa", { company: empresa, nome: nome, email: email });
             } else {
-                // Se não encontrar nem na tabela de clientes nem na de empresas
-                // Coloque aqui o código para lidar com a ausência de usuário/empresa
                 res.render("pages/login");
             }
         }
@@ -182,11 +122,9 @@ const verSeEmpresa = async (req, res) => {
     }
 };
 
-
 module.exports = {
     regrasValidacaoFormLogin,
     logarEmpr,
     registrarEmpr,
-    adicionarProduto,
     verSeEmpresa,
 };
