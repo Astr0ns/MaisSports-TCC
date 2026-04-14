@@ -143,3 +143,18 @@ CREATE TABLE reservas (
   status VARCHAR(20) DEFAULT 'pendente',
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS avaliacao_prod (
+  id SERIAL PRIMARY KEY,
+  fk_id_prod INT REFERENCES produtos_das_empresas(id),
+  fk_id_cliente INT REFERENCES usuario_clientes(id),
+  comentario_prod TEXT,
+  avaliacao_estrela_prod INT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS favorito_produto (
+  id SERIAL PRIMARY KEY,
+  fk_id_cliente INT REFERENCES usuario_clientes(id),
+  fk_id_prod INT REFERENCES produtos_das_empresas(id)
+);

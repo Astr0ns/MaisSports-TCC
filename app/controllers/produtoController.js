@@ -2,7 +2,7 @@ const connection = require("../../config/pool_conexoes");
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 
 const client = new MercadoPagoConfig({
-    accessToken: 'TEST-5246075068010463-102011-23539c46def1acb4b061770a6d174e1e-428968371',
+    accessToken: process.env.MP_ACCESS_TOKEN,
     options: { timeout: 5000, idempotencyKey: 'abc' }
 });
 
@@ -34,7 +34,7 @@ const adicionarProdSegredos = async (req, res) => {
         }
 
         req.flash('success_msg', 'Produto adicionado com sucesso!');
-        res.redirect(`product-page/${ProdId}`);
+        res.redirect(`/product-page/${ProdId}`);
     } catch (error) {
         req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
         console.log(error);
@@ -48,7 +48,11 @@ const adicionarProd = async (req, res) => {
     const imagens = req.files.map(file => file.filename);
 
     const idPlanoNum = parseInt(idPlano, 10);
-    const valorPlanoNum = parseFloat(valorPlano);
+    const valorPlanoNum = Number(parseFloat(valorPlano).toFixed(2));
+
+    if (!valorPlanoNum || isNaN(valorPlanoNum)) {
+        return res.status(400).send('Valor do plano inválido.');
+    }
 
     let titlePlano;
     if (idPlanoNum === 1) titlePlano = "Black";
@@ -72,9 +76,9 @@ const adicionarProd = async (req, res) => {
                 unit_price: valorPlanoNum,
             }],
             back_urls: {
-                success: `https://maissports-tcc.onrender.com/produto-confirmado`,
-                failure: `https://maissports-tcc.onrender.com/produto-confirmado`,
-                pending: `https://maissports-tcc.onrender.com/produto-confirmado`,
+                success: `https://curly-computing-machine-6q6pwx6pqxvhxv4-3000.app.github.dev/produto-confirmado`,
+                failure: `https://curly-computing-machine-6q6pwx6pqxvhxv4-3000.app.github.dev/produto-confirmado`,
+                pending: `https://curly-computing-machine-6q6pwx6pqxvhxv4-3000.app.github.dev/produto-confirmado`,
             },
             auto_return: 'approved',
             external_reference: externalReference
@@ -120,7 +124,7 @@ const adicionarProdutoConfirmado = async (req, res) => {
         }
 
         req.flash('success_msg', 'Produto adicionado com sucesso!');
-        res.redirect(`product-page/${ProdId}`);
+        res.redirect(`/product-page/${ProdId}`);
     } catch (error) {
         req.flash('error_msg', 'Erro ao adicionar produto: ' + error.message);
         console.log(error);
@@ -245,10 +249,13 @@ const pegarProdutoCurtido = async (req, res) => {
     }
 };
 
-const getProductById = (path) => {
+const getProductById = (pagina) => {
     return async (req, res) => {
         const prodId = req.params.id;
         const email = req.session.email;
+        console.log("URL completa:", req.originalUrl);
+        console.log("Params:", req.params);
+        console.log("prodId:", prodId);
         try {
             const query = `
                 SELECT p.id, p.titulo_prod, p.descricao_prod, p.link_prod, i.nome_imagem, i.ordem_img,
@@ -275,7 +282,7 @@ const getProductById = (path) => {
             }, []);
 
             if (produtos.length > 0) {
-                res.render("pages/product-page", { product: produtos[0], email: email });
+                res.render(pagina, { product: produtos[0], email: email });
             } else {
                 res.status(404).send("Produto não encontrado");
             }

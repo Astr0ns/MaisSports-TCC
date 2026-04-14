@@ -4,13 +4,10 @@ function renderProducts(products) {
 
 
     products.forEach(product => {
-        const { id_prod, titulo_prod, valor_prod, imagens, media_avaliacao } = product;
-
-        
+        const { id, titulo_prod, valor_prod, imagens, media_avaliacao } = product;
 
         let favoritado = "";
 
-    // Verifica se valor_prod é válido e converte para número
         const preco = Number(valor_prod);
         const precoFormatado = !isNaN(preco) ? preco.toFixed(2) : "0.00";
         const parcelaFormatada = !isNaN(preco) ? (preco / 6).toFixed(2) : "0.00";
@@ -19,21 +16,18 @@ function renderProducts(products) {
 
         if (email.length === 0) {
             const productHTML = `
-                
                 <section class="row">
-                    <a href="/product-page/${id_prod}">
+                    <a href="/product-page/${id}">
                         <img src="/uploads/${imagens[0]}" alt="${titulo_prod}">
                     </a>
                     <section class="product-text">
                         <h5>NEW</h5>
                     </section>
                     <section class="heart-icon">
-                        
-                    <i class="bx bx-heart" onclick="redirecionarPag()" style="margin-right:5px;"></i>
-                        
+                        <i class="bx bx-heart" onclick="redirecionarPag()" style="margin-right:5px;"></i>
                     </section>
                     <section class="ratting">
-                        ${renderStars(media_avaliacao || 0)} <!-- Usa valor padrão se não houver avaliação -->
+                        ${renderStars(media_avaliacao || 0)}
                     </section>
                     <section class="price">
                         <h4>${titulo_prod}</h4>
@@ -46,18 +40,16 @@ function renderProducts(products) {
                         </section>
                         <section class="desc-outher">
                             <p class="estoque">em estoque</p>
-                            
                         </section>
                     </section>
                 </section>
-                
-                `;
+            `;
 
-                trendingSection.insertAdjacentHTML('beforeend', productHTML); // Adiciona o HTML do produto
+            trendingSection.insertAdjacentHTML('beforeend', productHTML);
         } else {
             const verificarFavorito = async () => {
                 try {
-                    const response = await fetch(`/verSeProdFav/${id_prod}`, { // Use 'id' aqui
+                    const response = await fetch(`/verSeProdFav/${id}`, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
@@ -67,10 +59,8 @@ function renderProducts(products) {
                     if (response.ok) {
                         const data = await response.json();
                         if (data.message === "Produto favoritado") {
-                            
                             favoritado = 1;
                         } else {
-                            
                             favoritado = 2;
                         }
                     } else {
@@ -80,34 +70,28 @@ function renderProducts(products) {
                     console.error("Erro na solicitação:", error);
                 }
 
-                
                 const productHTML = `
-                
                 <section class="row">
-                    <a href="/product-page/${id_prod}">
+                    <a href="/product-page/${id}">
                         <img src="/uploads/${imagens[0]}" alt="${titulo_prod}">
                     </a>
                     <section class="product-text">
                         <h5>NEW</h5>
                     </section>
                     <section class="heart-icon">
-                        
-
-                    ${email.length === 0 ? `
-                        <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${id_prod});" style="display: none; margin-right:5px;"></i>
-                        <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${id_prod});" style="margin-right:5px;"></i>
-                    ` : (favoritado == 1 ? `
-                        <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${id_prod});" style="display: none; margin-right:5px;"></i>
-                        <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${id_prod});" style="margin-right:5px;"></i>
-                    ` : `
-                        <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${id_prod});" style="margin-right:5px;"></i>
-                        <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${id_prod});" style="display: none; margin-right:5px;"></i>
-                    `)}
-                
-                        
+                        ${email.length === 0 ? `
+                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${id});" style="display: none; margin-right:5px;"></i>
+                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${id});" style="margin-right:5px;"></i>
+                        ` : (favoritado == 1 ? `
+                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${id});" style="display: none; margin-right:5px;"></i>
+                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${id});" style="margin-right:5px;"></i>
+                        ` : `
+                            <i class="bi bi-heart-fill" onclick="toggleHeart(event); favDesFav(${id});" style="margin-right:5px;"></i>
+                            <i class="bx bx-heart" onclick="toggleHeart(event); favDesFav(${id});" style="display: none; margin-right:5px;"></i>
+                        `)}
                     </section>
                     <section class="ratting">
-                        ${renderStars(media_avaliacao || 0)} <!-- Usa valor padrão se não houver avaliação -->
+                        ${renderStars(media_avaliacao || 0)}
                     </section>
                     <section class="price">
                         <h4>${titulo_prod}</h4>
@@ -120,30 +104,23 @@ function renderProducts(products) {
                         </section>
                         <section class="desc-outher">
                             <p class="estoque">em estoque</p>
-                            
                         </section>
                     </section>
                 </section>
-                
                 `;
 
-                trendingSection.insertAdjacentHTML('beforeend', productHTML); // Adiciona o HTML do produto
+                trendingSection.insertAdjacentHTML('beforeend', productHTML);
             };
 
-            // Chama a função assíncrona
             verificarFavorito();
         }
-
-        
     });
 }
 
 function redirecionarPag(){
-    window.location.href = "/login"; // Redireciona para a URL fornecida
+    window.location.href = "/login";
 }
 
-
-// Função para renderizar estrelas de avaliação
 function renderStars(rating) {
     let starsHTML = '';
     for (let i = 1; i <= 5; i++) {
@@ -171,48 +148,40 @@ function toggleHeart(event) {
         coracaoVazio.classList.add('animate');
     }
 
-    // Remove a classe de animação após a animação ser concluída
     setTimeout(() => {
         coracaoPreenchido.classList.remove('animate');
         coracaoVazio.classList.remove('animate');
-    }, 500); // 500ms é o tempo da animação
-
-    
+    }, 500);
 }
 
 function favDesFav(id) {
-    try {
-        const response = fetch(`/favoritarProd/${id}`, { // Use 'id' aqui
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-
-        response.then(res => {
-            if (res.ok) {
-                return res.json();
-            } else {
-                throw new Error(res.statusText);
-            }
-        }).then(data => {
-            if (data.message === "Produto favoritado com sucesso!") {
-                console.log("Produto adicionado aos favoritos:", data);
-            } else {
-                console.error("Erro ao favoritar o produto:", data.message);
-            }
-        });
-    } catch (error) {
+    fetch(`/favoritarProd/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+        throw new Error(res.statusText);
+    })
+    .then(data => {
+        if (data.message === "Produto favoritado com sucesso!") {
+            console.log("Produto adicionado aos favoritos:", data);
+        } else {
+            console.error("Erro ao favoritar o produto:", data.message);
+        }
+    })
+    .catch(error => {
         console.error("Erro na solicitação:", error);
-    }
+    });
 }
 
-// Fazer a requisição para pegar os produtos
 fetch('/pegarProdutoBanco')
     .then(response => response.json())
     .then(products => {
-        renderProducts(products); // Renderiza todos os produtos
-        console.log('Produtos recebidos:', products); // Log dos produtos
+        renderProducts(products);
+        console.log('Produtos recebidos:', products);
     })
     .catch(err => {
         console.error('Erro ao carregar produtos:', err);
