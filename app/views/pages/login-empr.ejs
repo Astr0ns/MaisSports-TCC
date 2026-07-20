@@ -17,6 +17,7 @@
 
     <!-- Link CSS's of Mains, Sections, etc. -->
 
+    <link rel="stylesheet" href="css/codes/interface.css">
     <link rel="stylesheet" href="css/codes/sessoes.css">
     <link rel="stylesheet" href="css/codes/tendencia.css">
     <link rel="stylesheet" href="css/codes/client-review.css">
@@ -40,6 +41,11 @@
 </head>
 
 <body>
+    <script>
+        if (localStorage.getItem('modoEscuro') === 'true') {
+            document.body.classList.add('dark');
+        }
+    </script>
 
     <header>
         <nav>
@@ -60,6 +66,8 @@
                 <section class="line2"></section>
                 <section class="line3"></section>
             </section>
+
+
 
             <ul class="nav-list">
                 <li><a href="/">Inicio</a></li>
@@ -94,15 +102,16 @@
 
 
 
-        <section class="login"><h1>LOGIN</h1>
+        <section class="login">
+            <h1>LOGIN</h1>
             <form action="/loginEmpr" method="post" class="login_form">
-            
+
                 <section class="form-group">
                     <h3 class="lr">E-mail</h3>
                     <label for="email">E-mail:</label>
                     <input id="email" type="email" name="email" placeholder="Digite seu E-mail" required>
                 </section>
-            
+
                 <section class="form-group">
                     <h3 class="lr">Senha</h3>
                     <label for="password">Senha:</label>
@@ -110,15 +119,16 @@
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
                         title="Adicione no mínimo uma letra maiúscula, uma letra minúscula, um número e deve ter entre 8 a 20 caracteres.">
                 </section>
-            
+
                 <section class="text-center">
                     <button type="submit" class="btn btn-primary" id="save-btn">Entrar</button>
                 </section>
-            
-                <p class="butun">Ainda não tem uma <span>empresa</span> cadastrada? <a href="/regs-empr">Cadastre-se</a>.</p>
-            
+
+                <p class="butun">Ainda não tem uma <span>empresa</span> cadastrada? <a
+                        href="/regs-empr">Cadastre-se</a>.</p>
+
             </form>
-             </section>
+        </section>
     </section>
 
     <%- include("../partial/footer") %>

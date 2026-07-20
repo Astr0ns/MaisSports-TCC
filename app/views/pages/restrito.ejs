@@ -6,6 +6,11 @@
     <title>Área Restrita</title>
 </head>
 <body>
+<script>
+    if (localStorage.getItem('modoEscuro') === 'true') {
+      document.body.classList.add('dark');
+    }
+  </script>
 
     <% if(autenticado.autenticado != null){
           let arquivo={"imagem":"imagem/img-perfil.png"} ;

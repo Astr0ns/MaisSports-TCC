@@ -39,7 +39,12 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2310003761562398"
      crossorigin="anonymous"></script>
 </head> 
-<body> 
+<body>
+<script>
+    if (localStorage.getItem('modoEscuro') === 'true') {
+      document.body.classList.add('dark');
+    }
+  </script>
     <%- include("../partial/header-home", { email: email }) %>
     <h1 class="desativar_mobile">LOCALIZAR LOCAIS</h1>
     <h2 class="userNome" style="display: none;"><%-  nome  %></h2>

@@ -29,6 +29,11 @@
     <link rel="stylesheet" href="/css/codes/local-page.css">
 </head>
 <body>
+<script>
+    if (localStorage.getItem('modoEscuro') === 'true') {
+      document.body.classList.add('dark');
+    }
+  </script>
     <%- include("../partial/header-home", {email: email }) %>
     <main>
         

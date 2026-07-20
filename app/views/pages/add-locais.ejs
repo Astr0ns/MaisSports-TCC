@@ -38,6 +38,11 @@
 </head>
 
 <body style="background-color: #fff;">
+<script>
+    if (localStorage.getItem('modoEscuro') === 'true') {
+      document.body.classList.add('dark');
+    }
+  </script>
     
     <%- include("../partial/header-home-local", { email: email }) %>
 

@@ -160,3 +160,7 @@ section#valid-sucess {
     }
     
 }
+
+body.dark p{
+    color: var(--cor-fonte2);
+}

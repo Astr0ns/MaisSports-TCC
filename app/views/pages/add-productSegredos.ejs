@@ -37,6 +37,11 @@
 </head>
 
 <body onload="saberPreco(3.5)">
+<script>
+    if (localStorage.getItem('modoEscuro') === 'true') {
+      document.body.classList.add('dark');
+    }
+  </script>
     
     <%- include("../partial/header-home", { email: email }) %>
 

@@ -4,6 +4,11 @@
 <%- include ("../partial/head-soccer") %>
 
 <body>
+<script>
+    if (localStorage.getItem('modoEscuro') === 'true') {
+      document.body.classList.add('dark');
+    }
+  </script>
 
     <%- include("../partial/header-home", {email: email}) %>
 
