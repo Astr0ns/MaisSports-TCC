@@ -85,25 +85,24 @@
     </header>
 
     <section class="notify">
-        <% if (error_msg || success_msg) { %>
-            <section class="flash-message" style="display: none;">
-                <% if (error_msg) { %>
-                    <section class="error">
-                        <%= error_msg %>
-                    </section>
-                    <% } %>
-                        <% if (success_msg) { %>
-                            <section class="success">
-                                <%= success_msg %>
-                            </section>
-                            <% } %>
-                                <section class="progress-bar">
-                                    <section class="progress-bar-inner"></section>
-                                </section>
-            </section>
+    <% if (error_msg.length > 0 || success_msg.length > 0) { %>
+        <section class="flash-message" style="display: none;">
+            <% if (error_msg.length > 0) { %>
+                <section class="error">
+                    <%= error_msg[0] %>
+                </section>
             <% } %>
-
-    </section>
+            <% if (success_msg.length > 0) { %>
+                <section class="success">
+                    <%= success_msg[0] %>
+                </section>
+            <% } %>
+            <section class="progress-bar">
+                <section class="progress-bar-inner"></section>
+            </section>
+        </section>
+    <% } %>
+</section>
     <section class="area-login">
 
         <section class="login">

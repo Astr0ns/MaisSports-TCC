@@ -77,16 +77,16 @@
 
     <section class="notificacao">
         <section class="notify">
-            <% if (error_msg || success_msg) { %>
+            <% if (error_msg.length> 0 || success_msg.length > 0) { %>
                 <section class="flash-message" style="display: none;">
-                    <% if (error_msg) { %>
+                    <% if (error_msg.length> 0) { %>
                         <section class="error">
-                            <%= error_msg %>
+                            <%= error_msg[0] %>
                         </section>
                         <% } %>
-                            <% if (success_msg) { %>
+                            <% if (success_msg.length> 0) { %>
                                 <section class="success">
-                                    <%= success_msg %>
+                                    <%= success_msg[0] %>
                                 </section>
                                 <% } %>
                                     <section class="progress-bar">
@@ -94,8 +94,9 @@
                                     </section>
                 </section>
                 <% } %>
-
         </section>
+
+    </section>
     </section>
 
     <section class="area-login">

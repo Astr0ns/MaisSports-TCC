@@ -68,7 +68,7 @@ const registrarUsu = async (req, res) => {
         });
     }
 
-    const { nome, email, senha } = req.body;
+    const { nome, sobrenome, email, senha } = req.body;
 
     if (senha !== req.body.cSenha) {
         req.flash('error_msg', 'As senhas não conferem.');
@@ -90,8 +90,8 @@ const registrarUsu = async (req, res) => {
         const hash = bcrypt.hashSync(senha, salt);
 
         await connection.query(
-            "INSERT INTO usuario_clientes (nome, email, senha, celular, logradouro, cep) VALUES ($1, $2, $3, $4, $5, $6)",
-            [nome, email, hash, '00000000000', 'Logradouro Exemplo', '00000000']
+            "INSERT INTO usuario_clientes (nome, sobrenome, email, senha, celular, logradouro, cep) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+            [nome, sobrenome, email, hash, '00000000000', 'Logradouro Não Adicionado', '00000000']
         );
 
         req.flash('success_msg', 'Registro bem-sucedido!');

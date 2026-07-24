@@ -36,18 +36,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2310003761562398"
-     crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
 
 
     <title>+Sports</title>
 </head>
 
 <body>
-<script>
-    if (localStorage.getItem('modoEscuro') === 'true') {
-      document.body.classList.add('dark');
-    }
-  </script>
+    <script>
+        if (localStorage.getItem('modoEscuro') === 'true') {
+            document.body.classList.add('dark');
+        }
+    </script>
 
     <header>
         <nav>
@@ -82,16 +82,16 @@
 
     <main class="bg">
         <section class="notify">
-            <% if (error_msg || success_msg) { %>
+            <% if (error_msg.length> 0 || success_msg.length > 0) { %>
                 <section class="flash-message" style="display: none;">
-                    <% if (error_msg) { %>
+                    <% if (error_msg.length> 0) { %>
                         <section class="error">
-                            <%= error_msg %>
+                            <%= error_msg[0] %>
                         </section>
                         <% } %>
-                            <% if (success_msg) { %>
+                            <% if (success_msg.length> 0) { %>
                                 <section class="success">
-                                    <%= success_msg %>
+                                    <%= success_msg[0] %>
                                 </section>
                                 <% } %>
                                     <section class="progress-bar">
@@ -99,7 +99,6 @@
                                     </section>
                 </section>
                 <% } %>
-
         </section>
         <section class="area-login">
             <section class="sub-og">
