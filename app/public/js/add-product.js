@@ -142,7 +142,6 @@ function selectNormal() {
     document.querySelector(".assinatura-info").style.backgroundColor = "#fff";
     document.querySelector(".assinatura-info").style.color = "#000";
     document.querySelector(".assinatura-info h2").style.color = "#f72ba5";
-
     document.querySelector(".assinatura-info h3 i").style.color = "#f72ba5";
 
     

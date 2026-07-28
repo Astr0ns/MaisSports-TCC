@@ -72,6 +72,25 @@ body.dark .heart-icon {
     color: var(--cor-fonte);
 }
 
+body.dark {
+
+    .assinatura-info h3 {
+        color: #f72ba5;
+    }
+
+    .assinatura-info p {
+        color: #000;
+    }
+
+    .assinatura-info h2 {
+        color: #f72ba5;
+
+    }
+    #selectMedio section.container {
+        background-color: #000;
+    }
+}
+
 
 
 body.dark footer p {
@@ -80,9 +99,11 @@ body.dark footer p {
 
 
 
-body.dark .locaisReservas div,  body.dark .reservas div{
+body.dark .locaisReservas div,
+body.dark .reservas div {
     background-color: var(--cor-bar-dark-mob);
 }
+
 
 
 @media screen and (min-width:320px) and (max-width: 1024px) {

@@ -99,7 +99,7 @@ const getLocalReservaById = (path) => {
         try {
             const query = `
                 SELECT l.id_local_premium, l.nome_local_premium, l.latitude, l.longitude, l.descricao,
-                e.preco_hora, e.id_espaco_local, e.nome_espaco,
+                e.preco_hora, e.id AS id_espaco_local, e.nome_espaco,
                     d.dia_semana, d.horario_inicio, d.horario_fim,
                     i.nome_imagem, a.comentario_local, a.avaliacao_estrela_locais,
                     u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente,
@@ -111,7 +111,7 @@ const getLocalReservaById = (path) => {
                 LEFT JOIN dia_atuacao d on l.id_local_premium = d.fk_id_local_premium 
                 LEFT JOIN espaco_local e on l.id_local_premium = e.fk_id_local_premium
                 WHERE l.id_local_premium = $1
-                GROUP BY l.id_local_premium, i.nome_imagem, d.dia_semana, a.comentario_local, e.id_espaco_local, u.nome, u.sobrenome
+                GROUP BY l.id_local_premium, i.nome_imagem, d.dia_semana, a.comentario_local, e.id, u.nome, u.sobrenome
             `;
             const { rows: results } = await connection.query(query, [localId]);
 
@@ -221,7 +221,7 @@ const fazerReserva = async (req, res) => {
                 failure: `https://maissports-tcc.onrender.com/reservaConfirmada`,
                 pending: `https://maissports-tcc.onrender.com/reservaConfirmada`,
             },
-            auto_return: all,
+            auto_return: 'all',
             external_reference: externalReference
         };
 
@@ -247,8 +247,9 @@ const reservaConfirmada = async (req, res) => {
 
         const fk_id_cliente = userRows[0].id;
 
+        // fk_id_espaco_local -> fk_id_espaco (nome real da coluna na tabela Reservas)
         await connection.query(
-            `INSERT INTO Reservas (fk_id_cliente, fk_id_espaco_local, data_reserva, horario_inicio, horario_fim, preco_total) 
+            `INSERT INTO Reservas (fk_id_cliente, fk_id_espaco, data_reserva, horario_inicio, horario_fim, preco_total) 
              VALUES ($1, $2, $3, $4, $5, $6)`,
             [fk_id_cliente, selected_espaco, data_reserva, horario_inicio, horario_fim, precoTotalFloat]
         );
@@ -269,10 +270,11 @@ const pegarReservasFeitas = async (req, res) => {
     console.log(date);
 
     try {
+        // fk_id_espaco_local -> fk_id_espaco | id_reserva -> id (aliased para manter o resto do código igual)
         const query = `
-            SELECT id_reserva, horario_inicio, horario_fim 
+            SELECT id AS id_reserva, horario_inicio, horario_fim 
             FROM Reservas 
-            WHERE fk_id_espaco_local = $1 AND data_reserva = $2
+            WHERE fk_id_espaco = $1 AND data_reserva = $2
         `;
         const { rows: results } = await connection.query(query, [localId, date]);
 
@@ -308,19 +310,20 @@ const pegarReservas = async (req, res) => {
 
         const fk_id_user = userRows[0].id;
 
+        // r.id_reserva -> r.id (aliased) | r.fk_id_espaco_local -> r.fk_id_espaco
         const query = `
-            SELECT r.id_reserva, r.fk_id_espaco_local, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total,
+            SELECT r.id AS id_reserva, r.fk_id_espaco, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total,
                     e.fk_id_local_premium, e.nome_espaco,
                    i.nome_imagem,
                    l.nome_local_premium, l.id_local_premium,
                    u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente
             FROM Reservas r
-            LEFT JOIN espaco_local e ON r.fk_id_espaco_local = e.id_espaco_local
+            LEFT JOIN espaco_local e ON r.fk_id_espaco = e.id
             LEFT JOIN imagens i ON e.fk_id_local_premium = i.fk_local_premium_id
             LEFT JOIN usuario_clientes u ON r.fk_id_cliente = u.id
             LEFT JOIN local_premium l ON e.fk_id_local_premium = l.id_local_premium
             WHERE r.fk_id_cliente = $1
-            GROUP BY r.id_reserva, i.nome_imagem, u.nome, u.sobrenome
+            GROUP BY r.id, i.nome_imagem, u.nome, u.sobrenome
         `;
         const { rows: results } = await connection.query(query, [fk_id_user]);
 
@@ -374,19 +377,20 @@ const pegarReservasEmpresa = async (req, res) => {
 
         const fk_id_emp = userRows[0].id;
 
+        // r.id_reserva -> r.id (aliased) | r.fk_id_espaco_local -> r.fk_id_espaco
         const query = `
             SELECT l.id_local_premium, l.nome_local_premium, 
-                e.id_espaco_local, e.preco_hora, e.nome_espaco,
-                r.id_reserva, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total, 
+                e.id AS id_espaco_local, e.preco_hora, e.nome_espaco,
+                r.id AS id_reserva, r.data_reserva, r.horario_inicio, r.horario_fim, r.preco_total, 
                 i.nome_imagem,
                 u.nome AS nome_cliente, u.sobrenome AS sobrenome_cliente
             FROM local_premium l
             LEFT JOIN espaco_local e ON e.fk_id_local_premium = l.id_local_premium
-            LEFT JOIN Reservas r ON r.fk_id_espaco_local = e.id_espaco_local
+            LEFT JOIN Reservas r ON r.fk_id_espaco = e.id
             LEFT JOIN imagens i ON i.fk_local_premium_id = l.id_local_premium
             LEFT JOIN usuario_clientes u ON r.fk_id_cliente = u.id
-            WHERE l.fk_id_empresa = $1 AND r.id_reserva IS NOT NULL
-            GROUP BY l.id_local_premium, r.id_reserva, i.nome_imagem, u.nome, u.sobrenome
+            WHERE l.fk_id_empresa = $1 AND r.id IS NOT NULL
+            GROUP BY l.id_local_premium, e.id, r.id, i.nome_imagem, u.nome, u.sobrenome
         `;
         const { rows: results } = await connection.query(query, [fk_id_emp]);
 
