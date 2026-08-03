@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', initPlanSelection);
 
 function initPlanSelection() {
@@ -192,7 +190,11 @@ function saberPreco(valorDia) {
         dias[1] * valorDia,
         dias[2] * valorDia
     ];
-    const prices = document.querySelectorAll(".price");
+    // ANTES: document.querySelectorAll(".price") pegava TAMBÉM a seção
+    // "Editar preço do produto" e o card de prévia (que também usam a classe .price),
+    // estourando índice fora do array e quebrando o script.
+    // Agora escopado só pros preços dentro dos cards de plano:
+    const prices = document.querySelectorAll(".plan .price");
 
     prices.forEach((priceElement, index) => {
         if(index == 0){
@@ -325,6 +327,3 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
-
-
-

@@ -1,5 +1,5 @@
 require("dotenv").config(); // 1) carrega o .env ANTES de tudo
-
+console.log('MP Token carregado:', process.env.MP_ACCESS_TOKEN?.slice(0, 15));
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;

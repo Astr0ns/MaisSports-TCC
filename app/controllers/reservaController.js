@@ -6,7 +6,7 @@ const { all } = require('../routes/productRouter');
 
 // Inicialize o cliente Mercado Pago
 const client = new MercadoPagoConfig({
-    accessToken: 'TEST-5246075068010463-102011-23539c46def1acb4b061770a6d174e1e-428968371',
+    accessToken: process.env.MP_ACCESS_TOKEN,
     options: { timeout: 5000, idempotencyKey: 'abc' }
 });
 
@@ -226,7 +226,17 @@ const fazerReserva = async (req, res) => {
         };
 
         const response = await preference.create({ body });
-        res.redirect(response.init_point);
+
+        // LOGS TEMPORÁRIOS PRA DEBUG - pode remover depois
+        console.log('init_point:', response.init_point);
+        console.log('sandbox_init_point:', response.sandbox_init_point);
+
+        // Com credenciais de TESTE, o redirecionamento tem que ser pro sandbox_init_point.
+        // init_point é a URL de produção e causa o erro "uma das partes é de teste".
+        const checkoutUrl = process.env.MP_ACCESS_TOKEN?.startsWith('TEST-')
+            ? response.sandbox_init_point
+            : response.init_point;
+        res.redirect(checkoutUrl);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Payment processing failed' });

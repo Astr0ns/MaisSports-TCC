@@ -18,8 +18,8 @@ body {
     background-color: #010c1aa9;
 }
 
-body.dark .card{
-    background-color: var(--cor-bar-dark);
+body.dark p{
+    color: var(--cor-fonte2);
 }
 
 body,
